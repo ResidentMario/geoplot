@@ -1,0 +1,14 @@
+name: geoplot
+dependencies:
+  - python=3.5
+  - numpy
+  - pandas
+  - jupyter
+  - requests
+  - pip:
+    - runipy
+    - decartes
+    - shapely
+    - fiona
+    - pyproj
+    - geopandas

@@ -7,7 +7,7 @@ WIP. Design.
 
 Submethods of `geoplot` provide a number of interesting geographic plot types, from simple to advanced, which extend
 the root `geopandas` object's content. All plots are "slippy maps" built using `geopandas`, `folium`,
-`mplleaflet`, and `decartes`, backended by `matplotlib` and `leaflet.js`.
+`mplleaflet`, and `decartes`, back-ended by `matplotlib` and `leaflet.js`.
 
 ### Want
 
@@ -30,6 +30,19 @@ Colors polygons according to data on their number.
     * Including [non-contiguous option](http://bl.ocks.org/mbostock/4055908)? Easier to implement.
 * Enough to start. Plenty more [here](https://github.com/andrea-cuttone/geoplotlib/tree/master/examples/screenshots).
 
-### To-do
+### Development environment
 
-1. Implement abstract `D3` bindings on top of `Leaflet`.
+To set this library up for development in a local virtual environment:
+
+#### Linux, Mac OSX
+
+1. `git clone https://github.com/ResidentMario/geoplot.git`
+2. `conda env create`
+3. `source activate geoplot`
+
+#### Windows
+
+1. `git clone https://github.com/ResidentMario/geoplot.git`
+2. `conda env create` (this will likely partially fail, keep going)
+3. `runipy install.ipynb`
+4. `activate geoplot`
