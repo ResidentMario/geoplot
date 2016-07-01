@@ -29,3 +29,7 @@ Colors polygons according to data on their number.
 * `cartogram()` &mdash; Proportional sizing, no idea how that would be implemented.
     * Including [non-contiguous option](http://bl.ocks.org/mbostock/4055908)? Easier to implement.
 * Enough to start. Plenty more [here](https://github.com/andrea-cuttone/geoplotlib/tree/master/examples/screenshots).
+
+### To-do
+
+1. Implement abstract `D3` bindings on top of `Leaflet`.
