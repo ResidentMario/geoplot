@@ -1,4 +1,4 @@
-import folium
+# import folium
 import numpy as np
 # import pandas as pd
 import functools
@@ -39,8 +39,9 @@ class FramePlotMethods():
         minx, miny = np.min(bounds['minx']), np.min(bounds['miny'])
         maxx, maxy = np.max(bounds['maxx']), np.max(bounds['maxy'])
         center = ((minx + miny) / 2, (maxx + maxy) / 2)
-        geoplot = folium.Map(location=center, zoom_start=13)
-        return geoplot
+        # geoplot = folium.Map(location=center, zoom_start=13)
+        # return geoplot
+        return
 
     def point(self, **kwargs):
         print("Hello!")
