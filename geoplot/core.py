@@ -1,48 +1,40 @@
-# import folium
-import numpy as np
+import folium
+import geopandas as gpd
+from geopandas import GeoDataFrame, GeoSeries
+# import numpy as np
 # import pandas as pd
-import functools
+# import functools
 # import mplleaflet
+import math
 
 
-# def geoplot(self):
-#     pass
-
-class FramePlotMethods():
+def _initialize_folium_layer(geom, padding=None):
     """
-    Framing object for all geoplotting methods. Aliased to geoplot at runtime.
+    Generates the folium layer for a plot.
     """
-
-    def __init__(self, kind='point', **kwargs):
-        """
-        This method is run when GeoDataFrame.geoplot() is executed directly. It wraps the call and sends it to the
-        appropriate plotter method.
-
-        :param kind:
-        :param lat:
-        :param long:
-        :param kwargs:
-        """
-        caller = getattr(FramePlotMethods, kind)
-        caller(**kwargs)
+    # TODO: Something is wrong with this, see the notebook.
+    print(geom.unary_union.bounds)
+    x_min, y_min, x_max, y_max = geom.unary_union.bounds
+    # center = (x_min + x_max) / 2, (y_min + y_max) / 2
+    # print(center)
+    map_layer = folium.Map()
+    map_layer.fit_bounds([(x_min, y_min), (x_max, y_max)]) # , padding=padding)
+    return map_layer
 
 
-    @staticmethod
-    def _initialize_folium_layer(gdf, **kwargs):
-        """
-        Generates the folium layer for a plot. Given a GeoDataFrame containing points that we expect to appear in
-        the plot, computes the map center and map zoom level.
-
-        Returns a folium.Map() object.
-        """
-        bounds = gdf['geometry'].bounds
-        minx, miny = np.min(bounds['minx']), np.min(bounds['miny'])
-        maxx, maxy = np.max(bounds['maxx']), np.max(bounds['maxy'])
-        center = ((minx + miny) / 2, (maxx + maxy) / 2)
-        # geoplot = folium.Map(location=center, zoom_start=13)
-        # return geoplot
-        return
-
-    def point(self, **kwargs):
-        print("Hello!")
-        pass
+def point(geo, **kwargs):
+    """
+    Implements a point plot.
+    :param geo:
+    :param kwargs:
+    :return:
+    """
+    map_layer = None
+    if isinstance(geo, GeoSeries):
+        map_layer = _initialize_folium_layer(geo)
+        for geom in geo:
+            folium.Marker([geom.y, geom.x]).add_to(map_layer)
+    else: # GeoDataFrame
+        geom_col = kwargs.pop('geometry', 'geometry')
+        map_layer = _initialize_folium_layer(geo[geom_col])
+    return map_layer
