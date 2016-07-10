@@ -1,6 +1,7 @@
 import folium
 from folium.folium import Map
 import geopandas as gpd
+import pandas as pd
 from pandas import DataFrame, Series
 from geopandas import GeoDataFrame, GeoSeries
 from shapely.geometry import Point
@@ -66,7 +67,7 @@ from shapely.geometry import Point
 #             return GeoDataFrame()
 
 
-def _initialize_folium_layer(geom, **kwargs):
+def _initialize_folium_layer(geom, padding=None, scale=None, tiles='OpenStreetMap'):
     """
     Creates and returns a centered and padded Folium map for the given plot input.
 
@@ -86,29 +87,82 @@ def _initialize_folium_layer(geom, **kwargs):
     # Folium allows settings left and right bounds separately, and expects input in the form (n_px, n_px).
     # For example, folium.Map().fit_bounds([...], padding=(100, 100)) would ensure 100 pixels of boundary.
     # We will simplify the API by expecting a single value (some number n_px) and converting that.
-    padding = [kwargs.pop('padding', None)]*2
+    padding = [padding]*2
     # Folium has a control_scale parameter, however I think simply "scale" is much cleaner.
-    scale = kwargs.pop('scale', None)
-    map_layer = folium.folium.Map(**kwargs, control_scale=scale)
+    map_layer = folium.Map(control_scale=scale, tiles=tiles)
     map_layer.fit_bounds([(y_min, x_min), (y_max, x_max)], padding=padding)
     return map_layer
 
 
-def point(data, **kwargs):
+def point(data, padding=None, scale=False, radius=None, radial_func=None, tiles='OpenStreetMap'):
+    # TODO: Decide if data in *args (as usual) or data in **kwargs (as in seaborn).
     """
     Implements a point plot.
 
     Parameters
     ----------
-    geom: GeoSeries or GeoDataFrame
+    data: GeoSeries or GeoDataFrame
         The geometry being plotted.
+    padding: int or float
+        The amount of padding to include in the plot, in pixels. This will cause geoplot to pick a Folium zoom level
+        which results in at least this much space on any one side of the plot. Defaults to None.
+    scale: bool
+        Whether or not to display a map scale bar. Defaults to False.
+    tiles: str
+        Which map timeset to use. A number are built in
+    radius: iterable or int or float
+        Controller for the radius of the displayed circles. If specified as an int or float, every circle will be
+        this size. If specified as an iterable, will use that iterable's linearly normalized values,
+        unless a different radial_func is specified.
+    radial_func: function
+        Optional parameter, may only be specified if a radius is specified as a str or an iterable (not an int or
+        float). By default the point plot will plot a linearized radial length. A radial function can be specified
+        to apply a different function to it instead. This is useful for cases in which linear radial length is not
+        appropriate, for example when the parameter is highly imbalanced, in which case a log-linear radial map
+        would be better.
 
     Returns
     -------
-    A centered and padded Folium map.
+    A point map.
     """
-    map_layer = _initialize_folium_layer(data, padding=kwargs.pop('padding', None))
+    # Initialize the map layer.
+    map_layer = _initialize_folium_layer(data, padding=padding, scale=scale, tiles=tiles)
+
+    # Fetch the geometry column---the GeoSeries itself if one is passed, the requisite column if passed a GoDataFrame.
     geometries = data if isinstance(data, GeoSeries) else data._get_geometry()
-    for geometry in geometries:
-        map_layer.add_children(folium.Marker([geometry.y, geometry.x]))
+
+    # Set up the radii based on input.
+    if isinstance(radius, int) or isinstance(radius, float):
+        assert not radial_func, "A radial function does not make sense if the radius is specified as an int or a float."
+        radii = [radius]*len(geometries)
+    elif hasattr(radius, '__iter__'):  # radius is really a list of radii in this case
+        assert len(radius) == len(geometries), "If an iterable is passed to radius it must be the same length as the " \
+                                               "data."
+        if not radial_func:
+            radii = [datum/max(radius)*500 for datum in radius]
+        else:
+            radii = [radial_func(datum) for datum in radius]
+    elif not radius:  # This is best placed here because when at the top input ndarrays raise ambiguity ValueErrors.
+        # TODO: The Folium radius value-pass is the radius at maximum zoom. Figure out how to calculate a better one.
+        assert not radial_func, "A radial function does not make sense if no radius is specified."
+        radii = [500]*len(geometries)
+    else:
+        raise ValueError("Radius must be specified with an int, float, column name, or iterable.")
+
+    # Create markers and add them to the map.
+    # Geometries with unspecified coordinates must be explicitly filtered out here.
+    # This is because the addition to the map layer of a marker with NaN coordinates will cause Folium to silently
+    # fail to plot any of the markers which come afterwards, whether their coordinates are valid or not.
+    # cf. https://github.com/python-visualization/folium/issues/461
+    markers = [folium.CircleMarker([geometry.y, geometry.x], radius=radii[i]) for i, geometry in enumerate(geometries)
+               if pd.notnull(geometry.x) and pd.notnull(geometry.y)]
+    for marker in markers:
+        map_layer.add_children(marker)
+
+    # Final result.
     return map_layer
+
+
+def cluster(data, **kwargs):
+    pass
+    # TODO: https://github.com/python-visualization/folium/blob/master/examples/clustered_markers.ipynb
