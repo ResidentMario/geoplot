@@ -5,6 +5,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 from geopandas import GeoDataFrame, GeoSeries
 from shapely.geometry import Point
+import matplotlib.pyplot as plt
 # import numpy as np
 # import pandas as pd
 # import functools
@@ -67,7 +68,9 @@ from shapely.geometry import Point
 #             return GeoDataFrame()
 
 
-def _initialize_folium_layer(geom, padding=None, scale=None, tiles='OpenStreetMap'):
+def _initialize_folium_layer(geom, padding=None, scale=None,
+                             tiles='OpenStreetMap',
+                             attribution=None):
     """
     Creates and returns a centered and padded Folium map for the given plot input.
 
@@ -82,14 +85,18 @@ def _initialize_folium_layer(geom, padding=None, scale=None, tiles='OpenStreetMa
     """
     # Calculate the geospatial envelope.
     # This will be passed to the Folium `fit_bounds` method in order to set the view.
+    # print(geom)
+    # print(geom.unary_union)
     x_min, y_min, x_max, y_max = geom.unary_union.bounds
-    # With regards to padding:
+
+    # Handle padding.
     # Folium allows settings left and right bounds separately, and expects input in the form (n_px, n_px).
     # For example, folium.Map().fit_bounds([...], padding=(100, 100)) would ensure 100 pixels of boundary.
     # We will simplify the API by expecting a single value (some number n_px) and converting that.
     padding = [padding]*2
+
     # Folium has a control_scale parameter, however I think simply "scale" is much cleaner.
-    map_layer = folium.Map(control_scale=scale, tiles=tiles)
+    map_layer = folium.Map(control_scale=scale, tiles=tiles, attr=attribution)
     map_layer.fit_bounds([(y_min, x_min), (y_max, x_max)], padding=padding)
     return map_layer
 
@@ -109,7 +116,9 @@ def point(data, padding=None, scale=False, radius=None, radial_func=None, tiles=
     scale: bool
         Whether or not to display a map scale bar. Defaults to False.
     tiles: str
-        Which map timeset to use. A number are built in
+        A Leaflet-style URL of the form http://{s}.yourtiles.com/{z}/{x}/{y}.png which links to a known tilemap. See
+        https://leaflet-extras.github.io/leaflet-providers/preview/ for a list of options. Defaults to OpenStreetMap
+        if left unspecified.
     radius: iterable or int or float
         Controller for the radius of the displayed circles. If specified as an int or float, every circle will be
         this size. If specified as an iterable, will use that iterable's linearly normalized values,
@@ -120,16 +129,20 @@ def point(data, padding=None, scale=False, radius=None, radial_func=None, tiles=
         to apply a different function to it instead. This is useful for cases in which linear radial length is not
         appropriate, for example when the parameter is highly imbalanced, in which case a log-linear radial map
         would be better.
+    cmap:
 
     Returns
     -------
     A point map.
     """
+    # Fetch the geometry column---the GeoSeries itself if one is passed, the requisite column if passed a GoDataFrame.
+    # Before doing anything else, remove the geometries from the input containing NaN values, as this can cause the
+    # process to fail at several key steps. GeoDataFrames do not handle missing values as well as I wish...
+    geometries = data if isinstance(data, GeoSeries) else data._get_geometry()
+    geometries = geometries[~geometries.is_empty & geometries.is_valid]
+
     # Initialize the map layer.
     map_layer = _initialize_folium_layer(data, padding=padding, scale=scale, tiles=tiles)
-
-    # Fetch the geometry column---the GeoSeries itself if one is passed, the requisite column if passed a GoDataFrame.
-    geometries = data if isinstance(data, GeoSeries) else data._get_geometry()
 
     # Set up the radii based on input.
     if isinstance(radius, int) or isinstance(radius, float):
@@ -147,15 +160,14 @@ def point(data, padding=None, scale=False, radius=None, radial_func=None, tiles=
         assert not radial_func, "A radial function does not make sense if no radius is specified."
         radii = [500]*len(geometries)
     else:
-        raise ValueError("Radius must be specified with an int, float, column name, or iterable.")
+        raise ValueError("Radius must be specified as an int, float, or iterable.")
 
     # Create markers and add them to the map.
     # Geometries with unspecified coordinates must be explicitly filtered out here.
     # This is because the addition to the map layer of a marker with NaN coordinates will cause Folium to silently
     # fail to plot any of the markers which come afterwards, whether their coordinates are valid or not.
     # cf. https://github.com/python-visualization/folium/issues/461
-    markers = [folium.CircleMarker([geometry.y, geometry.x], radius=radii[i]) for i, geometry in enumerate(geometries)
-               if pd.notnull(geometry.x) and pd.notnull(geometry.y)]
+    markers = [folium.CircleMarker([geometry.y, geometry.x], radius=radii[i]) for i, geometry in enumerate(geometries)]
     for marker in markers:
         map_layer.add_children(marker)
 
