@@ -7,6 +7,21 @@ import string
 import IPython.core.display
 
 
+def draw_2(html):
+    """
+    Draws a plot inside of the Jupyter notebook.
+    """
+    JS_text = string.Template('''
+<div id="maindiv${seed}"></div>
+
+$html
+''')
+    seed = int(random.uniform(0,9999999999))
+    JS_text = JS_text.safe_substitute({'seed': seed, 'html': html})
+    JS_text = JS_text.replace('${frame}', '#maindiv{0}'.format(seed))
+    return IPython.core.display.display(IPython.core.display.HTML(JS_text))
+
+
 def draw(javascript, css=None):
     """
     Draws a JavaScript object inside of the Jupyter notebook. This is the actual display method that all of the
