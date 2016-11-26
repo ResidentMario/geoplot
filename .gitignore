@@ -1,3 +1,6 @@
 .idea/
 .ipynb_checkpoints/
 *.csv
+geoplot/__pycache__
+data/
+dependencies/
