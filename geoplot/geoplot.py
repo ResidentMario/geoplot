@@ -86,7 +86,7 @@ def choropleth(df,
         pass
 
     projection = projection.load(df, {
-        'central_longitude': lambda df: df.geometry.envelope.exterior,
+        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
@@ -95,71 +95,47 @@ def choropleth(df,
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
     ax = plt.subplot(111, projection=projection)
 
+    # Set extent.
+    if extent:
+        ax.set_extent(extent)
+    else:
+        ax.set_extent(_get_envelopes_min_maxes(df.geometry.envelope.exterior))
+
     # Set optional parameters.
-    if extent:
-        ax.set_extent(extent)
     if stock_image:
         ax.stock_img()
     if coastlines:
         ax.coastlines()
 
-    # Otherwise, assemble the defaults.
-    proj_params = dict(projection.proj4_params)
-    globe = projection.globe
-
-    if ('lon_0' in proj_params.keys() and proj_params['lon_0'] == 0) or\
-       ('lat_0' in proj_params.keys() and proj_params['lat_0'] == 0):
-        xs = np.array([p.x for p in df.geometry.centroid])
-        ys = np.array([p.y for p in df.geometry.centroid])
-        projkwargs = dict()
-        if 'lon_0' in proj_params.keys() and proj_params['lon_0'] == 0:
-            projkwargs['central_longitude'] = np.mean(xs)
-            proj_params.pop('lon_0')
-        else:
-            pass
-        if 'lat_0' in proj_params.keys() and proj_params['lat_0'] == 0:
-            projkwargs['central_latitude'] = np.mean(ys)
-            proj_params.pop('lat_0')
-        else:
-            pass
-        projection = projection.__class__(**projkwargs, globe=globe)
-
-    # Initialize the cartopy axis.
-    ax = plt.subplot(111, projection=projection)
-
-    # Set optional params.
-    if extent:
-        ax.set_extent(extent)
-    # else:
-    #     envelopes = df.geometry.envelope.exterior
-    #     import pdb; pdb.set_trace()
-    #     xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
-    #                                                            linearring.coords[2][0],
-    #                                                            linearring.coords[3][0],
-    #                                                            linearring.coords[4][0]])))
-    #     ymin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][1],
-    #                                                            linearring.coords[2][1],
-    #                                                            linearring.coords[3][1],
-    #                                                            linearring.coords[4][1]])))
-    #     xmax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][0],
-    #                                                            linearring.coords[2][0],
-    #                                                            linearring.coords[3][0],
-    #                                                            linearring.coords[4][0]])))
-    #     ymax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][1],
-    #                                                            linearring.coords[2][1],
-    #                                                            linearring.coords[3][1],
-    #                                                            linearring.coords[4][1]])))
-        ax.set_extent((xmin, xmax, ymin, ymax))
-    if stock_image:
-        ax.stock_img()
-    if coastlines:
-        ax.coastlines()
-
-    # Draw. To do this, we'll have to bastardize parts of the geopandas drawing API, taking code from here:
-    # https://github.com/geopandas/geopandas/blob/46e50fe5a772944b325bc3c8806f4f96da76a0d8/geopandas/plotting.py#L120
-    # TODO: Implement this.
+    # TODO: Implement.
     features = ShapelyFeature(df.geometry, ccrs.PlateCarree())
     ax.add_feature(features, **kwargs)
     plt.show()
 
-    pass
+##################
+# HELPER METHODS #
+##################
+
+def _get_envelopes_min_maxes(envelopes):
+    xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
+                                                          linearring.coords[2][0],
+                                                          linearring.coords[3][0],
+                                                          linearring.coords[4][0]])))
+    xmax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][0],
+                                                          linearring.coords[2][0],
+                                                          linearring.coords[3][0],
+                                                          linearring.coords[4][0]])))
+    ymin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][1],
+                                                           linearring.coords[2][1],
+                                                           linearring.coords[3][1],
+                                                           linearring.coords[4][1]])))
+    ymax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][1],
+                                                           linearring.coords[2][1],
+                                                           linearring.coords[3][1],
+                                                           linearring.coords[4][1]])))
+    return xmin, xmax, ymin, ymax
+
+
+def _get_envelopes_centroid(envelopes):
+    xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(envelopes)
+    return np.mean(xmin, xmax), np.mean(ymin, ymax)
