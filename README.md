@@ -1,24 +1,13 @@
-WIP. Design.
-
 ### Quickstart
 
-`geoplot` adds a new `geoplot` extension to the `GeoSeries` and `GeoDataFrame` data structures provided by the
-`geopandas` library (itself a geographic extension of `pandas`).
+`geoplot` is to geospatial analytics as `seaborn` is to regular data science. `geoplot` is to `cartopy` as `seaborn`
+is to `matplotlib`.
 
-Submethods of `geoplot` provide a number of interesting geographic plot types, from simple to advanced, which extend
-the root `geopandas` object's content.
+This project is a very early "pre-alpha" work in progress.
 
-All plots are static plots built using `matplotlib` Basemap facilities, alongside `geopandas` and `mplleaflet`.
+![a](./figures/example.png)
 
-Interactive versions of these plots using `leaflet.js` and `d3.js` might be worth investigating as a separate library
- (`mercator`?).
-
-As `pd.DataFrame.plot` extends `matplotlib`, so too should `gdf.GeoDataFrame.geoplot` extend `matplotlib.Basemap`.
-
-As `mpld3` extends `pd.DataFrame` interactively via `d3.js`, so too should `mercator` extend `gdf.GeoDataFrame`
-interactively via `d3.js`.
-
-### Features
+### Potential features
 
 * `geoplot()` &mdash; Simple extension of the `geopandas`-provided `plot()`.
 * `dot()` &mdash; [Dot map](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/dotdensity.png).
@@ -38,12 +27,20 @@ Colors polygons according to data on their number.
     * Including [non-contiguous option](http://bl.ocks.org/mbostock/4055908)? Easier to implement.
 * Enough to start. Plenty more [here](https://github.com/andrea-cuttone/geoplotlib/tree/master/examples/screenshots).
 
+#### References
+
+* http://geoffboeing.com/2016/11/osmnx-python-street-networks/
+* http://seaborn.pydata.org/api.html
+* http://scitools.org.uk/cartopy/docs/latest/gallery.html
+* http://darribas.org/gds_scipy16/ipynb_md/02_geovisualization.html
+
 ### To-do
 
-1. Factor out the JavaScript rendering code.
-2. Learn the Basemap API.
+Tons.
 
 ### Development environment
+
+This is not accurate anymore.
 
 To set this library up for development in a local virtual environment:
 
