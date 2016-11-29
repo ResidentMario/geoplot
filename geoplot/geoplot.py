@@ -20,14 +20,12 @@ def pointplot(df,
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
-    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
-    if not projection:
-        return plt.scatter(xs, ys)
-
+    # TODO
+    # # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
+    # # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # if not projection:
+    #     return plt.scatter(xs, ys)
     # Otherwise, we have to deal with projection settings.
-    proj_params = dict(projection.proj4_params)
-    globe = projection.globe
 
     # All of the optional parameters passed to the Cartopy CRS instance as an argument to the projection parameter
     # above are themselves passed on, via initialization, into a `proj4_params` attribute of the class, which is a
@@ -43,33 +41,10 @@ def pointplot(df,
     # In other words, Cartopy CRS internals are immutable; they can only be set at initialization.
     # cf. http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473
     #
-    # Since we can't inject sensible defaults by default, we'll have to quietly reinitialize a different copy of the
-    # object with our default central_latitude and/or central_longitude as inputs when needed. This means that, yes,
-    # we effectively have to initialize our CRS twice!
-    #
-    # There's a lot unresolved awkardness here as well. I can account for and deal with the latitude and longitude
-    # parameters, but I haven'y yet dealt with all of the *other* optional parameters, all of which would need to
-    # also be detected off of `proj_params` and reinitialized themselves. I'm not even totally certain that I can
-    # reverse engineer all of them!
-    #
-    # For now this is all a massive "to-do". I'm not sure what the most appealing API for this would be,
-    # given the limitations present.
-    # import pdb; pdb.set_trace()
-    if ('lon_0' in proj_params.keys() and proj_params['lon_0'] == 0) or\
-       ('lat_0' in proj_params.keys() and proj_params['lat_0'] == 0):
-        projkwargs = dict()
-        if 'lon_0' in proj_params.keys() and proj_params['lon_0'] == 0:
-            projkwargs['central_longitude'] = np.mean(xs)
-            proj_params.pop('lon_0')
-        else:
-            pass
-        if 'lat_0' in proj_params.keys() and proj_params['lat_0'] == 0:
-            projkwargs['central_latitude'] = np.mean(ys)
-            proj_params.pop('lat_0')
-        else:
-            pass
-        print({**proj_params, **projkwargs})
-        projection = projection.__class__(**projkwargs, globe=globe)
+    # I tried several workarounds. The one which works best is having the user pass a geoplot.crs.* to projection;
+    # the contents of geoplot.crs are a bunch of thin projection class wrappers with a factory method, "load",
+    # for properly configuring a Cartopy projection with or without optional central coordinate(s).
+    projection = projection.load(df)
 
     # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
     # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
