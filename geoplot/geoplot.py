@@ -1,7 +1,10 @@
 import geopandas as gpd
+from geopandas.plotting import __pysal_choro, norm_cmap
 import pandas as pd
 from shapely import geometry
 import matplotlib.pyplot as plt
+from matplotlib.colors import Normalize
+import matplotlib.cm
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
@@ -11,7 +14,7 @@ def pointplot(df,
               extent=None,
               stock_image=False, coastlines=False,
               projection=None,
-              figsize=(12, 4),
+              figsize=(8, 6),
               **kwargs):
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -60,6 +63,8 @@ def pointplot(df,
     if coastlines:
         ax.coastlines()
 
+    # TODO: Refactor and include improvements from choropleth.
+
     # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
     # is again because the axis is a special cartopy object.
     xs = np.array([p.x for p in df.geometry])
@@ -70,11 +75,24 @@ def pointplot(df,
 
 def choropleth(df,
                data=None,
+               scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
+               spines=False,
                extent=None,
                stock_image=False, coastlines=False,
                projection=None,
-               figsize=(12, 4),
+               figsize=(8, 6),
                **kwargs):
+
+    # Format the data to be displayed for input.
+    if not data:
+        nongeom = set(df.columns) - {df.geometry.name}
+        if len(nongeom) > 1:
+            raise ValueError("Ambiguous input: no 'data' parameter was specified and the inputted DataFrame has more "
+                             "than one column of data.")
+        else:
+            data = df[list(nongeom)[0]]
+    elif isinstance(data, str):
+        data = df[data]
 
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -94,12 +112,14 @@ def choropleth(df,
     # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
     ax = plt.subplot(111, projection=projection)
+    ax.margins(0.2)
 
     # Set extent.
+    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     if extent:
         ax.set_extent(extent)
     else:
-        ax.set_extent(_get_envelopes_min_maxes(df.geometry.envelope.exterior))
+        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
     if stock_image:
@@ -107,14 +127,52 @@ def choropleth(df,
     if coastlines:
         ax.coastlines()
 
-    # TODO: Implement.
-    features = ShapelyFeature(df.geometry, ccrs.PlateCarree())
-    ax.add_feature(features, **kwargs)
+    # Set up the colormap. This code is largely taken from geoplot's choropleth facilities, cf.
+    # https://github.com/geopandas/geopandas/blob/master/geopandas/plotting.py#L253
+    # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
+    # input data is categorical.
+    # TODO: The "scheme" specification used by geoplot is inconsistent, consider fixing that.
+    if scheme:
+        binning = __pysal_choro(data, scheme, k=k)
+        values = binning.yb
+        binedges = [binning.yb.min()] + binning.bins.tolist()
+        categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
+                      for i in range(len(binedges) - 1)]
+    else:
+        values = data
+        categories = None  # TODO: Implement.
+    cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
+
+    # Set up spines. Cartopy by default generates and hides a plot's spines (cf.
+    # https://github.com/SciTools/cartopy/blob/master/lib/cartopy/mpl/geoaxes.py#L972), we don't necessarily want that.
+    # Instead what *is* enabled by default is a transparent background patch and an "outline" patch that forms a border.
+    # This code removes the extraneous patches and optionally sets the axis.
+    ax.background_patch.set_visible(False)
+    ax.outline_patch.set_visible(False)
+    if spines:
+        ax.axes.get_xaxis().set_visible(True)
+        ax.axes.get_yaxis().set_visible(True)
+        ax.yaxis.set_ticks_position('left')
+        ax.xaxis.set_ticks_position('bottom')
+        # The default axis limits are equal to the extent of the plot, which is "some distribution" in the coordinate
+        # reference system of the projection of the plot. For our purposes we'll just take them as being arbitrary and
+        # overwrite the tick labels with our own computed values.
+        x_min_proj, x_max_proj, y_min_proj, y_max_proj = ax.get_extent()
+        x_transform = lambda x: ((x - x_min_proj) / (x_max_proj - x_min_proj)) * (x_max_coord - x_min_coord) + x_min_coord
+        y_transform = lambda y: ((y - y_min_proj) / (y_max_proj - y_min_proj)) * (y_max_coord - y_min_coord) + y_min_coord
+        ax.set_xticklabels(['{:.2f}'.format(x_transform(pos)) for pos in ax.get_xticks()])
+        ax.set_yticklabels(['{:.2f}'.format(y_transform(pos)) for pos in ax.get_yticks()])
+
+    # Finally we draw the features.
+    for cat, geom in zip(values, df.geometry):
+        features = ShapelyFeature([geom], ccrs.PlateCarree())
+        ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
     plt.show()
 
 ##################
 # HELPER METHODS #
 ##################
+
 
 def _get_envelopes_min_maxes(envelopes):
     xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
