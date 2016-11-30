@@ -17,7 +17,6 @@ from pyproj import Proj
 def pointplot(df,
               extent=None,
               hue=None,
-              spines=False,
               stock_image=False, coastlines=False,
               projection=None,
               figsize=(8, 6),
@@ -56,7 +55,7 @@ def pointplot(df,
     # Currently 5% of the plot area is reserved for padding.
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
-    xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    # xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
     # xfudge = (xmax - xmin) * 0.025
     # yfudge = (ymax - ymin) * 0.025
     # xmin -= xfudge
@@ -67,8 +66,6 @@ def pointplot(df,
 
     if extent:
         ax.set_extent(extent)
-    # else:
-    #     ax.set_extent((xmin, xmax, ymin, ymax))
 
     # Set optional parameters.
     if stock_image:
@@ -77,11 +74,10 @@ def pointplot(df,
         ax.coastlines()
 
     # TODO: Refactor and include improvements from choropleth.
-    _lay_out_axes(ax, spines, (xmin, xmax, ymin, ymax), projection.proj4_params)
+    # Clean up patches.
+    _lay_out_axes(ax)
 
     ax.spines['bottom'].set_zorder(5)
-
-    import pdb; pdb.set_trace()
 
     # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
     # is again because the axis is a special cartopy object.
@@ -94,7 +90,7 @@ def pointplot(df,
 def choropleth(df,
                hue=None,
                scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
-               spines=False, legend=False, legend_kwargs=None,
+               legend=False, legend_kwargs=None,
                extent=None,
                stock_image=False, coastlines=False,
                projection=None,
@@ -188,8 +184,8 @@ def choropleth(df,
         values = [value_map[d] for d in hue]
     cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
 
-    # Set up spines.
-    _lay_out_axes(ax, spines, (x_min_coord, x_max_coord, y_min_coord, y_max_coord))
+    # Clean up patches.
+    _lay_out_axes(ax)
 
     if legend:
         patches = []
@@ -239,35 +235,8 @@ def _get_envelopes_centroid(envelopes):
     return np.mean(xmin, xmax), np.mean(ymin, ymax)
 
 
-def _lay_out_axes(ax, spines, coord_vals, proj_params):
-    # Set up spines. Cartopy by default generates and hides a plot's spines (cf.
-    # https://github.com/SciTools/cartopy/blob/master/lib/cartopy/mpl/geoaxes.py#L972), we don't necessarily want that.
-    # Instead what *is* enabled by default is a transparent background patch and an "outline" patch that forms a border.
-    # This code removes the extraneous patches and optionally sets the axis.
+def _lay_out_axes(ax):
+    # Enabled by default is a transparent background patch and an "outline" patch that forms a border.
+    # This code removes the extraneous patches.
     ax.background_patch.set_visible(False)
     ax.outline_patch.set_visible(False)
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = coord_vals
-    if spines:
-        ax.axes.get_xaxis().set_visible(True)
-        ax.axes.get_yaxis().set_visible(True)
-        ax.yaxis.set_ticks_position('left')
-        ax.xaxis.set_ticks_position('bottom')
-        # The default axis limits are equal to the extent of the plot, which is "some distribution" in the coordinate
-        # reference system of the projection of the plot. For our purposes we'll just take them as being arbitrary and
-        # overwrite the tick labels with our own computed values.
-        x_min_proj, x_max_proj, y_min_proj, y_max_proj = ax.get_extent()
-        # Naive method, works only when extent is EXACTLY equal to extremes of the data. Since this is not true in a
-        # properly padded pointplot, this does not work.
-        # x_transform = lambda x: ((x - x_min_proj) / (x_max_proj - x_min_proj)) * (x_max_coord - x_min_coord) + x_min_coord
-        # y_transform = lambda y: ((y - y_min_proj) / (y_max_proj - y_min_proj)) * (y_max_coord - y_min_coord) + y_min_coord
-        # Better method, reproject ourselves.
-        inproj = Proj(proj_params)
-        # inproj = Proj({'y_0': 0.0, 'lon_0': 0.0, 'ellps': 'WGS84', 'lat_2': 50.0, 'lat_0': 0.0, 'lat_1': 20.0, 'proj': 'aea', 'x_0': 0.0})
-        outproj = Proj(init='epsg:4326')
-        x_transform = lambda pos: pyproj.transform(inproj, outproj, x_min_proj + pos * (x_max_proj - x_min_proj), 0)[0]
-        y_transform = lambda y: pyproj.transform(inproj, outproj, 0, y)[1]
-
-        import pdb; pdb.set_trace()
-
-        ax.set_xticklabels(['{:.2f}'.format(x_transform(pos)) for pos in ax.get_xticks()])
-        ax.set_yticklabels(['{:.2f}'.format(y_transform(pos)) for pos in ax.get_yticks()])
