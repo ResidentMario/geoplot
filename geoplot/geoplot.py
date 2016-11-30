@@ -155,6 +155,20 @@ def choropleth(df,
         ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
     plt.show()
 
+
+def aggplot(df,
+            hue=None,
+            # scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
+            # legend=False, legend_kwargs=None,
+            extent=None,
+            # stock_image=False, coastlines=False, gridlines=False,
+            projection=None,
+            figsize=(8, 6),
+            **kwargs):
+    # TODO: Implement the missingno geographic nullity plot as a general-purpose plot type here.
+    pass
+
+
 ##################
 # HELPER METHODS #
 ##################
