@@ -157,6 +157,7 @@ def choropleth(df,
 
 
 def aggplot(df,
+            cutoff=0.05,
             hue=None,
             # scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
             # legend=False, legend_kwargs=None,
@@ -166,6 +167,14 @@ def aggplot(df,
             figsize=(8, 6),
             **kwargs):
     # TODO: Implement the missingno geographic nullity plot as a general-purpose plot type here.
+    patches = []
+    blocks = []
+    while blocks != [None]*len(blocks):
+        for i, block in enumerate(blocks):
+            if block is not None:
+                values = _squarify(df, block, cutoff)
+                if values is not None:
+                    patches.append(values)
     pass
 
 
@@ -276,3 +285,38 @@ def _validate_buckets(categorical, k, scheme):
     if not scheme:
         scheme = 'Quantiles'  # This trips it correctly later.
     return categorical, k, scheme
+
+
+def _squarify(df, window, cutoff, patches, aggfunc):
+    # TODO: Write this as a tree structure.
+    min_x, max_x, min_y, max_y = window
+    points = df.geometry.centroid
+    indices = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
+    points_inside = points[indices]
+    threshold = cutoff * len(df) if cutoff < 1 else cutoff  # both float (percentage) and integer cutoffs allowed
+    if len(points_inside) < threshold:
+        patches.append(((min_x, max_x, min_y, max_y), indices))
+    else:
+        mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
+        _squarify(df, (min_x, mid_x, mid_y, max_y), cutoff, patches, aggfunc)
+        _squarify(df, (min_x, mid_x, min_y, mid_y), cutoff, patches, aggfunc)
+        _squarify(df, (mid_x, max_x, mid_y, max_y), cutoff, patches, aggfunc)
+        _squarify(df, (mid_x, max_x, min_y, mid_y), cutoff, patches, aggfunc)
+
+
+# points_inside = df[(_min_x < arr[:, 0]) &
+    #                    (arr[:, 0] < _max_x) &
+    #                    (_min_y < arr[:, 1]) &
+    #                    (arr[:, 1] < _max_y)]
+    # if len(points_inside) < cutoff:
+    #     # The following subroutine groups `geo_group` by `x_col` and `y_col`, and calculates and returns
+    #     # a list of points in the group (`points`) as well as its overall nullity (`geographic_nullity`). The
+    #     # first of these calculations is ignored.
+    #     _, square_nullity = _calculate_geographic_nullity(points_inside, x_col, y_col)
+    #     rectangles.append(((_min_x, _max_x, _min_y, _max_y), square_nullity))
+    # else:
+    #     _mid_x, _mid_y = (_min_x + _max_x) / 2, (_min_y + _max_y) / 2
+    #     squarify(_min_x, _mid_x, _mid_y, _max_y, points_inside)
+    #     squarify(_min_x, _mid_x, _min_y, _mid_y, points_inside)
+    #     squarify(_mid_x, _max_x, _mid_y, _max_y, points_inside)
+    #     squarify(_mid_x, _max_x, _min_y, _mid_y, points_inside)
