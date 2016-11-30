@@ -5,9 +5,11 @@ from shapely import geometry
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import matplotlib.cm
+from matplotlib.lines import Line2D
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
+import warnings
 
 
 def pointplot(df,
@@ -74,9 +76,9 @@ def pointplot(df,
 
 
 def choropleth(df,
-               data=None,
-               scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
-               spines=False,
+               hue=None,
+               scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
+               spines=False, legend=False, legend_kwargs=None,
                extent=None,
                stock_image=False, coastlines=False,
                projection=None,
@@ -84,15 +86,39 @@ def choropleth(df,
                **kwargs):
 
     # Format the data to be displayed for input.
-    if not data:
+    if not hue:
         nongeom = set(df.columns) - {df.geometry.name}
         if len(nongeom) > 1:
             raise ValueError("Ambiguous input: no 'data' parameter was specified and the inputted DataFrame has more "
                              "than one column of data.")
         else:
-            data = df[list(nongeom)[0]]
-    elif isinstance(data, str):
-        data = df[data]
+            hue = df[list(nongeom)[0]]
+    elif isinstance(hue, str):
+        hue = df[hue]
+
+    # Validate choropleth bucketing input. Valid inputs are:
+    # 1. Both k and scheme are specified. In that case the user wants us to handle binning the data into k buckets
+    #    ourselves, using the stated algorithm. We issue a warning if the specified k is greater than 10.
+    # 2. k is left unspecified and scheme is specified. In that case the user wants us to handle binning the data
+    #    into some default (k=5) number of buckets, using the stated algorithm.
+    # 3. Both k and scheme are left unspecified. In that case the user wants us bucket the data variable using some
+    #    default algorithm (Quantiles) into some default number of buckets (5).
+    # 4. k is specified, but scheme is not. We choose to interpret this as meaning that the user wants us to handle
+    #    bucketing the data into k buckets using the default (Quantiles) bucketing algorithm.
+    # 5. categorical is True, and both k and scheme are False or left unspecified. In that case we do categorical.
+    # Invalid inputs are:
+    # 6. categorical is True, and one of k or scheme are also specified. In this case we raise a ValueError as this
+    #    input makes no sense.
+    if categorical and (k or scheme):
+            raise ValueError("Invalid input: categorical cannot be specified as True simultaneously with scheme or k "
+                             "parameters")
+    if not k:
+        k = 5
+    if k > 10:
+        warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
+                      "This is not recommended!")
+    if not scheme:
+        scheme = 'Quantiles'  # This trips it correctly later.
 
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -112,7 +138,6 @@ def choropleth(df,
     # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
     ax = plt.subplot(111, projection=projection)
-    ax.margins(0.2)
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
@@ -132,15 +157,19 @@ def choropleth(df,
     # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
     # input data is categorical.
     # TODO: The "scheme" specification used by geoplot is inconsistent, consider fixing that.
-    if scheme:
-        binning = __pysal_choro(data, scheme, k=k)
+    if not categorical:
+        binning = __pysal_choro(hue, scheme, k=k)
         values = binning.yb
         binedges = [binning.yb.min()] + binning.bins.tolist()
         categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
                       for i in range(len(binedges) - 1)]
     else:
-        values = data
-        categories = None  # TODO: Implement.
+        categories = np.unique(hue)
+        if len(categories) > 10:
+            warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
+                          "This is not recommended!")
+        value_map = {v: i for i, v in enumerate(categories)}
+        values = [value_map[d] for d in hue]
     cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
 
     # Set up spines. Cartopy by default generates and hides a plot's spines (cf.
@@ -162,6 +191,18 @@ def choropleth(df,
         y_transform = lambda y: ((y - y_min_proj) / (y_max_proj - y_min_proj)) * (y_max_coord - y_min_coord) + y_min_coord
         ax.set_xticklabels(['{:.2f}'.format(x_transform(pos)) for pos in ax.get_xticks()])
         ax.set_yticklabels(['{:.2f}'.format(y_transform(pos)) for pos in ax.get_yticks()])
+
+    if legend:
+        patches = []
+        for value, cat in enumerate(categories):
+            patches.append(Line2D([0], [0], linestyle="none",
+                                  marker="o",
+                                  markersize=10, markerfacecolor=cmap.to_rgba(value)))
+        # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
+        # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
+        # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
+        if not legend_kwargs: legend_kwargs = dict()
+        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
     # Finally we draw the features.
     for cat, geom in zip(values, df.geometry):
