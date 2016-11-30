@@ -10,6 +10,7 @@ import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
 import warnings
+from collections import defaultdict
 
 
 def pointplot(df,
@@ -157,7 +158,7 @@ def choropleth(df,
 
 
 def aggplot(df,
-            cutoff=0.05,
+            cutoff=5,
             hue=None,
             # scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
             # legend=False, legend_kwargs=None,
@@ -167,15 +168,18 @@ def aggplot(df,
             figsize=(8, 6),
             **kwargs):
     # TODO: Implement the missingno geographic nullity plot as a general-purpose plot type here.
-    patches = []
-    blocks = []
-    while blocks != [None]*len(blocks):
-        for i, block in enumerate(blocks):
-            if block is not None:
-                values = _squarify(df, block, cutoff)
-                if values is not None:
-                    patches.append(values)
-    pass
+    # We need to smartly generate geometry limits. For now we'll just use centroids.
+    xs = [g.x for g in df.geometry]
+    ys = [g.y for g in df.geometry]
+    minx, maxx = np.min(xs), np.max(xs)
+    miny, maxy = np.min(ys), np.max(ys)
+    patches = dict()
+    # Do stuff.
+    import pdb; pdb.set_trace()
+    patches = _squarify(df, (minx, maxx, miny, maxy), cutoff)
+    1 + 1
+    1 + 1
+
 
 
 ##################
@@ -287,22 +291,56 @@ def _validate_buckets(categorical, k, scheme):
     return categorical, k, scheme
 
 
-def _squarify(df, window, cutoff, patches, aggfunc):
+def _generate_patches(df, window, cutoff):
+    quads = _squarify(df, window, cutoff)
+    if len(quads) <= 4:
+        return quads
+    else:
+        for i in range(len(quads) - 4):
+            # cleanup...
+            pass
+
+
+def _squarify(df, window, cutoff):
     # TODO: Write this as a tree structure.
     min_x, max_x, min_y, max_y = window
-    points = df.geometry.centroid
-    indices = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
-    points_inside = points[indices]
+    indices = __indices_inside(df, window)
     threshold = cutoff * len(df) if cutoff < 1 else cutoff  # both float (percentage) and integer cutoffs allowed
-    if len(points_inside) < threshold:
-        patches.append(((min_x, max_x, min_y, max_y), indices))
-    else:
+    if len(indices) > threshold:
         mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
-        _squarify(df, (min_x, mid_x, mid_y, max_y), cutoff, patches, aggfunc)
-        _squarify(df, (min_x, mid_x, min_y, mid_y), cutoff, patches, aggfunc)
-        _squarify(df, (mid_x, max_x, mid_y, max_y), cutoff, patches, aggfunc)
-        _squarify(df, (mid_x, max_x, min_y, mid_y), cutoff, patches, aggfunc)
+        q1 = _squarify(df, (min_x, mid_x, mid_y, max_y), cutoff)
+        q2 = _squarify(df, (min_x, mid_x, min_y, mid_y), cutoff)
+        q3 = _squarify(df, (mid_x, max_x, mid_y, max_y), cutoff)
+        q4 = _squarify(df, (mid_x, max_x, min_y, mid_y), cutoff)
+        return [((min_x, max_x, min_y, max_y), indices)] + q1 + q2 + q3 + q4
+        # mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
+        # q1w = (min_x, mid_x, mid_y, max_y)
+        # q2w = (min_x, mid_x, min_y, mid_y)
+        # q3w = (mid_x, max_x, mid_y, max_y)
+        # q4w = (mid_x, max_x, min_y, mid_y)
+        # q1i = __indices_inside(df, q1w)
+        # q2i = __indices_inside(df, q2w)
+        # q3i = __indices_inside(df, q3w)
+        # q4i = __indices_inside(df, q4w)
+        # subl = []
+        # for qw, qi in zip([q1w, q2w, q3w, q4w], [q1i, q2i, q3i, q4i]):
+        #     if len(qi) > threshold:
+        #         subl += _squarify(df.iloc[qi], qw, cutoff)
+        # if len(subl) > 0:
+        #     return subl
+        # else:
+        #     return [[window, indices]]
+    else:
+        # return [[window, indices]]
+        return []
 
+
+def __indices_inside(df, window):
+    min_x, max_x, min_y, max_y = window
+    points = df.geometry.centroid
+    is_in = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
+    indices = is_in.values.nonzero()[0]
+    return indices
 
 # points_inside = df[(_min_x < arr[:, 0]) &
     #                    (arr[:, 0] < _max_x) &
