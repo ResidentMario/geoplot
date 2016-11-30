@@ -10,10 +10,14 @@ import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
 import warnings
+import pyproj
+from pyproj import Proj
 
 
 def pointplot(df,
               extent=None,
+              hue=None,
+              spines=False,
               stock_image=False, coastlines=False,
               projection=None,
               figsize=(8, 6),
@@ -21,32 +25,21 @@ def pointplot(df,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # TODO
+    # If a hue parameter is specified and is a string, convert it to a reference to its column. This puts us on a
+    # level playing field with cases when hue is specified as an explicit iterable. If hue is None, do nothing.
+    if isinstance(hue, str):
+        hue = df[hue]
+
+    # TODO: Work this out.
     # # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
     # # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
-    # if not projection:
-    #     xs = np.array([p.x for p in df.geometry])
-    #     ys = np.array([p.y for p in df.geometry])
-    #     return plt.scatter(xs, ys)
-    # Otherwise, we have to deal with projection settings.
+    if not projection:
+        raise NotImplementedError
+        # xs = np.array([p.x for p in df.geometry])
+        # ys = np.array([p.y for p in df.geometry])
+        # return plt.scatter(xs, ys)
 
-    # All of the optional parameters passed to the Cartopy CRS instance as an argument to the projection parameter
-    # above are themselves passed on, via initialization, into a `proj4_params` attribute of the class, which is a
-    # basic dict of the form e.g.:
-    # >>> projection.proj4_params
-    # <<< {'proj': 'eqc', 'lon_0': 0.0, 'a': 57.29577951308232, 'ellps': 'WGS84'}
-    #
-    # In general Python follows the philosophy that everything should be mutable. This object, however,
-    # refuses assignment. For example witness what happens when you insert the following code:
-    # >>> projection.proj4_params['a'] = 0
-    # >>> print(projection.proj4_params['a'])
-    # <<< 57.29577951308232
-    # In other words, Cartopy CRS internals are immutable; they can only be set at initialization.
-    # cf. http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473
-    #
-    # I tried several workarounds. The one which works best is having the user pass a geoplot.crs.* to projection;
-    # the contents of geoplot.crs are a bunch of thin projection class wrappers with a factory method, "load",
-    # for properly configuring a Cartopy projection with or without optional central coordinate(s).
+    # Properly set up the projection.
     projection = projection.load(df, {
         'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
@@ -57,15 +50,38 @@ def pointplot(df,
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
     ax = plt.subplot(111, projection=projection)
 
-    # Set optional parameters.
+    # Set extent. In order to prevent points from being occluded, we set it to be a little bit larger than the values
+    # in the plot themselves. This is done within the data itself because the underlying plot appears not to respect
+    # commands like e.g. ax.margin(0.05), which would have a similar effect.
+    # Currently 5% of the plot area is reserved for padding.
+    xs = np.array([p.x for p in df.geometry])
+    ys = np.array([p.y for p in df.geometry])
+    xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    # xfudge = (xmax - xmin) * 0.025
+    # yfudge = (ymax - ymin) * 0.025
+    # xmin -= xfudge
+    # xmax += xfudge
+    # ymin -= yfudge
+    # ymax += yfudge
+    import pdb; pdb.set_trace()
+
     if extent:
         ax.set_extent(extent)
+    # else:
+    #     ax.set_extent((xmin, xmax, ymin, ymax))
+
+    # Set optional parameters.
     if stock_image:
         ax.stock_img()
     if coastlines:
         ax.coastlines()
 
     # TODO: Refactor and include improvements from choropleth.
+    _lay_out_axes(ax, spines, (xmin, xmax, ymin, ymax), projection.proj4_params)
+
+    ax.spines['bottom'].set_zorder(5)
+
+    import pdb; pdb.set_trace()
 
     # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
     # is again because the axis is a special cartopy object.
@@ -125,9 +141,9 @@ def choropleth(df,
 
     # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
     # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
-    # TODO
+    # TODO: Implement this.
     if not projection:
-        pass
+        raise NotImplementedError
 
     projection = projection.load(df, {
         'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
@@ -172,25 +188,8 @@ def choropleth(df,
         values = [value_map[d] for d in hue]
     cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
 
-    # Set up spines. Cartopy by default generates and hides a plot's spines (cf.
-    # https://github.com/SciTools/cartopy/blob/master/lib/cartopy/mpl/geoaxes.py#L972), we don't necessarily want that.
-    # Instead what *is* enabled by default is a transparent background patch and an "outline" patch that forms a border.
-    # This code removes the extraneous patches and optionally sets the axis.
-    ax.background_patch.set_visible(False)
-    ax.outline_patch.set_visible(False)
-    if spines:
-        ax.axes.get_xaxis().set_visible(True)
-        ax.axes.get_yaxis().set_visible(True)
-        ax.yaxis.set_ticks_position('left')
-        ax.xaxis.set_ticks_position('bottom')
-        # The default axis limits are equal to the extent of the plot, which is "some distribution" in the coordinate
-        # reference system of the projection of the plot. For our purposes we'll just take them as being arbitrary and
-        # overwrite the tick labels with our own computed values.
-        x_min_proj, x_max_proj, y_min_proj, y_max_proj = ax.get_extent()
-        x_transform = lambda x: ((x - x_min_proj) / (x_max_proj - x_min_proj)) * (x_max_coord - x_min_coord) + x_min_coord
-        y_transform = lambda y: ((y - y_min_proj) / (y_max_proj - y_min_proj)) * (y_max_coord - y_min_coord) + y_min_coord
-        ax.set_xticklabels(['{:.2f}'.format(x_transform(pos)) for pos in ax.get_xticks()])
-        ax.set_yticklabels(['{:.2f}'.format(y_transform(pos)) for pos in ax.get_yticks()])
+    # Set up spines.
+    _lay_out_axes(ax, spines, (x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     if legend:
         patches = []
@@ -238,3 +237,37 @@ def _get_envelopes_min_maxes(envelopes):
 def _get_envelopes_centroid(envelopes):
     xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(envelopes)
     return np.mean(xmin, xmax), np.mean(ymin, ymax)
+
+
+def _lay_out_axes(ax, spines, coord_vals, proj_params):
+    # Set up spines. Cartopy by default generates and hides a plot's spines (cf.
+    # https://github.com/SciTools/cartopy/blob/master/lib/cartopy/mpl/geoaxes.py#L972), we don't necessarily want that.
+    # Instead what *is* enabled by default is a transparent background patch and an "outline" patch that forms a border.
+    # This code removes the extraneous patches and optionally sets the axis.
+    ax.background_patch.set_visible(False)
+    ax.outline_patch.set_visible(False)
+    x_min_coord, x_max_coord, y_min_coord, y_max_coord = coord_vals
+    if spines:
+        ax.axes.get_xaxis().set_visible(True)
+        ax.axes.get_yaxis().set_visible(True)
+        ax.yaxis.set_ticks_position('left')
+        ax.xaxis.set_ticks_position('bottom')
+        # The default axis limits are equal to the extent of the plot, which is "some distribution" in the coordinate
+        # reference system of the projection of the plot. For our purposes we'll just take them as being arbitrary and
+        # overwrite the tick labels with our own computed values.
+        x_min_proj, x_max_proj, y_min_proj, y_max_proj = ax.get_extent()
+        # Naive method, works only when extent is EXACTLY equal to extremes of the data. Since this is not true in a
+        # properly padded pointplot, this does not work.
+        # x_transform = lambda x: ((x - x_min_proj) / (x_max_proj - x_min_proj)) * (x_max_coord - x_min_coord) + x_min_coord
+        # y_transform = lambda y: ((y - y_min_proj) / (y_max_proj - y_min_proj)) * (y_max_coord - y_min_coord) + y_min_coord
+        # Better method, reproject ourselves.
+        inproj = Proj(proj_params)
+        # inproj = Proj({'y_0': 0.0, 'lon_0': 0.0, 'ellps': 'WGS84', 'lat_2': 50.0, 'lat_0': 0.0, 'lat_1': 20.0, 'proj': 'aea', 'x_0': 0.0})
+        outproj = Proj(init='epsg:4326')
+        x_transform = lambda pos: pyproj.transform(inproj, outproj, x_min_proj + pos * (x_max_proj - x_min_proj), 0)[0]
+        y_transform = lambda y: pyproj.transform(inproj, outproj, 0, y)[1]
+
+        import pdb; pdb.set_trace()
+
+        ax.set_xticklabels(['{:.2f}'.format(x_transform(pos)) for pos in ax.get_xticks()])
+        ax.set_yticklabels(['{:.2f}'.format(y_transform(pos)) for pos in ax.get_yticks()])
