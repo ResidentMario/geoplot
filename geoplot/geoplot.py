@@ -29,18 +29,8 @@ def pointplot(df,
     if isinstance(hue, str):
         hue = df[hue]
 
-    # Chloropleth things...
-    if categorical and (k or scheme):
-        raise ValueError("Invalid input: categorical cannot be specified as True simultaneously with scheme or k "
-                         "parameters")
-
-    if not k:
-        k = 5
-    if k > 10:
-        warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
-                      "This is not recommended!")
-    if not scheme:
-        scheme = 'Quantiles'  # This trips it correctly later.
+    # Validate bucketing.
+    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
     # TODO: Work this out.
     # # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
@@ -73,12 +63,7 @@ def pointplot(df,
         ax.set_extent(extent)
 
     # Set optional parameters.
-    if stock_image:
-        ax.stock_img()
-    if coastlines:
-        ax.coastlines()
-    if gridlines:
-        ax.gridlines()
+    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -88,40 +73,13 @@ def pointplot(df,
     # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
     # input data is categorical.
     if hue is not None:
-        if not categorical:
-            binning = __pysal_choro(hue, scheme, k=k)
-            values = binning.yb
-            binedges = [binning.yb.min()] + binning.bins.tolist()
-            categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
-                          for i in range(len(binedges) - 1)]
-        else:
-            categories = np.unique(hue)
-            if len(categories) > 10:
-                warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
-                              "This is not recommended!")
-            value_map = {v: i for i, v in enumerate(categories)}
-            values = [value_map[d] for d in hue]
-        cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
+        cmap, categories, values = _colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
         colors = [cmap.to_rgba(v) for v in values]
 
         if legend:
-            patches = []
-            for value, cat in enumerate(categories):
-                patches.append(Line2D([0], [0], linestyle="none",
-                                      marker="o",
-                                      markersize=10, markerfacecolor=cmap.to_rgba(value)))
-            # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability
-            # quirks. cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
-            # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
-            if not legend_kwargs: legend_kwargs = dict()
-            ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+            _paint_legend(ax, categories, cmap, legend_kwargs)
     else:
         colors = 'steelblue'
-
-    # # Finally we draw the features.
-    # for cat, geom in zip(values, df.geometry):
-    #     features = ShapelyFeature([geom], ccrs.PlateCarree())
-    #     ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
 
     # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
     # is again because the axis is a special cartopy object.
@@ -143,36 +101,15 @@ def choropleth(df,
     if not hue:
         nongeom = set(df.columns) - {df.geometry.name}
         if len(nongeom) > 1:
-            raise ValueError("Ambiguous input: no 'data' parameter was specified and the inputted DataFrame has more "
+            raise ValueError("Ambiguous input: no 'hue' parameter was specified and the inputted DataFrame has more "
                              "than one column of data.")
         else:
             hue = df[list(nongeom)[0]]
     elif isinstance(hue, str):
         hue = df[hue]
 
-    # Validate choropleth bucketing input. Valid inputs are:
-    # 1. Both k and scheme are specified. In that case the user wants us to handle binning the data into k buckets
-    #    ourselves, using the stated algorithm. We issue a warning if the specified k is greater than 10.
-    # 2. k is left unspecified and scheme is specified. In that case the user wants us to handle binning the data
-    #    into some default (k=5) number of buckets, using the stated algorithm.
-    # 3. Both k and scheme are left unspecified. In that case the user wants us bucket the data variable using some
-    #    default algorithm (Quantiles) into some default number of buckets (5).
-    # 4. k is specified, but scheme is not. We choose to interpret this as meaning that the user wants us to handle
-    #    bucketing the data into k buckets using the default (Quantiles) bucketing algorithm.
-    # 5. categorical is True, and both k and scheme are False or left unspecified. In that case we do categorical.
-    # Invalid inputs are:
-    # 6. categorical is True, and one of k or scheme are also specified. In this case we raise a ValueError as this
-    #    input makes no sense.
-    if categorical and (k or scheme):
-            raise ValueError("Invalid input: categorical cannot be specified as True simultaneously with scheme or k "
-                             "parameters")
-    if not k:
-        k = 5
-    if k > 10:
-        warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
-                      "This is not recommended!")
-    if not scheme:
-        scheme = 'Quantiles'  # This trips it correctly later.
+    # Validate bucketing.
+    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -201,47 +138,16 @@ def choropleth(df,
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
-    if stock_image:
-        ax.stock_img()
-    if coastlines:
-        ax.coastlines()
-    if gridlines:
-        ax.gridlines()
+    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
-    # Set up the colormap. This code is largely taken from geoplot's choropleth facilities, cf.
-    # https://github.com/geopandas/geopandas/blob/master/geopandas/plotting.py#L253
-    # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
-    # input data is categorical.
-    # TODO: The "scheme" specification used by geoplot is inconsistent, consider fixing that.
-    if not categorical:
-        binning = __pysal_choro(hue, scheme, k=k)
-        values = binning.yb
-        binedges = [binning.yb.min()] + binning.bins.tolist()
-        categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
-                      for i in range(len(binedges) - 1)]
-    else:
-        categories = np.unique(hue)
-        if len(categories) > 10:
-            warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
-                          "This is not recommended!")
-        value_map = {v: i for i, v in enumerate(categories)}
-        values = [value_map[d] for d in hue]
-    cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
+    # Generate colormaps.
+    cmap, categories, values = _colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
     # Clean up patches.
     _lay_out_axes(ax)
 
     if legend:
-        patches = []
-        for value, cat in enumerate(categories):
-            patches.append(Line2D([0], [0], linestyle="none",
-                                  marker="o",
-                                  markersize=10, markerfacecolor=cmap.to_rgba(value)))
-        # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
-        # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
-        # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
-        if not legend_kwargs: legend_kwargs = dict()
-        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+        _paint_legend(ax, categories, cmap, legend_kwargs)
 
     # Finally we draw the features.
     for cat, geom in zip(values, df.geometry):
@@ -284,3 +190,75 @@ def _lay_out_axes(ax):
     # This code removes the extraneous patches.
     ax.background_patch.set_visible(False)
     ax.outline_patch.set_visible(False)
+
+
+def _colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
+    # Set up the colormap. This code is largely taken from geoplot's choropleth facilities, cf.
+    # https://github.com/geopandas/geopandas/blob/master/geopandas/plotting.py#L253
+    # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
+    # input data is categorical.
+    # TODO: The "scheme" specification used by geoplot is inconsistent, consider fixing that.
+    if not categorical:
+        binning = __pysal_choro(hue, scheme, k=k)
+        values = binning.yb
+        binedges = [binning.yb.min()] + binning.bins.tolist()
+        categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
+                      for i in range(len(binedges) - 1)]
+    else:
+        categories = np.unique(hue)
+        if len(categories) > 10:
+            warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
+                          "This is not recommended!")
+        value_map = {v: i for i, v in enumerate(categories)}
+        values = [value_map[d] for d in hue]
+    cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
+    return cmap, categories, values
+
+
+def _paint_legend(ax, categories, cmap, legend_kwargs):
+    patches = []
+    for value, cat in enumerate(categories):
+        patches.append(Line2D([0], [0], linestyle="none",
+                              marker="o",
+                              markersize=10, markerfacecolor=cmap.to_rgba(value)))
+    # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
+    # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
+    # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
+    if not legend_kwargs: legend_kwargs = dict()
+    ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+
+
+def _set_optional_parameters(ax, stock_image, coastlines, gridlines):
+    if stock_image:
+        ax.stock_img()
+    if coastlines:
+        ax.coastlines()
+    if gridlines:
+        ax.gridlines()
+
+
+def _validate_buckets(categorical, k, scheme):
+    # Validate hue bucketing input. Valid inputs are:
+    # 1. Both k and scheme are specified. In that case the user wants us to handle binning the data into k buckets
+    #    ourselves, using the stated algorithm. We issue a warning if the specified k is greater than 10.
+    # 2. k is left unspecified and scheme is specified. In that case the user wants us to handle binning the data
+    #    into some default (k=5) number of buckets, using the stated algorithm.
+    # 3. Both k and scheme are left unspecified. In that case the user wants us bucket the data variable using some
+    #    default algorithm (Quantiles) into some default number of buckets (5).
+    # 4. k is specified, but scheme is not. We choose to interpret this as meaning that the user wants us to handle
+    #    bucketing the data into k buckets using the default (Quantiles) bucketing algorithm.
+    # 5. categorical is True, and both k and scheme are False or left unspecified. In that case we do categorical.
+    # Invalid inputs are:
+    # 6. categorical is True, and one of k or scheme are also specified. In this case we raise a ValueError as this
+    #    input makes no sense.
+    if categorical and (k or scheme):
+        raise ValueError("Invalid input: categorical cannot be specified as True simultaneously with scheme or k "
+                         "parameters")
+    if not k:
+        k = 5
+    if k > 10:
+        warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
+                      "This is not recommended!")
+    if not scheme:
+        scheme = 'Quantiles'  # This trips it correctly later.
+    return categorical, k, scheme
