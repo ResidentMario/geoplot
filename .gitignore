@@ -4,3 +4,5 @@
 geoplot/__pycache__
 data/
 dependencies/
+.DS_Store
+test.png
