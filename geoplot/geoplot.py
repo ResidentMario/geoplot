@@ -1,7 +1,5 @@
 import geopandas as gpd
 from geopandas.plotting import __pysal_choro, norm_cmap
-import pandas as pd
-from shapely import geometry
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import matplotlib.cm
@@ -10,10 +8,14 @@ import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
 import warnings
-from matplotlib.patches import Rectangle
-from matplotlib.collections import PatchCollection
-from scipy.spatial import KDTree
-from collections import defaultdict
+from geoplot.quad import QuadTree, partition
+# import descartes
+# from matplotlib.patches import Rectangle
+# from matplotlib.collections import PatchCollection
+# from scipy.spatial import KDTree
+# from collections import defaultdict
+# import pandas as pd
+# from shapely import geometry
 
 
 def pointplot(df,
@@ -161,7 +163,8 @@ def choropleth(df,
 
 
 def aggplot(df,
-            cutoff=5,
+            threshold=5,
+            by=None,
             hue=None,
             # scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
             # legend=False, legend_kwargs=None,
@@ -170,29 +173,13 @@ def aggplot(df,
             projection=None,
             figsize=(8, 6),
             **kwargs):
-    # TODO: Implement the missingno geographic nullity plot as a general-purpose plot type here.
-    # We need to smartly generate geometry limits. For now we'll just use centroids.
-    xs = [g.x for g in df.geometry]
-    ys = [g.y for g in df.geometry]
-    minx, maxx = np.min(xs), np.max(xs)
-    miny, maxy = np.min(ys), np.max(ys)
-    patches = dict()
-    # Do stuff.
-    import pdb; pdb.set_trace()
-    patches = _squarify(df, (minx, maxx, miny, maxy), cutoff)
-    geoms = [p[0] for p in patches]
-    fig = plt.plot()
-    patch_col = []
-    for x0, x1, y0, y1 in geoms:
-        print(x0, x1, y0, y1)
-        patch_col.append(Rectangle((x0, y0), x1 - x0, y1 - y0))
-    col = PatchCollection(patch_col)
-    ax = plt.gca()
-    ax.add_collection(col)
-    ax.set_ylim([40.540909999999997, 40.886433399999994])
-    ax.set_xlim([-74.177014599999993, -73.736522300000004])
-    plt.show()
-
+    if by:
+        pass
+    else:
+        # Generate a quadtree and partition it to generate.
+        quad = QuadTree(df)
+        partitions = partition(quad, threshold)
+        pass
 
 
 
@@ -305,80 +292,9 @@ def _validate_buckets(categorical, k, scheme):
     return categorical, k, scheme
 
 
-def _patchify(df, window, cutoff):
-    pass
-
-
-def _squarify(df, window, cutoff, depth=0):
-    # TODO: Write this as a tree structure.
-    min_x, max_x, min_y, max_y = window
-    indices = __indices_inside(df, window)
-    threshold = cutoff * len(df) if cutoff < 1 else cutoff  # both float (percentage) and integer cutoffs allowed
-    if len(indices) > threshold:
-        mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
-        q1 = _squarify(df, (min_x, mid_x, mid_y, max_y), cutoff, depth + 1)
-        q2 = _squarify(df, (min_x, mid_x, min_y, mid_y), cutoff, depth + 1)
-        q3 = _squarify(df, (mid_x, max_x, mid_y, max_y), cutoff, depth + 1)
-        q4 = _squarify(df, (mid_x, max_x, min_y, mid_y), cutoff, depth + 1)
-        return [((min_x, max_x, min_y, max_y), depth, indices)] + q1 + q2 + q3 + q4
-    else:
-        return []
-
-
 def __indices_inside(df, window):
     min_x, max_x, min_y, max_y = window
     points = df.geometry.centroid
     is_in = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
     indices = is_in.values.nonzero()[0]
     return indices
-
-# points_inside = df[(_min_x < arr[:, 0]) &
-    #                    (arr[:, 0] < _max_x) &
-    #                    (_min_y < arr[:, 1]) &
-    #                    (arr[:, 1] < _max_y)]
-    # if len(points_inside) < cutoff:
-    #     # The following subroutine groups `geo_group` by `x_col` and `y_col`, and calculates and returns
-    #     # a list of points in the group (`points`) as well as its overall nullity (`geographic_nullity`). The
-    #     # first of these calculations is ignored.
-    #     _, square_nullity = _calculate_geographic_nullity(points_inside, x_col, y_col)
-    #     rectangles.append(((_min_x, _max_x, _min_y, _max_y), square_nullity))
-    # else:
-    #     _mid_x, _mid_y = (_min_x + _max_x) / 2, (_min_y + _max_y) / 2
-    #     squarify(_min_x, _mid_x, _mid_y, _max_y, points_inside)
-    #     squarify(_min_x, _mid_x, _min_y, _mid_y, points_inside)
-    #     squarify(_mid_x, _max_x, _mid_y, _max_y, points_inside)
-    #     squarify(_mid_x, _max_x, _min_y, _mid_y, points_inside)
-
-
-# def _squarify(df, window, cutoff):
-#     # TODO: Write this as a tree structure.
-#     min_x, max_x, min_y, max_y = window
-#     indices = __indices_inside(df, window)
-#     threshold = cutoff * len(df) if cutoff < 1 else cutoff  # both float (percentage) and integer cutoffs allowed
-#     if len(indices) > threshold:
-#         mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
-#         q1 = _squarify(df, (min_x, mid_x, mid_y, max_y), cutoff)
-#         q2 = _squarify(df, (min_x, mid_x, min_y, mid_y), cutoff)
-#         q3 = _squarify(df, (mid_x, max_x, mid_y, max_y), cutoff)
-#         q4 = _squarify(df, (mid_x, max_x, min_y, mid_y), cutoff)
-#         return [((min_x, max_x, min_y, max_y), indices)] + q1 + q2 + q3 + q4
-#         # mid_x, mid_y = (min_x + max_x) / 2, (min_y + max_y) / 2
-#         # q1w = (min_x, mid_x, mid_y, max_y)
-#         # q2w = (min_x, mid_x, min_y, mid_y)
-#         # q3w = (mid_x, max_x, mid_y, max_y)
-#         # q4w = (mid_x, max_x, min_y, mid_y)
-#         # q1i = __indices_inside(df, q1w)
-#         # q2i = __indices_inside(df, q2w)
-#         # q3i = __indices_inside(df, q3w)
-#         # q4i = __indices_inside(df, q4w)
-#         # subl = []
-#         # for qw, qi in zip([q1w, q2w, q3w, q4w], [q1i, q2i, q3i, q4i]):
-#         #     if len(qi) > threshold:
-#         #         subl += _squarify(df.iloc[qi], qw, cutoff)
-#         # if len(subl) > 0:
-#         #     return subl
-#         # else:
-#         #     return [[window, indices]]
-#     else:
-#         # return [[window, indices]]
-#         return []
