@@ -1,20 +1,30 @@
-# All of the optional parameters passed to the Cartopy CRS instance as an argument to the projection parameter
-# above are themselves passed on, via initialization, into a `proj4_params` attribute of the class, which is a
-# basic dict of the form e.g.:
+"""
+This module defines the ``geoplot`` coordinate reference system classes, wrappers on ``cartopy.crs`` objects meant
+to be used as parameters to the ``projection`` parameter of all front-end ``geoplot`` outputs.
+
+This was necessary because ``cartopy.crs`` objects do not allow modifications in place. Allow me to explain:
+
+All of the optional parameters passed to the Cartopy CRS instance as an argument to the projection parameter
+above are themselves passed on, via initialization, into a `proj4_params` attribute of the class, which is a
+basic dict of the form e.g.:
 # >>> projection.proj4_params
 # <<< {'proj': 'eqc', 'lon_0': 0.0, 'a': 57.29577951308232, 'ellps': 'WGS84'}
-#
-# In general Python follows the philosophy that everything should be mutable. This object, however,
-# refuses assignment. For example witness what happens when you insert the following code:
+
+In general Python follows the philosophy that everything should be mutable. This object, however,
+refuses assignment. For example witness what happens when you insert the following code:
 # >>> projection.proj4_params['a'] = 0
 # >>> print(projection.proj4_params['a'])
 # <<< 57.29577951308232
-# In other words, Cartopy CRS internals are immutable; they can only be set at initialization.
-# cf. http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473
-#
-# I tried several workarounds. The one which works best is having the user pass a geoplot.crs.* to projection;
-# the contents of geoplot.crs are a bunch of thin projection class wrappers with a factory method, "load",
-# for properly configuring a Cartopy projection with or without optional central coordinate(s).
+In other words, Cartopy CRS internals are immutable; they can only be set at initialization.
+cf. http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473
+
+I tried several workarounds. The one which works best is having the user pass a geoplot.crs.* to projection;
+the contents of geoplot.crs are a bunch of thin projection class wrappers with a factory method, "load",
+for properly configuring a Cartopy projection with or without optional central coordinate(s). Hence this module.
+
+For the list of Cartopy CRS objects this module derives from, refer to
+http://scitools.org.uk/cartopy/docs/latest/crs/projections.html
+"""
 
 import cartopy.crs as ccrs
 
@@ -171,6 +181,37 @@ class OSNI:
 
 
 def _generic_load(proj, df, centerings):
+    """
+    A moderately mind-bendy metamethod which abstracts the internals of individual projections' load procedures.
+
+    Parameters
+    ----------
+    proj : geoplot.crs object instance
+        A disguised reference to ``self``.
+    df : GeoDataFrame
+        The GeoDataFrame which has been passed as input to the plotter at the top level. This data is needed to
+        calculate reasonable centering variables in cases in which the user does not already provide them; which is,
+        incidentally, the reason behind all of this funny twice-instantiation loading in the first place.
+    centerings: dct
+        A dictionary containing names and centering methods. Certain projections have certain centering parameters
+        whilst others lack them. For example, the geospatial projection contains both ``central_longitude`` and
+        ``central_latitude`` instance parameter, which together control the center of the plot, while the North Pole
+        Stereo projection has only a ``central_longitude`` instance parameter, implying that latitude is fixed (as
+        indeed it is, as this projection is centered on the North Pole!).
+
+        A top-level centerings method is provided in each of the ``geoplot`` top-level plot functions; each of the
+        projection wrapper classes defined here in turn selects the functions from this list relevent to this
+        particular instance and passes them to the ``_generic_load`` method here.
+
+        We then in turn execute these functions to get defaults for our ``df`` and pass them off to our output
+        ``cartopy.crs`` instance.
+
+    Returns
+    -------
+    crs : ``cartopy.crs`` object instance
+        Returns a ``cartopy.crs`` object instance whose appropriate instance variables have been set to reasonable
+        defaults wherever not already provided by the user.
+    """
     centering_variables = dict()
     for key, func in centerings.items():
         centering_variables[key] = func(df)
