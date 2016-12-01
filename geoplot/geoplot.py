@@ -9,6 +9,9 @@ from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
 import warnings
 from geoplot.quad import QuadTree, partition
+import shapely.geometry
+from matplotlib.patches import Rectangle
+from matplotlib.collections import PatchCollection
 # import descartes
 # from matplotlib.patches import Rectangle
 # from matplotlib.collections import PatchCollection
@@ -169,17 +172,44 @@ def aggplot(df,
             # scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
             # legend=False, legend_kwargs=None,
             extent=None,
-            # stock_image=False, coastlines=False, gridlines=False,
             projection=None,
             figsize=(8, 6),
             **kwargs):
+    fig = plt.plot(figsize=figsize)
+
+    # TODO: Implement this.
+    if not projection:
+        raise NotImplementedError
+
+    projection = projection.load(df, {
+        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+    })
+
+    ax = plt.subplot(111, projection=projection)
+
     if by:
         pass
     else:
         # Generate a quadtree and partition it to generate.
         quad = QuadTree(df)
+        bxmin, bxmax, bymin, bymax = quad.bounds
         partitions = partition(quad, threshold)
-        pass
+        partitions = list(partitions)
+        # import pdb; pdb.set_trace()
+        patches = []
+        for p in partitions:
+            xmin, xmax, ymin, ymax = p.bounds
+            rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
+            feature = ShapelyFeature([rect], ccrs.PlateCarree())
+            ax.add_feature(feature, **kwargs)
+            # TODO: The code snippet for matplotlib alone is below.
+            # ax.add_artist(Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor='lightgray'))
+            # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
+            # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
+        ax.set_ylim([bymin, bymax])
+        ax.set_xlim([bxmin, bxmax])
+    plt.show()
 
 
 
