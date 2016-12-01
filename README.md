@@ -7,6 +7,8 @@ This project is a very early "pre-alpha" work in progress.
 
 ![a](./figures/example.png)
 
+![a](./figures/example_2.png)
+
 ### Potential features
 
 * `geoplot()` &mdash; Simple extension of the `geopandas`-provided `plot()`.
