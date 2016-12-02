@@ -313,8 +313,6 @@ def aggplot(df,
             extent=None,
             figsize=(8, 6),
             **kwargs):
-    import pdb; pdb.set_trace()
-    # TODO: Parameters are incomplete, so docstring is likewise.
     """
     Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
     geometry types and missing aggregate geometry data.
@@ -381,6 +379,7 @@ def aggplot(df,
     None
         Terminates by calling ``plt.show()``.
     """
+    # TODO: Parameters are incomplete, so docstring is likewise.
 
     fig = plt.plot(figsize=figsize)
 
@@ -426,7 +425,6 @@ def aggplot(df,
         if extent:
             ax.set_extent(extent, crs=ccrs.PlateCarree())
         else:
-            import pdb; pdb.set_trace()
             ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
     plt.show()
 
