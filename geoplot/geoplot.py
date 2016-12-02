@@ -145,7 +145,7 @@ def pointplot(df,
     ys = np.array([p.y for p in df.geometry])
 
     if extent:
-        ax.set_extent(extent)
+        ax.set_extent(extent, crs=ccrs.PlateCarree())
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -280,9 +280,9 @@ def choropleth(df,
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     if extent:
-        ax.set_extent(extent)
+        ax.set_extent(extent, crs=ccrs.PlateCarree())
     else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
+        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord), crs=ccrs.PlateCarree())
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -313,6 +313,7 @@ def aggplot(df,
             extent=None,
             figsize=(8, 6),
             **kwargs):
+    import pdb; pdb.set_trace()
     # TODO: Parameters are incomplete, so docstring is likewise.
     """
     Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
@@ -423,9 +424,10 @@ def aggplot(df,
             # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
             # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
         if extent:
-            ax.set_extent(extent)
+            ax.set_extent(extent, crs=ccrs.PlateCarree())
         else:
-            ax.set_extent((bxmin, bxmax, bymin, bymax))
+            import pdb; pdb.set_trace()
+            ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
     plt.show()
 
 
