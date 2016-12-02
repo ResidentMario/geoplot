@@ -87,7 +87,7 @@ class QuadTree:
         return [QuadTree(self.data, bounds=q1), QuadTree(self.data, bounds=q2), QuadTree(self.data, bounds=q3),
                 QuadTree(self.data, bounds=q4)]
 
-    def partition(self, thresh):
+    def partition(self, nmin, nmax):
         """
         This method call decomposes a QuadTree instances into a list of sub- QuadTree instances which are the
         smallest possible geospatial "buckets", given the current splitting rules, containing at least ``thresh``
@@ -106,14 +106,14 @@ class QuadTree:
             A list of sub- QuadTree instances which are the smallest possible geospatial "buckets", given the current
             splitting rules, containing at least ``thresh`` points.
         """
-        if self.n < thresh:
+        if self.n < nmin:
             return [self]
         else:
-            ret = subpartition(self, thresh)
+            ret = subpartition(self, nmin, nmax)
             return flatten(ret)
 
 
-def subpartition(quadtree, thresh):
+def subpartition(quadtree, nmin, nmax):
     """
     Recursive core of the ``QuadTree.partition`` method. Just five lines of code, amazingly.
 
@@ -121,7 +121,7 @@ def subpartition(quadtree, thresh):
     ----------
     quadtree : QuadTree object instance
         The QuadTree object instance being partitioned.
-    thresh : int
+    nmin : int
         The splitting threshold. If this is not met this method will return a listing containing the root tree alone.
 
     Returns
@@ -130,10 +130,12 @@ def subpartition(quadtree, thresh):
     parameter.
     """
     subtrees = quadtree.split()
-    if any([t.n < thresh for t in subtrees]):
+    if quadtree.n > nmax:
+        return [q.partition(nmin, nmax) for q in subtrees]
+    elif any([t.n < nmin for t in subtrees]):
         return [quadtree]
     else:
-        return [q.partition(thresh) for q in subtrees]
+        return [q.partition(nmin, nmax) for q in subtrees]
 
 
 def flatten(items):
