@@ -16,6 +16,7 @@ import cartopy.crs as ccrs
 import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
+import pandas as pd
 # from matplotlib.patches import Rectangle
 # from matplotlib.collections import PatchCollection
 # import descartes
@@ -305,11 +306,13 @@ def choropleth(df,
 
 def aggplot(df,
             projection=None,
+            hue=None,
+            geometry=None,
             by=None,
-            threshold=5,
-            hue=None, cmap='Set1', vmin=None, vmax=None,
+            nmax=None, nmin=None, nsig=0,
             agg=np.mean,
-            # legend=False, legend_kwargs=None,
+            cmap='Set1', vmin=None, vmax=None,
+            legend=True, legend_kwargs=None,
             extent=None,
             figsize=(8, 6),
             **kwargs):
@@ -334,16 +337,41 @@ def aggplot(df,
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
         formats. Defaults to None, in which case no colormap will be applied at all.
-    categorical : boolean, optional
-        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
-        is set to None or not specified.
-    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
-        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
-        left unspecified or set to None this variable is ignored.
-    k : int, optional
-        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is left unspecified or set to None this
-        variable is ignored.
+    by : iterable or str, optional
+        The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
+        Specifying ``by`` kicks ``aggplot`` into convex hull plotting mode.
+    nmax : int or None, optional
+        This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
+        will be ignored. This variable specifies the maximum number of observations that will be contained in each
+        quadrangle; any quadrangle containing more than ``nmax`` observations will be forcefully partitioned.
+
+        This is useful as a way of "forcing" the quadtree to subpartition further than it would otherwise,
+        as using a minimum-obsevations rule alone will cause partitioning to halt early whenever a hole in the data
+        is found. For those familiar with them, an analog may be drawn here to splitting rules in decision trees.
+
+        This variable may be left unspecified, in which case no maximum splitting rule will be used. If this
+        value is specified it is enforced more strictly than the minimum splitting ``nmin`` parameter, and may result
+        in partitions containing no or statistically insignificant amounts of points.
+    nmin : int, optional
+        This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
+        will be ignored.
+
+        This value specifies the minimum number of observations that must be present in each quadtree split for the
+        split to be followed through. For example, if we specify a value of 5, partition a quadrangle, and find that it
+        contains a subquadrangle with just 4 points inside, this rule will cause the algorithm to return the parent
+        quadrangle instead of its children.
+
+        This is the primary variable controlling how deep a quadtree partition can go. Note that if ``nmax`` is
+        specified that rule is given higher priority.
+    nsig : int, optional
+        A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
+        ``nsig`` points are not aggregated and are instead returned as white patches, indicative of their status as
+        "empty" spaces. This value defaults to 0. It should be set higher than that if one wishes to control for
+        outliers.
+    agg : function, optional
+        The aggregation ufunc that will be applied to the ``numpy`` array of values for the variable of interest of
+        observations inside of each quadrangle. Defaults to ``np.mean``. Other options are ``np.median``,
+        ``np.count``, etc.
     cmap : matplotlib color, optional
         The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
         for a colormap to be applied at all, so this parameter is ignored otherwise.
@@ -359,8 +387,8 @@ def aggplot(df,
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
     legend_kwargs : dict, optional
-        Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments cf.
-        http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend.
+        Keword arguments to be passed to the ``matplotlib`` ``ax.colorbar`` method. For a list of possible arguments cf.
+        http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -381,8 +409,6 @@ def aggplot(df,
     """
     # TODO: Parameters are incomplete, so docstring is likewise.
 
-    fig = plt.plot(figsize=figsize)
-
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
@@ -392,10 +418,8 @@ def aggplot(df,
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
+    fig = plt.plot(figsize=figsize)
     ax = plt.subplot(111, projection=projection)
-
-    # # Generate colormaps.
-    # cmap, categories, values = _colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -405,18 +429,64 @@ def aggplot(df,
     values = _validate_hue(df, hue)
     cmap = _continuous_colormap(values, cmap, vmin, vmax)
 
-    if by:
-        pass
+    # TODO: This is the next feature to implement.
+    if geometry is not None:
+        import pdb; pdb.set_trace()
+        f = lambda geom: _geom_index(geom, geometry)
+        categories = geometry.apply(f, axis='columns')
+        # ...
+
+    elif by:
+        bxmin = bxmax = bymin = bymax = None
+        for _, p in df.groupby(by):
+            hull = shapely.geometry.MultiPoint(p.geometry).convex_hull
+
+            # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
+            # extrema of the hulls we are generating.
+            if not extent:
+                hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(hull.envelope.exterior))
+                if not bxmin or hxmin < bxmin:
+                    bxmin = hxmin
+                if not bxmax or hxmax > bxmax:
+                    bxmax = hxmax
+                if not bymin or hymin < bymin:
+                    bymin = hymin
+                if not bymax or hymax > bymax:
+                    bymax = hymax
+
+            # We draw here.
+            color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
+            features = ShapelyFeature([hull], ccrs.PlateCarree())
+            ax.add_feature(features, facecolor=color, **kwargs)
+
+        # Set the extent.
+        if extent:
+            ax.set_extent(extent, crs=ccrs.PlateCarree())
+        else:
+            ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
+
     else:
-        # Generate a quadtree and partition it to generate.
+        # Set reasonable defaults for the n-params if appropriate.
+        # nmax = nmax if nmax else np.min([50, int(0.20 * len(df))])
+        nmax = nmax if nmax else len(df)
+        nmin = nmin if nmin else np.min([20, int(0.05 * len(df))])
+
+        # Generate a quadtree.
         quad = QuadTree(df)
         bxmin, bxmax, bymin, bymax = quad.bounds
-        partitions = quad.partition(threshold)
+        # Assert that nmin is not smaller than the largest number of co-located observations (otherwise the algorithm
+        # would continue running until the recursion limit).
+        max_coloc = np.max([len(l) for l in quad.agg.values()])
+        if max_coloc > nmin:
+            raise ValueError("nmin is set to {0}, but there is a coordinate containing {1} observations in the "
+                             "dataset.".format(nmin, max_coloc))
+        # Run the partitions, then paint the results.
+        partitions = quad.partition(nmin, nmax)
         for p in partitions:
             xmin, xmax, ymin, ymax = p.bounds
             rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
             feature = ShapelyFeature([rect], ccrs.PlateCarree())
-            color = cmap.to_rgba(agg(p.data[hue_col]))
+            color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
             ax.add_feature(feature, facecolor=color, **kwargs)
             # TODO: The code snippet for matplotlib alone is below.
             # ax.add_artist(Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor='lightgray'))
@@ -426,6 +496,12 @@ def aggplot(df,
             ax.set_extent(extent, crs=ccrs.PlateCarree())
         else:
             ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
+
+    # Append a legend, if appropriate.
+    if legend:
+        cmap.set_array(values)
+        plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
+
     plt.show()
 
 
@@ -761,3 +837,13 @@ def __indices_inside(df, window):
     is_in = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
     indices = is_in.values.nonzero()[0]
     return indices
+
+
+def _geom_index(geom, geoms):
+    """
+    WIP, documentation coming.
+    """
+    for i, shape in enumerate(geoms):
+        if shape.contains(geom):
+            return i
+    return -1

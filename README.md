@@ -1,33 +1,21 @@
 ### Quickstart
 
-`geoplot` is to geospatial analytics as `seaborn` is to regular data science. `geoplot` is to `cartopy` as `seaborn`
-is to `matplotlib`.
+`geoplot` is an in-progress, very early-iteration library for high-level geographic data visualization, akin to
+`seaborn`. It is based on `cartopy`, `geopandas`, and the rest of the modern geospatial Python stack.
 
-This project is a very early "pre-alpha" work in progress.
+Here are a few teasers of what it can do:
 
 ![a](./figures/example.png)
 
 ![a](./figures/example_2.png)
 
-### Potential features
+### Status
 
-* `geoplot()` &mdash; Simple extension of the `geopandas`-provided `plot()`.
-* `dot()` &mdash; [Dot map](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/dotdensity.png).
-A simple map type that places a dot wherever a coordinate occurs.
-* `marker()` &mdash; An elaboration on `dot()`. Allows any marker type, as well as MultiMarkers.
-* `heatmap()` &mdash; [Geo heatmap](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/kde1.png).
-Fit a KDE or a distance-regular colormap to the map.
-* `boundary()` &mdash; [Boundary map](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/shapefiles.png).
-Draws the boundaries of polygons. Mostly useful in combination.
-* `choropleth()` &mdash; [Choropleth](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/choropleth.png).
-* `voronoi()` &mdash; [Voronoi tesselation](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/voronoi-filled.png).
-Fits polygons around points that map by minimizing distance.
-* `spatial()` &mdash; [Spatial map](https://raw.githubusercontent.com/andrea-cuttone/geoplotlib/master/examples/screenshots/graph-flights.png).
-Colors polygons according to data on their number.
-* `symbol()` &mdash; [Symbol map](symbol.png). Embed symbols like pies or growing circles into a map.
-* `cartogram()` &mdash; Proportional sizing, no idea how that would be implemented.
-    * Including [non-contiguous option](http://bl.ocks.org/mbostock/4055908)? Easier to implement.
-* Enough to start. Plenty more [here](https://github.com/andrea-cuttone/geoplotlib/tree/master/examples/screenshots).
+Frozen due to irresolvable differences between `shapely`, `fiona`, and `cartopy` `GEOS` C library linkages&mdash;both
+ of my development rigs are suffering from dependency hell kernel deaths of different stripes. [See this ticket for
+ reference](https://github.com/Toblerity/Shapely/issues/435).
+
+Not sure where to go from here.
 
 #### References
 
@@ -39,22 +27,3 @@ Colors polygons according to data on their number.
 ### To-do
 
 Tons.
-
-### Development environment
-
-This is not accurate anymore.
-
-To set this library up for development in a local virtual environment:
-
-#### Linux, Mac OSX
-
-1. `git clone https://github.com/ResidentMario/geoplot.git`
-2. `conda env create`
-3. `source activate geoplot`
-
-#### Windows
-
-1. `git clone https://github.com/ResidentMario/geoplot.git`
-2. `conda env create` (this will likely partially fail, keep going)
-3. `runipy install.ipynb`
-4. `activate geoplot`
