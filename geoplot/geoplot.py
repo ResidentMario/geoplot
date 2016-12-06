@@ -20,12 +20,9 @@ import pandas as pd
 # from matplotlib.patches import Rectangle
 # from matplotlib.collections import PatchCollection
 # import descartes
-# from matplotlib.patches import Rectangle
-# from matplotlib.collections import PatchCollection
 # from scipy.spatial import KDTree
 # from collections import defaultdict
 # import pandas as pd
-# from shapely import geometry
 
 
 def pointplot(df,
@@ -307,8 +304,8 @@ def choropleth(df,
 def aggplot(df,
             projection=None,
             hue=None,
-            geometry=None,
             by=None,
+            geometry=None,
             nmax=None, nmin=None, nsig=0,
             agg=np.mean,
             cmap='Set1', vmin=None, vmax=None,
@@ -341,6 +338,10 @@ def aggplot(df,
     by : iterable or str, optional
         The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
         Specifying ``by`` kicks ``aggplot`` into convex hull plotting mode.
+    geometry : GeoDataFrame or GeoSeries, optional
+        A ``geopandas`` object containing geometries. When both ``by`` and ``geometry`` are provided ``aggplot``
+        plots in geometry plotting mode, matching points in the ``by`` column with the geometries given by their index
+        label in the ``geometry`` column, aggregating those, and plotting the results.
     nmax : int or None, optional
         This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
         will be ignored. This variable specifies the maximum number of observations that will be contained in each
@@ -408,7 +409,6 @@ def aggplot(df,
     None
         Terminates by calling ``plt.show()``.
     """
-    # TODO: Parameters are incomplete, so docstring is likewise.
 
     # TODO: Implement this.
     if not projection:
@@ -430,53 +430,57 @@ def aggplot(df,
     values = _validate_hue(df, hue)
     cmap = _continuous_colormap(values, cmap, vmin, vmax)
 
-    if geometry is not None:
-        # Downconvert GeoDataFrame to GeoSeries objects.
-        if isinstance(geometry, gpd.GeoDataFrame): geometry = geometry.geometry
-
-        # Valid polygons are simple polygons (`shapely.geometry.Polygon`) and complex multi-piece polygons
-        # (`shapely.geometry.MultiPolygon`). The latter is an iterable of its components, so if the shape is
-        # a `MultiPolygon`, append it as that list. Otherwise if the shape is a basic `Polygon`,
-        # append a list with one element, the `Polygon` itself.
-        def geom_convert(geom):
-            if isinstance(geom, shapely.geometry.MultiPolygon):  # shapely.geometry.MultiPolygon
-                return shapely.ops.cascaded_union([p for p in geom])
-            elif isinstance(geom, shapely.geometry.Polygon):  # shapely.geometry.Polygon
-                return [geom]
-            else:  # Anything else, raise.
-                raise ValueError("Geometries of Polygon or MultiPolygon shapely types are expected, but one of {0} "
-                                 "type was provided.".format(type(geom)))
-        import pdb; pdb.set_trace()
-        geometry = geometry.map(geom_convert)
-
-        # Now geometry is a Series of lists of polygons, each of which together form a sector of interest.
-        # As a pre-processing step, let's now classify our points according to what polygon's convex hull they fit in;
-        # only then will we ask which data point geometry is contained in which full polygon and, hence, which data
-        # point geometry is contained in which sector. This is more efficient than asking this question directly,
-        # because contains is a very slow operation.
-        hull_membership_indices = []
-        for sector in geometry:
-            sector_indices = []
-            for polygon in sector:
-                sector_indices.append(np.nonzero([polygon.convex_hull.contains(p) for p in df.geometry]))
-            hull_membership_indices.append(sector_indices)
-        import pdb; pdb.set_trace()
-            # TODO: Not sure this works, and it seems difficult to make it run efficiently.
-
-        # indices = _geom_index(df, geometry)
-        # f = lambda geom: np.argmax(geometry.map(lambda g: g.contains(geom)))
-        # categories = geometry.map(f)
-        # ...
+    if geometry is not None and by is None:
+        raise NotImplementedError("Aggregation by geometry alone is not currently implemented and unlikely to be "
+                                  "implemented in the future - it is likely out-of-scope here due to the algorithmic "
+                                  "complexity involved.")
+        # The user wants us to classify our data geometries by their location within the passed world geometries
+        # ("sectors"), aggregate a statistic based on that, and return a plot. Unfortunately this seems to be too
+        # hard for the moment. Two reasons:
+        # 1. The Shapely API for doing so is just about as consistent as can be, but still a little bit inconsistent.
+        #    In particular, it is not obvious what to do with invalid and self-intersecting geometric components passed
+        #    to the algorithm.
+        # 2. Point-in-polygon and, worse, polygon-in-polygon algorithms are extremely slow, to the point that almost
+        #    any optimizations that the user can make by doing classification "by hand" is worth it.
+        # There should perhaps be a separate library or ``geopandas`` function for doing this.
 
     elif by:
         bxmin = bxmax = bymin = bymax = None
-        for _, p in df.groupby(by):
-            hull = shapely.geometry.MultiPoint(p.geometry).convex_hull
+
+        # Side-convert geometry for ease of use.
+        if geometry is not None:
+            # Downconvert GeoDataFrame to GeoSeries objects.
+            if isinstance(geometry, gpd.GeoDataFrame): geometry = geometry.geometry
+
+            # Valid polygons are simple polygons (``shapely.geometry.Polygon``) and complex multi-piece polygons
+            # (``shapely.geometry.MultiPolygon``). The latter is an iterable of its components, so if the shape is
+            # a ``MultiPolygon``, append it as that list. Otherwise if the shape is a basic ``Polygon``,
+            # append a list with one element, the ``Polygon`` itself.
+            def geom_convert(geom):
+                if isinstance(geom, shapely.geometry.MultiPolygon):
+                    return shapely.ops.cascaded_union([p for p in geom])
+                elif isinstance(geom, shapely.geometry.Polygon):
+                    return [geom]
+                else:  # Anything else, raise.
+                    raise ValueError("Shapely geometries of Polygon or MultiPolygon types are expected, but one of {0} "
+                                     "type was provided.".format(type(geom)))
+
+            geometry = geometry.map(geom_convert)
+
+        for label, p in df.groupby(by):
+            if geometry is not None:
+                try:
+                    sector = geometry.loc[label]
+                except IndexError:
+                    raise IndexError("Data contains a '{0}' label which lacks a corresponding value in the provided "
+                                     "geometry.".format(label))
+            else:
+                sector = shapely.geometry.MultiPoint(p.geometry).convex_hull
 
             # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
             # extrema of the hulls we are generating.
             if not extent:
-                hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(hull.envelope.exterior))
+                hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(sector.envelope.exterior))
                 if not bxmin or hxmin < bxmin:
                     bxmin = hxmin
                 if not bxmax or hxmax > bxmax:
@@ -488,8 +492,9 @@ def aggplot(df,
 
             # We draw here.
             color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
-            features = ShapelyFeature([hull], ccrs.PlateCarree())
+            features = ShapelyFeature([sector], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, **kwargs)
+            # TODO: If geometry is provided and the projection chosen is not PlateCarree the plot is flipped, fix that.
 
         # Set the extent.
         if extent:
@@ -874,21 +879,3 @@ def __indices_inside(df, window):
     is_in = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
     indices = is_in.values.nonzero()[0]
     return indices
-
-
-def _geom_index(df, display_geometries):
-    """
-    WIP, documentation coming.
-    """
-    data_geometries = df.reset_index(drop=True).geometry.copy()
-    indices = []
-    for _, geom in data_geometries.iteritems():
-        indices.append(np.nonzero(display_geometries.map(lambda geom_group: any([g.contains(geom) for g in
-                                                                                 geom_group]))))
-    return indices
-    # geometry.map(lambda geoms: )
-    # containers = geoms.geometry[geoms.geometry.map(lambda shape: shape.contains(geom))]
-    # if len(containers) == 0:
-    #     return -1
-    # else:
-    #     return containers.index[0]
