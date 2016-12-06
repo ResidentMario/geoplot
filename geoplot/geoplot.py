@@ -313,6 +313,7 @@ def aggplot(df,
             agg=np.mean,
             cmap='Set1', vmin=None, vmax=None,
             legend=True, legend_kwargs=None,
+            gridlines=False,
             extent=None,
             figsize=(8, 6),
             **kwargs):
@@ -429,11 +430,42 @@ def aggplot(df,
     values = _validate_hue(df, hue)
     cmap = _continuous_colormap(values, cmap, vmin, vmax)
 
-    # TODO: This is the next feature to implement.
     if geometry is not None:
+        # Downconvert GeoDataFrame to GeoSeries objects.
+        if isinstance(geometry, gpd.GeoDataFrame): geometry = geometry.geometry
+
+        # Valid polygons are simple polygons (`shapely.geometry.Polygon`) and complex multi-piece polygons
+        # (`shapely.geometry.MultiPolygon`). The latter is an iterable of its components, so if the shape is
+        # a `MultiPolygon`, append it as that list. Otherwise if the shape is a basic `Polygon`,
+        # append a list with one element, the `Polygon` itself.
+        def geom_convert(geom):
+            if isinstance(geom, shapely.geometry.MultiPolygon):  # shapely.geometry.MultiPolygon
+                return shapely.ops.cascaded_union([p for p in geom])
+            elif isinstance(geom, shapely.geometry.Polygon):  # shapely.geometry.Polygon
+                return [geom]
+            else:  # Anything else, raise.
+                raise ValueError("Geometries of Polygon or MultiPolygon shapely types are expected, but one of {0} "
+                                 "type was provided.".format(type(geom)))
         import pdb; pdb.set_trace()
-        f = lambda geom: _geom_index(geom, geometry)
-        categories = geometry.apply(f, axis='columns')
+        geometry = geometry.map(geom_convert)
+
+        # Now geometry is a Series of lists of polygons, each of which together form a sector of interest.
+        # As a pre-processing step, let's now classify our points according to what polygon's convex hull they fit in;
+        # only then will we ask which data point geometry is contained in which full polygon and, hence, which data
+        # point geometry is contained in which sector. This is more efficient than asking this question directly,
+        # because contains is a very slow operation.
+        hull_membership_indices = []
+        for sector in geometry:
+            sector_indices = []
+            for polygon in sector:
+                sector_indices.append(np.nonzero([polygon.convex_hull.contains(p) for p in df.geometry]))
+            hull_membership_indices.append(sector_indices)
+        import pdb; pdb.set_trace()
+            # TODO: Not sure this works, and it seems difficult to make it run efficiently.
+
+        # indices = _geom_index(df, geometry)
+        # f = lambda geom: np.argmax(geometry.map(lambda g: g.contains(geom)))
+        # categories = geometry.map(f)
         # ...
 
     elif by:
@@ -499,8 +531,13 @@ def aggplot(df,
 
     # Append a legend, if appropriate.
     if legend:
+        if not legend_kwargs: legend_kwargs = dict()
+
         cmap.set_array(values)
         plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
+
+    # Optional parameters, if appropriate.
+    _set_optional_parameters(ax, False, False, gridlines)
 
     plt.show()
 
@@ -839,11 +876,19 @@ def __indices_inside(df, window):
     return indices
 
 
-def _geom_index(geom, geoms):
+def _geom_index(df, display_geometries):
     """
     WIP, documentation coming.
     """
-    for i, shape in enumerate(geoms):
-        if shape.contains(geom):
-            return i
-    return -1
+    data_geometries = df.reset_index(drop=True).geometry.copy()
+    indices = []
+    for _, geom in data_geometries.iteritems():
+        indices.append(np.nonzero(display_geometries.map(lambda geom_group: any([g.contains(geom) for g in
+                                                                                 geom_group]))))
+    return indices
+    # geometry.map(lambda geoms: )
+    # containers = geoms.geometry[geoms.geometry.map(lambda shape: shape.contains(geom))]
+    # if len(containers) == 0:
+    #     return -1
+    # else:
+    #     return containers.index[0]

@@ -1,12 +1,13 @@
-name: geoplot_dev
+name: geoplot
 dependencies:
   - python=3.5
   - numpy
   - pandas
   - jupyter
   - requests
+  - matplotlib
   - pip:
-    - decartes
+    - descartes
     - shapely
     - fiona
     - pyproj
