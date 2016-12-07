@@ -1,9 +1,10 @@
 .idea/
 .ipynb_checkpoints/
 *.csv
-geoplot/*
 data/
 dependencies/
 .DS_Store
 test.png
 *.pyc
+docs/_static/
+docs/_templates/
