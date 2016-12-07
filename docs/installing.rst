@@ -1,0 +1,6 @@
+.. _installing:
+
+Installation
+============
+
+TODO
