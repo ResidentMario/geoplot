@@ -24,7 +24,6 @@ import pandas as pd
 # from collections import defaultdict
 # import pandas as pd
 
-
 def pointplot(df,
               extent=None,
               hue=None,

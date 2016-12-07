@@ -1,8 +1,9 @@
 .idea/
 .ipynb_checkpoints/
 *.csv
-geoplot/__pycache__
+geoplot/*
 data/
 dependencies/
 .DS_Store
 test.png
+*.pyc
