@@ -79,8 +79,9 @@ def pointplot(df,
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
     legend_kwargs : dict, optional
-        Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments cf.
-        http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend.
+        Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
+        refer to the `the matplotlib documentation
+        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -96,12 +97,78 @@ def pointplot(df,
         outliers---that input will be used instead.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments cf. http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
+        arguments refer to `the matplotlib documentation
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
     None
         Terminates by calling ``plt.show()``.
+
+    Examples
+    --------
+
+    The most basic plot possible is little more than a bunch of points and a projection:
+
+    .. code-block:: python
+
+        import geoplot as gplt
+        import geoplot.crs as ccrs
+        gplt.pointplot(points, projection=ccrs.PlateCarree())
+
+    .. image:: ../figures/pointplot/pointplot_demo_1.png
+
+
+    Use the ``hue`` parameter to apply a colormap to the data:
+
+    .. code-block:: python
+
+        gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT')
+
+    .. image:: ../figures/pointplot/pointplot_demo_2.png
+
+    ``pointplot`` will default to binning the observations in the given data column into five ordinal classes. Bins
+    are optimized to contain approximately equal numbers of observations by default (they are "quartiles"). You can
+    also specify an alternative binning scheme using the ``scheme`` parameter; note that you must have ``pysal``
+    installed in order for this parameter to work.
+
+    If your data is already `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_,
+    you can specify ``categorical=True`` instead to use the labels in your dataset directly:
+
+    .. code-block:: python
+
+        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], projection=ccrs.AlbersEqualArea(),
+                       hue='BOROUGH', categorical=True,
+                       legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/pointplot/pointplot_demo_3.png
+
+    Note also the use of ``legend``, as well as the various secondary visual parameters present.
+
+    You can change the number of data bins used by specifying an alternative ``k`` value, and you can adjust the
+    `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to any matplotlib-recognizable
+    colormap using the ``cmap`` parameter:
+
+    .. code-block:: python
+
+        gplt.pointplot(data, projection=ccrs.AlbersEqualArea(),
+               hue='var', cmap='inferno', k=8,
+               edgecolor='white', linewidth=0.5,
+               legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
+
+
+    .. image:: ../figures/pointplot/pointplot_demo_4.png
+
+
+    .. _commented_out_plot::
+
+       import matplotlib.pyplot as plt
+       import numpy as np
+       x = np.random.randn(1000)
+       plt.hist( x, 20)
+       plt.grid()
+       plt.title('Example Plot')
+       plt.show()
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -224,8 +291,9 @@ def choropleth(df,
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
     legend_kwargs : dict, optional
-        Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments cf.
-        http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend.
+        Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
+        refer to `the matplotlib documentation
+        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -241,7 +309,8 @@ def choropleth(df,
         outliers---that input will be used instead.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments cf. http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
+        arguments refer to `the matplotlib documentation
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
@@ -388,8 +457,10 @@ def aggplot(df,
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
     legend_kwargs : dict, optional
-        Keword arguments to be passed to the ``matplotlib`` ``ax.colorbar`` method. For a list of possible arguments cf.
-        http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar.
+        Keword arguments to be passed to the ``matplotlib`` ``ax.colorbar`` method. For a list of possible arguments
+        refer to `the matplotlib documentation
+        <http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar>`_.
+        http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -401,7 +472,8 @@ def aggplot(df,
         outliers---that input will be used instead.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments cf. http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
+        arguments refer to `the matplotlib documentation
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
@@ -693,8 +765,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     ordinal one. If a scheme is provided we compute a distribution for the given data. If one is not provided we
     assume that the input data is categorical.
 
-    This code is based on the ``geopandas`` choropleth facilities, cf.
-    https://github.com/geopandas/geopandas/blob/master/geopandas/plotting.py#L253
+    This code makes extensive use of ``geopandas`` choropleth facilities.
 
     Parameters
     ----------

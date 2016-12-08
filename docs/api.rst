@@ -1,6 +1,19 @@
 .. _api:
 
-API
-===
+API Reference
+=============
 
-TODO
+Spatial plots
+-------------
+
+.. currentmodule:: geoplot
+
+.. autosummary::
+
+    pointplot
+    choropleth
+    aggplot
+
+Utility functions
+-----------------
+

@@ -20,6 +20,7 @@
 import os
 import sys
 import sphinx_bootstrap_theme
+import matplotlib
 # Custom styling configuration details:
 # https://ryan-roemer.github.io/sphinx-bootstrap-theme/README.html
 
@@ -36,7 +37,7 @@ sys.path.insert(0, os.path.abspath(os.path.pardir))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon',
-    'sphinx.ext.githubpages']
+    'sphinx.ext.githubpages', 'sphinx.ext.autosummary', 'matplotlib.sphinxext.plot_directive']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
