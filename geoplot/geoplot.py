@@ -4,12 +4,11 @@ This module defines the majority of geoplot functions, including all plot types.
 
 import geopandas as gpd
 from geopandas.plotting import __pysal_choro, norm_cmap
-# TODO: Clean up imports using import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from matplotlib.colors import Normalize
-import matplotlib.cm
-from matplotlib.lines import Line2D
+# from matplotlib.colors import Normalize
+# import matplotlib.cm
+# from matplotlib.lines import Line2D
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
@@ -17,12 +16,7 @@ import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
-# from matplotlib.patches import Rectangle
-# from matplotlib.collections import PatchCollection
-# import descartes
-# from scipy.spatial import KDTree
-# from collections import defaultdict
-# import pandas as pd
+
 
 def pointplot(df,
               extent=None,
@@ -31,7 +25,7 @@ def pointplot(df,
               stock_image=False, coastlines=False, gridlines=False,
               projection=None,
               legend=False, legend_kwargs=None,
-              figsize=(8, 6),
+              figsize=(8, 6), ax=None,
               **kwargs):
     """
     Generates an instance of a pointplot, the simplest kind of plot type available in this library. A pointplot is,
@@ -69,12 +63,10 @@ def pointplot(df,
         for a colormap to be applied at all, so this parameter is ignored otherwise.
     vmin : float, optional
         A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is below this level will all be colored by the same threshold value.
     vmax : float, optional
         A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is above this level will all be colored by the same threshold value.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
@@ -82,9 +74,6 @@ def pointplot(df,
         Keword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
         refer to the `the matplotlib documentation
         <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
-        Defaults to (8, 6), the ``matplotlib`` default global.
     stock_image : boolean, optional
         Whether or not to overlay the low-resolution Natural Earth world map.
     coastlines : boolean, optional
@@ -95,6 +84,14 @@ def pointplot(df,
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
         outliers---that input will be used instead.
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        Defaults to (8, 6), the ``matplotlib`` default global.
+    ax : GeoAxesSubplot instance, optional
+        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
+        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
         arguments refer to `the matplotlib documentation
@@ -102,8 +99,8 @@ def pointplot(df,
 
     Returns
     -------
-    None
-        Terminates by calling ``plt.show()``.
+    GeoAxesSubplot instance
+        The axis object with the plot on it.
 
     Examples
     --------
@@ -158,17 +155,6 @@ def pointplot(df,
 
 
     .. image:: ../figures/pointplot/pointplot_demo_4.png
-
-
-    .. _commented_out_plot::
-
-       import matplotlib.pyplot as plt
-       import numpy as np
-       x = np.random.randn(1000)
-       plt.hist( x, 20)
-       plt.grid()
-       plt.title('Example Plot')
-       plt.show()
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -199,7 +185,8 @@ def pointplot(df,
     # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
     # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
-    ax = plt.subplot(111, projection=projection)
+    if not ax:
+        ax = plt.subplot(111, projection=projection)
 
     # Set extent. In order to prevent points from being occluded, we set it to be a little bit larger than the values
     # in the plot themselves. This is done within the data itself because the underlying plot appears not to respect
@@ -233,7 +220,7 @@ def pointplot(df,
     # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
     # is again because the axis is a special cartopy object.
     ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, **kwargs)
-    plt.show()
+    return ax
 
 
 def choropleth(df,
@@ -243,7 +230,7 @@ def choropleth(df,
                legend=False, legend_kwargs=None,
                stock_image=False, coastlines=False, gridlines=False,
                extent=None,
-               figsize=(8, 6),
+               figsize=(8, 6), ax=None,
                **kwargs):
     """
     Generates an instance of a choropleth, a simple aggregation plot based on geometry properties and a mainstay of
@@ -281,12 +268,10 @@ def choropleth(df,
         for a colormap to be applied at all, so this parameter is ignored otherwise.
     vmin : float, optional
         A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is below this level will all be colored by the same threshold value.
     vmax : float, optional
         A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is above this level will all be colored by the same threshold value.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
@@ -307,6 +292,11 @@ def choropleth(df,
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
         outliers---that input will be used instead.
+    ax : GeoAxesSubplot instance, optional
+        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
+        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
         arguments refer to `the matplotlib documentation
@@ -314,8 +304,45 @@ def choropleth(df,
 
     Returns
     -------
-    None
-        Terminates by calling ``plt.show()``.
+    GeoAxesSubplot instance
+        The axis object with the plot on it.
+
+    Examples
+    --------
+
+    A basic choropleth specifies a collection of polygons, a projection, and a ``hue`` variable for mapping. In the
+    case below our target variable is categorical, so we additionally set ``categorical`` to True.
+
+    .. code-block:: python
+
+        import geoplot as gplt
+        import geoplot.crs as ccrs
+        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True)
+
+    .. image:: ../figures/choropleth/choropleth_demo_1.png
+
+
+    Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
+    them. You can change the colormap with the ``cmap`` parameter, and add a legend by specifying ``legend``.
+
+    .. code-block:: python
+
+        gplt.choropleth(polydata, hue='classification', projection=ccrs.PlateCarree(), cmap='Blues',
+                        legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)})
+
+    .. image:: ../figures/choropleth/choropleth_demo_2.png
+
+
+    Change the scheme used to generate the buckets with the ``scheme`` parameter, and the number of buckets by
+    specifying ``k``.
+
+    .. code-block:: python
+
+        gplt.choropleth(census_tracts, hue='mock_category', projection=ccrs.AlbersEqualArea(),
+                        cmap='Set1', k=5, scheme='equal_interval', legend=True,
+                        edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/choropleth/choropleth_demo_3.png
     """
 
     # Format the data to be displayed for input.
@@ -341,7 +368,8 @@ def choropleth(df,
     # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
     # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
     # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
-    ax = plt.subplot(111, projection=projection)
+    if not ax:
+        ax = plt.subplot(111, projection=projection)
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
@@ -366,7 +394,8 @@ def choropleth(df,
     for cat, geom in zip(values, df.geometry):
         features = ShapelyFeature([geom], ccrs.PlateCarree())
         ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
-    plt.show()
+
+    return ax
 
 
 def aggplot(df,
@@ -380,7 +409,7 @@ def aggplot(df,
             legend=True, legend_kwargs=None,
             gridlines=False,
             extent=None,
-            figsize=(8, 6),
+            figsize=(8, 6), ax=None,
             **kwargs):
     """
     Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
@@ -447,12 +476,10 @@ def aggplot(df,
         for a colormap to be applied at all, so this parameter is ignored otherwise.
     vmin : float, optional
         A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is below this level will all be colored by the same threshold value.
     vmax : float, optional
         A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is above this level will all be colored by the same threshold value.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
@@ -470,6 +497,11 @@ def aggplot(df,
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
         outliers---that input will be used instead.
+    ax : GeoAxesSubplot instance, optional
+        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
+        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
     kwargs: dict, optional
         Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
         arguments refer to `the matplotlib documentation
@@ -477,8 +509,8 @@ def aggplot(df,
 
     Returns
     -------
-    None
-        Terminates by calling ``plt.show()``.
+    GeoAxesSubplot instance
+        The axis object with the plot on it.
     """
 
     # TODO: Implement this.
@@ -491,7 +523,8 @@ def aggplot(df,
     })
 
     fig = plt.plot(figsize=figsize)
-    ax = plt.subplot(111, projection=projection)
+    if not ax:
+        ax = plt.subplot(111, projection=projection)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -615,7 +648,7 @@ def aggplot(df,
     # Optional parameters, if appropriate.
     _set_optional_parameters(ax, False, False, gridlines)
 
-    plt.show()
+    return ax
 
 
 ##################
@@ -755,7 +788,7 @@ def _continuous_colormap(hue, cmap, vmin, vmax):
     """
     mn = min(hue) if vmin is None else vmin
     mx = max(hue) if vmax is None else vmax
-    norm = Normalize(vmin=mn, vmax=mx)
+    norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
     return mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
 
 
@@ -786,12 +819,10 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
         determines the spectrum; our algorithm determines the cuts.
     vmin : float
         A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is below this level will all be colored by the same threshold value.
     vmax : float
         A strict cealing on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value. The value for this variable is
-        meant to be inherited from the top-level variable of the same name.
+        value is above this level will all be colored by the same threshold value.
 
     Returns
     -------
@@ -811,7 +842,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
                           "This is not recommended!")
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
-    cmap = norm_cmap(values, cmap, Normalize, matplotlib.cm, vmin=vmin, vmax=vmax)
+    cmap = norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm, vmin=vmin, vmax=vmax)
     return cmap, categories, values
 
 
@@ -841,7 +872,7 @@ def _paint_legend(ax, categories, cmap, legend_kwargs):
     """
     patches = []
     for value, cat in enumerate(categories):
-        patches.append(Line2D([0], [0], linestyle="none",
+        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
                               marker="o",
                               markersize=10, markerfacecolor=cmap.to_rgba(value)))
     # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
