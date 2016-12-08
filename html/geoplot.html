@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>geoplot package &#8212; geoplot 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          geoplot</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Geoplot tutorial</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">geoplot package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-geoplot.crs">geoplot.crs module</a></li>
+<li><a class="reference internal" href="#module-geoplot.geoplot">geoplot.geoplot module</a></li>
+<li><a class="reference internal" href="#module-geoplot.quad">geoplot.quad module</a></li>
+<li><a class="reference internal" href="#module-geoplot">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/geoplot.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="geoplot-package">
+<h1>geoplot package<a class="headerlink" href="#geoplot-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-geoplot.crs">
+<span id="geoplot-crs-module"></span><h2>geoplot.crs module<a class="headerlink" href="#module-geoplot.crs" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the <code class="docutils literal"><span class="pre">geoplot</span></code> coordinate reference system classes, wrappers on <code class="docutils literal"><span class="pre">cartopy.crs</span></code> objects meant
+to be used as parameters to the <code class="docutils literal"><span class="pre">projection</span></code> parameter of all front-end <code class="docutils literal"><span class="pre">geoplot</span></code> outputs.</p>
+<p>This was necessary because <code class="docutils literal"><span class="pre">cartopy.crs</span></code> objects do not allow modifications in place. cf.
+<a class="reference external" href="http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473">http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473</a></p>
+<p>For the list of Cartopy CRS objects this module derives from, refer to
+<a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/crs/projections.html">http://scitools.org.uk/cartopy/docs/latest/crs/projections.html</a></p>
+<dl class="class">
+<dt id="geoplot.crs.AlbersEqualArea">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">AlbersEqualArea</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AlbersEqualArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.AlbersEqualArea.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AlbersEqualArea.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.AzimuthalEquidistant">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">AzimuthalEquidistant</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AzimuthalEquidistant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.AzimuthalEquidistant.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AzimuthalEquidistant.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.EuroPP">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">EuroPP</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.EuroPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.EuroPP.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.EuroPP.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Geostationary">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Geostationary</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Geostationary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Geostationary.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Geostationary.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Gnomonic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Gnomonic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Gnomonic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Gnomonic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Gnomonic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.InterruptedGoodeHomolosine">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">InterruptedGoodeHomolosine</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.InterruptedGoodeHomolosine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.InterruptedGoodeHomolosine.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.InterruptedGoodeHomolosine.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertAzimuthalEqualArea">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertAzimuthalEqualArea</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertAzimuthalEqualArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertAzimuthalEqualArea.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertAzimuthalEqualArea.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertConformal">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertConformal</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertConformal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertConformal.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertConformal.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertCylindrical">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertCylindrical</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertCylindrical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertCylindrical.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertCylindrical.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Mercator">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Mercator</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Mercator.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Miller">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Miller</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Miller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Miller.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Miller.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Mollweide">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Mollweide</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mollweide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Mollweide.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mollweide.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.NorthPolarStereo">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">NorthPolarStereo</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.NorthPolarStereo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.NorthPolarStereo.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.NorthPolarStereo.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.OSGB">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">OSGB</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.OSGB.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSGB.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.OSNI">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">OSNI</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSNI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.OSNI.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSNI.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Orthographic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Orthographic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Orthographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Orthographic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Orthographic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.PlateCarree">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">PlateCarree</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.PlateCarree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.PlateCarree.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.PlateCarree.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Robinson">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Robinson</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Robinson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Robinson.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Robinson.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Sinusoidal">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Sinusoidal</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Sinusoidal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Sinusoidal.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Sinusoidal.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.SouthPolarStereo">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">SouthPolarStereo</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.SouthPolarStereo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.SouthPolarStereo.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.SouthPolarStereo.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Stereographic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Stereographic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Stereographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Stereographic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Stereographic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.TransverseMercator">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">TransverseMercator</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.TransverseMercator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.TransverseMercator.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.TransverseMercator.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.UTM">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">UTM</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.UTM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.UTM.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.UTM.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-geoplot.geoplot">
+<span id="geoplot-geoplot-module"></span><h2>geoplot.geoplot module<a class="headerlink" href="#module-geoplot.geoplot" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the majority of geoplot functions, including all plot types.</p>
+<dl class="function">
+<dt id="geoplot.geoplot.aggplot">
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
+geometry types and missing aggregate geometry data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
+module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
+<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
+chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
+operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
+projection is present.</p>
+<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+formats. Defaults to None, in which case no colormap will be applied at all.</li>
+<li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
+Specifying <code class="docutils literal"><span class="pre">by</span></code> kicks <code class="docutils literal"><span class="pre">aggplot</span></code> into convex hull plotting mode.</li>
+<li><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">geopandas</span></code> object containing geometries. When both <code class="docutils literal"><span class="pre">by</span></code> and <code class="docutils literal"><span class="pre">geometry</span></code> are provided <code class="docutils literal"><span class="pre">aggplot</span></code>
+plots in geometry plotting mode, matching points in the <code class="docutils literal"><span class="pre">by</span></code> column with the geometries given by their index
+label in the <code class="docutils literal"><span class="pre">geometry</span></code> column, aggregating those, and plotting the results.</li>
+<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; <p>This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
+will be ignored. This variable specifies the maximum number of observations that will be contained in each
+quadrangle; any quadrangle containing more than <code class="docutils literal"><span class="pre">nmax</span></code> observations will be forcefully partitioned.</p>
+<p>This is useful as a way of &#8220;forcing&#8221; the quadtree to subpartition further than it would otherwise,
+as using a minimum-obsevations rule alone will cause partitioning to halt early whenever a hole in the data
+is found. For those familiar with them, an analog may be drawn here to splitting rules in decision trees.</p>
+<p>This variable may be left unspecified, in which case no maximum splitting rule will be used. If this
+value is specified it is enforced more strictly than the minimum splitting <code class="docutils literal"><span class="pre">nmin</span></code> parameter, and may result
+in partitions containing no or statistically insignificant amounts of points.</p>
+</li>
+<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; <p>This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
+will be ignored.</p>
+<p>This value specifies the minimum number of observations that must be present in each quadtree split for the
+split to be followed through. For example, if we specify a value of 5, partition a quadrangle, and find that it
+contains a subquadrangle with just 4 points inside, this rule will cause the algorithm to return the parent
+quadrangle instead of its children.</p>
+<p>This is the primary variable controlling how deep a quadtree partition can go. Note that if <code class="docutils literal"><span class="pre">nmax</span></code> is
+specified that rule is given higher priority.</p>
+</li>
+<li><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
+<code class="docutils literal"><span class="pre">nsig</span></code> points are not aggregated and are instead returned as white patches, indicative of their status as
+&#8220;empty&#8221; spaces. This value defaults to 0. It should be set higher than that if one wishes to control for
+outliers.</li>
+<li><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) &#8211; The aggregation ufunc that will be applied to the <code class="docutils literal"><span class="pre">numpy</span></code> array of values for the variable of interest of
+observations inside of each quadrangle. Defaults to <code class="docutils literal"><span class="pre">np.mean</span></code>. Other options are <code class="docutils literal"><span class="pre">np.median</span></code>,
+<code class="docutils literal"><span class="pre">np.count</span></code>, etc.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
+for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
+value is below this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
+value is above this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
+None or left unspecified.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method. For a list of possible arguments
+refer to <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar">the matplotlib documentation</a>.
+<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend</a></li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
+outliers&#8212;that input will be used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="geoplot.geoplot.choropleth">
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">choropleth</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an instance of a choropleth, a simple aggregation plot based on geometry properties and a mainstay of
+the geospatial data science field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
+module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
+<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
+chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
+operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
+projection is present.</p>
+<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+formats. Defaults to None, in which case no colormap will be applied at all.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
+is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+left unspecified or set to None this variable is ignored.</li>
+<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this
+variable is ignored.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
+for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
+value is below this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
+value is above this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
+None or left unspecified.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
+refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
+<li><strong>coastlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth coastlines.</li>
+<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
+outliers&#8212;that input will be used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="geoplot.geoplot.pointplot">
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>extent=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>projection=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an instance of a pointplot, the simplest kind of plot type available in this library. A pointplot is,
+at its core, simply a dot map, with each dot corresponding with a single geometric (x, y) point in the dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
+module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
+<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
+chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
+operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
+projection is present.</p>
+<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+formats. Defaults to None, in which case no colormap will be applied at all.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
+is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+left unspecified or set to None this variable is ignored.</li>
+<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this
+variable is ignored.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
+for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
+value is below this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
+value is above this level will all be colored by the same threshold value. The value for this variable is
+meant to be inherited from the top-level variable of the same name.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
+None or left unspecified.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
+refer to the <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
+<li><strong>coastlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth coastlines.</li>
+<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
+outliers&#8212;that input will be used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The most basic plot possible is little more than a bunch of points and a projection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_1.png" src="_images/pointplot_demo_1.png" />
+<p>Use the <code class="docutils literal"><span class="pre">hue</span></code> parameter to apply a colormap to the data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_2.png" src="_images/pointplot_demo_2.png" />
+<p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes. Bins
+are optimized to contain approximately equal numbers of observations by default (they are &#8220;quartiles&#8221;). You can
+also specify an alternative binning scheme using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter; note that you must have <code class="docutils literal"><span class="pre">pysal</span></code>
+installed in order for this parameter to work.</p>
+<p>If your data is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>,
+you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> instead to use the labels in your dataset directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_3.png" src="_images/pointplot_demo_3.png" />
+<p>Note also the use of <code class="docutils literal"><span class="pre">legend</span></code>, as well as the various secondary visual parameters present.</p>
+<p>You can change the number of data bins used by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value, and you can adjust the
+<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any matplotlib-recognizable
+colormap using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+       <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+       <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_4.png" src="_images/pointplot_demo_4.png" />
+</dd></dl>
+
+</div>
+<div class="section" id="module-geoplot.quad">
+<span id="geoplot-quad-module"></span><h2>geoplot.quad module<a class="headerlink" href="#module-geoplot.quad" title="Permalink to this headline">¶</a></h2>
+<p>This module implements a naive equal-split four-way quadtree algorithm (<a class="reference external" href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a>). It
+has been written in way meant to make it convenient to use for splitting and aggregating rectangular geometries up
+to a certain guaranteed minimum instance threshold.</p>
+<p>The routines here are used by the <code class="docutils literal"><span class="pre">geoplot.aggplot</span></code> plot type, and only when no user geometry input is provided.</p>
+<dl class="class">
+<dt id="geoplot.quad.QuadTree">
+<em class="property">class </em><code class="descclassname">geoplot.quad.</code><code class="descname">QuadTree</code><span class="sig-paren">(</span><em>gdf</em>, <em>bounds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.quad.QuadTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This module&#8217;s core class. For more on quadtrees cf. <a class="reference external" href="https://en.wikipedia.org/wiki/Quadtree">https://en.wikipedia.org/wiki/Quadtree</a>.</p>
+<dl class="docutils">
+<dt>data</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">GeoDataFrame</span><dd>An efficient shallow copy reference to the class&#8217;s <code class="docutils literal"><span class="pre">gdf</span></code> data initialization input. This is retained for
+downstream aggregation purposes.</dd>
+<dt>bounds</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">(minx, maxx, miny, maxy)</span><dd>A tuple of boundaries for data contained in the quadtree. May be passed as an initialization input via
+<code class="docutils literal"><span class="pre">bounds</span></code> or left to the <code class="docutils literal"><span class="pre">QuadTree</span></code> instance to compute for itself.</dd>
+<dt>agg</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd>An aggregated dictionary whose keys consist of coordinates within the instance&#8217;s <code class="docutils literal"><span class="pre">bounds</span></code> and whose values
+consist of the indices of rows in the <code class="docutils literal"><span class="pre">data</span></code> property corresponding with those points. This additional
+bookkeeping is necessary because a single coordinate may contain many individual data points.</dd>
+<dt>n</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The number of points contained in the current QuadTree instance.</dd>
+</dl>
+<dl class="method">
+<dt id="geoplot.quad.QuadTree.partition">
+<code class="descname">partition</code><span class="sig-paren">(</span><em>nmin</em>, <em>nmax</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.quad.QuadTree.partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method call decomposes a QuadTree instances into a list of sub- QuadTree instances which are the
+smallest possible geospatial &#8220;buckets&#8221;, given the current splitting rules, containing at least <code class="docutils literal"><span class="pre">thresh</span></code>
+points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>thresh</strong> (<em>int</em>) &#8211; The minimum number of points per partition. Care should be taken not to set this parameter to be too
+low, as in large datasets a small cluster of highly adjacent points may result in a number of
+sub-recursive splits possibly in excess of Python&#8217;s global recursion limit.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>partitions</strong> &#8211; A list of sub- QuadTree instances which are the smallest possible geospatial &#8220;buckets&#8221;, given the current
+splitting rules, containing at least <code class="docutils literal"><span class="pre">thresh</span></code> points.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of QuadTree object instances</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="geoplot.quad.QuadTree.split">
+<code class="descname">split</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.quad.QuadTree.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits the current QuadTree instance four ways through the midpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><em>A list of four &#8220;sub&#8221; QuadTree instances, corresponding with the first, second, third, and fourth quartiles,</em></li>
+<li><em>respectively.</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="geoplot.quad.flatten">
+<code class="descclassname">geoplot.quad.</code><code class="descname">flatten</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.quad.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield items from any nested iterable. Used by <code class="docutils literal"><span class="pre">QuadTree.flatten</span></code> to one-dimensionalize a list of sublists.
+cf. <a class="reference external" href="http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python">http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="geoplot.quad.subpartition">
+<code class="descclassname">geoplot.quad.</code><code class="descname">subpartition</code><span class="sig-paren">(</span><em>quadtree</em>, <em>nmin</em>, <em>nmax</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.quad.subpartition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursive core of the <code class="docutils literal"><span class="pre">QuadTree.partition</span></code> method. Just five lines of code, amazingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>quadtree</strong> (<em>QuadTree object instance</em>) &#8211; The QuadTree object instance being partitioned.</li>
+<li><strong>nmin</strong> (<em>int</em>) &#8211; The splitting threshold. If this is not met this method will return a listing containing the root tree alone.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><em>A (probably nested) list of QuadTree object instances containing a number of points respecting the threshold</em></li>
+<li><em>parameter.</em></li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-geoplot">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoplot" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+  
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>
