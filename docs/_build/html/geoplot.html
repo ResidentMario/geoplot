@@ -405,7 +405,7 @@ to be used as parameters to the <code class="docutils literal"><span class="pre"
 <p>This module defines the majority of geoplot functions, including all plot types.</p>
 <dl class="function">
 <dt id="geoplot.geoplot.aggplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
 geometry types and missing aggregate geometry data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -458,11 +458,9 @@ observations inside of each quadrangle. Defaults to <code class="docutils litera
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is below this level will all be colored by the same threshold value.</li>
 <li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is above this level will all be colored by the same threshold value.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method. For a list of possible arguments
@@ -474,16 +472,20 @@ Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplot
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
+<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
+multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
 <li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
 arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
 </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -492,7 +494,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 
 <dl class="function">
 <dt id="geoplot.geoplot.choropleth">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">choropleth</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">choropleth</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an instance of a choropleth, a simple aggregation plot based on geometry properties and a mainstay of
 the geospatial data science field.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -521,11 +523,9 @@ variable is ignored.</li>
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is below this level will all be colored by the same threshold value.</li>
 <li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is above this level will all be colored by the same threshold value.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
@@ -539,25 +539,53 @@ Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplot
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
+<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
+multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
 <li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
 arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
 </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>A basic choropleth specifies a collection of polygons, a projection, and a <code class="docutils literal"><span class="pre">hue</span></code> variable for mapping. In the
+case below our target variable is categorical, so we additionally set <code class="docutils literal"><span class="pre">categorical</span></code> to True.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/choropleth_demo_1.png" src="_images/choropleth_demo_1.png" />
+<p>Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
+them. You can change the colormap with the <code class="docutils literal"><span class="pre">cmap</span></code> parameter, and add a legend by specifying <code class="docutils literal"><span class="pre">legend</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
+                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/choropleth_demo_2.png" src="_images/choropleth_demo_2.png" />
+<p>Change the scheme used to generate the buckets with the <code class="docutils literal"><span class="pre">scheme</span></code> parameter, and the number of buckets by
+specifying <code class="docutils literal"><span class="pre">k</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_category&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Set1&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/choropleth_demo_3.png" src="_images/choropleth_demo_3.png" />
 </dd></dl>
 
 <dl class="function">
 <dt id="geoplot.geoplot.pointplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>extent=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>projection=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>extent=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>projection=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates an instance of a pointplot, the simplest kind of plot type available in this library. A pointplot is,
 at its core, simply a dot map, with each dot corresponding with a single geometric (x, y) point in the dataset.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -586,34 +614,36 @@ variable is ignored.</li>
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is below this level will all be colored by the same threshold value.</li>
 <li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value. The value for this variable is
-meant to be inherited from the top-level variable of the same name.</li>
+value is above this level will all be colored by the same threshold value.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
 refer to the <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
 </li>
-<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
-Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
 <li><strong>coastlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth coastlines.</li>
 <li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
+multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
 <li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
 arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
 </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Terminates by calling <code class="docutils literal"><span class="pre">plt.show()</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -768,8 +798,6 @@ cf. <a class="reference external" href="http://stackoverflow.com/questions/95291
       
   </div>
 </div>
-  
-  
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
@@ -782,6 +810,5 @@ cf. <a class="reference external" href="http://stackoverflow.com/questions/95291
     </p>
   </div>
 </footer>
-
   </body>
 </html>
