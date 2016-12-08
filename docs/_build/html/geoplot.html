@@ -71,7 +71,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Geoplot tutorial</a></li>
 </ul>
 </ul>
@@ -465,16 +465,18 @@ value is above this level will all be colored by the same threshold value. The v
 meant to be inherited from the top-level variable of the same name.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method. For a list of possible arguments cf.
-<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar">http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar</a>.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method. For a list of possible arguments
+refer to <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar">the matplotlib documentation</a>.
+<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend</a></li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments cf. <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter</a></li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -526,8 +528,9 @@ value is above this level will all be colored by the same threshold value. The v
 meant to be inherited from the top-level variable of the same name.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments cf.
-<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend</a>.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
+refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
@@ -536,8 +539,9 @@ Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplot
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments cf. <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter</a></li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -589,8 +593,9 @@ value is above this level will all be colored by the same threshold value. The v
 meant to be inherited from the top-level variable of the same name.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments cf.
-<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend</a>.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
+refer to the <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
@@ -599,8 +604,9 @@ Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplot
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments cf. <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter</a></li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
 </ul>
 </td>
 </tr>
@@ -612,6 +618,42 @@ arguments cf. <a class="reference external" href="http://matplotlib.org/api/pypl
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>The most basic plot possible is little more than a bunch of points and a projection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_1.png" src="_images/pointplot_demo_1.png" />
+<p>Use the <code class="docutils literal"><span class="pre">hue</span></code> parameter to apply a colormap to the data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_2.png" src="_images/pointplot_demo_2.png" />
+<p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes. Bins
+are optimized to contain approximately equal numbers of observations by default (they are &#8220;quartiles&#8221;). You can
+also specify an alternative binning scheme using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter; note that you must have <code class="docutils literal"><span class="pre">pysal</span></code>
+installed in order for this parameter to work.</p>
+<p>If your data is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>,
+you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> instead to use the labels in your dataset directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_3.png" src="_images/pointplot_demo_3.png" />
+<p>Note also the use of <code class="docutils literal"><span class="pre">legend</span></code>, as well as the various secondary visual parameters present.</p>
+<p>You can change the number of data bins used by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value, and you can adjust the
+<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any matplotlib-recognizable
+colormap using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+       <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+       <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot_demo_4.png" src="_images/pointplot_demo_4.png" />
 </dd></dl>
 
 </div>
