@@ -8,10 +8,12 @@ dependencies:
   - matplotlib
   - scikit-learn
   - pysal
+  - pandoc
+  - cartopy
   - pip:
     - descartes
     - shapely
     - fiona
     - pyproj
     - geopandas
-    - cartopy
+    - sphinx-bootstrap-theme
