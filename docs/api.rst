@@ -12,6 +12,7 @@ Spatial plots
 
     pointplot
     polyplot
+    cartogram
     choropleth
     aggplot
 
