@@ -405,9 +405,8 @@ to be used as parameters to the <code class="docutils literal"><span class="pre"
 <p>This module defines the majority of geoplot functions, including all plot types.</p>
 <dl class="function">
 <dt id="geoplot.geoplot.aggplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an instance of an aggregate plot, a minimum-expectations summary plot type which handles mixes of
-geometry types and missing aggregate geometry data.</p>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A minimum-expectations summary plot type which handles mixes of geometry types and missing aggregate geometry data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -490,13 +489,59 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>This plot type is intricate: it accepts all geometry types, including a mixture of points and polygons if you
+have them, unlike most of the other plot types included in this library; and its end result can fall into any of
+three general patterns of output.</p>
+<p>When you have a number of geometries but are unable or unwilling (given time and/or interest constraints) to
+provide geospatial context for them, <code class="docutils literal"><span class="pre">aggplot</span></code> will lump your observations into a recursive quadtree. Each of
+the boxes in your result will contain in between some minimum and some maximum number of observations.</p>
+<p>To start with, here&#8217;s an aggplot with a minimal amount of information provided, just data, a projection,
+and a data column:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/aggplot_demo_1.png" src="_images/aggplot_demo_1.png" />
+<p>Quadtree decompositions look a bit like abstract paintings, but they do succeed in getting a point across. To
+get the best output, you often need to tweak the <code class="docutils literal"><span class="pre">nmin</span></code> and <code class="docutils literal"><span class="pre">nmax</span></code> parameters, controlling the minimum and
+maximum number of observations per box, respectively, yourself. Changing the <code class="docutils literal"><span class="pre">cmap</span></code> can also be helpful.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/aggplot_demo_2.png" src="_images/aggplot_demo_2.png" />
+<p>Note that <code class="docutils literal"><span class="pre">aggplot</span></code> will satisfy the <code class="docutils literal"><span class="pre">nmax</span></code> parameter before trying to satisfy <code class="docutils literal"><span class="pre">nmin</span></code>, so you may result in
+spaces without observations, or ones lacking a statistically significant number of observations. This is
+necessary in order to break up &#8220;spaces&#8221; that the algorithm would otherwise end on. You can control the
+maximum number of observations in the holes uisng the <code class="docutils literal"><span class="pre">nsig</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/aggplot_demo_3.png" src="_images/aggplot_demo_3.png" />
+<p>Usually you&#8217;ll just have to play around with these parameters to get the clearest picture.</p>
+<p>If you can provide some sense of space in the form of a categorical variable, you can get a more readable
+picture using convex hull -calculated spaces by passing that variable into the <code class="docutils literal"><span class="pre">by</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;ZIP CODE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+         <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;ZIP CODE&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/aggplot_demo_4.png" src="_images/aggplot_demo_4.png" />
+<p>Finally, if you actually know exactly the geometries that you would like to aggregate by, and can provide a
+<code class="docutils literal"><span class="pre">GeoSeries</span></code> whose index matches your categorical variable of interest, then you can generate an exact
+choropleth.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+             <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/aggplot_demo_5.png" src="_images/aggplot_demo_5.png" />
+<p>Note also the usage of the <code class="docutils literal"><span class="pre">agg</span></code> parameter, which controls what you mean by the &#8220;agg&#8221; in <code class="docutils literal"><span class="pre">aggplot</span></code>. By
+default it will be the mean of the observations contained in the polygon, but you can also specify an
+alternative metric, like the use of <code class="docutils literal"><span class="pre">np.max</span></code> instead here.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="geoplot.geoplot.choropleth">
 <code class="descclassname">geoplot.geoplot.</code><code class="descname">choropleth</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an instance of a choropleth, a simple aggregation plot based on geometry properties and a mainstay of
-the geospatial data science field.</p>
+<dd><p>A simple aggregation plot based on geometry. A mainstay of the geospatial data science field.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -586,8 +631,7 @@ specifying <code class="docutils literal"><span class="pre">k</span></code>.</p>
 <dl class="function">
 <dt id="geoplot.geoplot.pointplot">
 <code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>extent=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>projection=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an instance of a pointplot, the simplest kind of plot type available in this library. A pointplot is,
-at its core, simply a dot map, with each dot corresponding with a single geometric (x, y) point in the dataset.</p>
+<dd><p>A geospatial scatter plot. The simplest useful plot type available.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -684,6 +728,72 @@ colormap using the <code class="docutils literal"><span class="pre">cmap</span><
 </pre></div>
 </div>
 <img alt="_images/pointplot_demo_4.png" src="_images/pointplot_demo_4.png" />
+</dd></dl>
+
+<dl class="function">
+<dt id="geoplot.geoplot.polyplot">
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">polyplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>extent=None</em>, <em>stock_image=False</em>, <em>coastlines=False</em>, <em>gridlines=False</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>facecolor='None'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.polyplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trivially plots whatever geometries are passed to it. Mostly meant to be used in concert with other,
+more interesting plot types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
+module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
+<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
+chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
+operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
+projection is present.</p>
+<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+</li>
+<li><strong>stock_image</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth world map.</li>
+<li><strong>coastlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay the low-resolution Natural Earth coastlines.</li>
+<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
+outliers&#8212;that input will be used instead.</li>
+<li><strong>facecolor</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The color that will be used for the fill &#8220;inside&#8221; of the polygon. This parameter defaults to the string
+<code class="docutils literal"><span class="pre">'None'</span></code>, which creates transparent polygons.</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
+multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
+arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>A trivial example can be created with just two parameters, a geometry and a projection.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="_images/polyplot_demo_1.png" src="_images/polyplot_demo_1.png" />
+<p>However, note that <code class="docutils literal"><span class="pre">polyplot</span></code> is mainly intended to be used in concert with other plot types.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+               <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/polyplot_demo_2.png" src="_images/polyplot_demo_2.png" />
 </dd></dl>
 
 </div>
