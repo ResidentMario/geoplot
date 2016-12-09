@@ -11,6 +11,7 @@ Spatial plots
 .. autosummary::
 
     pointplot
+    polyplot
     choropleth
     aggplot
 
