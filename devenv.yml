@@ -10,6 +10,7 @@ dependencies:
   - pysal
   - pandoc
   - cartopy
+  - seaborn
   - pip:
     - descartes
     - shapely

@@ -384,6 +384,7 @@ def polyplot(df,
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    import pdb; pdb.set_trace()
     if extent:
         ax.set_extent(extent, crs=ccrs.PlateCarree())
     else:
@@ -955,7 +956,6 @@ def cartogram(df,
               extent=None,
               figsize=(8, 6), ax=None,
               **kwargs):
-    # TODO: Finish building.
     """
     This plot scales the size of polygonal inputs based on the value of a particular data parameter.
 
@@ -1115,13 +1115,6 @@ def cartogram(df,
 
     .. image:: ../figures/cartogram/cartogram_demo_8.png
     """
-
-    # Format the data to be displayed for input.
-    # hue = _validate_hue(df, hue)
-
-    # Validate bucketing.
-    # categorical, k, scheme = _validate_buckets(categorical, k, scheme)
-
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
@@ -1207,6 +1200,66 @@ def cartogram(df,
         ax.add_feature(features, **kwargs)
 
     return ax
+
+
+def kdeplot(df,
+            projection=None,
+            scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
+            legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+            stock_image=False, coastlines=False, gridlines=False,
+            extent=None,
+            figsize=(8, 6), ax=None,
+            **kwargs):
+    # Initialize the figure.
+    fig = plt.figure(figsize=figsize)
+
+    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
+    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # TODO: Implement this.
+    if not projection:
+        raise NotImplementedError
+
+    xs = np.array([p.x for p in df.geometry])
+    ys = np.array([p.y for p in df.geometry])
+
+    # Load the projection.
+    projection = projection.load(df, {
+        'central_longitude': lambda df: np.mean(xs),
+        'central_latitude': lambda df: np.mean(ys)
+    })
+
+    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
+    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
+    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    if not ax:
+        ax = plt.subplot(111, projection=projection)
+
+    # Set extent.
+    if extent:
+        ax.set_extent(extent, crs=ccrs.PlateCarree())
+    else:
+        ext = ax.get_extent()
+        print(ax.get_extent())
+        print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+        import pdb; pdb.set_trace()
+        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+
+    # Set optional parameters.
+    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+
+    # TODO: Include colormapping capacity.
+    # Generate colormaps.
+    # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+
+    # Clean up patches.
+    _lay_out_axes(ax)
+
+    import seaborn as sns
+    sns.reset_orig()
+    sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax)
+
+    return ax
+
 
 ##################
 # HELPER METHODS #
