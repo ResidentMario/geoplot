@@ -6,6 +6,7 @@ dependencies/
 .DS_Store
 test.png
 *.pyc
-docs/_static/
-docs/_templates/
 docs/_build
+build/
+geoplot/__pycache__/
+source/
