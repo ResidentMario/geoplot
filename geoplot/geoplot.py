@@ -384,7 +384,7 @@ def polyplot(df,
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     if extent:
         ax.set_extent(extent, crs=ccrs.PlateCarree())
     else:
@@ -1241,7 +1241,7 @@ def kdeplot(df,
         ext = ax.get_extent()
         print(ax.get_extent())
         print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
 
     # Set optional parameters.
