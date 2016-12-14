@@ -1204,7 +1204,7 @@ def cartogram(df,
 
 def kdeplot(df,
             projection=None,
-            scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
+            # trace=True, trace_kwargs=None,
             legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
             stock_image=False, coastlines=False, gridlines=False,
             extent=None,
@@ -1213,7 +1213,7 @@ def kdeplot(df,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
+    # If we are not handed a projection we are in the PlateCarree projection. In that case we can return a
     # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
     # TODO: Implement this.
     if not projection:
@@ -1234,20 +1234,23 @@ def kdeplot(df,
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
-    # Set extent.
-    if extent:
-        ax.set_extent(extent, crs=ccrs.PlateCarree())
-    else:
-        ext = ax.get_extent()
-        print(ax.get_extent())
-        print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        # import pdb; pdb.set_trace()
-        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+    # # Set extent.
+    # if extent:
+    #     ax.set_extent(extent, crs=ccrs.PlateCarree())
+    # else:
+    #     # TODO: Fix this!
+    #     ext = ax.get_extent()
+    #     print(ax.get_extent())
+    #     print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+    #     # import pdb; pdb.set_trace()
+    #     ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+    #     print(ax.get_extent())
+    #     print(np.mean(xs))
+    #     print(np.mean(ys))
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
-    # TODO: Include colormapping capacity.
     # Generate colormaps.
     # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
