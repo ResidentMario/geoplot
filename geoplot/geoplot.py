@@ -389,6 +389,7 @@ def polyplot(df,
         ax.set_extent(extent, crs=ccrs.PlateCarree())
     else:
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord), crs=ccrs.PlateCarree())
+        print("Polyplot extent: ", ax.get_extent(crs=ccrs.PlateCarree()))
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -1234,20 +1235,22 @@ def kdeplot(df,
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
-    # # Set extent.
-    # if extent:
-    #     ax.set_extent(extent, crs=ccrs.PlateCarree())
-    # else:
-    #     # TODO: Fix this!
-    #     ext = ax.get_extent()
-    #     print(ax.get_extent())
-    #     print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-    #     # import pdb; pdb.set_trace()
-    #     ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
-    #     print(ax.get_extent())
-    #     print(np.mean(xs))
-    #     print(np.mean(ys))
-
+    # Set extent.
+    if not ax:
+        if extent:
+            ax.set_extent(extent, crs=ccrs.PlateCarree())
+        else:
+            # TODO: Fix this!
+            ext = ax.get_extent(crs=ccrs.PlateCarree())
+            print("KDE extent: ", ext)
+            print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+            # import pdb; pdb.set_trace()
+            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+            print(np.mean(xs))
+            print(np.mean(ys))
+    else:
+        pass
+        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=projection)
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
