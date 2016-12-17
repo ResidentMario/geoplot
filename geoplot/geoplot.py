@@ -6,9 +6,6 @@ import geopandas as gpd
 from geopandas.plotting import __pysal_choro, norm_cmap
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-# from matplotlib.colors import Normalize
-# import matplotlib.cm
-# from matplotlib.lines import Line2D
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
@@ -18,12 +15,12 @@ import shapely.geometry
 import pandas as pd
 
 
-def pointplot(df,
+# TODO: Progress on the rest of the library is frozen until I absolutely address projection shenanigans here.
+def pointplot(df, projection=None,
               extent=None,
               hue=None,
               categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
               stock_image=False, coastlines=False, gridlines=False,
-              projection=None,
               legend=False, legend_labels=None, legend_kwargs=None,
               figsize=(8, 6), ax=None,
               **kwargs):
@@ -253,7 +250,13 @@ def pointplot(df,
     ys = np.array([p.y for p in df.geometry])
 
     if extent:
-        ax.set_extent(extent, crs=ccrs.PlateCarree())
+        ax.set_extent(extent)
+    else:
+        # import pdb; pdb.set_trace()
+        # xs = np.array([p.x for p in df.geometry])
+        # ys = np.array([p.y for p in df.geometry])
+        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+        pass
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -280,8 +283,7 @@ def pointplot(df,
     return ax
 
 
-def polyplot(df,
-             projection=None,
+def polyplot(df, projection=None,
              extent=None,
              stock_image=False, coastlines=False, gridlines=False,
              figsize=(8, 6), ax=None,
@@ -386,10 +388,9 @@ def polyplot(df,
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     # import pdb; pdb.set_trace()
     if extent:
-        ax.set_extent(extent, crs=ccrs.PlateCarree())
+        ax.set_extent(extent)
     else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord), crs=ccrs.PlateCarree())
-        print("Polyplot extent: ", ax.get_extent(crs=ccrs.PlateCarree()))
+        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -405,11 +406,10 @@ def polyplot(df,
     return ax
 
 
-def choropleth(df,
-               projection=None,
+def choropleth(df, projection=None,
                hue=None,
                scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
-               legend=False, legend_kwargs=None,
+               legend=False, legend_kwargs=None, legend_labels=None,
                stock_image=False, coastlines=False, gridlines=False,
                extent=None,
                figsize=(8, 6), ax=None,
@@ -605,9 +605,9 @@ def choropleth(df,
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     if extent:
-        ax.set_extent(extent, crs=ccrs.PlateCarree())
+        ax.set_extent(extent)
     else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord), crs=ccrs.PlateCarree())
+        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -629,8 +629,7 @@ def choropleth(df,
     return ax
 
 
-def aggplot(df,
-            projection=None,
+def aggplot(df, projection=None,
             hue=None,
             by=None,
             geometry=None,
@@ -903,9 +902,9 @@ def aggplot(df,
 
         # Set the extent.
         if extent:
-            ax.set_extent(extent, crs=ccrs.PlateCarree())
+            ax.set_extent(extent)
         else:
-            ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
+            ax.set_extent((bxmin, bxmax, bymin, bymax))
 
     else:
         # Set reasonable defaults for the n-params if appropriate.
@@ -935,9 +934,9 @@ def aggplot(df,
             # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
             # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
         if extent:
-            ax.set_extent(extent, crs=ccrs.PlateCarree())
+            ax.set_extent(extent)
         else:
-            ax.set_extent((bxmin, bxmax, bymin, bymax), crs=ccrs.PlateCarree())
+            ax.set_extent((bxmin, bxmax, bymin, bymax))
 
     # Append a legend, if appropriate.
     if legend:
@@ -949,8 +948,7 @@ def aggplot(df,
     return ax
 
 
-def cartogram(df,
-              projection=None,
+def cartogram(df, projection=None,
               scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
               legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
               stock_image=False, coastlines=False, gridlines=False,
@@ -1148,9 +1146,9 @@ def cartogram(df,
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     if extent:
-        ax.set_extent(extent, crs=ccrs.PlateCarree())
+        ax.set_extent(extent)
     else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord), crs=ccrs.PlateCarree())
+        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
     _set_optional_parameters(ax, stock_image, coastlines, gridlines)
@@ -1203,14 +1201,14 @@ def cartogram(df,
     return ax
 
 
-def kdeplot(df,
-            projection=None,
-            # trace=True, trace_kwargs=None,
-            legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+def kdeplot(df, projection=None,
             stock_image=False, coastlines=False, gridlines=False,
             extent=None,
             figsize=(8, 6), ax=None,
             **kwargs):
+    import seaborn as sns  # Immediately fail if no seaborn.
+    sns.reset_orig()  # Reset to default style.
+
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
@@ -1238,14 +1236,14 @@ def kdeplot(df,
     # Set extent.
     if not ax:
         if extent:
-            ax.set_extent(extent, crs=ccrs.PlateCarree())
+            ax.set_extent(extent)
         else:
             # TODO: Fix this!
             ext = ax.get_extent(crs=ccrs.PlateCarree())
             print("KDE extent: ", ext)
             print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
             # import pdb; pdb.set_trace()
-            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
             print(np.mean(xs))
             print(np.mean(ys))
     else:
@@ -1260,12 +1258,80 @@ def kdeplot(df,
     # Clean up patches.
     _lay_out_axes(ax)
 
-    import seaborn as sns
-    sns.reset_orig()
-    sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax)
-
+    sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                transform=ccrs.PlateCarree(), ax=ax, **kwargs)
     return ax
 
+
+def network(df, projection=None,
+            start=None, end=None,
+            hue=None, cmap='viridis', vmin=None, vmax=None,
+            legend=True, legend_kwargs=None,
+            extent=None, figsize=(8, 6), ax = None,
+            **kwargs):
+
+    # Check that start and end are provided; format them as GeoSeries if they are passed as strings or iterables.
+    if start is None or end is None:
+        raise ValueError("Starting and/or ending points not provided.")
+    if isinstance(start, str):
+        start = df[start]
+    else:
+        start = gpd.GeoSeries(start)
+    if isinstance(end, str):
+        end = df[end]
+    else:
+        end = gpd.GeoSeries(end)
+
+    # Initialize the figure.
+    fig = plt.figure(figsize=figsize)
+
+    # If we are not handed a projection we are in the PlateCarree projection. In that case we can return a
+    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # TODO: Implement this.
+    if not projection:
+        raise NotImplementedError
+
+    points = pd.concat([start, end])
+    xs = np.array([p.x for p in points])
+    ys = np.array([p.y for p in points])
+
+    # Load the projection.
+    projection = projection.load(df, {
+        'central_longitude': lambda df: np.mean(xs),
+        'central_latitude': lambda df: np.mean(ys)
+    })
+
+    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
+    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
+    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # import pdb; pdb.set_trace()
+    if not ax:
+        ax = plt.subplot(111, projection=projection)
+
+    if extent:
+        ax.set_extent(extent)
+    else:
+        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+        # ax.set_global()
+        # ax.coastlines()
+
+    # Set extent.
+    # TODO: Fix the projection issues!
+        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
+
+    # Set optional parameters.
+    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+
+    # Generate colormaps.
+    # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+
+    # Clean up patches.
+    _lay_out_axes(ax)
+
+    # Plot.
+    ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c='steelblue', **kwargs)
+
+    return ax
 
 ##################
 # HELPER METHODS #
