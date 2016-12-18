@@ -13,14 +13,16 @@ import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
+# TODO: Drop optional arguments (coastlines etc.), let the user set those themselves.
+# TODO: Docstring and doc the new plot types.
+# TODO: Pure cmap option.
+# TODO: Projection tutorial.
 
 
-# TODO: Progress on the rest of the library is frozen until I absolutely address projection shenanigans here.
 def pointplot(df, projection=None,
               extent=None,
               hue=None,
               categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
-              stock_image=False, coastlines=False, gridlines=False,
               legend=False, legend_labels=None, legend_kwargs=None,
               figsize=(8, 6), ax=None,
               **kwargs):
@@ -72,12 +74,6 @@ def pointplot(df, projection=None,
         Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
         refer to the `the matplotlib documentation
         <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
-    stock_image : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth world map.
-    coastlines : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth coastlines.
-    gridlines : boolean, optional
-        Whether or not to overlay cartopy's computed latitude-longitude gridlines.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -259,7 +255,7 @@ def pointplot(df, projection=None,
         pass
 
     # Set optional parameters.
-    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -285,7 +281,6 @@ def pointplot(df, projection=None,
 
 def polyplot(df, projection=None,
              extent=None,
-             stock_image=False, coastlines=False, gridlines=False,
              figsize=(8, 6), ax=None,
              facecolor='None', **kwargs):
     """
@@ -306,12 +301,6 @@ def polyplot(df, projection=None,
         projection is present.
 
         However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
-    stock_image : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth world map.
-    coastlines : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth coastlines.
-    gridlines : boolean, optional
-        Whether or not to overlay cartopy's computed latitude-longitude gridlines.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -393,7 +382,7 @@ def polyplot(df, projection=None,
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
-    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -410,7 +399,6 @@ def choropleth(df, projection=None,
                hue=None,
                scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
                legend=False, legend_kwargs=None, legend_labels=None,
-               stock_image=False, coastlines=False, gridlines=False,
                extent=None,
                figsize=(8, 6), ax=None,
                **kwargs):
@@ -465,12 +453,6 @@ def choropleth(df, projection=None,
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    stock_image : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth world map.
-    coastlines : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth coastlines.
-    gridlines : boolean, optional
-        Whether or not to overlay cartopy's computed latitude-longitude gridlines.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -610,7 +592,7 @@ def choropleth(df, projection=None,
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
 
     # Set optional parameters.
-    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Generate colormaps.
     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
@@ -999,12 +981,6 @@ def cartogram(df, projection=None,
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    stock_image : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth world map.
-    coastlines : boolean, optional
-        Whether or not to overlay the low-resolution Natural Earth coastlines.
-    gridlines : boolean, optional
-        Whether or not to overlay cartopy's computed latitude-longitude gridlines.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -1202,10 +1178,55 @@ def cartogram(df, projection=None,
 
 
 def kdeplot(df, projection=None,
-            stock_image=False, coastlines=False, gridlines=False,
             extent=None,
             figsize=(8, 6), ax=None,
+            clip=None,
             **kwargs):
+    """
+    Geographic kernel density estimate plot.
+
+    Parameters
+    ----------
+    df : GeoDataFrame
+        The data being plotted.
+    projection : geoplot.crs object instance, optional
+        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
+        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
+
+        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
+        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
+        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
+        projection is present.
+
+        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+    clip : iterable or GeoSeries, optional
+        An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
+        "cleaning up". Note: this feature has not yet actually been implemented!
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        Defaults to (8, 6), the ``matplotlib`` default global.
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
+        outliers---that input will be used instead.
+    ax : GeoAxesSubplot instance, optional
+        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
+        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    kwargs: dict, optional
+        Keyword arguments to be passed to the ``sns.kdeplot`` method doing the plotting. For a list of possible
+        arguments refer to `the seaborn documentation
+        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html>`_.
+
+    Returns
+    -------
+    GeoAxesSubplot instance
+        The axis object with the plot on it.
+
+    Examples
+    --------
+    """
     import seaborn as sns  # Immediately fail if no seaborn.
     sns.reset_orig()  # Reset to default style.
 
@@ -1234,23 +1255,13 @@ def kdeplot(df, projection=None,
         ax = plt.subplot(111, projection=projection)
 
     # Set extent.
-    if not ax:
-        if extent:
-            ax.set_extent(extent)
-        else:
-            # TODO: Fix this!
-            ext = ax.get_extent(crs=ccrs.PlateCarree())
-            print("KDE extent: ", ext)
-            print((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-            # import pdb; pdb.set_trace()
-            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-            print(np.mean(xs))
-            print(np.mean(ys))
+    if extent:
+        ax.set_extent(extent)
     else:
-        pass
+        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
         # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=projection)
     # Set optional parameters.
-    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Generate colormaps.
     # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
@@ -1258,21 +1269,129 @@ def kdeplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax)
 
-    sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+    if clip is None:
+        sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                    transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+    else:
+        # TODO: Get clipping working...
+        raise NotImplementedError("This feature has not yet been added.")
+        # for geom in clip:
+        #     to_clip = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+        #                           transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+        #     feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
+        #     # import descartes; feature = descartes.PolygonPatch(geom.convex_hull, facecolor='steelblue')
+        #     # ax.add_feature(feature, facecolor='None', **kwargs)
+        #     # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
+        #     ax.add_patch(feature)
+        #     to_clip.set_clip_path(feature)
     return ax
 
 
-def network(df, projection=None,
-            start=None, end=None,
-            hue=None, cmap='viridis', vmin=None, vmax=None,
-            legend=True, legend_kwargs=None,
+def sankey(*args, projection=None,
+            start=None, end=None, path=ccrs.Geodetic(),
+            hue=None, categorical=False, scheme=None, k=None, cmap='viridis', vmin=None, vmax=None,
+            legend=False, legend_kwargs=None, legend_labels=None,
             extent=None, figsize=(8, 6), ax = None,
             **kwargs):
+    """
+    A geospatial Sankey diagram.
 
-    # Check that start and end are provided; format them as GeoSeries if they are passed as strings or iterables.
+    Parameters
+    ----------
+    df : GeoDataFrame, optional.
+        The data being plotted. Uniquely amongst ``geoplot`` functions, this parameter is optional&mdash;it is not
+        needed if ``start`` and ``end`` (and ``hue``, if provided) are iterables.
+    projection : geoplot.crs object instance, optional
+        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
+        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
+
+        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
+        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
+        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
+        projection is present.
+
+        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+    start : str or iterable
+        Linear starting points: either the name of a column in ``df`` or a self-contained iterable. This parameter is
+        required.
+    end : str or iterable
+        Linear ending points: either the name of a column in ``df`` or a self-contained iterable. This parameter is
+        required.
+    path : geoplot.crs object instance or iterable, optional
+        If this parameter is provided as an iterable, it is assumed to contain the lines that the user wishes to
+        draw to connect the points. This is useful if one wishes to e.g. build their own line-bundles.
+
+        If this parameter is provided as a projection, that projection will be used for determining how the line is
+        plotted. This parameter defaults to ``ccrs.Geodetic()``, which means that the *true* (e.g. shortest path
+        will be plotted (e.g. `great circle distance<https://en.wikipedia.org/wiki/Great-circle_distance>`_); any
+        other choice will result in what the shortest path is in that projection instead.
+    hue : None, Series, GeoSeries, iterable, or str, optional
+        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+        formats. Defaults to None, in which case no colormap will be applied at all.
+    categorical : boolean, optional
+        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
+        is set to None or not specified.
+    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
+        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        left unspecified or set to None this variable is ignored.
+    k : int, optional
+        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
+        many bins will exist in the output visualization. If ``hue`` is left unspecified or set to None this
+        variable is ignored.
+    cmap : matplotlib color, optional
+        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
+        for a colormap to be applied at all, so this parameter is ignored otherwise.
+    vmin : float, optional
+        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
+        value is below this level will all be colored by the same threshold value.
+    vmax : float, optional
+        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
+        value is above this level will all be colored by the same threshold value.
+    legend_labels : list, optional
+        If a legend is specified, this parameter can be used to control what names will be attached to
+    legend_kwargs : dict, optional
+        Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
+        refer to `the matplotlib documentation
+        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        Defaults to (8, 6), the ``matplotlib`` default global.
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
+        outliers---that input will be used instead.
+    ax : GeoAxesSubplot instance, optional
+        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
+        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
+        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
+        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    kwargs: dict, optional
+        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
+        arguments refer to `the matplotlib documentation
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+
+    Returns
+    -------
+    GeoAxesSubplot instance
+        The axis object with the plot on it.
+
+    Examples
+    --------
+    """
+
+    # Validate df.
+    if len(args) > 1:
+        raise ValueError("Invalid input.")
+    elif len(args) == 1:
+        df = args[0]
+    else:
+        df = None  # bind the local name here; initialize in a bit.
+
+    # Validate the rest of the input.
     if start is None or end is None:
-        raise ValueError("Starting and/or ending points not provided.")
+        raise ValueError("The 'start' and 'ending' parameters must both be specified.")
+    if isinstance(start, str) or isinstance(end, str) and df is None:
+        raise ValueError("Invalid input.")
     if isinstance(start, str):
         start = df[start]
     else:
@@ -1281,6 +1400,12 @@ def network(df, projection=None,
         end = df[end]
     else:
         end = gpd.GeoSeries(end)
+
+    # Load points.
+    points = pd.concat([start, end])
+    # Initialize the `df` variable with a projection dummy, if it has not been initialized already.
+    if not df:
+        df = gpd.GeoDataFrame(geometry=points)
 
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -1291,7 +1416,6 @@ def network(df, projection=None,
     if not projection:
         raise NotImplementedError
 
-    points = pd.concat([start, end])
     xs = np.array([p.x for p in points])
     ys = np.array([p.y for p in points])
 
@@ -1312,24 +1436,32 @@ def network(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        # ax.set_global()
-        # ax.coastlines()
-
-    # Set extent.
-    # TODO: Fix the projection issues!
-        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=ccrs.PlateCarree())
-
-    # Set optional parameters.
-    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Generate colormaps.
-    # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+    if hue:
+        hue = _validate_hue(df, hue)
+        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in values]
+
+        if legend:
+            _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+    else:
+        colors = [None]*len(start)
 
     # Clean up patches.
     _lay_out_axes(ax)
 
-    # Plot.
-    ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c='steelblue', **kwargs)
+    # Duck test plot. The first will work if a valid transformation is passed, the second will work with an iterable.
+    try:
+        for origin, destination, color in zip(start, end, colors):
+            ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
+                    linestyle='-', color=color, **kwargs)
+    except ValueError:
+        for origin, destination, line, color in zip(start, end, path, colors):
+            # TODO: Implement.
+            pass
+    ax.coastlines()  # Useful for debugging.
 
     return ax
 
@@ -1440,6 +1572,8 @@ def _validate_hue(df, hue):
     elif isinstance(hue, str):
         hue = df[hue]
         return hue
+    else:
+        return gpd.GeoSeries(hue)
 
 
 def _continuous_colormap(hue, cmap, vmin, vmax):
