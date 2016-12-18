@@ -22,3 +22,6 @@ p {
     margin-top:16px;
     margin-bottom:16px;
 }
+.col-md-12.content {
+    /* CSS for the text block goes here. */
+}
