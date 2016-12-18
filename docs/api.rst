@@ -15,6 +15,8 @@ Spatial plots
     cartogram
     choropleth
     aggplot
+    kdeplot
+    sankey
 
 Utility functions
 -----------------
