@@ -207,8 +207,7 @@ def pointplot(df, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If a hue parameter is specified and is a string, convert it to a reference to its column. This puts us on a
-    # level playing field with cases when hue is specified as an explicit iterable. If hue is None, do nothing.
+    # If a hue parameter is specified and is a string, convert it to a reference to its column.
     if isinstance(hue, str):
         hue = df[hue]
 
@@ -216,8 +215,7 @@ def pointplot(df, projection=None,
     categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
     # TODO: Work this out.
-    # # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
-    # # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In that case we can return a `matplotlib` plot directly.
     if not projection:
         raise NotImplementedError
         # xs = np.array([p.x for p in df.geometry])
@@ -230,38 +228,25 @@ def pointplot(df, projection=None,
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
-    # Set extent. In order to prevent points from being occluded, we set it to be a little bit larger than the values
-    # in the plot themselves. This is done within the data itself because the underlying plot appears not to respect
-    # commands like e.g. ax.margin(0.05), which would have a similar effect.
-    # Currently 5% of the plot area is reserved for padding.
+    # Set extent.
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
     if extent:
         ax.set_extent(extent)
     else:
-        # import pdb; pdb.set_trace()
         # xs = np.array([p.x for p in df.geometry])
         # ys = np.array([p.y for p in df.geometry])
         # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        pass
-
-    # Set optional parameters.
-    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
+        pass  # Default extent.
 
     # Clean up patches.
     _lay_out_axes(ax)
 
-    # Set up the colormap. This code is largely taken from geoplot's choropleth facilities, cf.
-    # https://github.com/geopandas/geopandas/blob/master/geopandas/plotting.py#L253
-    # If a scheme is provided we compute a distribution for the given data. If one is not provided we assume that the
-    # input data is categorical.
     if hue is not None:
         cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
         colors = [cmap.to_rgba(v) for v in values]
@@ -354,8 +339,7 @@ def polyplot(df, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
@@ -365,9 +349,7 @@ def polyplot(df, projection=None,
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
@@ -378,9 +360,6 @@ def polyplot(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
-    # Set optional parameters.
-    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -574,8 +553,7 @@ def choropleth(df, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
@@ -585,9 +563,7 @@ def choropleth(df, projection=None,
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
@@ -597,9 +573,6 @@ def choropleth(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
-    # Set optional parameters.
-    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
     # Generate colormaps.
     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
@@ -626,7 +599,6 @@ def aggplot(df, projection=None,
             agg=np.mean,
             cmap='viridis', vmin=None, vmax=None,
             legend=True, legend_kwargs=None,
-            gridlines=False,
             extent=None,
             figsize=(8, 6), ax=None,
             **kwargs):
@@ -896,7 +868,6 @@ def aggplot(df, projection=None,
 
     else:
         # Set reasonable defaults for the n-params if appropriate.
-        # nmax = nmax if nmax else np.min([50, int(0.20 * len(df))])
         nmax = nmax if nmax else len(df)
         nmin = nmin if nmin else np.min([20, int(0.05 * len(df))])
 
@@ -930,16 +901,12 @@ def aggplot(df, projection=None,
     if legend:
         _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
 
-    # Optional parameters, if appropriate.
-    _set_optional_parameters(ax, False, False, gridlines)
-
     return ax
 
 
 def cartogram(df, projection=None,
               scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
               legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
-              stock_image=False, coastlines=False, gridlines=False,
               extent=None,
               figsize=(8, 6), ax=None,
               **kwargs):
@@ -1099,13 +1066,12 @@ def cartogram(df, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In this case return amatplotlib` plot directly.
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
 
-    # Check that the ``scale`` parameter is filled, and use it to fill a "values" name.
+    # Check that the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if not scale:
         raise ValueError("No scale parameter provided.")
     elif isinstance(scale, str):
@@ -1119,9 +1085,7 @@ def cartogram(df, projection=None,
         'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
@@ -1131,13 +1095,6 @@ def cartogram(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
-    # Set optional parameters.
-    _set_optional_parameters(ax, stock_image, coastlines, gridlines)
-
-    # TODO: Include colormapping capacity.
-    # Generate colormaps.
-    # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -1292,8 +1249,7 @@ def kdeplot(df, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PlateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
@@ -1307,9 +1263,7 @@ def kdeplot(df, projection=None,
         'central_latitude': lambda df: np.mean(ys)
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
@@ -1318,11 +1272,6 @@ def kdeplot(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-    # Set optional parameters.
-    # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
-
-    # Generate colormaps.
-    # cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -1640,8 +1589,7 @@ def sankey(*args, projection=None,
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
 
-    # If we are not handed a projection we are in the PlateCarree projection. In that case we can return a
-    # `matplotlib` plot directly, which has the advantage of being native to e.g. mplleaflet.
+    # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
     if not projection:
         raise NotImplementedError
@@ -1655,10 +1603,7 @@ def sankey(*args, projection=None,
         'central_latitude': lambda df: np.mean(ys)
     })
 
-    # Set up the axis. Note that even though the method signature is from matplotlib, after this operation ax is a
-    # cartopy.mpl.geoaxes.GeoAxesSubplot object! This is a subclass of a matplotlib Axes class but not directly
-    # compatible with one, so it means that this axis cannot, for example, be plotted using mplleaflet.
-    # import pdb; pdb.set_trace()
+    # Set up the axis.
     if not ax:
         ax = plt.subplot(111, projection=projection)
 
@@ -1692,7 +1637,6 @@ def sankey(*args, projection=None,
         for origin, destination, line, color in zip(start, end, path, colors):
             # TODO: Implement.
             pass
-    # ax.coastlines()  # Useful for debugging.
 
     return ax
 
@@ -2011,35 +1955,6 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
                        markerfacecolor='None'))
     if not legend_kwargs: legend_kwargs = dict()
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
-
-
-def _set_optional_parameters(ax, stock_image, coastlines, gridlines):
-    """
-    A utility method which handles in-place various ``cartopy`` onboards available within certain plot types.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance whose properties are being toggled.
-    stock_image : boolean
-        Whether or not to overlay the low-resolution Natural Earth world map.
-    coastlines : boolean
-        Whether or not to overlay the low-resolution Natural Earth coastlines.
-    gridlines : boolean
-        Whether or not to overlay cartopy's computed latitude-longitude gridlines. Note: labelling is also possible,
-        but in the current state of development of cartopy is only available for the PlateCarree and Mercator
-        projections, so it has not yet been enabled here.
-
-    Returns
-    -------
-    None
-    """
-    if stock_image:
-        ax.stock_img()
-    if coastlines:
-        ax.coastlines()
-    if gridlines:
-        ax.gridlines()
 
 
 def _validate_buckets(categorical, k, scheme):
