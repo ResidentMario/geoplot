@@ -22,6 +22,9 @@ p {
     margin-top:16px;
     margin-bottom:16px;
 }
+img {
+    margin-bottom:50px;
+}
 .col-md-12.content {
     /* CSS for the text block goes here. */
 }

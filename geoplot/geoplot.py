@@ -13,10 +13,6 @@ import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
-# TODO: Drop optional arguments (coastlines etc.), let the user set those themselves.
-# TODO: Docstring and doc the new plot types.
-# TODO: Pure cmap option.
-# TODO: Projection tutorial.
 
 
 def pointplot(df, projection=None,
@@ -96,6 +92,8 @@ def pointplot(df, projection=None,
     GeoAxesSubplot instance
         The axis object with the plot on it.
 
+
+
     Examples
     --------
 
@@ -107,7 +105,7 @@ def pointplot(df, projection=None,
         import geoplot.crs as ccrs
         gplt.pointplot(points, projection=ccrs.PlateCarree())
 
-    .. image:: ../figures/pointplot/pointplot_demo_1.png
+    .. image:: ../figures/pointplot/pointplot-initial.png
 
 
     Use the ``hue`` parameter to apply a colormap to the data:
@@ -116,7 +114,7 @@ def pointplot(df, projection=None,
 
         gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT')
 
-    .. image:: ../figures/pointplot/pointplot_demo_2.png
+    .. image:: ../figures/pointplot/pointplot-hue.png
 
     The ``legend`` parameter toggles a legend.
 
@@ -124,7 +122,7 @@ def pointplot(df, projection=None,
 
         gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT', legend=True)
 
-    .. image:: ../figures/pointplot/pointplot_demo_3.png
+    .. image:: ../figures/pointplot/pointplot-legend.png
 
     ``legend_labels`` specifies custom legend labels.
 
@@ -133,7 +131,7 @@ def pointplot(df, projection=None,
         gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT',
                        legend=True, legend_labels=list('ABCDE'))
 
-    .. image:: ../figures/pointplot/pointplot_demo_10.png
+    .. image:: ../figures/pointplot/pointplot-legend-labels.png
 
 
     ``pointplot`` will default to binning the observations in the given data column into five ordinal classes. Bins
@@ -147,7 +145,7 @@ def pointplot(df, projection=None,
         gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT',
                        legend=True, scheme='equal_interval')
 
-    .. image:: ../figures/pointplot/pointplot_demo_4.png
+    .. image:: ../figures/pointplot/pointplot-scheme.png
 
     If your data is already `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_,
     you can specify ``categorical=True`` to instead use the labels in your dataset directly.
@@ -157,7 +155,7 @@ def pointplot(df, projection=None,
         gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(), hue='BOROUGH',
                        legend=True, categorical=True)
 
-    .. image:: ../figures/pointplot/pointplot_demo_5.png
+    .. image:: ../figures/pointplot/pointplot-categorical.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
     necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
@@ -168,7 +166,7 @@ def pointplot(df, projection=None,
         gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(), hue='BOROUGH',
                        categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
 
-    .. image:: ../figures/pointplot/pointplot_demo_6.png
+    .. image:: ../figures/pointplot/pointplot-legend-kwargs.png
 
     Additional arguments will be interpreted as keyword arguments to the underlying `matplotlib scatter
     <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_ plot.
@@ -180,7 +178,7 @@ def pointplot(df, projection=None,
                        legend=True, legend_kwargs={'loc': 'upper left'},
                        edgecolor='white', linewidth=0.5)
 
-    .. image:: ../figures/pointplot/pointplot_demo_7.png
+    .. image:: ../figures/pointplot/pointplot-kwargs.png
 
     Change the number of data bins used by specifying an alternative ``k`` value.
 
@@ -191,7 +189,7 @@ def pointplot(df, projection=None,
                        edgecolor='white', linewidth=0.5,
                        legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
 
-    .. image:: ../figures/pointplot/pointplot_demo_8.png
+    .. image:: ../figures/pointplot/pointplot-k.png
 
     Adjust the `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to any
     matplotlib-recognizable colormap using the ``cmap`` parameter:
@@ -204,7 +202,7 @@ def pointplot(df, projection=None,
                legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
 
 
-    .. image:: ../figures/pointplot/pointplot_demo_9.png
+    .. image:: ../figures/pointplot/pointplot-cmap.png
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -338,7 +336,7 @@ def polyplot(df, projection=None,
         gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea())
 
 
-    .. image:: ../figures/polyplot/polyplot_demo_1.png
+    .. image:: ../figures/polyplot/polyplot-initial.png
 
     However, note that ``polyplot`` is mainly intended to be used in concert with other plot types.
 
@@ -351,7 +349,7 @@ def polyplot(df, projection=None,
                        ax=ax)
 
 
-    .. image:: ../figures/polyplot/polyplot_demo_2.png
+    .. image:: ../figures/polyplot/polyplot-stacked.png
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
@@ -475,16 +473,15 @@ def choropleth(df, projection=None,
     Examples
     --------
 
-    A basic choropleth specifies a collection of polygons, a projection, and a ``hue`` variable for mapping. In the
-    case below our target variable is categorical, so we additionally set ``categorical`` to True.
+    A basic choropleth specifies a collection of polygons, a projection, and a ``hue`` variable to colorize with.
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as ccrs
-        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True)
+        gplt.choropleth(polydata, hue='latdep', projection=ccrs.PlateCarree())
 
-    .. image:: ../figures/choropleth/choropleth_demo_1.png
+    .. image:: ../figures/choropleth/choropleth-initial.png
 
 
     You can change the colormap with the ``cmap`` parameter.
@@ -493,7 +490,7 @@ def choropleth(df, projection=None,
 
         gplt.choropleth(polydata, hue='latdep', projection=ccrs.PlateCarree(), cmap='Blues')
 
-    .. image:: ../figures/choropleth/choropleth_demo_2.png
+    .. image:: ../figures/choropleth/choropleth-cmap.png
 
     If your data column is already categorical, you can use its values directly by specifying the ``categorical``
     parameter.
@@ -502,7 +499,7 @@ def choropleth(df, projection=None,
 
         gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True)
 
-    .. image:: ../figures/choropleth/choropleth_demo_3.png
+    .. image:: ../figures/choropleth/choropleth-categorical.png
 
     To add a legend, specify ``legend``.
 
@@ -511,7 +508,7 @@ def choropleth(df, projection=None,
         gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName',
                         categorical=True, legend=True)
 
-    .. image:: ../figures/choropleth/choropleth_demo_4.png
+    .. image:: ../figures/choropleth/choropleth-legend.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
     necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
@@ -522,7 +519,7 @@ def choropleth(df, projection=None,
         gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName',
                         categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
 
-    .. image:: ../figures/choropleth/choropleth_demo_5.png
+    .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
 
     Additional arguments not in the method signature will be passed as keyword parameters to the underlying
     `matplotlib Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -532,7 +529,7 @@ def choropleth(df, projection=None,
         gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True,
                         linewidth=0)
 
-    .. image:: ../figures/choropleth/choropleth_demo_6.png
+    .. image:: ../figures/choropleth/choropleth-kwargs.png
 
     Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
     them. Change the number of buckets by specifying ``k``.
@@ -543,8 +540,18 @@ def choropleth(df, projection=None,
                 legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
                 k=2)
 
-    .. image:: ../figures/choropleth/choropleth_demo_7.png
+    .. image:: ../figures/choropleth/choropleth-k.png
 
+    ``legend_labels`` controls the legend labels.
+
+    .. code-block:: python
+
+        gplt.choropleth(census_tracts, hue='mock_data', projection=ccrs.AlbersEqualArea(),
+                        edgecolor='white', linewidth=0.5,
+                        legend=True, legend_kwargs={'loc': 'upper left'},
+                        legend_labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
+
+    .. image:: ../figures/choropleth/choropleth-legend-labels.png
 
     Alternatively, change the scheme used to generate the buckets with the ``scheme`` parameter. ``equal_interval``,
     for example, will generate buckets of equal data distribution size instead.
@@ -555,7 +562,7 @@ def choropleth(df, projection=None,
                 legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
                 scheme='equal_interval')
 
-    .. image:: ../figures/choropleth/choropleth_demo_8.png
+    .. image:: ../figures/choropleth/choropleth-scheme.png
     """
 
     # Format the data to be displayed for input.
@@ -742,7 +749,7 @@ def aggplot(df, projection=None,
         import geoplot.crs as ccrs
         gplt.aggplot(collisions, projection=ccrs.PlateCarree(), hue='LATDEP')
 
-    .. image:: ../figures/aggplot/aggplot_demo_1.png
+    .. image:: ../figures/aggplot/aggplot-initial.png
 
     Quadtree decompositions look a bit like abstract paintings, but they do succeed in getting a point across. To
     get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters, controlling the minimum and
@@ -752,18 +759,18 @@ def aggplot(df, projection=None,
 
         gplt.aggplot(collisions, nmin=20, nmax=500, projection=ccrs.PlateCarree(), hue='LATDEP', cmap='Blues')
 
-    .. image:: ../figures/aggplot/aggplot_demo_2.png
+    .. image:: ../figures/aggplot/aggplot-quadtree.png
 
     Note that ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may result in
     spaces without observations, or ones lacking a statistically significant number of observations. This is
     necessary in order to break up "spaces" that the algorithm would otherwise end on. You can control the
-    maximum number of observations in the holes uisng the ``nsig`` parameter.
+    maximum number of observations in the holes using the ``nsig`` parameter.
 
     .. code-block:: python
 
         gplt.aggplot(collisions, nmin=20, nmax=500, nsig=5, projection=ccrs.PlateCarree(), hue='LATDEP', cmap='Reds')
 
-    .. image:: ../figures/aggplot/aggplot_demo_3.png
+    .. image:: ../figures/aggplot/aggplot-quadtree-tuned.png
 
     Usually you'll just have to play around with these parameters to get the clearest picture.
 
@@ -775,7 +782,7 @@ def aggplot(df, projection=None,
         gplt.aggplot(collisions[collisions['ZIP CODE'].notnull()], projection=ccrs.PlateCarree(),
                  hue='LATDEP', by='ZIP CODE', cmap='Greens')
 
-    .. image:: ../figures/aggplot/aggplot_demo_4.png
+    .. image:: ../figures/aggplot/aggplot-hulls.png
 
     Finally, if you actually know exactly the geometries that you would like to aggregate by, and can provide a
     ``GeoSeries`` whose index matches your categorical variable of interest, then you can generate an exact
@@ -786,7 +793,7 @@ def aggplot(df, projection=None,
         gplt.aggplot(collisions, projection=ccrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
                      geometry=boroughs_2, by='BOROUGH', agg=np.max)
 
-    .. image:: ../figures/aggplot/aggplot_demo_5.png
+    .. image:: ../figures/aggplot/aggplot-by.png
 
     Note also the usage of the ``agg`` parameter, which controls what you mean by the "agg" in ``aggplot``. By
     default it will be the mean of the observations contained in the polygon, but you can also specify an
@@ -880,7 +887,6 @@ def aggplot(df, projection=None,
             color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
             features = ShapelyFeature([sector], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, **kwargs)
-            # TODO: If geometry is provided and the projection chosen is not PlateCarree the plot is flipped, fix that.
 
         # Set the extent.
         if extent:
@@ -1010,7 +1016,7 @@ def cartogram(df, projection=None,
         import geoplot.crs as ccrs
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea())
 
-    .. image:: ../figures/cartogram/cartogram_demo_1.png
+    .. image:: ../figures/cartogram/cartogram-initial.png
 
     The gray outline can be turned off by specifying ``trace``, and a legend can be added by specifying ``legend``.
 
@@ -1019,18 +1025,18 @@ def cartogram(df, projection=None,
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        trace=False, legend=True)
 
-    .. image:: ../figures/cartogram/cartogram_demo_2.png
+    .. image:: ../figures/cartogram/cartogram-trace-legend.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
     necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
-    http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`.
+    http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_.
 
     .. code-block:: python
 
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        trace=False, legend=True, legend_kwargs={'loc': 'upper left'})
 
-    .. image:: ../figures/cartogram/cartogram_demo_3.png
+    .. image:: ../figures/cartogram/cartogram-legend-kwargs.png
 
     Specify an alternative legend display using the ``legend_values`` and ``legend_labels`` parameters.
 
@@ -1041,7 +1047,7 @@ def cartogram(df, projection=None,
                legend_labels=['Manhattan', 'Brooklyn', 'Queens', 'The Bronx', 'Staten Island'],
                legend_kwargs={'loc': 'upper left'})
 
-    .. image:: ../figures/cartogram/cartogram_demo_4.png
+    .. image:: ../figures/cartogram/cartogram-legend-labels.png
 
     Additional arguments to ``cartogram`` will be interpreted as keyword arguments for the scaled polygons,
     using `matplotlib Polygon patch
@@ -1052,7 +1058,7 @@ def cartogram(df, projection=None,
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        edgecolor='darkgreen')
 
-    .. image:: ../figures/cartogram/cartogram_demo_5.png
+    .. image:: ../figures/cartogram/cartogram-kwargs.png
 
     Manipulate the outlines use the ``trace_kwargs`` argument, which accepts the same `matplotlib Polygon patch
     <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_ parameters.
@@ -1062,7 +1068,7 @@ def cartogram(df, projection=None,
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        trace_kwargs={'edgecolor': 'lightgreen'})
 
-    .. image:: ../figures/cartogram/cartogram_demo_6.png
+    .. image:: ../figures/cartogram/cartogram-trace-kwargs.png
 
     By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
     0.2 while the largest value is left unchanged. Adjust this using the ``limits`` parameter.
@@ -1072,7 +1078,7 @@ def cartogram(df, projection=None,
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        limits=(0.5, 1))
 
-    .. image:: ../figures/cartogram/cartogram_demo_7.png
+    .. image:: ../figures/cartogram/cartogram-limits.png
 
     The default scaling function is a linear one. You can change the scaling function to whatever you want by
     specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
@@ -1088,7 +1094,7 @@ def cartogram(df, projection=None,
         gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
                        limits=(0.5, 1), scale_func=trivial_scale)
 
-    .. image:: ../figures/cartogram/cartogram_demo_8.png
+    .. image:: ../figures/cartogram/cartogram-scale-func.png
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
