@@ -832,8 +832,8 @@ and a projection.</p>
 </pre></div>
 </div>
 <img alt="_images/kdeplot_demo_1.png" src="_images/kdeplot_demo_1.png" />
-<p>However, kdeplots, more than any other plot type, need additional geospatial context to be interpretable. In
-this case (and for the remainder of the examples) we will provide this by overlaying borough geometry.</p>
+<p>However, kdeplots need additional geospatial context to be interpretable. In this case (and for the remainder of
+the examples) we will provide this by overlaying borough geometry.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
@@ -1066,7 +1066,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <dl class="function">
 <dt id="geoplot.geoplot.sankey">
 <code class="descclassname">geoplot.geoplot.</code><code class="descname">sankey</code><span class="sig-paren">(</span><em>*args</em>, <em>projection=None</em>, <em>start=None</em>, <em>end=None</em>, <em>path=&lt;cartopy._crs.Geodetic object&gt;</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
-<dd><p>A geospatial Sankey diagram.</p>
+<dd><p>A geospatial Sankey diagram (flow map).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1136,6 +1136,135 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </tbody>
 </table>
 <p class="rubric">Examples</p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Sankey_diagram">Sankey diagram</a> is a type of plot useful for visualizing flow
+through a network. Its most famous historical example is cartographic -
+<a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png">Minard&#8217;s classic diagram of Napolean&#8217;s invasion of Russia</a>.</p>
+<p>This plot type is unusual amongst <code class="docutils literal"><span class="pre">geoplot</span></code> types in that it is meant for <em>two</em> columns of geography,
+resulting in a slightly different API. A basic <code class="docutils literal"><span class="pre">sankey</span></code> specifies data, origins, and destinations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-initial.png" src="_images/sankey-initial.png" />
+<p>However, Sankey diagrams need additional geospatial context to be interpretable. In this case (and for the
+remainder of the examples) we will provide this by overlaying world geometry.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-geospatial-context.png" src="_images/sankey-geospatial-context.png" />
+<p>This function is very <code class="docutils literal"><span class="pre">seaborn</span></code>-like in that the usual <code class="docutils literal"><span class="pre">df</span></code> argument is optional. If geometries are provided
+as independent iterables it can be dropped.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-alternative-method-signature.png" src="_images/sankey-alternative-method-signature.png" />
+<p>You may be wondering why the lines are curved. By default, the paths followed by the plot are the <em>actual</em>
+shortest paths between those two points, in the spherical sense. This is known as <a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>. We can see this more clearly if we temporarily switch
+to an ortographic projection.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">],</span>
+         <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-greatest-circle-distance.png" src="_images/sankey-greatest-circle-distance.png" />
+<p>Plot using a different distance metric, pass it as an argument to the <code class="docutils literal"><span class="pre">path</span></code> parameter. Awkwardly, <code class="docutils literal"><span class="pre">cartopy</span></code>
+<code class="docutils literal"><span class="pre">crs</span></code> objects (<em>not</em> <code class="docutils literal"><span class="pre">geoplot</span></code> ones) are required.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cartopy.crs</span> <span class="kn">import</span> <span class="n">PlateCarree</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">],</span>
+                 <span class="n">path</span><span class="o">=</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-distance-metric.png" src="_images/sankey-distance-metric.png" />
+<p>User-provided custom pathing, a planned future feature, is still a work in progress.</p>
+<p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter colorizes paths based on data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-hue.png" src="_images/sankey-hue.png" />
+<p><code class="docutils literal"><span class="pre">cmap</span></code> changes the colormap.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-cmap.png" src="_images/sankey-cmap.png" />
+<p><code class="docutils literal"><span class="pre">legend</span></code> adds a legend.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-legend.png" src="_images/sankey-legend.png" />
+<p>Pass keyword arguments to the legend with <code class="docutils literal"><span class="pre">legend_kwargs</span></code>. This is often necessary for positioning.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-legend-kwargs.png" src="_images/sankey-legend-kwargs.png" />
+<p>Specify custom legend labels with <code class="docutils literal"><span class="pre">legend_labels</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Very Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Average&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Very High&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-legend-labels.png" src="_images/sankey-legend-labels.png" />
+<p>Change the number of bins with <code class="docutils literal"><span class="pre">k</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-k.png" src="_images/sankey-k.png" />
+<p>Change the binning sceme with <code class="docutils literal"><span class="pre">scheme</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_variable&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-scheme.png" src="_images/sankey-scheme.png" />
+<p>Specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to plot an already-categorical variable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;above_meridian&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-categorical.png" src="_images/sankey-categorical.png" />
 </dd></dl>
 
 </div>
