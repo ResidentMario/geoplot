@@ -72,7 +72,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Geoplot tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 </ul>
 </ul>
 </li>
@@ -933,13 +933,6 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </tr>
 </tbody>
 </table>
-<p>The pointplot visualization type is this library&#8217;s implementation of the widely useful, widely available bivariate
-scatter plot. It&#8217;s ideally suited for examining pointwise data from a high level, and thus likely to prove the most
-heavily used of all of the plots this library provides.</p>
-<p>Pointplots do have their limitations, however. When the number of points is very large (in the thousands) this
-plot type suffers from occlusion: points get plotted on top of one another aggressively, masking the data
-pattern underneath. And when the number of points is extremely large (in the tens or hundreds of thousands),
-performance becomes a problem. In these cases it&#8217;s best to aggregate by region and use a choropleth instead.</p>
 <p class="rubric">Examples</p>
 <p>The most basic plot possible is little more than a bunch of points and a projection:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>

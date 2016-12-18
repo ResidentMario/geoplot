@@ -1,8 +1,7 @@
+Tutorial
+========
 
-Geoplot tutorial
-================
-
-* `Introduction <./introduction.html>`_
-* `Working with Geospatial Data <./data.html>`_
-* `Projections <./projections.html>`_
-* `Plotting <./plotting.html>`_
+* `Introduction <./tutorial/introduction.html>`_
+* `Working with Geospatial Data <./tutorial/data.html>`_
+* `Projections <./tutorial/projections.html>`_
+* `Plotting <./tutorial/plotting.html>`_
