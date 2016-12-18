@@ -1237,8 +1237,8 @@ def kdeplot(df, projection=None,
 
     .. image:: ../figures/kdeplot/kdeplot_demo_1.png
 
-    However, kdeplots, more than any other plot type, need additional geospatial context to be interpretable. In
-    this case (and for the remainder of the examples) we will provide this by overlaying borough geometry.
+    However, kdeplots need additional geospatial context to be interpretable. In this case (and for the remainder of
+    the examples) we will provide this by overlaying borough geometry.
 
     .. code-block:: python
 
@@ -1346,7 +1346,7 @@ def sankey(*args, projection=None,
             extent=None, figsize=(8, 6), ax = None,
             **kwargs):
     """
-    A geospatial Sankey diagram.
+    A geospatial Sankey diagram (flow map).
 
     Parameters
     ----------
@@ -1429,6 +1429,178 @@ def sankey(*args, projection=None,
 
     Examples
     --------
+    A `Sankey diagram <https://en.wikipedia.org/wiki/Sankey_diagram>`_ is a type of plot useful for visualizing flow
+    through a network. Its most famous historical example is cartographic -
+    `Minard's classic diagram of Napolean's invasion of Russia <https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png>`_.
+
+    This plot type is unusual amongst ``geoplot`` types in that it is meant for *two* columns of geography,
+    resulting in a slightly different API. A basic ``sankey`` specifies data, origins, and destinations.
+
+    .. code-block:: python
+
+        import geoplot as gplt
+        import geoplot.crs as ccrs
+        gplt.sankey(mock_data, start='origin', end='destination', projection=ccrs.PlateCarree())
+
+    .. image:: ../figures/sankey/sankey-initial.png
+
+    However, Sankey diagrams need additional geospatial context to be interpretable. In this case (and for the
+    remainder of the examples) we will provide this by overlaying world geometry.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(mock_data, start='origin', end='destination', projection=ccrs.PlateCarree())
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-geospatial-context.png
+
+    This function is very ``seaborn``-like in that the usual ``df`` argument is optional. If geometries are provided
+    as independent iterables it can be dropped.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(projection=ccrs.PlateCarree(), start=network['from'], end=network['to'])
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-alternative-method-signature.png
+
+    You may be wondering why the lines are curved. By default, the paths followed by the plot are the *actual*
+    shortest paths between those two points, in the spherical sense. This is known as `great circle distance
+    <https://en.wikipedia.org/wiki/Great-circle_distance>`_. We can see this more clearly if we temporarily switch
+    to an ortographic projection.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(projection=ccrs.Orthographic(), start=network['from'], end=network['to'],
+                 extent=(-180, 180, -90, 90))
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-greatest-circle-distance.png
+
+    Plot using a different distance metric, pass it as an argument to the ``path`` parameter. Awkwardly, ``cartopy``
+    ``crs`` objects (*not* ``geoplot`` ones) are required.
+
+    .. code-block:: python
+
+        from cartopy.crs import PlateCarree
+        ax = gplt.sankey(projection=ccrs.PlateCarree(), start=network['from'], end=network['to'],
+                         path=PlateCarree())
+        ax.set_global()
+        ax.coastlines()
+
+
+    .. image:: ../figures/sankey/sankey-distance-metric.png
+
+    User-provided custom pathing, a planned future feature, is still a work in progress.
+
+    The ``hue`` parameter colorizes paths based on data.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to', path=PlateCarree(),
+                         hue='mock_variable')
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-hue.png
+
+
+    ``cmap`` changes the colormap.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu')
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-cmap.png
+
+    ``legend`` adds a legend.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu',
+                         legend=True)
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-legend.png
+
+    Pass keyword arguments to the legend with ``legend_kwargs``. This is often necessary for positioning.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)})
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-legend-kwargs.png
+
+    Specify custom legend labels with ``legend_labels``.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
+                         legend_labels=['Very Low', 'Low', 'Average', 'High', 'Very High'])
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-legend-labels.png
+
+    Change the number of bins with ``k``.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
+                         k=3)
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-k.png
+
+    Change the binning sceme with ``scheme``.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='mock_variable', cmap='RdYlBu',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
+                         k=3, scheme='equal_interval')
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-scheme.png
+
+    Specify ``categorical=True`` to plot an already-categorical variable.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         hue='above_meridian', cmap='RdYlBu',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
+                         categorical=True)
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-categorical.png
     """
 
     # Validate df.
@@ -1440,9 +1612,9 @@ def sankey(*args, projection=None,
         df = None  # bind the local name here; initialize in a bit.
 
     # Validate the rest of the input.
-    if start is None or end is None:
+    if (start is None) or (end is None):
         raise ValueError("The 'start' and 'ending' parameters must both be specified.")
-    if isinstance(start, str) or isinstance(end, str) and df is None:
+    if (isinstance(start, str) or isinstance(end, str)) and (df is None):
         raise ValueError("Invalid input.")
     if isinstance(start, str):
         start = df[start]

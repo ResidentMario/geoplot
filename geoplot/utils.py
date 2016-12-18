@@ -4,6 +4,7 @@ Utilities, principally example data generation algorithms, for use in geoplot te
 import numpy as np
 import shapely
 import geopandas as gpd
+import pandas as pd
 from sklearn.cluster import KMeans
 
 
@@ -27,3 +28,16 @@ def gaussian_polygons(points, n=10):
         sel_points = gdf[gdf['cluster_number'] == i].geometry
         polygons.append(shapely.geometry.MultiPoint([(p.x, p.y) for p in sel_points]).convex_hull)
     return gpd.GeoSeries(polygons)
+
+
+def uniform_random_global_points(n=100):
+    xs = np.random.uniform(-180, 180, n)
+    ys = np.random.uniform(-90, 90, n)
+    return [shapely.geometry.Point(x, y) for x, y in zip(xs, ys)]
+
+
+def uniform_random_global_network(loc=2000, scale=250, n=100):
+    arr = (np.random.normal(loc, scale, n)).astype(int)
+    return pd.DataFrame(data={'mock_variable': arr,
+                              'from': uniform_random_global_points(n),
+                              'to': uniform_random_global_points(n)})
