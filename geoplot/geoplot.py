@@ -1201,7 +1201,7 @@ def kdeplot(df, projection=None,
         However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
     clip : iterable or GeoSeries, optional
         An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
-        "cleaning up". Note: this feature has not yet actually been implemented!
+        "cleaning up" the plot. This feature has not yet actually been implemented!
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -1226,6 +1226,59 @@ def kdeplot(df, projection=None,
 
     Examples
     --------
+    A basic `kernel density estimate <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ plot specifies data
+    and a projection.
+
+    .. code-block:: python
+
+        import geoplot as gplt
+        import geoplot.crs as ccrs
+        gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
+
+    .. image:: ../figures/kdeplot/kdeplot_demo_1.png
+
+    However, kdeplots, more than any other plot type, need additional geospatial context to be interpretable. In
+    this case (and for the remainder of the examples) we will provide this by overlaying borough geometry.
+
+    .. code-block:: python
+
+        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
+        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+
+    .. image:: ../figures/kdeplot/kdeplot_demo_2.png
+
+    Most of the rest of the parameters to ``kdeplot`` are parameters inherited from `the seaborn method by the same
+    name <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_, on which this plot type is
+    based. For example, specifying ``shade=True`` provides a filled KDE instead of a contour one:
+
+    .. code-block:: python
+
+        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+                          shade=True)
+        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+
+    .. image:: ../figures/kdeplot/kdeplot_demo_3.png
+
+    Use ``n_levels`` to specify the number of contour levels.
+
+    .. code-block:: python
+
+        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+                          n_levels=30)
+        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+
+    .. image:: ../figures/kdeplot/kdeplot_demo_4.png
+
+    Or specify ``cmap`` to change the colormap.
+
+    .. code-block:: python
+
+        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+             cmap='Purples')
+        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+
+    .. image:: ../figures/kdeplot/kdeplot_demo_5.png
+
     """
     import seaborn as sns  # Immediately fail if no seaborn.
     sns.reset_orig()  # Reset to default style.
@@ -1259,7 +1312,6 @@ def kdeplot(df, projection=None,
         ax.set_extent(extent)
     else:
         ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)), crs=projection)
     # Set optional parameters.
     # _set_optional_parameters(ax, stock_image, coastlines, gridlines)
 
@@ -1404,7 +1456,7 @@ def sankey(*args, projection=None,
     # Load points.
     points = pd.concat([start, end])
     # Initialize the `df` variable with a projection dummy, if it has not been initialized already.
-    if not df:
+    if df is None:
         df = gpd.GeoDataFrame(geometry=points)
 
     # Initialize the figure.
@@ -1452,6 +1504,7 @@ def sankey(*args, projection=None,
     # Clean up patches.
     _lay_out_axes(ax)
 
+    # TODO: Implement line thickness as a visual parameter.
     # Duck test plot. The first will work if a valid transformation is passed, the second will work with an iterable.
     try:
         for origin, destination, color in zip(start, end, colors):
@@ -1461,7 +1514,7 @@ def sankey(*args, projection=None,
         for origin, destination, line, color in zip(start, end, path, colors):
             # TODO: Implement.
             pass
-    ax.coastlines()  # Useful for debugging.
+    # ax.coastlines()  # Useful for debugging.
 
     return ax
 
