@@ -13,6 +13,7 @@ import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
+import descartes
 
 
 def pointplot(df, projection=None,
@@ -32,11 +33,7 @@ def pointplot(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
         formats. Defaults to None, in which case no colormap will be applied at all.
@@ -270,33 +267,36 @@ def pointplot(df, projection=None,
 
     # TODO: Work this out.
     # In that case we can return a `matplotlib` plot directly.
-    if not projection:
-        raise NotImplementedError
-        # xs = np.array([p.x for p in df.geometry])
-        # ys = np.array([p.y for p in df.geometry])
-        # return plt.scatter(xs, ys)
 
-    # Properly set up the projection.
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-    })
-
-    # Set up the axis.
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
-
-    # Set extent.
+    # Variables needed later.
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
-    if extent:
-        ax.set_extent(extent)
+    if projection:
+        # Properly set up the projection.
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
+
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+        # Set extent.
+        if extent:
+            ax.set_extent(extent)
+        else:
+            # xs = np.array([p.x for p in df.geometry])
+            # ys = np.array([p.y for p in df.geometry])
+            # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+            pass  # Default extent.
+
+        # Clean up patches.
+        _lay_out_axes(ax)
+
     else:
-        # xs = np.array([p.x for p in df.geometry])
-        # ys = np.array([p.y for p in df.geometry])
-        # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-        pass  # Default extent.
+        ax = plt.subplot(111)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -323,9 +323,6 @@ def pointplot(df, projection=None,
     else:
         sizes = 20  # pyplot default
 
-    # Clean up patches.
-    _lay_out_axes(ax)
-
     # If a hue parameter is specified and is a string, convert it to a reference to its column.
     if isinstance(hue, str):
         hue = df[hue]
@@ -343,7 +340,11 @@ def pointplot(df, projection=None,
         colors = 'steelblue'
 
     # Draw.
-    ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
+    if projection:
+        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
+    else:
+        ax.scatter(xs, ys, c=colors, s=sizes, **kwargs)
+        plt.gca().axison = False
 
     return ax
 
@@ -365,11 +366,7 @@ def polyplot(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -427,33 +424,56 @@ def polyplot(df, projection=None,
 
     # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
+    # if not projection:
+    #     raise NotImplementedError
 
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-    })
+    if projection:
+        # Properly set up the projection.
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
 
-    # Set up the axis.
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+        # Clean up patches.
+        _lay_out_axes(ax)
+    else:
+        ax = plt.subplot(111)
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    # import pdb; pdb.set_trace()
-    if extent:
-        ax.set_extent(extent)
+    if projection:
+        if extent:
+            ax.set_extent(extent)
+        else:
+            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
     else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
-    # Clean up patches.
-    _lay_out_axes(ax)
+        if extent:
+            ax.set_xlim((extent[0], extent[1]))
+            ax.set_ylim((extent[2], extent[3]))
+        else:
+            ax.set_xlim((x_min_coord, x_max_coord))
+            ax.set_ylim((y_min_coord, y_max_coord))
 
     # Finally we draw the features.
-    for geom in df.geometry:
-        features = ShapelyFeature([geom], ccrs.PlateCarree())
-        ax.add_feature(features, facecolor=facecolor, **kwargs)
+    if projection:
+        for geom in df.geometry:
+            features = ShapelyFeature([geom], ccrs.PlateCarree())
+            ax.add_feature(features, facecolor=facecolor, **kwargs)
+    else:
+        import descartes
+        for geom in df.geometry:
+            try:  # Duck test for MultiPolygon.
+                for subgeom in geom:
+                    feature = descartes.PolygonPatch(subgeom, facecolor=facecolor, **kwargs)
+                    ax.add_patch(feature)
+            except TypeError:  # Shapely Polygon.
+                feature = descartes.PolygonPatch(geom, facecolor=facecolor, **kwargs)
+                ax.add_patch(feature)
+        plt.gca().axison = False
 
     return ax
 
@@ -477,11 +497,7 @@ def choropleth(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
         formats. Defaults to None, in which case no colormap will be applied at all.
@@ -629,6 +645,43 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-scheme.png
     """
+    # Initialize the figure.
+    fig = plt.figure(figsize=figsize)
+
+    # In this case we can return a `matplotlib` plot directly.
+    # TODO: Implement this.
+    # if not projection:
+    #     raise NotImplementedError
+
+    if projection:
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
+
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+        # Clean up patches.
+        _lay_out_axes(ax)
+    else:
+        ax = plt.subplot(111)
+
+    # Set extent.
+    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    if projection:
+        if extent:
+            ax.set_extent(extent)
+        else:
+            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
+    else:
+        if extent:
+            ax.set_xlim((extent[0], extent[1]))
+            ax.set_ylim((extent[2], extent[3]))
+        else:
+            ax.set_xlim((x_min_coord, x_max_coord))
+            ax.set_ylim((y_min_coord, y_max_coord))
 
     # Format the data to be displayed for input.
     hue = _validate_hue(df, hue)
@@ -636,43 +689,27 @@ def choropleth(df, projection=None,
     # Validate bucketing.
     categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
-    # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
-
-    # In this case we can return a `matplotlib` plot directly.
-    # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
-
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-    })
-
-    # Set up the axis.
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
-
-    # Set extent.
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    if extent:
-        ax.set_extent(extent)
-    else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
     # Generate colormaps.
     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
-
-    # Clean up patches.
-    _lay_out_axes(ax)
 
     if legend:
         _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
 
     # Finally we draw the features.
-    for cat, geom in zip(values, df.geometry):
-        features = ShapelyFeature([geom], ccrs.PlateCarree())
-        ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
+    if projection:
+        for cat, geom in zip(values, df.geometry):
+            features = ShapelyFeature([geom], ccrs.PlateCarree())
+            ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
+    else:
+        for cat, geom in zip(values, df.geometry):
+            try:  # Duck test for MultiPolygon.
+                for subgeom in geom:
+                    feature = descartes.PolygonPatch(subgeom, facecolor=cmap.to_rgba(cat), **kwargs)
+                    ax.add_patch(feature)
+            except TypeError:  # Shapely Polygon.
+                feature = descartes.PolygonPatch(geom, facecolor=cmap.to_rgba(cat), **kwargs)
+                ax.add_patch(feature)
+        plt.gca().axison = False
 
     return ax
 
@@ -700,11 +737,7 @@ def aggplot(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
         formats. Defaults to None, in which case no colormap will be applied at all.
@@ -858,22 +891,29 @@ def aggplot(df, projection=None,
     alternative metric, like the use of ``np.max`` instead here.
 
     """
+    fig = plt.plot(figsize=figsize)
 
     # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
+    # if not projection:
+    #     raise NotImplementedError
 
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-    })
+    # Set up projection.
+    if projection:
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
 
-    fig = plt.plot(figsize=figsize)
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+    else:
+        ax = plt.subplot(111)
 
     # Clean up patches.
-    _lay_out_axes(ax)
+    if projection:
+        _lay_out_axes(ax)
+    else:
+        ax.axison = False
 
     # Format hue and generate a colormap
     hue_col = hue
@@ -943,14 +983,31 @@ def aggplot(df, projection=None,
 
             # We draw here.
             color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
-            features = ShapelyFeature([sector], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, **kwargs)
+            if projection:
+                features = ShapelyFeature([sector], ccrs.PlateCarree())
+                ax.add_feature(features, facecolor=color, **kwargs)
+            else:
+                try:  # Duck test for MultiPolygon.
+                    for subgeom in sector:
+                        feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
+                        ax.add_patch(feature)
+                except TypeError:  # Shapely Polygon.
+                    feature = descartes.PolygonPatch(sector, facecolor=color, **kwargs)
+                    ax.add_patch(feature)
 
         # Set the extent.
-        if extent:
-            ax.set_extent(extent)
+        if projection:
+            if extent:
+                ax.set_extent(extent)
+            else:
+                ax.set_extent((bxmin, bxmax, bymin, bymax))
         else:
-            ax.set_extent((bxmin, bxmax, bymin, bymax))
+            if extent:
+                ax.set_xlim((extent[0], extent[1]))
+                ax.set_ylim((extent[2], extent[3]))
+            else:
+                ax.set_xlim((bxmin, bxmax))
+                ax.set_ylim((bymin, bymax))
 
     else:
         # Set reasonable defaults for the n-params if appropriate.
@@ -971,17 +1028,27 @@ def aggplot(df, projection=None,
         for p in partitions:
             xmin, xmax, ymin, ymax = p.bounds
             rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-            feature = ShapelyFeature([rect], ccrs.PlateCarree())
             color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
-            ax.add_feature(feature, facecolor=color, **kwargs)
-            # TODO: The code snippet for matplotlib alone is below.
-            # ax.add_artist(Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor='lightgray'))
-            # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
-            # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
-        if extent:
-            ax.set_extent(extent)
+            if projection:
+                feature = ShapelyFeature([rect], ccrs.PlateCarree())
+                ax.add_feature(feature, facecolor=color, **kwargs)
+            else:
+                ax.add_artist(mpl.patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor=color, **kwargs))
+                # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
+                # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
+        # Set the extent.
+        if projection:
+            if extent:
+                ax.set_extent(extent)
+            else:
+                ax.set_extent((bxmin, bxmax, bymin, bymax))
         else:
-            ax.set_extent((bxmin, bxmax, bymin, bymax))
+            if extent:
+                ax.set_xlim((extent[0], extent[1]))
+                ax.set_ylim((extent[2], extent[3]))
+            else:
+                ax.set_xlim((bxmin, bxmax))
+                ax.set_ylim((bymin, bymax))
 
     # Append a legend, if appropriate.
     if legend:
@@ -1008,11 +1075,7 @@ def cartogram(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     scale : str or iterable, optional
         The data parameter against which the geometries will be scaled.
     limits : (min, max) tuple, optional
@@ -1156,8 +1219,45 @@ def cartogram(df, projection=None,
 
     # In this case return amatplotlib` plot directly.
     # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
+    # if not projection:
+    #     raise NotImplementedError
+
+    # Load the projection.
+    if projection:
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
+
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+        # Clean up patches.
+    else:
+        ax = plt.subplot(111)
+
+    # Clean up patches.
+    if projection:
+        _lay_out_axes(ax)
+    else:
+        ax.axison = False
+
+    # Set extent.
+    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+
+    if projection:
+        if extent:
+            ax.set_extent(extent)
+        else:
+            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
+    else:
+        if extent:
+            ax.set_xlim((extent[0], extent[1]))
+            ax.set_ylim((extent[2], extent[3]))
+        else:
+            ax.set_xlim((x_min_coord, x_max_coord))
+            ax.set_ylim((y_min_coord, y_max_coord))
 
     # Check that the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if not scale:
@@ -1166,26 +1266,6 @@ def cartogram(df, projection=None,
         values = df[scale]
     else:
         values = scale
-
-    # Load the projection.
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-        'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-    })
-
-    # Set up the axis.
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
-
-    # Set extent.
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    if extent:
-        ax.set_extent(extent)
-    else:
-        ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-
-    # Clean up patches.
-    _lay_out_axes(ax)
 
     # Compute a scale function.
     dmin, dmax = np.min(values), np.max(values)
@@ -1214,16 +1294,35 @@ def cartogram(df, projection=None,
 
     # Draw traces first, if appropriate.
     if trace:
-        for polygon in df.geometry:
-            features = ShapelyFeature([polygon], ccrs.PlateCarree())
-            ax.add_feature(features, **trace_kwargs)
+        if projection:
+            for polygon in df.geometry:
+                features = ShapelyFeature([polygon], ccrs.PlateCarree())
+                ax.add_feature(features, **trace_kwargs)
+        else:
+            for polygon in df.geometry:
+                try:  # Duck test for MultiPolygon.
+                    for subgeom in polygon:
+                        feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                        ax.add_patch(feature)
+                except TypeError:  # Shapely Polygon.
+                    feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                    ax.add_patch(feature)
 
     # Finally, draw the scaled geometries.
     for value, polygon in zip(values, df.geometry):
         scale_factor = dscale(value)
         scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
-        features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
-        ax.add_feature(features, **kwargs)
+        if projection:
+            features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
+            ax.add_feature(features, **kwargs)
+        else:
+            try:  # Duck test for MultiPolygon.
+                for subgeom in scaled_polygon:
+                    feature = descartes.PolygonPatch(subgeom, **kwargs)
+                    ax.add_patch(feature)
+            except TypeError:  # Shapely Polygon.
+                feature = descartes.PolygonPatch(scaled_polygon, **kwargs)
+                ax.add_patch(feature)
 
     return ax
 
@@ -1245,11 +1344,7 @@ def kdeplot(df, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     clip : iterable or GeoSeries, optional
         An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
         "cleaning up" the plot. This feature has not yet actually been implemented!
@@ -1339,46 +1434,68 @@ def kdeplot(df, projection=None,
 
     # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
+    # if not projection:
+    #     raise NotImplementedError
 
+    # Necessary prior.
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
     # Load the projection.
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(xs),
-        'central_latitude': lambda df: np.mean(ys)
-    })
+    if projection:
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(xs),
+            'central_latitude': lambda df: np.mean(ys)
+        })
 
-    # Set up the axis.
-    if not ax:
-        ax = plt.subplot(111, projection=projection)
-
-    # Set extent.
-    if extent:
-        ax.set_extent(extent)
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
     else:
-        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+        ax = plt.subplot(111)
 
     # Clean up patches.
-    _lay_out_axes(ax)
-
-    if clip is None:
-        sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
-                    transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+    if projection:
+        _lay_out_axes(ax)
     else:
-        # TODO: Get clipping working...
-        raise NotImplementedError("This feature has not yet been added.")
-        # for geom in clip:
-        #     to_clip = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
-        #                           transform=ccrs.PlateCarree(), ax=ax, **kwargs)
-        #     feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
-        #     # import descartes; feature = descartes.PolygonPatch(geom.convex_hull, facecolor='steelblue')
-        #     # ax.add_feature(feature, facecolor='None', **kwargs)
-        #     # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
-        #     ax.add_patch(feature)
-        #     to_clip.set_clip_path(feature)
+        ax.axison = False
+
+    # Set extent.
+    if projection:
+        if extent:
+            ax.set_extent(extent)
+        else:
+            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+    else:
+        if extent:
+            ax.set_xlim((extent[0], extent[1]))
+            ax.set_ylim((extent[2], extent[3]))
+        else:
+            ax.set_xlim((np.min(xs), np.max(xs)))
+            ax.set_ylim((np.min(ys), np.max(ys)))
+
+    if projection:
+        if clip is None:
+            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                        transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+        else:
+            # TODO: Get clipping working...
+            raise NotImplementedError("This feature has not yet been added.")
+            # for geom in clip:
+            #     to_clip = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+            #                           transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+            #     feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
+            #     # import descartes; feature = descartes.PolygonPatch(geom.convex_hull, facecolor='steelblue')
+            #     # ax.add_feature(feature, facecolor='None', **kwargs)
+            #     # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
+            #     ax.add_patch(feature)
+            #     to_clip.set_clip_path(feature)
+    else:
+        if clip is None:
+            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax, **kwargs)
+        else:
+            # TODO: Get clipping working...
+            raise NotImplementedError("This feature has not yet been added.")
     return ax
 
 
@@ -1402,11 +1519,7 @@ def sankey(*args, projection=None,
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
 
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, as opposed to the ``cartopy`` based plot returned when a projection is present. This allows certain
-        operations, like stacking ``geoplot`` plots with and amongst other plots, which are not possible when a
-        projection is present.
-
-        However, for the moment failing to specify a projection will raise a ``NotImplementedError``.
+        chart, which allow certain operations not possible with projected ``cartopy`` results.
     start : str or iterable
         Linear starting points: either the name of a column in ``df`` or a self-contained iterable. This parameter is
         required.
@@ -1739,26 +1852,44 @@ def sankey(*args, projection=None,
 
     # In this case we can return a `matplotlib` plot directly.
     # TODO: Implement this.
-    if not projection:
-        raise NotImplementedError
+    # if not projection:
+    #     raise NotImplementedError
 
     xs = np.array([p.x for p in points])
     ys = np.array([p.y for p in points])
 
     # Load the projection.
-    projection = projection.load(df, {
-        'central_longitude': lambda df: np.mean(xs),
-        'central_latitude': lambda df: np.mean(ys)
-    })
+    if projection:
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(xs),
+            'central_latitude': lambda df: np.mean(ys)
+        })
 
-    # Set up the axis.
-    if not ax:
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+    else:
         ax = plt.subplot(111, projection=projection)
 
-    if extent:
-        ax.set_extent(extent)
+    # Clean up patches.
+    if projection:
+        _lay_out_axes(ax)
     else:
-        ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+        ax.axison = False
+
+    # Set extent.
+    if projection:
+        if extent:
+            ax.set_extent(extent)
+        else:
+            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+    else:
+        if extent:
+            ax.set_xlim((extent[0], extent[1]))
+            ax.set_ylim((extent[2], extent[3]))
+        else:
+            ax.set_xlim((np.min(xs), np.max(xs)))
+            ax.set_ylim((np.min(ys), np.max(ys)))
 
     # Generate colormaps.
     if hue:
@@ -1797,9 +1928,6 @@ def sankey(*args, projection=None,
     else:
         widths = [1] * len(df)  # pyplot default
 
-    # Clean up patches.
-    _lay_out_axes(ax)
-
     # Allow overwriting visual arguments.
     if 'linestyle' in kwargs.keys():
         linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
@@ -1810,15 +1938,26 @@ def sankey(*args, projection=None,
     if 'linewidth' in kwargs.keys():
         widths = [kwargs['linewidth']]*len(df); kwargs.pop('linewidth')
 
-    # Duck test plot. The first will work if a valid transformation is passed, the second will work with an iterable.
-    try:
-        for origin, destination, color, width in zip(start, end, colors, widths):
-            ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
-                    linestyle=linestyle, linewidth=width, color=color, **kwargs)
-    except ValueError:
-        for origin, destination, line, color, width in zip(start, end, path, colors, widths):
-            feature = ShapelyFeature([line], ccrs.PlateCarree())
-            ax.add_feature(feature, linestyle=linestyle, linewidth=width, facecolor=color, **kwargs)
+    if projection:
+        # Duck test plot. The first will work if a valid transformation is passed, the second will work with an
+        # iterable.
+        try:
+            for origin, destination, color, width in zip(start, end, colors, widths):
+                ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
+                        linestyle=linestyle, linewidth=width, color=color, **kwargs)
+        except ValueError:
+            for origin, destination, line, color, width in zip(start, end, path, colors, widths):
+                feature = ShapelyFeature([line], ccrs.PlateCarree())
+                ax.add_feature(feature, linestyle=linestyle, linewidth=width, facecolor=color, **kwargs)
+    else:
+        try:
+            for origin, destination, color, width in zip(start, end, colors, widths):
+                ax.plot([origin.x, destination.x], [origin.y, destination.y],
+                        linestyle=linestyle, linewidth=width, color=color, **kwargs)
+        except ValueError:
+            for origin, destination, line, color, width in zip(start, end, path, colors, widths):
+                feature = descartes.PolygonPatch(line, **kwargs)
+                ax.add_patch(feature)
 
     return ax
 
