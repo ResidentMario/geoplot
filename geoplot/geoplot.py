@@ -1816,9 +1816,9 @@ def sankey(*args, projection=None,
             ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
                     linestyle=linestyle, linewidth=width, color=color, **kwargs)
     except ValueError:
-        for origin, destination, line, color in zip(start, end, path, colors):
-            # TODO: Implement.
-            pass
+        for origin, destination, line, color, width in zip(start, end, path, colors, widths):
+            feature = ShapelyFeature([line], ccrs.PlateCarree())
+            ax.add_feature(feature, linestyle=linestyle, linewidth=width, facecolor=color, **kwargs)
 
     return ax
 
