@@ -16,12 +16,10 @@ import pandas as pd
 
 
 def pointplot(df, projection=None,
-              extent=None,
-              hue=None,
-              categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
-              legend=False, legend_labels=None, legend_kwargs=None,
-              figsize=(8, 6), ax=None,
-              **kwargs):
+              hue=None, categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
+              scale=None, limits=(0.5, 2), scale_func=None,
+              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+              figsize=(8, 6), extent=None, ax=None, **kwargs):
     """
     A geospatial scatter plot. The simplest useful plot type available.
 
@@ -61,9 +59,22 @@ def pointplot(df, projection=None,
     vmax : float, optional
         A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
         value is above this level will all be colored by the same threshold value.
+    scale : str or iterable, optional
+        The data parameter against which the geometries will be scaled.
+    limits : (min, max) tuple, optional
+        The minimum and maximum limits against which the shape will be scaled.
+    scale_func : unfunc, optional
+        The default scaling function is a linear one. You can change the scaling function to whatever you want by
+        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
+        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
+    legend_values : list, optional
+        This variable will only have an effect if the ``scale`` parameter is in use (e.g. size is a variable) and
+        ``legend=True``. Equal intervals will be used for the "points" in the legend by default. However,
+        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
+        well, the values included in the input will be used by the legend instead.
     legend_labels : list, optional
         If a legend is specified, this parameter can be used to control what names will be attached to the values.
     legend_kwargs : dict, optional
@@ -203,16 +214,59 @@ def pointplot(df, projection=None,
 
 
     .. image:: ../figures/pointplot/pointplot-cmap.png
+
+    ``pointplot`` also supports using point ``scale`` as a visual variable.
+
+    .. code-block:: python
+
+        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+                       scale='NUMBER OF PERSONS INJURED',
+                       legend=True, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/pointplot/pointplot-scale.png
+
+    The default limits, ``(0.5, 2.0)``, can be adjusted via the ``limits`` parameter.(usually a less conservative
+    value is appropriate).
+
+    .. code-block:: python
+
+        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
+                       legend=True, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/pointplot/pointplot-limits.png
+
+    The default scaling function is a linear one. You can change the scaling function to whatever you want by
+    specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
+    maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+
+    .. code-block:: python
+
+        def trivial_scale(minval, maxval):
+            def scalar(val):
+                return 2
+            return scalar
+
+        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+                       scale='NUMBER OF PERSONS INJURED', scale_func=trivial_scale,
+                       legend=True, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/pointplot/pointplot-scale-func.png
+
+    ``hue`` and ``scale`` can co-exist. Note, however, that only the ``hue`` legend will be displayed in this case.
+
+    .. code-block:: python
+
+        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
+                       projection=ccrs.AlbersEqualArea(),
+                       hue='BOROUGH', categorical=True,
+                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
+                       legend=True, legend_kwargs={'loc': 'upper left'})
+
+    .. image:: ../figures/pointplot/pointplot-hue-scale.png
     """
     # Initialize the figure.
     fig = plt.figure(figsize=figsize)
-
-    # If a hue parameter is specified and is a string, convert it to a reference to its column.
-    if isinstance(hue, str):
-        hue = df[hue]
-
-    # Validate bucketing.
-    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
     # TODO: Work this out.
     # In that case we can return a `matplotlib` plot directly.
@@ -244,21 +298,59 @@ def pointplot(df, projection=None,
         # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
         pass  # Default extent.
 
+    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    if scale:
+        if isinstance(scale, str):
+            scalar_values = df[scale]
+        else:
+            scalar_values = scale
+
+        # Compute a scale function.
+        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
+        if not scale_func:
+            dslope = (limits[1] - limits[0]) / (dmax - dmin)
+            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
+        else:
+            dscale = scale_func(dmin, dmax)
+
+        # Apply the scale function.
+        scalar_multiples = np.array([dscale(d) for d in scalar_values])
+        sizes = scalar_multiples * 20
+
+        # Draw a legend, if appropriate.
+        if legend:
+            _paint_carto_legend(ax, scalar_values, None, None, dscale, legend_kwargs)
+
+    else:
+        sizes = 20  # pyplot default
+
+    # # Create a legend, if appropriate.
+    # if legend:
+    #     _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
+    # WIP
+
     # Clean up patches.
     _lay_out_axes(ax)
 
+    # If a hue parameter is specified and is a string, convert it to a reference to its column.
+    if isinstance(hue, str):
+        hue = df[hue]
+
+    # Validate bucketing.
+    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+
     if hue is not None:
-        cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
-        colors = [cmap.to_rgba(v) for v in values]
+        cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
 
         if legend:
             _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
     else:
         colors = 'steelblue'
 
-    # Draw. Notice that this scatter method's signature is attached to the axis instead of to the overall plot. This
-    # is again because the axis is a special cartopy object.
-    ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, **kwargs)
+    # Draw.
+    ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
+
     return ax
 
 
@@ -932,7 +1024,9 @@ def cartogram(df, projection=None,
     limits : (min, max) tuple, optional
         The minimum and maximum limits against which the shape will be scaled.
     scale_func : unfunc, optional
-        [...]
+        The default scaling function is a linear one. You can change the scaling function to whatever you want by
+        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
+        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
     trace : boolean, optional
         Whether or not to include a trace of the polygon's original outline in the plot result.
     trace_kwargs : dict, optional
@@ -1940,18 +2034,18 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
     """
 
     # Set up the legend values.
-    if legend_values:
+    if legend_values is not None:
         display_values = legend_values
     else:
         display_values = np.linspace(np.max(values), np.min(values), num=5)
-    display_labels = legend_labels if legend_labels else display_values
+    display_labels = legend_labels if (legend_labels is not None) else display_values
 
     # Paint patches.
     patches = []
     for value in display_values:
         patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
                        marker="o",
-                       markersize=10*scale_func(value),
+                       markersize=(20*scale_func(value))**(1/2),
                        markerfacecolor='None'))
     if not legend_kwargs: legend_kwargs = dict()
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
