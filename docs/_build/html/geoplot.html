@@ -1121,7 +1121,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 
 <dl class="function">
 <dt id="geoplot.geoplot.sankey">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">sankey</code><span class="sig-paren">(</span><em>*args</em>, <em>projection=None</em>, <em>start=None</em>, <em>end=None</em>, <em>path=&lt;cartopy._crs.Geodetic object&gt;</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">sankey</code><span class="sig-paren">(</span><em>*args</em>, <em>projection=None</em>, <em>start=None</em>, <em>end=None</em>, <em>path=&lt;cartopy._crs.Geodetic object&gt;</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>scale=None</em>, <em>limits=(1</em>, <em>5)</em>, <em>scale_func=None</em>, <em>legend_values=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial Sankey diagram (flow map).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1164,6 +1164,15 @@ for a colormap to be applied at all, so this parameter is ignored otherwise.</li
 value is below this level will all be colored by the same threshold value.</li>
 <li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
 value is above this level will all be colored by the same threshold value.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; The data parameter against which the geometries will be scaled.</li>
+<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled.</li>
+<li><strong>scale_func</strong> (<em>unfunc</em><em>, </em><em>optional</em>) &#8211; The default scaling function is a linear one. You can change the scaling function to whatever you want by
+specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
+maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; This variable will only have an effect if the <code class="docutils literal"><span class="pre">scale</span></code> parameter is in use (e.g. size is a variable) and
+<code class="docutils literal"><span class="pre">legend=True</span></code>. Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However,
+particularly if your scale is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as
+well, the values included in the input will be used by the legend instead.</li>
 <li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
 refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
@@ -1321,6 +1330,42 @@ to an ortographic projection.</p>
 </pre></div>
 </div>
 <img alt="_images/sankey-categorical.png" src="_images/sankey-categorical.png" />
+<p><code class="docutils literal"><span class="pre">scale</span></code> can be used to enable <code class="docutils literal"><span class="pre">linewidth</span></code> as a visual variable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-scale.png" src="_images/sankey-scale.png" />
+<p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
+0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-limits.png" src="_images/sankey-limits.png" />
+<p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
+specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
+maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">scalar</span>
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-scale-func.png" src="_images/sankey-scale-func.png" />
 </dd></dl>
 
 </div>
