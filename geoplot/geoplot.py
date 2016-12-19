@@ -319,15 +319,9 @@ def pointplot(df, projection=None,
 
         # Draw a legend, if appropriate.
         if legend:
-            _paint_carto_legend(ax, scalar_values, None, None, dscale, legend_kwargs)
-
+            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
         sizes = 20  # pyplot default
-
-    # # Create a legend, if appropriate.
-    # if legend:
-    #     _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
-    # WIP
 
     # Clean up patches.
     _lay_out_axes(ax)
@@ -1389,11 +1383,12 @@ def kdeplot(df, projection=None,
 
 
 def sankey(*args, projection=None,
-            start=None, end=None, path=ccrs.Geodetic(),
-            hue=None, categorical=False, scheme=None, k=None, cmap='viridis', vmin=None, vmax=None,
-            legend=False, legend_kwargs=None, legend_labels=None,
-            extent=None, figsize=(8, 6), ax = None,
-            **kwargs):
+           start=None, end=None, path=ccrs.Geodetic(),
+           hue=None, categorical=False, scheme=None, k=None, cmap='viridis', vmin=None, vmax=None,
+           legend=False, legend_kwargs=None, legend_labels=None,
+           extent=None, figsize=(8, 6), ax=None,
+           scale=None, limits=(1, 5), scale_func=None, legend_values=None,
+           **kwargs):
     """
     A geospatial Sankey diagram (flow map).
 
@@ -1448,6 +1443,19 @@ def sankey(*args, projection=None,
     vmax : float, optional
         A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
         value is above this level will all be colored by the same threshold value.
+    scale : str or iterable, optional
+        The data parameter against which the geometries will be scaled.
+    limits : (min, max) tuple, optional
+        The minimum and maximum limits against which the shape will be scaled.
+    scale_func : unfunc, optional
+        The default scaling function is a linear one. You can change the scaling function to whatever you want by
+        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
+        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+    legend_values : list, optional
+        This variable will only have an effect if the ``scale`` parameter is in use (e.g. size is a variable) and
+        ``legend=True``. Equal intervals will be used for the "points" in the legend by default. However,
+        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
+        well, the values included in the input will be used by the legend instead.
     legend_labels : list, optional
         If a legend is specified, this parameter can be used to control what names will be attached to
     legend_kwargs : dict, optional
@@ -1650,6 +1658,52 @@ def sankey(*args, projection=None,
         ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-categorical.png
+
+    ``scale`` can be used to enable ``linewidth`` as a visual variable.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         scale='mock_data',
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
+                         color='lightblue')
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-scale.png
+
+
+    By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
+    0.2 while the largest value is left unchanged. Adjust this using the ``limits`` parameter.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         scale='mock_data', limits=(1, 3),
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
+                         color='lightblue')
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-limits.png
+
+    The default scaling function is a linear one. You can change the scaling function to whatever you want by
+    specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
+    maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+
+    .. code-block:: python
+
+        def trivial_scale(minval, maxval):
+            def scalar(val):
+                return 0.5
+            return scalar
+
+        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+                       limits=(0.5, 1), scale_func=trivial_scale)
+
+    .. image:: ../figures/sankey/sankey-scale-func.png
     """
 
     # Validate df.
@@ -1718,15 +1772,49 @@ def sankey(*args, projection=None,
     else:
         colors = [None]*len(start)
 
+    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    if scale:
+        if isinstance(scale, str):
+            scalar_values = df[scale]
+        else:
+            scalar_values = scale
+
+        # Compute a scale function.
+        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
+        if not scale_func:
+            dslope = (limits[1] - limits[0]) / (dmax - dmin)
+            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
+        else:
+            dscale = scale_func(dmin, dmax)
+
+        # Apply the scale function.
+        scalar_multiples = np.array([dscale(d) for d in scalar_values])
+        widths = scalar_multiples * 1
+
+        # Draw a legend, if appropriate.
+        if legend:
+            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
+    else:
+        widths = [1] * len(df)  # pyplot default
+
     # Clean up patches.
     _lay_out_axes(ax)
 
-    # TODO: Implement line thickness as a visual parameter.
+    # Allow overwriting visual arguments.
+    if 'linestyle' in kwargs.keys():
+        linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
+    else:
+        linestyle = '-'
+    if 'color' in kwargs.keys():
+        colors = [kwargs['color']]*len(df); kwargs.pop('color')
+    if 'linewidth' in kwargs.keys():
+        widths = [kwargs['linewidth']]*len(df); kwargs.pop('linewidth')
+
     # Duck test plot. The first will work if a valid transformation is passed, the second will work with an iterable.
     try:
-        for origin, destination, color in zip(start, end, colors):
+        for origin, destination, color, width in zip(start, end, colors, widths):
             ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
-                    linestyle='-', color=color, **kwargs)
+                    linestyle=linestyle, linewidth=width, color=color, **kwargs)
     except ValueError:
         for origin, destination, line, color in zip(start, end, path, colors):
             # TODO: Implement.
