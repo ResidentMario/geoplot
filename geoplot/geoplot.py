@@ -262,8 +262,9 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-hue-scale.png
     """
-    # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
+    # Initialize the figure, if one hasn't been initialized already.
+    if not ax:
+        fig = plt.figure(figsize=figsize)
 
     # TODO: Work this out.
     # In that case we can return a `matplotlib` plot directly.
@@ -420,12 +421,10 @@ def polyplot(df, projection=None,
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
     # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
+    if not ax:
+        fig = plt.figure(figsize=figsize)
 
     # In this case we can return a `matplotlib` plot directly.
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
 
     if projection:
         # Properly set up the projection.
@@ -438,10 +437,14 @@ def polyplot(df, projection=None,
         if not ax:
             ax = plt.subplot(111, projection=projection)
 
-        # Clean up patches.
-        _lay_out_axes(ax)
     else:
         ax = plt.subplot(111)
+
+    # Clean up patches.
+    if projection:
+        _lay_out_axes(ax)
+    else:
+        plt.gca().axison = False
 
     # Set extent.
     x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
@@ -464,7 +467,6 @@ def polyplot(df, projection=None,
             features = ShapelyFeature([geom], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=facecolor, **kwargs)
     else:
-        import descartes
         for geom in df.geometry:
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
@@ -473,7 +475,6 @@ def polyplot(df, projection=None,
             except TypeError:  # Shapely Polygon.
                 feature = descartes.PolygonPatch(geom, facecolor=facecolor, **kwargs)
                 ax.add_patch(feature)
-        plt.gca().axison = False
 
     return ax
 
@@ -1393,8 +1394,6 @@ def kdeplot(df, projection=None,
 
     .. image:: ../figures/kdeplot/kdeplot-overlay.png
 
-    .. image:: ../figures/kdeplot/kdeplot_demo_2.png
-
     Most of the rest of the parameters to ``kdeplot`` are parameters inherited from `the seaborn method by the same
     name <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_, on which this plot type is
     based. For example, specifying ``shade=True`` provides a filled KDE instead of a contour one:
@@ -1405,7 +1404,7 @@ def kdeplot(df, projection=None,
                           shade=True)
         gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
 
-    .. image:: ../figures/kdeplot/kdeplot_demo_3.png
+    .. image:: ../figures/kdeplot/kdeplot-shade.png
 
     Use ``n_levels`` to specify the number of contour levels.
 
@@ -1415,7 +1414,7 @@ def kdeplot(df, projection=None,
                           n_levels=30)
         gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
 
-    .. image:: ../figures/kdeplot/kdeplot_demo_4.png
+    .. image:: ../figures/kdeplot/kdeplot-n-levels.png
 
     Or specify ``cmap`` to change the colormap.
 
@@ -1425,19 +1424,15 @@ def kdeplot(df, projection=None,
              cmap='Purples')
         gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
 
-    .. image:: ../figures/kdeplot/kdeplot_demo_5.png
+    .. image:: ../figures/kdeplot/kdeplot-cmap.png
 
     """
     import seaborn as sns  # Immediately fail if no seaborn.
     sns.reset_orig()  # Reset to default style.
 
     # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
-
-    # In this case we can return a `matplotlib` plot directly.
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
+    if not ax:
+        fig = plt.figure(figsize=figsize)
 
     # Necessary prior.
     xs = np.array([p.x for p in df.geometry])
@@ -1663,7 +1658,7 @@ def sankey(*args, projection=None,
         ax.coastlines()
 
 
-    .. image:: ../figures/sankey/sankey-distance-metric.png
+    .. image:: ../figures/sankey/sankey-path.png
 
     User-provided custom pathing, a planned future feature, is still a work in progress.
 
