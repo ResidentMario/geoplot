@@ -416,10 +416,7 @@ to be used as parameters to the <code class="docutils literal"><span class="pre"
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
@@ -553,10 +550,7 @@ alternative metric, like the use of <code class="docutils literal"><span class="
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; The data parameter against which the geometries will be scaled.</li>
 <li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled.</li>
@@ -676,10 +670,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
@@ -803,10 +794,7 @@ for example, will generate buckets of equal data distribution size instead.</p>
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>clip</strong> (<em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
 &#8220;cleaning up&#8221; the plot. This feature has not yet actually been implemented!</li>
@@ -840,13 +828,14 @@ and a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="_images/kdeplot_demo_1.png" src="_images/kdeplot_demo_1.png" />
+<img alt="_images/kdeplot-initial.png" src="_images/kdeplot-initial.png" />
 <p>However, kdeplots need additional geospatial context to be interpretable. In this case (and for the remainder of
 the examples) we will provide this by overlaying borough geometry.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="_images/kdeplot-overlay.png" src="_images/kdeplot-overlay.png" />
 <img alt="_images/kdeplot_demo_2.png" src="_images/kdeplot_demo_2.png" />
 <p>Most of the rest of the parameters to <code class="docutils literal"><span class="pre">kdeplot</span></code> are parameters inherited from <a class="reference external" href="http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot">the seaborn method by the same
 name</a>, on which this plot type is
@@ -886,10 +875,7 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
@@ -1070,10 +1056,7 @@ more interesting plot types.</p>
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
@@ -1133,10 +1116,7 @@ needed if <code class="docutils literal"><span class="pre">start</span></code> a
 <li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
 module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, as opposed to the <code class="docutils literal"><span class="pre">cartopy</span></code> based plot returned when a projection is present. This allows certain
-operations, like stacking <code class="docutils literal"><span class="pre">geoplot</span></code> plots with and amongst other plots, which are not possible when a
-projection is present.</p>
-<p>However, for the moment failing to specify a projection will raise a <code class="docutils literal"><span class="pre">NotImplementedError</span></code>.</p>
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
 <li><strong>start</strong> (<em>str</em><em> or </em><em>iterable</em>) &#8211; Linear starting points: either the name of a column in <code class="docutils literal"><span class="pre">df</span></code> or a self-contained iterable. This parameter is
 required.</li>
