@@ -1381,7 +1381,7 @@ def kdeplot(df, projection=None,
         import geoplot.crs as ccrs
         gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
 
-    .. image:: ../figures/kdeplot/kdeplot_demo_1.png
+    .. image:: ../figures/kdeplot/kdeplot-initial.png
 
     However, kdeplots need additional geospatial context to be interpretable. In this case (and for the remainder of
     the examples) we will provide this by overlaying borough geometry.
@@ -1390,6 +1390,8 @@ def kdeplot(df, projection=None,
 
         ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
         gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+
+    .. image:: ../figures/kdeplot/kdeplot-overlay.png
 
     .. image:: ../figures/kdeplot/kdeplot_demo_2.png
 
