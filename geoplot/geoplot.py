@@ -263,13 +263,8 @@ def pointplot(df, projection=None,
     .. image:: ../figures/pointplot/pointplot-hue-scale.png
     """
     # Initialize the figure, if one hasn't been initialized already.
-    if not ax:
-        fig = plt.figure(figsize=figsize)
+    fig = _init_figure(ax, figsize)
 
-    # TODO: Work this out.
-    # In that case we can return a `matplotlib` plot directly.
-
-    # Variables needed later.
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
@@ -288,16 +283,13 @@ def pointplot(df, projection=None,
         if extent:
             ax.set_extent(extent)
         else:
-            # xs = np.array([p.x for p in df.geometry])
-            # ys = np.array([p.y for p in df.geometry])
-            # ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
             pass  # Default extent.
-
-        # Clean up patches.
-        _lay_out_axes(ax)
 
     else:
         ax = plt.subplot(111)
+
+    # Clean up patches.
+    _lay_out_axes(ax, projection)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -345,7 +337,6 @@ def pointplot(df, projection=None,
         ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
     else:
         ax.scatter(xs, ys, c=colors, s=sizes, **kwargs)
-        plt.gca().axison = False
 
     return ax
 
@@ -421,8 +412,7 @@ def polyplot(df, projection=None,
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
     # Initialize the figure.
-    if not ax:
-        fig = plt.figure(figsize=figsize)
+    fig = _init_figure(ax, figsize)
 
     # In this case we can return a `matplotlib` plot directly.
 
@@ -441,25 +431,11 @@ def polyplot(df, projection=None,
         ax = plt.subplot(111)
 
     # Clean up patches.
-    if projection:
-        _lay_out_axes(ax)
-    else:
-        plt.gca().axison = False
+    _lay_out_axes(ax, projection)
 
     # Set extent.
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    if projection:
-        if extent:
-            ax.set_extent(extent)
-        else:
-            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-    else:
-        if extent:
-            ax.set_xlim((extent[0], extent[1]))
-            ax.set_ylim((extent[2], extent[3]))
-        else:
-            ax.set_xlim((x_min_coord, x_max_coord))
-            ax.set_ylim((y_min_coord, y_max_coord))
+    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
     if projection:
@@ -647,12 +623,7 @@ def choropleth(df, projection=None,
     .. image:: ../figures/choropleth/choropleth-scheme.png
     """
     # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
-
-    # In this case we can return a `matplotlib` plot directly.
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
+    fig = _init_figure(ax, figsize)
 
     if projection:
         projection = projection.load(df, {
@@ -663,26 +634,15 @@ def choropleth(df, projection=None,
         # Set up the axis.
         if not ax:
             ax = plt.subplot(111, projection=projection)
-
-        # Clean up patches.
-        _lay_out_axes(ax)
     else:
         ax = plt.subplot(111)
 
+    # Clean up patches.
+    _lay_out_axes(ax, projection)
+
     # Set extent.
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-    if projection:
-        if extent:
-            ax.set_extent(extent)
-        else:
-            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-    else:
-        if extent:
-            ax.set_xlim((extent[0], extent[1]))
-            ax.set_ylim((extent[2], extent[3]))
-        else:
-            ax.set_xlim((x_min_coord, x_max_coord))
-            ax.set_ylim((y_min_coord, y_max_coord))
+    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    _set_extent(ax, projection, extent, extrema)
 
     # Format the data to be displayed for input.
     hue = _validate_hue(df, hue)
@@ -693,10 +653,11 @@ def choropleth(df, projection=None,
     # Generate colormaps.
     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
 
+    # Add a legend, if one is appropriate.
     if legend:
         _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
 
-    # Finally we draw the features.
+    # Draw the features.
     if projection:
         for cat, geom in zip(values, df.geometry):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
@@ -892,11 +853,7 @@ def aggplot(df, projection=None,
     alternative metric, like the use of ``np.max`` instead here.
 
     """
-    fig = plt.plot(figsize=figsize)
-
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
+    fig = _init_figure(ax, figsize)
 
     # Set up projection.
     if projection:
@@ -911,10 +868,7 @@ def aggplot(df, projection=None,
         ax = plt.subplot(111)
 
     # Clean up patches.
-    if projection:
-        _lay_out_axes(ax)
-    else:
-        ax.axison = False
+    _lay_out_axes(ax, projection)
 
     # Format hue and generate a colormap
     hue_col = hue
@@ -996,19 +950,9 @@ def aggplot(df, projection=None,
                     feature = descartes.PolygonPatch(sector, facecolor=color, **kwargs)
                     ax.add_patch(feature)
 
-        # Set the extent.
-        if projection:
-            if extent:
-                ax.set_extent(extent)
-            else:
-                ax.set_extent((bxmin, bxmax, bymin, bymax))
-        else:
-            if extent:
-                ax.set_xlim((extent[0], extent[1]))
-                ax.set_ylim((extent[2], extent[3]))
-            else:
-                ax.set_xlim((bxmin, bxmax))
-                ax.set_ylim((bymin, bymax))
+        # Set extent.
+        extrema = (bxmin, bxmax, bymin, bymax)
+        _set_extent(ax, projection, extent, extrema)
 
     else:
         # Set reasonable defaults for the n-params if appropriate.
@@ -1037,19 +981,10 @@ def aggplot(df, projection=None,
                 ax.add_artist(mpl.patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor=color, **kwargs))
                 # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
                 # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
-        # Set the extent.
-        if projection:
-            if extent:
-                ax.set_extent(extent)
-            else:
-                ax.set_extent((bxmin, bxmax, bymin, bymax))
-        else:
-            if extent:
-                ax.set_xlim((extent[0], extent[1]))
-                ax.set_ylim((extent[2], extent[3]))
-            else:
-                ax.set_xlim((bxmin, bxmax))
-                ax.set_ylim((bymin, bymax))
+
+        # Set extent.
+        extrema = (bxmin, bxmax, bymin, bymax)
+        _set_extent(ax, projection, extent, extrema)
 
     # Append a legend, if appropriate.
     if legend:
@@ -1216,12 +1151,7 @@ def cartogram(df, projection=None,
     .. image:: ../figures/cartogram/cartogram-scale-func.png
     """
     # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
-
-    # In this case return amatplotlib` plot directly.
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
+    fig = _init_figure(ax, figsize)
 
     # Load the projection.
     if projection:
@@ -1239,26 +1169,11 @@ def cartogram(df, projection=None,
         ax = plt.subplot(111)
 
     # Clean up patches.
-    if projection:
-        _lay_out_axes(ax)
-    else:
-        ax.axison = False
+    _lay_out_axes(ax, projection)
 
     # Set extent.
-    x_min_coord, x_max_coord, y_min_coord, y_max_coord = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
-
-    if projection:
-        if extent:
-            ax.set_extent(extent)
-        else:
-            ax.set_extent((x_min_coord, x_max_coord, y_min_coord, y_max_coord))
-    else:
-        if extent:
-            ax.set_xlim((extent[0], extent[1]))
-            ax.set_ylim((extent[2], extent[3]))
-        else:
-            ax.set_xlim((x_min_coord, x_max_coord))
-            ax.set_ylim((y_min_coord, y_max_coord))
+    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    _set_extent(ax, projection, extent, extrema)
 
     # Check that the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if not scale:
@@ -1431,8 +1346,7 @@ def kdeplot(df, projection=None,
     sns.reset_orig()  # Reset to default style.
 
     # Initialize the figure.
-    if not ax:
-        fig = plt.figure(figsize=figsize)
+    fig = _init_figure(ax, figsize)
 
     # Necessary prior.
     xs = np.array([p.x for p in df.geometry])
@@ -1452,24 +1366,11 @@ def kdeplot(df, projection=None,
         ax = plt.subplot(111)
 
     # Clean up patches.
-    if projection:
-        _lay_out_axes(ax)
-    else:
-        ax.axison = False
+    _lay_out_axes(ax, projection)
 
     # Set extent.
-    if projection:
-        if extent:
-            ax.set_extent(extent)
-        else:
-            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
-    else:
-        if extent:
-            ax.set_xlim((extent[0], extent[1]))
-            ax.set_ylim((extent[2], extent[3]))
-        else:
-            ax.set_xlim((np.min(xs), np.max(xs)))
-            ax.set_ylim((np.min(ys), np.max(ys)))
+    extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    _set_extent(ax, projection, extent, extrema)
 
     if projection:
         if clip is None:
@@ -1845,12 +1746,7 @@ def sankey(*args, projection=None,
         df = gpd.GeoDataFrame(geometry=points)
 
     # Initialize the figure.
-    fig = plt.figure(figsize=figsize)
-
-    # In this case we can return a `matplotlib` plot directly.
-    # TODO: Implement this.
-    # if not projection:
-    #     raise NotImplementedError
+    fig = _init_figure(ax, figsize)
 
     xs = np.array([p.x for p in points])
     ys = np.array([p.y for p in points])
@@ -1869,10 +1765,7 @@ def sankey(*args, projection=None,
         ax = plt.subplot(111, projection=projection)
 
     # Clean up patches.
-    if projection:
-        _lay_out_axes(ax)
-    else:
-        ax.axison = False
+    _lay_out_axes(ax, projection)
 
     # Set extent.
     if projection:
@@ -1963,6 +1856,29 @@ def sankey(*args, projection=None,
 ##################
 
 
+def _init_figure(ax, figsize):
+    """
+    Initializes the ``matplotlib`` ``figure``, one of the first things that every plot must do. No figure is
+    initialized (and, consequentially, the ``figsize`` argument is ignored) if a pre-existing ``ax`` is passed to
+    the method. This is necessary for ``plt.savefig()`` to work.
+
+    Parameters
+    ----------
+    ax : None or cartopy GeoAxesSubplot instance
+        The current axis, if there is one.
+    figsize : (x_dim, y_dim) tuple
+        The dimension of the resultant plot.
+
+    Returns
+    -------
+    None or matplotlib.Figure instance
+        Returns either nothing or the underlying ``Figure`` instance, depending on whether or not one is initialized.
+    """
+    if not ax:
+        fig = plt.figure(figsize=figsize)
+        return fig
+
+
 def _get_envelopes_min_maxes(envelopes):
     """
     Returns the extrema of the inputted polygonal envelopes. Used for setting chart extent where appropriate. Note
@@ -2017,22 +1933,43 @@ def _get_envelopes_centroid(envelopes):
     return np.mean(xmin, xmax), np.mean(ymin, ymax)
 
 
-def _lay_out_axes(ax):
+def _set_extent(ax, projection, extent, extrema):
+    xmin, xmax, ymin, ymax = extrema
+    if extent and projection:
+        ax.set_extent(extent)
+    if extent and not projection:
+        exmin, exmax, eymin, eymax = extent
+        ax.set_xlim((exmin, exmax))
+        ax.set_ylim((eymin, eymax))
+    if not extent and projection:
+        ax.set_extent((xmin, xmax, ymin, ymax))
+    if not extent and not projection:
+        ax.set_xlim((xmin, xmax))
+        ax.set_ylim((ymin, ymax))
+
+
+def _lay_out_axes(ax, projection):
     """
-    Cartopy enables a a transparent background patch and an "outline" patch by default. This short method simply
-    hides these extraneous visual features.
+    ``cartopy`` enables a a transparent background patch and an "outline" patch by default. This short method simply
+    hides these extraneous visual features. If the plot is a pure ``matplotlib`` one, it does the same thing by
+    removing the axis altogether.
 
     Parameters
     ----------
     ax : matplotlib.Axes instance
         The ``matplotlib.Axes`` instance being manipulated.
+    projection : None or geoplot.crs instance
+        The projection, if one is used.
 
     Returns
     -------
     None
     """
-    ax.background_patch.set_visible(False)
-    ax.outline_patch.set_visible(False)
+    if projection is not None:
+        ax.background_patch.set_visible(False)
+        ax.outline_patch.set_visible(False)
+    else:
+        plt.gca().axison = False
 
 
 def _validate_hue(df, hue):
@@ -2321,26 +2258,3 @@ def _validate_buckets(categorical, k, scheme):
     if not scheme:
         scheme = 'Quantiles'  # This trips it correctly later.
     return categorical, k, scheme
-
-
-def __indices_inside(df, window):
-    """
-    Returns the indices of columns in a ``geopandas`` object located within a certain rectangular window. This helper
-    method is not currently used, see the quad package instead.
-
-    Parameters
-    ----------
-    df : GeoSeries or GeoDataFrame
-        The ``geopandas`` object containing a ``geometry`` of interest.
-    window : tuple
-        The ``(min_x, max_x, min_y, max_y)`` rectangular lookup coordinates from which points will be returned.
-
-    Returns
-    -------
-    The indices within `df` of points within `window`.
-    """
-    min_x, max_x, min_y, max_y = window
-    points = df.geometry.centroid
-    is_in = points.map(lambda point: (min_x < point.x < max_x) & (min_y < point.y < max_y))
-    indices = is_in.values.nonzero()[0]
-    return indices
