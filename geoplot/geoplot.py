@@ -284,7 +284,6 @@ def pointplot(df, projection=None,
             ax.set_extent(extent)
         else:
             pass  # Default extent.
-
     else:
         ax = plt.subplot(111)
 
@@ -1934,16 +1933,37 @@ def _get_envelopes_centroid(envelopes):
 
 
 def _set_extent(ax, projection, extent, extrema):
-    xmin, xmax, ymin, ymax = extrema
-    if extent and projection:
+    """
+    Sets the plot extent.
+
+    Parameters
+    ----------
+    ax : cartopy.GeoAxesSubplot instance
+        The axis whose boundaries are being tweaked.
+    projection : None or geoplot.crs instance
+        The projection, if one is being used.
+    extent : None or (xmin, xmax, ymin, ymax) tuple
+        A copy of the ``extent`` top-level parameter, if the user choses to specify their own extent. These values
+        will be used if ``extent`` is non-``None``.
+    extrema : None or (xmin, xmax, ymin, ymax) tuple
+        Plot-calculated extrema. These values, which are calculated in the plot above and passed to this function
+        (different plots require different calculations), will be used if a user-provided ``extent`` is not provided.
+
+    Returns
+    -------
+    None
+    """
+    if extent and projection:  # Input ``extent`` into set_extent().
         ax.set_extent(extent)
-    if extent and not projection:
-        exmin, exmax, eymin, eymax = extent
-        ax.set_xlim((exmin, exmax))
-        ax.set_ylim((eymin, eymax))
-    if not extent and projection:
+    elif extent and not projection:  # Input ``extent`` into set_ylim, set_xlim.
+        xmin, xmax, ymin, ymax = extent
+        ax.set_xlim((xmin, xmax))
+        ax.set_ylim((ymin, ymax))
+    if not extent and projection:  # Input ``extrema`` into set_extent.
+        xmin, xmax, ymin, ymax = extrema
         ax.set_extent((xmin, xmax, ymin, ymax))
-    if not extent and not projection:
+    if not extent and not projection:  # Input ``extrema`` into set_ylim, set_xlim.
+        xmin, xmax, ymin, ymax = extrema
         ax.set_xlim((xmin, xmax))
         ax.set_ylim((ymin, ymax))
 
