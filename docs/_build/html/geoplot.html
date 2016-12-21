@@ -863,7 +863,7 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 
 <dl class="function">
 <dt id="geoplot.geoplot.pointplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial scatter plot. The simplest useful plot type available.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -903,6 +903,9 @@ None or left unspecified.</li>
 particularly if your scale is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as
 well, the values included in the input will be used by the legend instead.</li>
 <li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. <code class="docutils literal"><span class="pre">geoplot</span></code> visualizations can only
+have one legend at a time out-of-the-box, and this variable (set to &#8220;hue&#8221; by default) controls which one
+gets precedence. Note that <code class="docutils literal"><span class="pre">legend_var</span></code> does nothing if both variables aren&#8217;t used.</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
 refer to the <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
 </li>

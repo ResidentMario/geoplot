@@ -19,7 +19,7 @@ import descartes
 def pointplot(df, projection=None,
               hue=None, categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
               scale=None, limits=(0.5, 2), scale_func=None,
-              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="hue",
               figsize=(8, 6), extent=None, ax=None, **kwargs):
     """
     A geospatial scatter plot. The simplest useful plot type available.
@@ -74,6 +74,10 @@ def pointplot(df, projection=None,
         well, the values included in the input will be used by the legend instead.
     legend_labels : list, optional
         If a legend is specified, this parameter can be used to control what names will be attached to the values.
+    legend_var : "hue" or "scale", optional
+        The name of the visual variable for which a legend will be displayed. ``geoplot`` visualizations can only
+        have one legend at a time out-of-the-box, and this variable (set to "hue" by default) controls which one
+        gets precedence. Note that ``legend_var`` does nothing if both variables aren't used.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
         refer to the `the matplotlib documentation
@@ -310,7 +314,7 @@ def pointplot(df, projection=None,
         sizes = scalar_multiples * 20
 
         # Draw a legend, if appropriate.
-        if legend:
+        if legend and (legend_var == "scale" or hue is None):
             _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
         sizes = 20  # pyplot default
@@ -326,7 +330,7 @@ def pointplot(df, projection=None,
         cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
-        if legend:
+        if legend and (legend_var != "scale" or scale is None):
             _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
     else:
         colors = 'steelblue'
@@ -1988,8 +1992,11 @@ def _lay_out_axes(ax, projection):
     None
     """
     if projection is not None:
-        ax.background_patch.set_visible(False)
-        ax.outline_patch.set_visible(False)
+        try:
+            ax.background_patch.set_visible(False)
+            ax.outline_patch.set_visible(False)
+        except AttributeError:  # Testing...
+            pass
     else:
         plt.gca().axison = False
 
