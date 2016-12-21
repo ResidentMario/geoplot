@@ -1,0 +1,670 @@
+Metadata:
+  Identification_Information:
+    Citation:
+      Citation_Information:
+        Originator: National Atlas of the United States
+        Publication_Date: 201403
+        Title: Cities and Towns of the United States
+        Edition: 2
+        Geospatial_Data_Presentation_Form: Vector digital data
+        Publication_Information:
+          Publication_Place: Rolla, MO
+          Publisher: National Atlas of the United States
+        Online_Linkage: http://nationalatlas.gov/atlasftp-1m.html
+    Description:
+      Abstract:
+        This map layer includes cities and towns in the United States, Puerto Rico, and the U.S. Virgin 
+        Islands.  A city or town is a place with a recorded population, usually with at least one central 
+        area that provides commercial activities.  Cities are generally larger than towns; no distinction 
+        is made between cities and towns in this map layer.  
+      Purpose:
+        These data are intended for geographic display and analysis at the national level, and for large 
+        regional areas.  The data should be displayed and analyzed at scales appropriate 
+        for 1:1,000,000-scale data.  No responsibility is assumed by the National Atlas of the United 
+        States in the use of these data.
+      Supplemental_Information:
+        Version 1 of this data set was produced from GNIS and Census data in 2012 but was not released.  
+        This data set replaces the earlier version.
+
+    Time_Period_of_Content:
+      Time_Period_Information:
+        Single_Date/Time:
+          Calendar_Date: 201403
+      Currentness_Reference: Publication date
+    Status:
+      Progress: Complete
+      Maintenance_and_Update_Frequency: Irregular
+    Spatial_Domain:
+      Bounding_Coordinates:
+        West_Bounding_Coordinate: 172
+        East_Bounding_Coordinate: -64
+        North_Bounding_Coordinate: 72
+        South_Bounding_Coordinate: 17
+    Keywords:
+      Theme:
+        Theme_Keyword_Thesaurus: ISO 19115 Topic Category
+        Theme_Keyword: Location
+        Theme_Keyword: Society
+      Theme:
+        Theme_Keyword_Thesaurus: None
+        Theme_Keyword: Cities
+        Theme_Keyword: Towns
+        Theme_Keyword: Populated places
+
+      Place:
+        Place_Keyword_Thesaurus:
+          Organization for International Standards, 2008, ISO 3166 Country Codes,
+          https://www.iso.org/obp/ui/#search.
+        Place_Keyword: United States
+        Place_Keyword: US
+      Place:
+        Place_Keyword_Thesaurus: None
+        Place_Keyword: USA
+      Place:
+        Place_Keyword_Thesaurus:
+          U.S. Department of Commerce; 2013; American National Standards Institute (ANSI) Codes for States, 
+          the District of Columbia, Puerto Rico, and the Insular Areas of the United States; 
+          Washington, DC; U.S. Census Bureau; http://www.census.gov/geo/reference/ansi_statetables.html.
+        Place_Keyword: Alabama
+        Place_Keyword: Alaska
+        Place_Keyword: Arizona
+        Place_Keyword: Arkansas
+        Place_Keyword: California
+        Place_Keyword: Colorado
+        Place_Keyword: Connecticut
+        Place_Keyword: Delaware
+        Place_Keyword: District of Columbia
+        Place_Keyword: Florida
+        Place_Keyword: Georgia
+        Place_Keyword: Hawaii
+        Place_Keyword: Idaho
+        Place_Keyword: Illinois
+        Place_Keyword: Indiana
+        Place_Keyword: Iowa
+        Place_Keyword: Kansas
+        Place_Keyword: Kentucky
+        Place_Keyword: Louisiana
+        Place_Keyword: Maine
+        Place_Keyword: Maryland
+        Place_Keyword: Massachusetts
+        Place_Keyword: Michigan
+        Place_Keyword: Minnesota
+        Place_Keyword: Mississippi
+        Place_Keyword: Missouri
+        Place_Keyword: Montana
+        Place_Keyword: Nebraska
+        Place_Keyword: Nevada
+        Place_Keyword: New Hampshire
+        Place_Keyword: New Jersey
+        Place_Keyword: New Mexico
+        Place_Keyword: New York
+        Place_Keyword: North Carolina
+        Place_Keyword: North Dakota
+        Place_Keyword: Ohio
+        Place_Keyword: Oklahoma
+        Place_Keyword: Oregon
+        Place_Keyword: Pennsylvania
+        Place_Keyword: Rhode Island
+        Place_Keyword: South Carolina
+        Place_Keyword: South Dakota
+        Place_Keyword: Tennessee
+        Place_Keyword: Texas
+        Place_Keyword: Utah
+        Place_Keyword: Vermont
+        Place_Keyword: Virginia
+        Place_Keyword: Washington
+        Place_Keyword: West Virginia
+        Place_Keyword: Wisconsin
+        Place_Keyword: Wyoming
+        Place_Keyword: Puerto Rico
+        Place_Keyword: Virgin Islands
+        Place_Keyword: U.S. Virgin Islands
+
+    Access_Constraints: None
+    Use_Constraints:
+      None.  Acknowledgment of The National Atlas of the United States of America would be appreciated in 
+      products derived from these data.
+    Point_of_Contact: 
+      Contact_Information: 
+        Contact_Organization_Primary: 
+          Contact_Organization: National Atlas of the United States 
+        Contact_Address: 
+          Address_Type: Mailing and physical address 
+          Address: U.S. Geological Survey
+          Address: 511 National Center 
+          Address: 12201 Sunrise Valley Drive 
+          City: Reston 
+          State_or_Province: VA 
+          Postal_Code: 20192 
+        Contact_Voice_Telephone: 1-888-ASK-USGS (1-888-275-8747)
+        Contact_Electronic_Mail_Address: atlasmail@usgs.gov
+        Contact_Instructions:
+          For questions about this map layer or metadata, please contact the National Atlas using the 
+          information above, or through the U.S. Geological Survey contact page at 
+          http://www.usgs.gov/ask/.  For distribution questions, please see the Distribution Information 
+          elsewhere in this metadata. 
+
+  Data_Quality_Information:
+    Logical_Consistency_Report 
+      The map layer was checked for topological consistency using ArcGIS.  No other checks for logical 
+      consistency were performed on this map layer.
+    Completeness_Report:
+      This map layer includes cities and towns in the 50 United States, the District of Columbia, 
+      Puerto Rico, and the U.S. Virgin Islands.
+    Lineage:
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: National Atlas of the United States
+            Publication_Date: 200402
+            Title: Cities and Towns of the United States
+            Publication_Information:
+              Publication_Place: Reston, VA
+              Publisher: National Atlas of the United States
+            Online_Linkage: http://www.nationalatlas.gov/atlasftp.html
+        Type_of_Source_Media: Online
+        Source_Time_Period_of_Content: 
+          Time_Period_Information:
+            Range_Of_Dates/Times:
+              Beginning_Date: 1972
+              Ending_Date: 2004
+          Source_Currentness_Reference: Ground condition
+        Source_Citation_Abbreviation: 2M_Cities
+        Source_Contribution: Spatial and attribute information
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: U.S. Geological Survey
+            Publication_Date: 20121204
+            Title: 
+              Geographic Names Information System, State Files with Federal 
+              Codes - NationalFedCodes20121204.zip
+            Publication_Information:
+              Publication_Place: Reston, VA
+              Publisher: U.S. Geological Survey
+            Online_Linkage: http://geonames.usgs.gov/domestic/download_data.htm
+        Type_of_Source_Media: Online
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: 2012
+          Source_Currentness_Reference: Publication date
+        Source_Citation_Abbreviation: GNIS
+        Source_Contribution: Spatial and attribute information
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: United States Census Bureau
+            Publication_Date: 2012
+            Title: U.S. Census Bureau National Places Gazetteer Files
+            Publication_Information:
+              Publication_Place: Washington, DC
+              Publisher: 
+                United States Census Bureau, U.S. Department of Commerce Research and Innovative Technology 
+                Administration,  Bureau of Transportation Statistics (RITA/BTS)
+            Online_Linkage: http://www.census.gov/geo/maps-data/data/gazetteer2010.html
+        Type_of_Source_Media: Online
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: 2010
+          Source_Currentness_Reference: Ground condition
+        Source_Citation_Abbreviation: 2010Census_Gazetteer
+        Source_Contribution: Spatial and attribute information
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: U.S. Geological Survey
+            Publication_Date: Unknown
+            Title: 1:24,000-Scale Topographic Map Series
+        Source_Scale_Denominator: 24000
+        Type_of_Source_Media: Paper
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: Unknown
+          Source_Currentness_Reference: Publication date
+        Source_Citation_Abbreviation: Paper Topo Maps 1:24K
+        Source_Contribution: Spatial and attribute information.
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: U.S. Geological Survey
+            Publication_Date: Unknown
+            Title: 1:500,000-Scale State Base Map Series
+        Source_Scale_Denominator: 500000
+        Type_of_Source_Media: Paper
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: Unknown
+          Source_Currentness_Reference: Publication date
+        Source_Citation_Abbreviation: State Base Maps 1:500K
+        Source_Contribution: Spatial and attribute information.
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: Environmental Systems Research Institute - ESRI
+            Publication_Date: 2009
+            Title: ESRI USA Topo Maps Map Service
+            Geospatial_Data_Presentation_Form: Raster digital data
+            Online_Linkage: 
+              http://www.esri.com/software/arcgis/arcgisonline/maps/maps-and-map-layers
+        Source_Scale_Denominator: 100000
+        Type_of_Source_Media: Online
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: 2009
+          Source_Currentness_Reference: Publication date
+        Source_Citation_Abbreviation: USA Topo Maps Map Service 100K
+        Source_Contribution: Spatial and attribute information.
+
+      Source_Information:
+        Source_Citation:
+          Citation_Information:
+            Originator: State Transportation Departments
+            Publication_Date: Unknown
+            Title: (variable) Official State Highway Maps
+        Type_of_Source_Media: Paper
+        Source_Time_Period_of_Content:
+          Time_Period_Information:
+            Single_Date/Time:
+              Calendar_Date: Unknown
+          Source_Currentness_Reference: Publication date
+        Source_Citation_Abbreviation: Official State Highway Maps
+        Source_Contribution: Spatial and attribute information.
+
+      Process_Step:
+        Process_Description:
+          The data sets were all loaded into ArcGIS.  The GNIS data are considered the most authoritative 
+          source, and the Census data are considered the next most authoritative source.
+
+          The 2M_Cities and GNIS data were compared.  Cities that were included in both sources were 
+          identified and added to the data set, using the location from GNIS.
+
+          The 2010Census_Gazetteer and GNIS data were compared.  Cities that were included in both sources 
+          were identified and added to the data set, using the location from GNIS.  
+
+          The 2010Census_Gazetteer and 2M_Cities data were compared.  Cities that were included in both 
+          sources but that were not in GNIS were added to the data set, using the location from 
+          2010Census_Gazetteer.
+
+          The result was a file that included all the cities and towns from 2010Census_Gazetteer, as well 
+          as some other cities and towns.  If there was a GNIS position available, that was used; if no 
+          GNIS position was available the Census position was used.
+
+          Attribute fields were updated as necessary.  The attribute GNIS_ID was added from GNIS to 
+          identify all populated places and any other cities or towns that were in GNIS.  The attribute 
+          ANSICODE was added to all cities or towns that were in the 2010Census_Gazetteer; included are 
+          most of the cities designated as "census" or "civil" in GNIS.  There are some "census" and 
+          "civil" points in GNIS that are not in 2010Census_Gazetteer; for these locations the ANSICODE was 
+          set to -999.  Locations that came from sources other than GNIS or 2010Census_Gazetteer have a 
+          value of -999 for both GNIS_ID and ANSICODE.  Some elevation values were added from topographic 
+          map sources.
+        Source_Used_Citation_Abbreviation: 2M_Cities
+        Source_Used_Citation_Abbreviation: GNIS
+        Source_Used_Citation_Abbreviation: 2010Census_Gazetteer
+        Source_Used_Citation_Abbreviation: Paper Topo Maps 1:24K
+        Process_Date: 2014
+
+      Process_Step:
+        Process_Description:
+          City and town names from GNIS were modified to remove the feature type from the name; the 
+          resulting name was used for all features taken from GNIS.  For features that came from 
+          2010Census_Gazetteer, the Census name was used.  Remaining names were taken from the State base 
+          maps, topographic maps, or State highway maps.  Name discrepancies were sent to the GNIS and were 
+          resolved by their personnel.
+
+          Some features are included in GNIS both as "populated places" and as "census" or "civil" feature 
+          types.  Duplicate features were identified and the "populated places" were deleted from the data.
+
+          Population data were added to the file from 2010Census_Gazetteer.
+
+          A final quality-control review was done and some city locations and names were adjusted based on 
+          information from State Base Maps 1:500K, USA Topo Maps Map Service 100K, and Official State 
+          Highway Maps.
+        Source_Used_Citation_Abbreviation: GNIS
+        Source_Used_Citation_Abbreviation: 2010Census_Gazetteer
+        Source_Used_Citation_Abbreviation: State Base Maps 1:500K
+        Source_Used_Citation_Abbreviation: USA Topo Maps Map Service 100K
+        Source_Used_Citation_Abbreviation: Official State Highway Maps
+        Process_Date: 2014
+
+  Spatial_Data_Organization_Information:
+    Indirect_Spatial_Reference:
+      U.S. Department of Commerce; 2013; American National Standards Institute (ANSI) Codes for States, the 
+      District of Columbia, Puerto Rico, and the Insular Areas of the United States; U.S. Census Bureau.
+
+      U.S. Department of Commerce; 2009; ANSI Codes for the Identification of Counties and Equivalent Areas 
+      of the United States, Puerto Rico, and the Insular Areas; U.S. Census Bureau.
+    Direct_Spatial_Reference_Method: Vector
+    Point_and_Vector_Object_Information:
+      SDTS_Terms_Description:
+        SDTS_Point_and_Vector_Object_Type: Entity point
+        Point_and_Vector_Object_Count: 38187
+
+  Spatial_Reference_Information:
+    Horizontal_Coordinate_System_Definition:
+      Geographic:
+        Latitude_Resolution: 0.000278
+        Longitude_Resolution: 0.000278
+        Geographic_Coordinate_Units: Decimal degrees
+      Geodetic_Model:
+        Horizontal_Datum_Name: North American Datum of 1983
+        Ellipsoid_Name: GRS1980
+        Semi-major_Axis: 6378137
+        Denominator_of_Flattening_Ratio: 298.257222
+
+  Entity_and_Attribute_Information:
+    Detailed_Description:
+      Entity_Type:
+        Entity_Type_Label: City or town
+        Entity_Type_Definition: 
+          A city or town in the United States, Puerto Rico, or the U.S. Virgin Islands.   A city or town is 
+          a place with a recorded population, usually with at least one central area that provides 
+          commercial activities.  Cities are generally larger than towns; no distinction is made between 
+          cities and towns in this map layer.  
+        Entity_Type_Definition_Source: National Atlas of the United States 
+      Attribute:
+        Attribute_Label: Shape
+        Attribute_Definition: The representation of the entity in the data.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Point
+            Enumerated_Domain_Value_Definition: 0-dimensional element
+            Enumerated_Domain_Value_Definition_Source: ESRI GIS software
+      Attribute:
+        Attribute_Label: Gnis_id
+        Attribute_Definition: 
+          A unique identification number assigned by the Geographic Names Information System (GNIS).  This 
+          number can be used to link places in this data set with GNIS.
+        Attribute_Definition_Source: National Atlas of the United States 
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: -999
+            Enumerated_Domain_Value_Definition: No GNIS identification number is available.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: 516
+            Range_Domain_Maximum: 2727439
+      Attribute:
+        Attribute_Label: Ansicode
+        Attribute_Definition: 
+          A unique identification number assigned by the U.S. Census Bureau.  This number can be used to 
+          link places in this data set with the Census Gazetteer data.
+        Attribute_Definition_Source: National Atlas of the United States 
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: -999
+            Enumerated_Domain_Value_Definition: No Census Bureau identification number is available.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: 408990
+            Range_Domain_Maximum: 2634654
+      Attribute:
+        Attribute_Label: Feature
+        Attribute_Definition: The type of feature, as assigned by GNIS.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Census
+            Enumerated_Domain_Value_Definition: 
+              A statistical area delineated locally specifically for the tabulation of Census Bureau data 
+              (Census designated place, census county division, unorganized territory, various types of 
+              American Indian/Alaska Native statistical areas.)  Distinct from Civil and Populated Place.
+            Enumerated_Domain_Value_Definition_Source: GNIS
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Civil
+            Enumerated_Domain_Value_Definition: 
+              A political division formed for administrative purposes (borough, county, incorporated place, 
+              municipio, parish, town, township.)  Distinct from Census and Populated Place.
+            Enumerated_Domain_Value_Definition_Source: GNIS
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Locale
+            Enumerated_Domain_Value_Definition: 
+              Place at which there is or was human activity; it does not include populated places, mines, 
+              and dams (battlefield, crossroad, camp, farm, ghost town, landing, railroad siding, ranch, 
+              ruins, site, station, windmill.)
+            Enumerated_Domain_Value_Definition_Source: GNIS
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Place
+            Enumerated_Domain_Value_Definition: 
+              A city or town found in local sources but that is not in either GNIS or the Census gazetteer.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: Populated Place
+            Enumerated_Domain_Value_Definition:
+              Place or area with clustered or scattered buildings and a permanent human population (city, 
+              settlement, town, village.)  A populated place is usually not incorporated and by definition 
+              has no legal boundaries.  However, a populated place may have a corresponding "civil" record, 
+              the legal boundaries of which may or may not coincide with the perceived populated place.  
+              Distinct from Census and Civil classes.
+            Enumerated_Domain_Value_Definition_Source: GNIS
+      Attribute:
+        Attribute_Label: Feature2
+        Attribute_Definition: The status of the city or town
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: -999
+            Enumerated_Domain_Value_Definition: The city or town does not have a status designation.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: County Seat
+            Enumerated_Domain_Value_Definition: A place that serves as the seat of the county government.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: National Capital
+            Enumerated_Domain_Value_Definition: 
+              A place that serves as the seat of the national government of the United States of America.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: State Capital
+            Enumerated_Domain_Value_Definition: A place that serves as the seat of the State government.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: State Capital County Seat
+            Enumerated_Domain_Value_Definition:
+              A place that serves as the seat of both the State government and the county government.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+      Attribute:
+        Attribute_Label: Name
+        Attribute_Definition: The name of the city or town.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Codeset_Domain:
+            Codeset_Name: Geographic Names Information System
+            Codeset_Source: U.S. Board on Geographic Names
+        Attribute_Domain_Values:
+          Unrepresentable_Domain:
+            There is no predetermined set of official names for cities and towns that are not in GNIS.
+      Attribute:
+        Attribute_Label: Pop_2010
+        Attribute_Definition: 
+          The 2010 population of the city or town.  Locations with a population of 0 are listed as such in 
+          the Census source data.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Enumerated_Domain:
+            Enumerated_Domain_Value: -999
+            Enumerated_Domain_Value_Definition: 
+              No population information is available for the city or town.
+            Enumerated_Domain_Value_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: 0
+            Range_Domain_Maximum: 8175133
+      Attribute:
+        Attribute_Label: County
+        Attribute_Definition: 
+          The name of the county or county equivalent where the city or town is located.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Codeset_Domain:
+            Codeset_Name:
+              American National Standards Institute (ANSI) Codes for the Identification of Counties and 
+              Equivalent Areas of the United States, Puerto Rico, and the Insular Areas
+            Codeset_Source: U.S. Department of Commerce, U.S. Census Bureau
+      Attribute:
+        Attribute_Label: Countyfips
+        Attribute_Definition: The 3-digit FIPS code of the county or county equivalent.  
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Codeset_Domain:
+            Codeset_Name:
+              ANSI Codes for the Identification of Counties and Equivalent Areas of the United States, 
+              Puerto Rico, and the Insular Areas
+            Codeset_Source: U.S. Department of Commerce, U.S. Census Bureau
+      Attribute:
+        Attribute_Label: State
+        Attribute_Definition: 
+          The 2-character abbreviation for the State in which the city or town is located.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Codeset_Domain:
+            Codeset_Name:
+              ANSI Codes for States, the District of Columbia, Puerto Rico, and the Insular Areas of the 
+              United States
+            Codeset_Source: U.S. Department of Commerce, U.S. Census Bureau
+      Attribute:
+        Attribute_Label: State_fips
+        Attribute_Definition: The 2-digit FIPS code for the State in which the city or town is located.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Codeset_Domain:
+            Codeset_Name:
+              ANSI Codes for States, the District of Columbia, Puerto Rico, and the Insular Areas of the 
+              United States.
+            Codeset_Source: U.S. Department of Commerce, U.S. Census Bureau
+      Attribute:
+        Attribute_Label: Latitude
+        Attribute_Definition: The latitude of the city or town as it appears in this data set.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: 17.7124746
+            Range_Domain_Maximum: 71.2905556
+      Attribute:
+        Attribute_Label: Longitude
+        Attribute_Definition: The longitude of the city or town as it appears in this data set.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: -176.6580556
+            Range_Domain_Maximum: 178.8775999
+      Attribute:
+        Attribute_Label: Poppllat
+        Attribute_Definition: The latitude of the city or town as it appears in the source data.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: 17.7124746
+            Range_Domain_Maximum: 71.2905556
+      Attribute:
+        Attribute_Label: Poppllong
+        Attribute_Definition: The longitude of the city or town as it appears in the source data.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: -176.6580556
+            Range_Domain_Maximum: 178.8775999
+      Attribute:
+        Attribute_Label: Elev_in_m
+        Attribute_Definition: 
+          The elevation, in meters, of the city or town. Determined from GNIS or from topographic map 
+          sources.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: -68
+            Range_Domain_Maximum: 3457
+      Attribute:
+        Attribute_Label: Elev_in_ft
+        Attribute_Definition: 
+          The elevation, in meters, of the city or town.  Determined from GNIS or from topographic map 
+          sources.
+        Attribute_Definition_Source: National Atlas of the United States
+        Attribute_Domain_Values:
+          Range_Domain:
+            Range_Domain_Minimum: -223
+            Range_Domain_Maximum: 11342
+
+  Distribution_Information:
+    Distributor:
+      Contact_Information:
+        Contact_Organization_Primary:
+          Contact_Organization: Earth Explorer, U.S. Geological Survey
+        Contact_Address:
+          Address_Type: Mailing address
+          Address: U.S. Geological Survey
+          Address: 47914 252nd Street
+          City: Sioux Falls
+          State_or_Province: SD
+          Postal_Code: 57198-0001
+        Contact_Voice_Telephone: 605-594-6116
+        Contact_Voice_Telephone: 866-573-3222
+        Contact_Electronic_Mail_Address: custserv@usgs.gov
+    Distribution_Liability:
+      Although these data have been processed successfully on a computer system at the U.S. Geological 
+      Survey, no warranty expressed or implied is made by the U.S. Geological Survey regarding the utility 
+      of the data on any other system, nor shall the act of distribution constitute any such warranty.  
+      No responsibility is assumed by the U.S. Geological Survey in the use of these data.
+    Standard_Order_Process:
+      Digital_Form:
+        Digital_Transfer_Information:
+          Format_Name: ESRI Shapefile
+        Digital_Transfer_Option:
+          Online_Option:
+            Computer_Contact_Information:
+              Network_Address: 
+                Network_Resource_Name: http://nationalatlas.gov/atlasftp-1m.html
+      Digital_Form:
+        Digital_Transfer_Information:
+          Format_Name: ESRI File Geodatabase
+        Digital_Transfer_Option:
+          Online_Option:
+            Computer_Contact_Information:
+              Network_Address:
+                Network_Resource_Name: http://nationalatlas.gov/atlasftp-1m.html
+      Fees: None
+
+  Metadata_Reference_Information:
+    Metadata_Date: 20140404
+    Metadata_Contact:
+      Contact_Information:
+        Contact_Organization_Primary:
+          Contact_Organization: National Atlas of the United States
+        Contact_Address:
+          Address_Type: Mailing address
+          Address: U.S. Geological Survey
+          Address: 511 National Center
+          Address: 12201 Sunrise Valley Drive 
+          City: Reston
+          State_or_Province: VA
+          Postal_Code: 20192
+        Contact_Voice_Telephone: 1-888-ASK-USGS (1-888-275-8747)
+        Contact_Electronic_Mail_Address: atlasmail@usgs.gov
+    Metadata_Standard_Name: FGDC Content Standards for Digital Geospatial Metadata
+    Metadata_Standard_Version: FGDC-STD-001-1998
+    Metadata_Security_Information:
+      Metadata_Security_Classification_System: None
+      Metadata_Security_Classification: Unclassified
+      Metadata_Security_Handling_Description: None 
