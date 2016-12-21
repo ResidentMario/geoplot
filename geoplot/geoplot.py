@@ -894,7 +894,8 @@ def aggplot(df, projection=None,
         # Side-convert geometry for ease of use.
         if geometry is not None:
             # Downconvert GeoDataFrame to GeoSeries objects.
-            if isinstance(geometry, gpd.GeoDataFrame): geometry = geometry.geometry
+            if isinstance(geometry, gpd.GeoDataFrame):
+                geometry = geometry.geometry
 
             # Valid polygons are simple polygons (``shapely.geometry.Polygon``) and complex multi-piece polygons
             # (``shapely.geometry.MultiPolygon``). The latter is an iterable of its components, so if the shape is
@@ -977,7 +978,8 @@ def aggplot(df, projection=None,
                 feature = ShapelyFeature([rect], ccrs.PlateCarree())
                 ax.add_feature(feature, facecolor=color, **kwargs)
             else:
-                ax.add_artist(mpl.patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, facecolor=color, **kwargs))
+                feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
+                ax.add_patch(feature)
                 # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
                 # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
 
