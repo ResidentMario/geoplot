@@ -294,6 +294,22 @@ def pointplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
+    # If a hue parameter is specified and is a string, convert it to a reference to its column.
+    if isinstance(hue, str):
+        hue = df[hue]
+
+    # Validate bucketing.
+    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+
+    if hue is not None:
+        cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
+
+        if legend and (legend_var != "scale" or scale is None):
+            _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+    else:
+        colors = ['steelblue']*len(df)
+
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
         if isinstance(scale, str):
@@ -313,27 +329,20 @@ def pointplot(df, projection=None,
         scalar_multiples = np.array([dscale(d) for d in scalar_values])
         sizes = scalar_multiples * 20
 
+        # When a scale is applied, large points will tend to obfuscate small ones. Bringing the smaller
+        # points to the front (by plotting them last) is a necessary intermediate step, which is what this bit of
+        # code does.
+        sorted_indices = np.array(sorted(enumerate(sizes), key=lambda tup: tup[1])[::-1])[:,0].astype(int)
+        xs = np.array(xs)[sorted_indices]
+        ys = np.array(ys)[sorted_indices]
+        sizes = np.array(sizes)[sorted_indices]
+        colors = np.array(colors)[sorted_indices]
+
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale" or hue is None):
             _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
         sizes = 20  # pyplot default
-
-    # If a hue parameter is specified and is a string, convert it to a reference to its column.
-    if isinstance(hue, str):
-        hue = df[hue]
-
-    # Validate bucketing.
-    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
-
-    if hue is not None:
-        cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-        if legend and (legend_var != "scale" or scale is None):
-            _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-    else:
-        colors = 'steelblue'
 
     # Draw.
     if projection:
