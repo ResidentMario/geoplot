@@ -10,6 +10,7 @@ http://scitools.org.uk/cartopy/docs/latest/crs/projections.html
 """
 
 import cartopy.crs as ccrs
+import geopandas as gpd
 
 # TODO: RotatedPole
 
@@ -20,12 +21,16 @@ class PlateCarree:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class LambertCylindrical:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class Mercator:
@@ -34,12 +39,15 @@ class Mercator:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 class Miller:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class Mollweide:
@@ -48,12 +56,16 @@ class Mollweide:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class Robinson:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class Sinusoidal:
@@ -62,12 +74,16 @@ class Sinusoidal:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class InterruptedGoodeHomolosine:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class Geostationary:
@@ -76,12 +92,16 @@ class Geostationary:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class NorthPolarStereo:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class SouthPolarStereo:
@@ -90,6 +110,8 @@ class SouthPolarStereo:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_longitude': centerings['central_longitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class Gnomonic:
     def __init__(self, **kwargs): self.args = kwargs
@@ -97,11 +119,15 @@ class Gnomonic:
     def load(self, df, centerings):
         return _generic_load(self, df, {'central_latitude': centerings['central_latitude']})
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class AlbersEqualArea:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class AzimuthalEquidistant:
@@ -109,11 +135,15 @@ class AzimuthalEquidistant:
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class LambertConformal:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class Orthographic:
@@ -121,11 +151,15 @@ class Orthographic:
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class Stereographic:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class TransverseMercator:
@@ -133,11 +167,15 @@ class TransverseMercator:
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class LambertAzimuthalEqualArea:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, centerings): return _generic_load(self, df, centerings)
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class UTM:
@@ -145,11 +183,15 @@ class UTM:
 
     def load(self, df, _): return _generic_load(self, df, dict())
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class OSGB:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, _): return _generic_load(self, df, dict())
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 class EuroPP:
@@ -157,11 +199,15 @@ class EuroPP:
 
     def load(self, df, _): return _generic_load(self, df, dict())
 
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
+
 
 class OSNI:
     def __init__(self, **kwargs): self.args = kwargs
 
     def load(self, df, _): return _generic_load(self, df, dict())
+
+    def _as_mpl_axes(self): return _as_mpl_axes(self)
 
 
 def _generic_load(proj, df, centerings):
@@ -200,3 +246,35 @@ def _generic_load(proj, df, centerings):
     for key, func in centerings.items():
         centering_variables[key] = func(df)
     return getattr(ccrs, proj.__class__.__name__)(**{**centering_variables, **proj.args})
+
+
+def _as_mpl_axes(proj):
+    """
+    Another moderately mind-bendy method. When ``matplotlib`` is provided a projection via a ``projection`` keyword
+    argument, it expects to get something with a callable ``as_mpl_axes`` method. The precise details of what this
+    method does, exactly, are not important: it suffices to know that every ``cartopy`` coordinate reference system
+    object has one.
+
+    When we pass a ``geoplot.crs`` crs object to a ``geoplot`` function, the loading and centering of the data
+    occurs automatically (using the function defined immediately above). Since we control what ``geoplot`` does at
+    execution, we gracefully integrate this two-step procedure into the function body.
+
+    But there are also use cases outside of our control in which we are forced to pass a ``geoplot.crs`` object
+    without having first called ``load``: most prominently, when creating a plot containing subplots, the "overall"
+    projection must be pre-loaded. It's possible to get around this by using ``cartopy.crs`` objects instead,
+    but this is inelegant. This method is a better way: when a ``cartopy.crs`` object called by ``matplotlib``,
+    it silently swaps itself out for a vanilla version of its ``cartopy.crs`` mirror, and calls that function's
+    ``_as_mpl_axes`` instead.
+
+    Parameters
+    ----------
+    proj : geoplot.crs projection instance
+        The instance in question (self, in the method body).
+
+    Returns
+    -------
+    Mutates into a ``cartopy.crs`` object and returns the result of executing ``_as_mpl_axes`` on that object instead.
+
+    """
+    proj = proj.load(gpd.GeoDataFrame(), dict())
+    return proj._as_mpl_axes()
