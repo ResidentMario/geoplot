@@ -9,4 +9,4 @@ Layered subplots
 **Python source code:** :download:`[download source: nyc-collisions-map.py]<nyc-collisions-map.py>`
 
 .. literalinclude:: nyc-collisions-map.py
-    :lines: 1-
+    :lines: 2-

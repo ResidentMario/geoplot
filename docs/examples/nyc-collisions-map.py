@@ -59,4 +59,4 @@ gplt.pointplot(injurious_collisions, projection=ccrs.AlbersEqualArea(),
                ax=ax)
 plt.title("Injurious Crashes in New York City, 2016")
 
-plt.savefig("nyc-motor-vehicle-collisions.png", bbox_inches='tight', pad_inches=0)
+plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)
