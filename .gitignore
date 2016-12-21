@@ -1,10 +1,7 @@
 .idea/
 .ipynb_checkpoints/
-*.csv
-data/
 dependencies/
 .DS_Store
-test.png
 *.pyc
 docs/_build
 build/
