@@ -2122,7 +2122,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     else:
         categories = np.unique(hue)
         if len(categories) > 10:
-            warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
+            warnings.warn("Generating a colormap using a categorical column with over 10 individual categories. "
                           "This is not recommended!")
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
