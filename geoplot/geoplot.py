@@ -1412,7 +1412,7 @@ def kdeplot(df, projection=None,
 
 
 def sankey(*args, projection=None,
-           start=None, end=None, path=ccrs.Geodetic(),
+           start=None, end=None, path=None,
            hue=None, categorical=False, scheme=None, k=None, cmap='viridis', vmin=None, vmax=None,
            legend=False, legend_kwargs=None, legend_labels=None,
            extent=None, figsize=(8, 6), ax=None,
@@ -1730,7 +1730,6 @@ def sankey(*args, projection=None,
 
     .. image:: ../figures/sankey/sankey-scale-func.png
     """
-
     # Validate df.
     if len(args) > 1:
         raise ValueError("Invalid input.")
@@ -1740,36 +1739,71 @@ def sankey(*args, projection=None,
         df = None  # bind the local name here; initialize in a bit.
 
     # Validate the rest of the input.
-    if (start is None) or (end is None):
-        raise ValueError("The 'start' and 'ending' parameters must both be specified.")
+    if ((start is None) or (end is None)) and not hasattr(path, "__iter__"):
+        raise ValueError("The 'start' and 'end' parameters must both be specified.")
     if (isinstance(start, str) or isinstance(end, str)) and (df is None):
         raise ValueError("Invalid input.")
     if isinstance(start, str):
         start = df[start]
-    else:
+    elif start is not None:
         start = gpd.GeoSeries(start)
     if isinstance(end, str):
         end = df[end]
-    else:
+    elif end is not None:
         end = gpd.GeoSeries(end)
+    if (start is not None) and (end is not None) and not hasattr(path, "__iter__"):
+        raise ValueError("One of 'start' and 'end' OR 'path' must be specified, but they cannot be specified "
+                         "simultaneously.")
+    if path is None:
+        path = ccrs.Geodetic()
+        path_geoms = None
+    elif isinstance(path, str):
+        path_geoms = df[path]
+    else:
+        path_geoms = path
+    if start is not None and end is not None:
+        points = pd.concat([start, end])
+    else:
+        points = None
 
-    # Load points.
-    points = pd.concat([start, end])
-    # Initialize the `df` variable with a projection dummy, if it has not been initialized already.
-    if df is None:
+    # After validating the inputs, we are in one of two modes:
+    # 1. Projective mode. In this case ``path_geoms`` is None, while ``points`` contains a concatenation of our
+    #    points (for use in initializing the plot extents). This case occurs when the user specifies ``start`` and
+    #    ``end``, and not ``path``. This is "projective mode" because it means that ``path`` will be a
+    #    projection---if one is not provided explicitly, the ``ccrs.Geodetic()`` projection.
+    # 2. Path mode. In this case ``path_geoms`` is an iterable of LineString entities to be plotted, while ``points``
+    #    is None. This occurs when the user specifies ``path``, and not ``start`` or ``end``. This is path mode
+    #    because we will need to plot exactly those paths!
+
+    # At this point we'll initialize the rest of the variables we need. The way that we initialize them is going to
+    # depend on which code path we are on. Additionally, we will initialize the `df` variable with a projection
+    # dummy, if it has not been initialized already. This `df` will only be used for figuring out the extent,
+    # and will be discarded afterwards!
+    #
+    # Variables we need to generate at this point, and why we need them:
+    # 1. (clong, clat) --- To pass this to the projection settings.
+    # 2. (xmin. xmax, ymin. ymax) --- To pass this to the extent settings.
+    # 3. n --- To pass this to the color array in case no ``color`` is specified.
+    if df is None and points is not None:
         df = gpd.GeoDataFrame(geometry=points)
+        xs = np.array([p.x for p in points])
+        ys = np.array([p.y for p in points])
+        xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+        clong, clat = np.mean(xs), np.mean(ys)
+        n = len(points) / 2
+    else:  # path_geoms is an iterable
+        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path.envelope.exterior)
+        clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
+        n = len(path_geoms)
 
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
 
-    xs = np.array([p.x for p in points])
-    ys = np.array([p.y for p in points])
-
     # Load the projection.
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(xs),
-            'central_latitude': lambda df: np.mean(ys)
+            'central_longitude': lambda df: clong,
+            'central_latitude': lambda df: clat
         })
 
         # Set up the axis.
@@ -1786,14 +1820,14 @@ def sankey(*args, projection=None,
         if extent:
             ax.set_extent(extent)
         else:
-            ax.set_extent((np.min(xs), np.max(xs), np.min(ys), np.max(ys)))
+            ax.set_extent((xmin, xmax, ymin, ymax))
     else:
         if extent:
             ax.set_xlim((extent[0], extent[1]))
             ax.set_ylim((extent[2], extent[3]))
         else:
-            ax.set_xlim((np.min(xs), np.max(xs)))
-            ax.set_ylim((np.min(ys), np.max(ys)))
+            ax.set_xlim((xmin, xmax))
+            ax.set_ylim((ymin, ymax))
 
     # Generate colormaps.
     if hue:
@@ -1805,7 +1839,7 @@ def sankey(*args, projection=None,
         if legend:
             _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
     else:
-        colors = [None]*len(start)
+        colors = [None]*n
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -1843,26 +1877,37 @@ def sankey(*args, projection=None,
         widths = [kwargs['linewidth']]*len(df); kwargs.pop('linewidth')
 
     if projection:
-        # Duck test plot. The first will work if a valid transformation is passed, the second will work with an
-        # iterable.
+        # Duck test plot. The first will work if a valid transformation is passed to ``path`` (e.g. we are in the
+        # ``start + ``end`` case), the second will work if ``path`` is an iterable (e.g. we are in the ``path`` case).
         try:
             for origin, destination, color, width in zip(start, end, colors, widths):
                 ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
                         linestyle=linestyle, linewidth=width, color=color, **kwargs)
-        except ValueError:
-            for origin, destination, line, color, width in zip(start, end, path, colors, widths):
+        except TypeError:
+            for line, color, width in zip(path, colors, widths):
                 feature = ShapelyFeature([line], ccrs.PlateCarree())
-                ax.add_feature(feature, linestyle=linestyle, linewidth=width, facecolor=color, **kwargs)
+                ax.add_feature(feature, linestyle=linestyle, linewidth=width, edgecolor=color, facecolor='None',
+                **kwargs)
     else:
         try:
             for origin, destination, color, width in zip(start, end, colors, widths):
                 ax.plot([origin.x, destination.x], [origin.y, destination.y],
                         linestyle=linestyle, linewidth=width, color=color, **kwargs)
-        except ValueError:
-            for origin, destination, line, color, width in zip(start, end, path, colors, widths):
-                feature = descartes.PolygonPatch(line, **kwargs)
-                ax.add_patch(feature)
-
+        except TypeError:
+            for path, color, width in zip(path, colors, widths):
+                # We have to implement different methods for dealing with LineString and MultiLineString objects.
+                # This calls for, yep, another duck test.
+                try:  # LineString
+                    line = mpl.lines.Line2D([coord[0] for coord in path.coords],
+                                            [coord[1] for coord in path.coords],
+                                            linestyle=linestyle, linewidth=width, color=color, **kwargs)
+                    ax.add_line(line)
+                except NotImplementedError:  # MultiLineString
+                    for line in path:
+                        line = mpl.lines.Line2D([coord[0] for coord in line.coords],
+                                                [coord[1] for coord in line.coords],
+                                                linestyle=linestyle, linewidth=width, color=color, **kwargs)
+                        ax.add_line(line)
     return ax
 
 ##################
@@ -1901,7 +1946,7 @@ def _get_envelopes_min_maxes(envelopes):
     Parameters
     ----------
     envelopes : GeoSeries
-        The envelopes of the given geometries, as would be returned by e.g. ``data.geometry.envelope``.
+        The envelopes of the given geometries, as would be returned by e.g. ``data.geometry.envelope.exterior``.
 
     Returns
     -------
