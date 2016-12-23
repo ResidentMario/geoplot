@@ -6,8 +6,7 @@ import geoplot.crs as ccrs
 import matplotlib.pyplot as plt
 
 
-# This example inspired by:
-# https://bl.ocks.org/mbostock/4055908
+# This script was inspired by: https://bl.ocks.org/mbostock/4055908
 
 
 # Shape the data.

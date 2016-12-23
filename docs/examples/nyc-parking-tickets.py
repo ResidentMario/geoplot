@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# This example was inspired by:
-# http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
+# This script demonstrates creating and populating a large matplotlib subplots array using geoplot.
+# It also demonstrates some very attractive-looking choropleths!
+# Inspired by: http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
 
 
 # Load the data.
@@ -40,16 +41,11 @@ def tickets_by_precinct(state):
         state_count = srs['Count']
         precinct_count = precinct_ticket_totals.loc[precinct]
         return state_count / precinct_count
-        # all_tickets = int(precinct_ticket_totals.loc[precinct]['Count'])
-        # return state_tickets[state_tickets['Precinct'] == precinct].set_index('Precinct')['Count'].iloc[0] / all_tickets
 
     precinct_ticket_percentages = state_tickets.apply(get_precinct_ticket_percentage, axis='columns')
 
     def get_geom(precinct_num):
-        try:
-            return precincts.loc[precinct_num].geometry
-        except:
-            print("WARNING: Does the {0}th precinct exist?".format(precinct_num))
+        return precincts.loc[precinct_num].geometry
 
     geom = precinct_ticket_percentages.index.map(get_geom)
     geo_data = gpd.GeoDataFrame(data=precinct_ticket_percentages, geometry=geom)
@@ -82,4 +78,4 @@ plot_state_to_ax('California', axarr[2][1])
 plot_state_to_ax('District of Columbia', axarr[3][0])
 plot_state_to_ax('Puerto Rico', axarr[3][1])
 
-plt.savefig("nyc-parking-tickets.png", bbox_inches='tight')# , pad_inches=0.0)
+plt.savefig("nyc-parking-tickets.png", bbox_inches='tight')

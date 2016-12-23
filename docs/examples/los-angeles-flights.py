@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import cartopy
 
 
+# This script demonstrates using the cartopy feature interface alongside geoplot.
+# For more information visit http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html.
+
+
 # Fetch the data.
 # Note: this script doesn't actually work! For the moment.
 airline_city_pairs = pd.read_csv('../../data/world_flights/flights.csv', index_col=0)
