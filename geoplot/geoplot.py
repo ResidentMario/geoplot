@@ -1521,16 +1521,35 @@ def kdeplot(df, projection=None,
                         transform=ccrs.PlateCarree(), ax=ax, **kwargs)
         else:
             # TODO: Get clipping working...
-            raise NotImplementedError("This feature has not yet been added.")
+            # raise NotImplementedError("This feature has not yet been added.")
+            import pdb; pdb.set_trace()
+            kde = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                              transform=ccrs.PlateCarree(), **kwargs)
+            # staten_island = [p for p in clip.geometry.iloc[0]][3]
+            # staten_island_poly = descartes.PolygonPatch(staten_island)
+            # mock_coords = [c for c in staten_island.envelope.exterior.coords]
+            # poly = mpl.patches.Polygon(mock_coords, closed=True, facecolor='red')
+            # import pdb; pdb.set_trace()
+            # kde.set_clip_path(poly)
+            # fig.axes.append(kde)
             # for geom in clip:
             #     to_clip = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
             #                           transform=ccrs.PlateCarree(), ax=ax, **kwargs)
-            #     feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
-            #     # import descartes; feature = descartes.PolygonPatch(geom.convex_hull, facecolor='steelblue')
-            #     # ax.add_feature(feature, facecolor='None', **kwargs)
-            #     # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
-            #     ax.add_patch(feature)
-            #     to_clip.set_clip_path(feature)
+            #     # feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
+            #     import pdb; pdb.set_trace()
+            #     try:  # Duck test for MultiPolygon.
+            #         for subgeom in geom:
+            #             feature = descartes.PolygonPatch(subgeom)
+            #             to_clip.set_clip_path(feature)
+            #             ax.add_patch(feature)
+            #     except (TypeError, AssertionError):  # Shapely Polygon.
+            #         feature = descartes.PolygonPatch(geom)
+            #         to_clip.set_clip_path(feature)
+            #         ax.add_patch(feature)
+                # ax.add_feature(feature, facecolor='None', **kwargs)
+                # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
+                # to_clip.set_clip_path(feature)
+                # ax.add_patch(feature)
     else:
         if clip is None:
             sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax, **kwargs)
@@ -1542,7 +1561,7 @@ def kdeplot(df, projection=None,
 
 def sankey(*args, projection=None,
            start=None, end=None, path=None,
-           hue=None, categorical=False, scheme=None, k=None, cmap='viridis', vmin=None, vmax=None,
+           hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
            legend=False, legend_kwargs=None, legend_labels=None,
            extent=None, figsize=(8, 6), ax=None,
            scale=None, limits=(1, 5), scale_func=None, legend_values=None,
@@ -1880,7 +1899,8 @@ def sankey(*args, projection=None,
         end = df[end]
     elif end is not None:
         end = gpd.GeoSeries(end)
-    if (start is not None) and (end is not None) and not hasattr(path, "__iter__"):
+    if (start is not None) and (end is not None) and hasattr(path, "__iter__"):
+        import pdb; pdb.set_trace()
         raise ValueError("One of 'start' and 'end' OR 'path' must be specified, but they cannot be specified "
                          "simultaneously.")
     if path is None:
@@ -1889,7 +1909,7 @@ def sankey(*args, projection=None,
     elif isinstance(path, str):
         path_geoms = df[path]
     else:
-        path_geoms = path
+        path_geoms = gpd.GeoSeries(path)
     if start is not None and end is not None:
         points = pd.concat([start, end])
     else:
@@ -1913,15 +1933,17 @@ def sankey(*args, projection=None,
     # 1. (clong, clat) --- To pass this to the projection settings.
     # 2. (xmin. xmax, ymin. ymax) --- To pass this to the extent settings.
     # 3. n --- To pass this to the color array in case no ``color`` is specified.
-    if df is None and points is not None:
-        df = gpd.GeoDataFrame(geometry=points)
+    if path_geoms is None and points is not None:
+        if df is None:
+            df = gpd.GeoDataFrame(geometry=points)
         xs = np.array([p.x for p in points])
         ys = np.array([p.y for p in points])
         xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
         clong, clat = np.mean(xs), np.mean(ys)
         n = len(points) / 2
     else:  # path_geoms is an iterable
-        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path.envelope.exterior)
+        import pdb; pdb.set_trace()
+        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path_geoms.envelope.exterior)
         clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
         n = len(path_geoms)
 
