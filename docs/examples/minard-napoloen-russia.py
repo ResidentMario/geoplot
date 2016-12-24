@@ -6,6 +6,12 @@ from shapely.geometry import Point
 import pandas as pd
 import mplleaflet
 
+# Note that in order to get the webmap working inside of ReStructed Text, the format in which this guide is written,
+# the output had to be hand-modified slightly. This trick:
+# http://stackoverflow.com/questions/41272106/directive-for-including-a-raw-html-file-in-a-restructured-text-page
+# ...was employed, and the output HTML was further modified slightly so that it could function within this page (
+# removing the <body> tag etc.).
+
 # Shape the data.
 troop_positions = pd.read_fwf("../../data/napoloen/troops.txt")
 troop_positions = gpd.GeoDataFrame(data=troop_positions,
