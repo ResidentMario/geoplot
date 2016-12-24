@@ -539,7 +539,7 @@ alternative metric, like the use of <code class="docutils literal"><span class="
 
 <dl class="function">
 <dt id="geoplot.geoplot.cartogram">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">cartogram</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>scale=None</em>, <em>limits=(0.2</em>, <em>1)</em>, <em>scale_func=None</em>, <em>trace=True</em>, <em>trace_kwargs=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">cartogram</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>scale=None</em>, <em>limits=(0.2</em>, <em>1)</em>, <em>scale_func=None</em>, <em>trace=True</em>, <em>trace_kwargs=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>This plot scales the size of polygonal inputs based on the value of a particular data parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -560,6 +560,22 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <li><strong>trace</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a trace of the polygon&#8217;s original outline in the plot result.</li>
 <li><strong>trace_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">trace</span></code> is set to <code class="docutils literal"><span class="pre">True</span></code>, this parameter can be used to adjust the properties of the trace outline. This
 parameter is ignored if trace is <code class="docutils literal"><span class="pre">False</span></code>.</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+formats. Defaults to None, in which case no colormap will be applied at all.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
+is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+left unspecified or set to None this variable is ignored.</li>
+<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
+<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
+ignored.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
+for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
+value is below this level will all be colored by the same threshold value.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
+value is above this level will all be colored by the same threshold value.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
 <li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, equal intervals will be used for the &#8220;points&#8221; in the legend by default. However,
@@ -569,6 +585,9 @@ well, the values included in the input will be used by the legend instead.</li>
 <li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
 refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
 </li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. <code class="docutils literal"><span class="pre">geoplot</span></code> visualizations can only
+have one legend at a time out-of-the-box, and this variable (set to &#8220;hue&#8221; by default) controls which one
+gets precedence. Note that <code class="docutils literal"><span class="pre">legend_var</span></code> does nothing if both variables aren&#8217;t used.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
@@ -655,6 +674,15 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 </pre></div>
 </div>
 <img alt="_images/cartogram-scale-func.png" src="_images/cartogram-scale-func.png" />
+<p><code class="docutils literal"><span class="pre">cartogram</span></code> also provides the same <code class="docutils literal"><span class="pre">hue</span></code> visual variable parameters provided by e.g. <code class="docutils literal"><span class="pre">pointplot</span></code>. Although
+it&#8217;s possible for <code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> to refer to different aspects of the data, it&#8217;s strongly recommended
+to use the same data column for both. For more information on <code class="docutils literal"><span class="pre">hue</span></code>-related arguments, refer to e.g. the
+<code class="docutils literal"><span class="pre">pointplot</span></code> <a class="reference external" href="../pointplot.html">documentation</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/cartogram-hue.png" src="_images/cartogram-hue.png" />
 </dd></dl>
 
 <dl class="function">

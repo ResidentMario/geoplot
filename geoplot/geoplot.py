@@ -321,7 +321,7 @@ def pointplot(df, projection=None,
     _lay_out_axes(ax, projection)
 
     # Validate hue input.
-    hue = _validate_hue(df, hue)
+    hue = _validate_hue(df, hue, required=False)
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
@@ -498,7 +498,7 @@ def polyplot(df, projection=None,
                 for subgeom in geom:
                     feature = descartes.PolygonPatch(subgeom, facecolor=facecolor, **kwargs)
                     ax.add_patch(feature)
-            except TypeError:  # Shapely Polygon.
+            except (TypeError, AssertionError):  # Shapely Polygon.
                 feature = descartes.PolygonPatch(geom, facecolor=facecolor, **kwargs)
                 ax.add_patch(feature)
 
@@ -743,7 +743,7 @@ def choropleth(df, projection=None,
                 for subgeom in geom:
                     feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
                     ax.add_patch(feature)
-            except TypeError:  # Shapely Polygon.
+            except (TypeError, AssertionError):  # Shapely Polygon.
                 feature = descartes.PolygonPatch(geom, facecolor=color, **kwargs)
                 ax.add_patch(feature)
 
@@ -1022,7 +1022,7 @@ def aggplot(df, projection=None,
                     for subgeom in sector:
                         feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
                         ax.add_patch(feature)
-                except TypeError:  # Shapely Polygon.
+                except (TypeError, AssertionError):  # Shapely Polygon.
                     feature = descartes.PolygonPatch(sector, facecolor=color, **kwargs)
                     ax.add_patch(feature)
 
@@ -1072,7 +1072,8 @@ def aggplot(df, projection=None,
 
 def cartogram(df, projection=None,
               scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
-              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+              hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
+              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="hue",
               extent=None,
               figsize=(8, 6), ax=None,
               **kwargs):
@@ -1102,6 +1103,29 @@ def cartogram(df, projection=None,
     trace_kwargs : dict, optional
         If ``trace`` is set to ``True``, this parameter can be used to adjust the properties of the trace outline. This
         parameter is ignored if trace is ``False``.
+    hue : None, Series, GeoSeries, iterable, or str, optional
+        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+        formats. Defaults to None, in which case no colormap will be applied at all.
+    categorical : boolean, optional
+        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
+        is set to None or not specified.
+    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
+        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        left unspecified or set to None this variable is ignored.
+    k : int, optional
+        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
+        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
+        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
+        ignored.
+    cmap : matplotlib color, optional
+        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
+        for a colormap to be applied at all, so this parameter is ignored otherwise.
+    vmin : float, optional
+        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
+        value is below this level will all be colored by the same threshold value.
+    vmax : float, optional
+        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
+        value is above this level will all be colored by the same threshold value.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
@@ -1115,6 +1139,10 @@ def cartogram(df, projection=None,
         Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
         refer to `the matplotlib documentation
         <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+    legend_var : "hue" or "scale", optional
+        The name of the visual variable for which a legend will be displayed. ``geoplot`` visualizations can only
+        have one legend at a time out-of-the-box, and this variable (set to "hue" by default) controls which one
+        gets precedence. Note that ``legend_var`` does nothing if both variables aren't used.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -1226,6 +1254,18 @@ def cartogram(df, projection=None,
                        limits=(0.5, 1), scale_func=trivial_scale)
 
     .. image:: ../figures/cartogram/cartogram-scale-func.png
+
+    ``cartogram`` also provides the same ``hue`` visual variable parameters provided by e.g. ``pointplot``. Although
+    it's possible for ``hue`` and ``scale`` to refer to different aspects of the data, it's strongly recommended
+    to use the same data column for both. For more information on ``hue``-related arguments, refer to e.g. the
+    ``pointplot`` `documentation <../pointplot.html>`_.
+
+    .. code-block:: python
+
+        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+                       hue='Population Density', k=None, cmap='Blues')
+
+    .. image:: ../figures/cartogram/cartogram-hue.png
     """
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
@@ -1272,6 +1312,36 @@ def cartogram(df, projection=None,
     if legend:
         _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
 
+    # Validate hue input.
+    hue = _validate_hue(df, hue, required=False)
+
+    # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
+    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    if k is not None:
+        # Categorical colormap code path.
+        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+
+        if hue is not None:
+            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            colors = [cmap.to_rgba(v) for v in hue_values]
+
+            # Add a legend, if appropriate.
+            if legend and (legend_var != "scale" or scale is None):
+                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+        else:
+            colors = ['None']*len(df)
+    elif k is None and hue is not None:
+        # Continuous colormap code path.
+        hue_values = hue
+        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
+
+        # Add a legend, if appropriate.
+        if legend and (legend_var != "scale" or scale is None):
+            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+    else:
+        colors = ['None']*len(df)
+
     # Manipulate trace_kwargs.
     if trace:
         if trace_kwargs is None:
@@ -1280,10 +1350,6 @@ def cartogram(df, projection=None,
             trace_kwargs['edgecolor'] = 'lightgray'
         if 'facecolor' not in trace_kwargs.keys():
             trace_kwargs['facecolor'] = 'None'
-
-    # Manipulate kwargs.
-    if 'facecolor' not in kwargs.keys():
-        kwargs['facecolor'] = 'None'
 
     # Draw traces first, if appropriate.
     if trace:
@@ -1297,24 +1363,24 @@ def cartogram(df, projection=None,
                     for subgeom in polygon:
                         feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
                         ax.add_patch(feature)
-                except TypeError:  # Shapely Polygon.
+                except (TypeError, AssertionError):  # Shapely Polygon.
                     feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
                     ax.add_patch(feature)
 
     # Finally, draw the scaled geometries.
-    for value, polygon in zip(values, df.geometry):
+    for value, color, polygon in zip(values, colors, df.geometry):
         scale_factor = dscale(value)
         scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
         if projection:
             features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
-            ax.add_feature(features, **kwargs)
+            ax.add_feature(features, facecolor=color, **kwargs)
         else:
             try:  # Duck test for MultiPolygon.
                 for subgeom in scaled_polygon:
-                    feature = descartes.PolygonPatch(subgeom, **kwargs)
+                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
                     ax.add_patch(feature)
-            except TypeError:  # Shapely Polygon.
-                feature = descartes.PolygonPatch(scaled_polygon, **kwargs)
+            except (TypeError, AssertionError):  # Shapely Polygon.
+                feature = descartes.PolygonPatch(scaled_polygon, facecolor=color, **kwargs)
                 ax.add_patch(feature)
 
     return ax
