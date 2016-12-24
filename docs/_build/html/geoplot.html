@@ -863,7 +863,7 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 
 <dl class="function">
 <dt id="geoplot.geoplot.pointplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=None</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial scatter plot. The simplest useful plot type available.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -871,11 +871,10 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
-</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
+module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.
+If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
+chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
 <li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
@@ -883,8 +882,9 @@ is set to None or not specified.</li>
 <li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
 <li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
-many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this
-variable is ignored.</li>
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
+<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
+ignored.</li>
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
@@ -1004,6 +1004,15 @@ matplotlib-recognizable colormap using the <code class="docutils literal"><span 
 </pre></div>
 </div>
 <img alt="_images/pointplot-cmap.png" src="_images/pointplot-cmap.png" />
+<p>To use a continuous colormap (instead of the default categorical <code class="docutils literal"><span class="pre">k=5</span></code>, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note
+that in this case, a colorbar legend will be used.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+       <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+       <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-k-None.png" src="_images/pointplot-k-None.png" />
 <p><code class="docutils literal"><span class="pre">pointplot</span></code> also supports using point <code class="docutils literal"><span class="pre">scale</span></code> as a visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span>
@@ -1033,7 +1042,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 </pre></div>
 </div>
 <img alt="_images/pointplot-scale-func.png" src="_images/pointplot-scale-func.png" />
-<p><code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> can co-exist. Note, however, that only the <code class="docutils literal"><span class="pre">hue</span></code> legend will be displayed in this case.</p>
+<p><code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> can co-exist.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
                <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -1042,6 +1051,16 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 </pre></div>
 </div>
 <img alt="_images/pointplot-hue-scale.png" src="_images/pointplot-hue-scale.png" />
+<p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
+               <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+               <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-legend-var.png" src="_images/pointplot-legend-var.png" />
 </dd></dl>
 
 <dl class="function">

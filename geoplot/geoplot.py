@@ -17,7 +17,7 @@ import descartes
 
 
 def pointplot(df, projection=None,
-              hue=None, categorical=False, scheme=None, k=None, cmap='Set1', vmin=None, vmax=None,
+              hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
               scale=None, limits=(0.5, 2), scale_func=None,
               legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="hue",
               figsize=(8, 6), extent=None, ax=None, **kwargs):
@@ -31,7 +31,6 @@ def pointplot(df, projection=None,
     projection : geoplot.crs object instance, optional
         A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
         module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
         If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
         chart, which allow certain operations not possible with projected ``cartopy`` results.
     hue : None, Series, GeoSeries, iterable, or str, optional
@@ -45,8 +44,9 @@ def pointplot(df, projection=None,
         left unspecified or set to None this variable is ignored.
     k : int, optional
         If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is left unspecified or set to None this
-        variable is ignored.
+        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
+        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
+        ignored.
     cmap : matplotlib color, optional
         The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
         for a colormap to be applied at all, so this parameter is ignored otherwise.
@@ -216,6 +216,18 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-cmap.png
 
+    To use a continuous colormap (instead of the default categorical ``k=5``, explicitly specify ``k=None``. Note
+    that in this case, a colorbar legend will be used.
+
+    .. code-block:: python
+
+        gplt.pointplot(data, projection=ccrs.AlbersEqualArea(),
+               hue='var', cmap='inferno', k=None,
+               edgecolor='white', linewidth=0.5,
+               legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
+
+    .. image:: ../figures/pointplot/pointplot-k-None.png
+
     ``pointplot`` also supports using point ``scale`` as a visual variable.
 
     .. code-block:: python
@@ -254,7 +266,7 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scale-func.png
 
-    ``hue`` and ``scale`` can co-exist. Note, however, that only the ``hue`` legend will be displayed in this case.
+    ``hue`` and ``scale`` can co-exist.
 
     .. code-block:: python
 
@@ -265,6 +277,20 @@ def pointplot(df, projection=None,
                        legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/pointplot/pointplot-hue-scale.png
+
+    In case more than one visual variable is used, control which one appears in the legend using ``legend_var``.
+
+    .. code-block:: python
+
+        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
+                       projection=ccrs.AlbersEqualArea(),
+                       hue='BOROUGH', categorical=True,
+                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
+                       legend=True, legend_kwargs={'loc': 'upper left'},
+                       legend_var='scale')
+
+    .. image:: ../figures/pointplot/pointplot-legend-var.png
+
     """
     # Initialize the figure, if one hasn't been initialized already.
     fig = _init_figure(ax, figsize)
@@ -298,17 +324,31 @@ def pointplot(df, projection=None,
     if isinstance(hue, str):
         hue = df[hue]
 
-    # Validate bucketing.
-    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+    # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
+    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    if k is not None:
+        # Categorical colormap code path.
+        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
-    if hue is not None:
-        cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+        if hue is not None:
+            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            colors = [cmap.to_rgba(v) for v in hue_values]
+
+            # Add a legend, if appropriate.
+            if legend and (legend_var != "scale" or scale is None):
+                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+        else:
+            colors = ['steelblue']*len(df)
+    elif k is None and hue is not None:
+        # Continuous colormap code path.
+        hue_values = hue
+        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
+        # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
-            _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-    else:
-        colors = ['steelblue']*len(df)
+            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -688,6 +728,7 @@ def choropleth(df, projection=None,
     return ax
 
 
+# TODO: aggplot is totally broken, fix it.
 def aggplot(df, projection=None,
             hue=None,
             by=None,
@@ -2330,11 +2371,9 @@ def _validate_buckets(categorical, k, scheme):
     (categorical, k, scheme) : tuple
         A possibly modified input tuple meant for reassignment in place.
     """
-    if categorical and (k or scheme):
+    if categorical and (k != 5 or scheme):
         raise ValueError("Invalid input: categorical cannot be specified as True simultaneously with scheme or k "
                          "parameters")
-    if not k:
-        k = 5
     if k > 10:
         warnings.warn("Generating a choropleth using a categorical column with over 10 individual categories. "
                       "This is not recommended!")
