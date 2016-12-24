@@ -320,9 +320,8 @@ def pointplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
-    # If a hue parameter is specified and is a string, convert it to a reference to its column.
-    if isinstance(hue, str):
-        hue = df[hue]
+    # Validate hue input.
+    hue = _validate_hue(df, hue)
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
@@ -348,7 +347,6 @@ def pointplot(df, projection=None,
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
-
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -537,9 +535,8 @@ def choropleth(df, projection=None,
         The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
     k : int, optional
-        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is left unspecified or set to None this
-        variable is ignored.
+        If ``categorical`` is False, this number, set to 5 by default, will determine how many bins will exist in
+        the output visualization. If this variable is set to ``None``, a continuous colormap will be used.
     cmap : matplotlib color, optional
         The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
         for a colormap to be applied at all, so this parameter is ignored otherwise.
@@ -652,6 +649,15 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-k.png
 
+    To use a continuous colormap, specify ``k=None``. In this case a colorbar legend will be used.
+
+    .. code-block:: python
+
+        gplt.choropleth(polydata, hue='latdep', cmap='Blues', k=None, legend=True,
+                        projection=ccrs.PlateCarree())
+
+    .. image:: ../figures/choropleth/choropleth-k-none.png
+
     ``legend_labels`` controls the legend labels.
 
     .. code-block:: python
@@ -699,31 +705,47 @@ def choropleth(df, projection=None,
     # Format the data to be displayed for input.
     hue = _validate_hue(df, hue)
 
-    # Validate bucketing.
-    categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+    # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
+    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    if k is not None:
+        # Categorical colormap code path.
 
-    # Generate colormaps.
-    cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+        # Validate buckets.
+        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
-    # Add a legend, if one is appropriate.
-    if legend:
-        _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+        if hue is not None:
+            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            colors = [cmap.to_rgba(v) for v in hue_values]
+
+            # Add a legend, if appropriate.
+            if legend:
+                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+        else:
+            colors = ['steelblue']*len(df)
+    elif k is None and hue is not None:
+        # Continuous colormap code path.
+        hue_values = hue
+        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
+
+        # Add a legend, if appropriate.
+        if legend:
+            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
     # Draw the features.
     if projection:
-        for cat, geom in zip(values, df.geometry):
+        for color, geom in zip(colors, df.geometry):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=cmap.to_rgba(cat), **kwargs)
+            ax.add_feature(features, facecolor=color, **kwargs)
     else:
-        for cat, geom in zip(values, df.geometry):
+        for color, geom in zip(colors, df.geometry):
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=cmap.to_rgba(cat), **kwargs)
+                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
                     ax.add_patch(feature)
             except TypeError:  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=cmap.to_rgba(cat), **kwargs)
+                feature = descartes.PolygonPatch(geom, facecolor=color, **kwargs)
                 ax.add_patch(feature)
-        plt.gca().axison = False
 
     return ax
 
@@ -2096,7 +2118,7 @@ def _lay_out_axes(ax, projection):
         plt.gca().axison = False
 
 
-def _validate_hue(df, hue):
+def _validate_hue(df, hue, required=True):
     """
     The top-level ``hue`` parameter present in most plot types accepts a variety of input types. This method
     condenses this variety into a single preferred format---an iterable---which is expected by all submethods working
@@ -2109,20 +2131,25 @@ def _validate_hue(df, hue):
     hue : Series, GeoSeries, iterable, str
         The data column whose entries are being discretely colorized, as (loosely) passed by the top-level ``hue``
         variable.
+    required : boolean
+        Whether or not this parameter is required for the plot in question.
 
     Returns
     -------
     hue : iterable
         The ``hue`` parameter input as an iterable.
     """
-    if not hue:
-        nongeom = set(df.columns) - {df.geometry.name}
-        if len(nongeom) > 1:
-            raise ValueError("Ambiguous input: no 'hue' parameter was specified and the inputted DataFrame has more "
-                             "than one column of data.")
+    if hue is None:
+        if required:
+            nongeom = set(df.columns) - {df.geometry.name}
+            if len(nongeom) > 1:
+                raise ValueError("Ambiguous input: no 'hue' parameter was specified and the inputted DataFrame has more "
+                                 "than one column of data.")
+            else:
+                hue = df[list(nongeom)[0]]
+                return hue
         else:
-            hue = df[list(nongeom)[0]]
-            return hue
+            return None
     elif isinstance(hue, str):
         hue = df[hue]
         return hue

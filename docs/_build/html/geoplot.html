@@ -678,9 +678,8 @@ formats. Defaults to None, in which case no colormap will be applied at all.</li
 is set to None or not specified.</li>
 <li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
-many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this
-variable is ignored.</li>
+<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how many bins will exist in
+the output visualization. If this variable is set to <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used.</li>
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
@@ -763,6 +762,12 @@ them. Change the number of buckets by specifying <code class="docutils literal">
 </pre></div>
 </div>
 <img alt="_images/choropleth-k.png" src="_images/choropleth-k.png" />
+<p>To use a continuous colormap, specify <code class="docutils literal"><span class="pre">k=None</span></code>. In this case a colorbar legend will be used.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="_images/choropleth-k-none.png" src="_images/choropleth-k-none.png" />
 <p><code class="docutils literal"><span class="pre">legend_labels</span></code> controls the legend labels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                 <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
