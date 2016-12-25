@@ -26,6 +26,13 @@ Pointplot
 
     .. _largest_cities_usa: ./examples/largest-cities-usa.html
 
+    |boston_airbnb_webmap|_
+
+    .. |boston_airbnb_webmap| image:: ./examples/boston-airbnb-webmap.png
+        :width: 500px
+
+    .. _boston_airbnb_webmap: ./examples/boston-airbnb-webmap.html
+
 
 
 .. _gallery-tag-Choropleth:
