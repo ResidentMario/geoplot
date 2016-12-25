@@ -7,9 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# This script demonstrates creating and populating a large matplotlib subplots array using geoplot.
-# It also demonstrates some very attractive-looking choropleths!
-# Inspired by: http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
+# This example inspired by:
+# http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
 
 
 # Load the data.
@@ -62,7 +61,7 @@ def plot_state_to_ax(state, ax):
 
 
 # Finally, plot the data.
-f, axarr = plt.subplots(4, 2, figsize=(12, 24), subplot_kw={
+f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
     'projection': ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
 })
 
@@ -73,9 +72,5 @@ plot_state_to_ax('New York', axarr[0][0])
 plot_state_to_ax('New Jersey', axarr[0][1])
 plot_state_to_ax('Pennsylvania', axarr[1][0])
 plot_state_to_ax('Connecticut', axarr[1][1])
-plot_state_to_ax('Texas', axarr[2][0])
-plot_state_to_ax('California', axarr[2][1])
-plot_state_to_ax('District of Columbia', axarr[3][0])
-plot_state_to_ax('Puerto Rico', axarr[3][1])
 
 plt.savefig("nyc-parking-tickets.png", bbox_inches='tight')
