@@ -1414,6 +1414,9 @@ def kdeplot(df, projection=None,
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
         outliers---that input will be used instead.
+    clip : None or iterable or GeoSeries, optional
+        If this argument is specified, ``kdeplot`` output will be clipped so that the heatmap only appears when it
+        is inside the boundaries of the given geometries.
     ax : GeoAxesSubplot instance, optional
         A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
         multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
@@ -1484,6 +1487,16 @@ def kdeplot(df, projection=None,
 
     .. image:: ../figures/kdeplot/kdeplot-cmap.png
 
+    Oftentimes given the geometry of the location, a "regular" continuous KDEPlot doesn't make sense. We can specify a
+    ``clip`` of iterable geometries, which will be used to trim the KDEPlot.
+
+    .. code-block:: python
+
+        gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+                     shade=True, clip=boroughs)
+
+    .. image:: ../figures/kdeplot/kdeplot-clip.png
+
     """
     import seaborn as sns  # Immediately fail if no seaborn.
     sns.reset_orig()  # Reset to default style.
@@ -1520,42 +1533,20 @@ def kdeplot(df, projection=None,
             sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
                         transform=ccrs.PlateCarree(), ax=ax, **kwargs)
         else:
-            # TODO: Get clipping working...
-            # raise NotImplementedError("This feature has not yet been added.")
-            import pdb; pdb.set_trace()
-            kde = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
-                              transform=ccrs.PlateCarree(), **kwargs)
-            # staten_island = [p for p in clip.geometry.iloc[0]][3]
-            # staten_island_poly = descartes.PolygonPatch(staten_island)
-            # mock_coords = [c for c in staten_island.envelope.exterior.coords]
-            # poly = mpl.patches.Polygon(mock_coords, closed=True, facecolor='red')
-            # import pdb; pdb.set_trace()
-            # kde.set_clip_path(poly)
-            # fig.axes.append(kde)
-            # for geom in clip:
-            #     to_clip = sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
-            #                           transform=ccrs.PlateCarree(), ax=ax, **kwargs)
-            #     # feature = ShapelyFeature([geom.convex_hull], ccrs.PlateCarree())
-            #     import pdb; pdb.set_trace()
-            #     try:  # Duck test for MultiPolygon.
-            #         for subgeom in geom:
-            #             feature = descartes.PolygonPatch(subgeom)
-            #             to_clip.set_clip_path(feature)
-            #             ax.add_patch(feature)
-            #     except (TypeError, AssertionError):  # Shapely Polygon.
-            #         feature = descartes.PolygonPatch(geom)
-            #         to_clip.set_clip_path(feature)
-            #         ax.add_patch(feature)
-                # ax.add_feature(feature, facecolor='None', **kwargs)
-                # feature = mpl.patches.Circle((.75,.75),radius=.25,fc='none')
-                # to_clip.set_clip_path(feature)
-                # ax.add_patch(feature)
+            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                        transform=ccrs.PlateCarree(), ax=ax, **kwargs)
+            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
     else:
         if clip is None:
             sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax, **kwargs)
         else:
-            # TODO: Get clipping working...
-            raise NotImplementedError("This feature has not yet been added.")
+            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+            polyplot(gpd.GeoSeries(clip_geom),
+                     facecolor='white', linewidth=0, zorder=100, extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
+            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]),
+                        ax=ax, **kwargs)
     return ax
 
 
@@ -2495,3 +2486,14 @@ def _validate_buckets(categorical, k, scheme):
     if not scheme:
         scheme = 'Quantiles'  # This trips it correctly later.
     return categorical, k, scheme
+
+
+def _get_clip(extent, clip):
+    xmin, xmax, ymin, ymax = extent
+    # We have to add a little bit of padding to the edges of the box, as otherwise the edges will invert a little,
+    # surprisingly.
+    rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)])
+    rect = shapely.affinity.scale(rect, xfact=1.05, yfact=1.05)
+    for geom in clip:
+        rect = rect.symmetric_difference(geom)
+    return rect

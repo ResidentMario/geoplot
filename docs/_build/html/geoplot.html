@@ -829,13 +829,15 @@ module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateC
 <p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
 chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
 </li>
-<li><strong>clip</strong> (<em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
+<li><strong>clip</strong> (<em>None</em><em> or </em><em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
 &#8220;cleaning up&#8221; the plot. This feature has not yet actually been implemented!</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
+<li><strong>clip</strong> &#8211; If this argument is specified, <code class="docutils literal"><span class="pre">kdeplot</span></code> output will be clipped so that the heatmap only appears when it
+is inside the boundaries of the given geometries.</li>
 <li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
 multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
 instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
@@ -892,6 +894,13 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 </pre></div>
 </div>
 <img alt="_images/kdeplot-cmap.png" src="_images/kdeplot-cmap.png" />
+<p>Oftentimes given the geometry of the location, a &#8220;regular&#8221; continuous KDEPlot doesn&#8217;t make sense. We can specify a
+<code class="docutils literal"><span class="pre">clip</span></code> of iterable geometries, which will be used to trim the KDEPlot.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+             <span class="n">shade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/kdeplot-clip.png" src="_images/kdeplot-clip.png" />
 </dd></dl>
 
 <dl class="function">
