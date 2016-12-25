@@ -1488,7 +1488,8 @@ def kdeplot(df, projection=None,
     .. image:: ../figures/kdeplot/kdeplot-cmap.png
 
     Oftentimes given the geometry of the location, a "regular" continuous KDEPlot doesn't make sense. We can specify a
-    ``clip`` of iterable geometries, which will be used to trim the KDEPlot.
+    ``clip`` of iterable geometries, which will be used to trim the KDEPlot (note: if you have set ``shade=True`` as
+    a parameter you may need to additionally specify ``shade_lowest=False`` to avoid inversion at the edges).
 
     .. code-block:: python
 
