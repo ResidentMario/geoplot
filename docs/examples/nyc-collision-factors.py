@@ -26,16 +26,20 @@ collisions = collisions[collisions.geometry.map(lambda srs: not (srs.x == 0))]
 
 # Plot the data.
 fig = plt.figure(figsize=(10,5))
+
 ax1 = plt.subplot(121, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+
 gplt.kdeplot(collisions[collisions["CONTRIBUTING FACTOR VEHICLE 1"] == 'Failure to Yield Right-of-Way'],
              projection=ccrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax1)
 gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax1)
 plt.title("Failure to Yield Right-of-Way Crashes, 2016")
 
 ax2 = plt.subplot(122, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+
 gplt.kdeplot(collisions[collisions["CONTRIBUTING FACTOR VEHICLE 1"] == 'Lost Consciousness'],
              projection=ccrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax2)
 gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax2)
 plt.title("Loss of Consciousness Crashes, 2016")
+
 
 plt.savefig("nyc-collision-factors.png", bbox_inches='tight', pad_inches=0.1)

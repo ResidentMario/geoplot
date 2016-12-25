@@ -34,21 +34,22 @@ injurious_collisions = injurious_collisions[injurious_collisions.geometry.map(la
 injurious_collisions = injurious_collisions[injurious_collisions['DATE'].map(lambda day: "2016" in day)]
 
 
-# Plot the figure.
+# Plot the data.
 fig = plt.figure(figsize=(10,5))
-ax = plt.subplot(121, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
-gplt.polyplot(boroughs, ax=ax, projection=ccrs.AlbersEqualArea())
+
+ax1 = plt.subplot(121, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+gplt.polyplot(boroughs, ax=ax1, projection=ccrs.AlbersEqualArea())
 gplt.pointplot(fatal_collisions, projection=ccrs.AlbersEqualArea(),
                hue='BOROUGH', categorical=True,
                edgecolor='white', linewidth=0.5, zorder=10,
                scale='NUMBER OF PERSONS KILLED', limits=(2, 8),
                legend=True, legend_var='scale', legend_kwargs={'loc': 'upper left'},
                legend_values=[2, 1], legend_labels=['2 Fatalities', '1 Fatality'],
-               ax=ax)
+               ax=ax1)
 plt.title("Fatal Crashes in New York City, 2016")
 
-ax = plt.subplot(122, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
-gplt.polyplot(boroughs, ax=ax, projection=ccrs.AlbersEqualArea())
+ax2 = plt.subplot(122, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+gplt.polyplot(boroughs, ax=ax2, projection=ccrs.AlbersEqualArea())
 gplt.pointplot(injurious_collisions, projection=ccrs.AlbersEqualArea(),
                hue='BOROUGH', categorical=True,
                edgecolor='white', linewidth=0.5, zorder=10,
@@ -56,7 +57,8 @@ gplt.pointplot(injurious_collisions, projection=ccrs.AlbersEqualArea(),
                legend=True, legend_var='scale', legend_kwargs={'loc': 'upper left'},
                legend_values=[20, 15, 10, 5, 1],
                legend_labels=['20 Injuries', '15 Injuries', '10 Injuries', '5 Injuries', '1 Injury'],
-               ax=ax)
+               ax=ax2)
 plt.title("Injurious Crashes in New York City, 2016")
+
 
 plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)

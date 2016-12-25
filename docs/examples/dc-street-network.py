@@ -5,7 +5,9 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 
 
-# Data from: http://www.fhwa.dot.gov/policyinformation/hpms/shapefiles.cfm
+# The data being used here is the DC portion of the Federal Highway Administration's roadway traffic volume
+# shapefiles, retrieved from http://www.fhwa.dot.gov/policyinformation/hpms/shapefiles.cfm. The AADT column of
+# interest here is the FHA's traffic volume estimates.
 
 
 # Load the data.

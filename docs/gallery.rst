@@ -26,14 +26,6 @@ Pointplot
 
     .. _largest_cities_usa: ./examples/largest-cities-usa.html
 
-    |boston_airbnb_webmap|_
-
-    .. |boston_airbnb_webmap| image:: ./examples/boston-airbnb-webmap.png
-        :width: 500px
-
-    .. _boston_airbnb_webmap: ./examples/boston-airbnb-webmap.html
-
-
 
 .. _gallery-tag-Choropleth:
 
@@ -87,6 +79,14 @@ KDEPlot
         :width: 500px
 
     .. _nyc_collision_factors: ./examples/nyc-collision-factors.html
+
+
+    |boston_airbnb_kde|_
+
+    .. |boston_airbnb_kde| image:: ./examples/boston-airbnb-kde.png
+        :width: 500px
+
+    .. _boston_airbnb_kde: ./examples/boston-airbnb-kde.html
 
 
 
