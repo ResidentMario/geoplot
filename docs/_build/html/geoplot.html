@@ -626,7 +626,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id13"><span class="problematic" id="id14">`matplotlib Legend instance
+necessary to properly position the legend, will be passed to the underlying <a href="#id14"><span class="problematic" id="id15">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
@@ -922,7 +922,7 @@ chart, which allow certain operations not possible with projected <code class="d
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
 <li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
 is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
 <li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
 many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
@@ -976,14 +976,17 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>The most basic plot possible is little more than a bunch of points and a projection:</p>
+<p>The <code class="docutils literal"><span class="pre">pointplot</span></code> is a simple <a class="reference external" href="https://en.wikipedia.org/wiki/Scatter_plot">geospatial scatter plot</a>. The
+expected input is a <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> with geometries consisting of <code class="docutils literal"><span class="pre">shapely.geometry.Point</span></code>
+entities. The simplest possible plot can be made by specifying the input data (and, optionally, a
+<a class="reference external" href="./tutorial/projections.html">projection</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-initial.png" src="_images/pointplot-initial.png" />
-<p>Use the <code class="docutils literal"><span class="pre">hue</span></code> parameter to apply a colormap to the data:</p>
+<p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter accepts a data column and applies a colormap to the output.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -999,30 +1002,33 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </pre></div>
 </div>
 <img alt="_images/pointplot-legend-labels.png" src="_images/pointplot-legend-labels.png" />
-<p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes. Bins
-are optimized to contain approximately equal numbers of observations by default (they are &#8220;quartiles&#8221;). You can
-also specify an alternative binning scheme using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter.</p>
-<p>This can produce very different results. You must have <code class="docutils literal"><span class="pre">pysal</span></code> installed in order for this parameter to work.</p>
+<p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes
+containing equal numbers of observations - a <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile">quantile</a> scheme. An
+alternative binning scheme can be specified using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. Valid options are <code class="docutils literal"><span class="pre">Quantile</span></code>,
+<code class="docutils literal"><span class="pre">Equal_interval</span></code> (bins will be of equal sizes but contain different numbers of observations),
+and <code class="docutils literal"><span class="pre">Fisher_jenks</span></code> (an intermediate between the two).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-scheme.png" src="_images/pointplot-scheme.png" />
-<p>If your data is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>,
-you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to instead use the labels in your dataset directly.</p>
+<p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-categorical.png" src="_images/pointplot-categorical.png" />
-<p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">matplotlib Legend instance</a>.</p>
+<p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments will be
+passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.legend.Legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">ref</a>). The <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">bbox_to_anchor</span></code>
+parameters are particularly useful for positioning the legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
                <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-legend-kwargs.png" src="_images/pointplot-legend-kwargs.png" />
-<p>Additional arguments will be interpreted as keyword arguments to the underlying <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">matplotlib scatter</a> plot.</p>
+<p>Additional arguments will be interpreted as keyword arguments to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code>
+instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
@@ -1030,7 +1036,7 @@ necessary to properly position the legend, will be passed to the underlying <a c
 </pre></div>
 </div>
 <img alt="_images/pointplot-kwargs.png" src="_images/pointplot-kwargs.png" />
-<p>Change the number of data bins used by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value.</p>
+<p>Change the number of bins by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -1039,7 +1045,7 @@ necessary to properly position the legend, will be passed to the underlying <a c
 </div>
 <img alt="_images/pointplot-k.png" src="_images/pointplot-k.png" />
 <p>Adjust the <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any
-matplotlib-recognizable colormap using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter:</p>
+colormap recognizable to <code class="docutils literal"><span class="pre">matplotlib</span></code> using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
        <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
        <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -1047,8 +1053,8 @@ matplotlib-recognizable colormap using the <code class="docutils literal"><span 
 </pre></div>
 </div>
 <img alt="_images/pointplot-cmap.png" src="_images/pointplot-cmap.png" />
-<p>To use a continuous colormap (instead of the default categorical <code class="docutils literal"><span class="pre">k=5</span></code>, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note
-that in this case, a colorbar legend will be used.</p>
+<p>To use a continuous colormap, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note that if <code class="docutils literal"><span class="pre">legend=True</span></code>,
+a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></code> legend will be used (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
        <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
        <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -1056,24 +1062,25 @@ that in this case, a colorbar legend will be used.</p>
 </pre></div>
 </div>
 <img alt="_images/pointplot-k-None.png" src="_images/pointplot-k-None.png" />
-<p><code class="docutils literal"><span class="pre">pointplot</span></code> also supports using point <code class="docutils literal"><span class="pre">scale</span></code> as a visual variable.</p>
+<p><code class="docutils literal"><span class="pre">scale</span></code> provides an alternative or additional visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-scale.png" src="_images/pointplot-scale.png" />
-<p>The default limits, <code class="docutils literal"><span class="pre">(0.5,</span> <span class="pre">2.0)</span></code>, can be adjusted via the <code class="docutils literal"><span class="pre">limits</span></code> parameter.(usually a less conservative
-value is appropriate).</p>
+<p>The limits can be adjusted to fit your data using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <img alt="_images/pointplot-limits.png" src="_images/pointplot-limits.png" />
-<p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
-specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
-maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
+<p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
+between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
+be a factory function of two variables which, when given the maximum and minimum of the dataset,
+returns a scaling function which will be applied to the rest of the data. A <code class="docutils literal"><span class="pre">scale_func</span></code> demo is available in
+the <a class="reference external" href="examples/usa-city-elevations.html">example gallery</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">2</span>
@@ -1190,7 +1197,7 @@ required.</li>
 draw to connect the points. This is useful if one wishes to e.g. build their own line-bundles.</p>
 <p>If this parameter is provided as a projection, that projection will be used for determining how the line is
 plotted. This parameter defaults to <code class="docutils literal"><span class="pre">ccrs.Geodetic()</span></code>, which means that the <em>true</em> (e.g. shortest path
-will be plotted (e.g. <a href="#id15"><span class="problematic" id="id16">`great circle distance&lt;https://en.wikipedia.org/wiki/Great-circle_distance&gt;`_</span></a>); any
+will be plotted (e.g. <a href="#id16"><span class="problematic" id="id17">`great circle distance&lt;https://en.wikipedia.org/wiki/Great-circle_distance&gt;`_</span></a>); any
 other choice will result in what the shortest path is in that projection instead.</p>
 </li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible

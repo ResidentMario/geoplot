@@ -39,7 +39,7 @@ def pointplot(df, projection=None,
     categorical : boolean, optional
         Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
         is set to None or not specified.
-    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
+    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
         The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
     k : int, optional
@@ -109,18 +109,21 @@ def pointplot(df, projection=None,
     Examples
     --------
 
-    The most basic plot possible is little more than a bunch of points and a projection:
+    The ``pointplot`` is a simple `geospatial scatter plot <https://en.wikipedia.org/wiki/Scatter_plot>`_. The
+    expected input is a ``geopandas`` ``GeoDataFrame`` with geometries consisting of ``shapely.geometry.Point``
+    entities. The simplest possible plot can be made by specifying the input data (and, optionally, a
+    `projection <./tutorial/projections.html>`_).
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as ccrs
-        gplt.pointplot(points, projection=ccrs.PlateCarree())
+        gplt.pointplot(points)
 
     .. image:: ../figures/pointplot/pointplot-initial.png
 
 
-    Use the ``hue`` parameter to apply a colormap to the data:
+    The ``hue`` parameter accepts a data column and applies a colormap to the output.
 
     .. code-block:: python
 
@@ -146,11 +149,11 @@ def pointplot(df, projection=None,
     .. image:: ../figures/pointplot/pointplot-legend-labels.png
 
 
-    ``pointplot`` will default to binning the observations in the given data column into five ordinal classes. Bins
-    are optimized to contain approximately equal numbers of observations by default (they are "quartiles"). You can
-    also specify an alternative binning scheme using the ``scheme`` parameter.
-
-    This can produce very different results. You must have ``pysal`` installed in order for this parameter to work.
+    ``pointplot`` will default to binning the observations in the given data column into five ordinal classes
+    containing equal numbers of observations - a `quantile <https://en.wikipedia.org/wiki/Quantile>`_ scheme. An
+    alternative binning scheme can be specified using the ``scheme`` parameter. Valid options are ``Quantile``,
+    ``Equal_interval`` (bins will be of equal sizes but contain different numbers of observations),
+    and ``Fisher_jenks`` (an intermediate between the two).
 
     .. code-block:: python
 
@@ -159,8 +162,9 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scheme.png
 
-    If your data is already `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_,
-    you can specify ``categorical=True`` to instead use the labels in your dataset directly.
+    If your variable of interest is already `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, you can specify ``categorical=True`` to
+    use the labels in your dataset directly.
 
     .. code-block:: python
 
@@ -169,9 +173,10 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-categorical.png
 
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
-    necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments will be
+    passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
+    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and ``bbox_to_anchor``
+    parameters are particularly useful for positioning the legend.
 
     .. code-block:: python
 
@@ -180,8 +185,8 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-legend-kwargs.png
 
-    Additional arguments will be interpreted as keyword arguments to the underlying `matplotlib scatter
-    <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_ plot.
+    Additional arguments will be interpreted as keyword arguments to the underlying ``matplotlib.pyplot.scatter``
+    instance (`ref <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_).
 
     .. code-block:: python
 
@@ -192,7 +197,7 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-kwargs.png
 
-    Change the number of data bins used by specifying an alternative ``k`` value.
+    Change the number of bins by specifying an alternative ``k`` value.
 
     .. code-block:: python
 
@@ -204,7 +209,7 @@ def pointplot(df, projection=None,
     .. image:: ../figures/pointplot/pointplot-k.png
 
     Adjust the `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to any
-    matplotlib-recognizable colormap using the ``cmap`` parameter:
+    colormap recognizable to ``matplotlib`` using the ``cmap`` parameter.
 
     .. code-block:: python
 
@@ -216,8 +221,8 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-cmap.png
 
-    To use a continuous colormap (instead of the default categorical ``k=5``, explicitly specify ``k=None``. Note
-    that in this case, a colorbar legend will be used.
+    To use a continuous colormap, explicitly specify ``k=None``. Note that if ``legend=True``,
+    a ``matplotlib.colorbar`` legend will be used (`ref <http://matplotlib.org/api/colorbar_api.html>`_).
 
     .. code-block:: python
 
@@ -228,7 +233,7 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-k-None.png
 
-    ``pointplot`` also supports using point ``scale`` as a visual variable.
+    ``scale`` provides an alternative or additional visual variable.
 
     .. code-block:: python
 
@@ -238,8 +243,7 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scale.png
 
-    The default limits, ``(0.5, 2.0)``, can be adjusted via the ``limits`` parameter.(usually a less conservative
-    value is appropriate).
+    The limits can be adjusted to fit your data using the ``limits`` parameter.
 
     .. code-block:: python
 
@@ -249,9 +253,11 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-limits.png
 
-    The default scaling function is a linear one. You can change the scaling function to whatever you want by
-    specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
-    maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+    The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
+    between them in size. To specify an alternative scaling function, use the ``scale_func`` parameter. This should
+    be a factory function of two variables which, when given the maximum and minimum of the dataset,
+    returns a scaling function which will be applied to the rest of the data. A ``scale_func`` demo is available in
+    the `example gallery <examples/usa-city-elevations.html>`_.
 
     .. code-block:: python
 
@@ -337,7 +343,11 @@ def pointplot(df, projection=None,
             if legend and (legend_var != "scale" or scale is None):
                 _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
         else:
-            colors = ['steelblue']*len(df)
+            if 'color' not in kwargs.keys():
+                colors = ['steelblue']*len(df)
+            else:
+                colors = [kwargs['color']]*len(df)
+                kwargs.pop('color')
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue

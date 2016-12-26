@@ -9,6 +9,8 @@ import numpy as np
 
 # This example inspired by:
 # http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
+# The dataset provided is an aggregation based on:
+# https://data.cityofnewyork.us/-/Parking-Violations-Issued-Fiscal-Year-2016
 
 
 # Load the data.

@@ -26,6 +26,13 @@ Pointplot
 
     .. _largest_cities_usa: ./examples/largest-cities-usa.html
 
+    |usa_city_elevations|_
+
+    .. |usa_city_elevations| image:: ./examples/usa-city-elevations.png
+        :width: 500px
+
+    .. _usa_city_elevations: ./examples/usa-city-elevations.html
+
 
 .. _gallery-tag-Choropleth:
 
@@ -99,6 +106,13 @@ Sankey
 .. container:: gallery_images
 
 
+    |los_angeles_flights|_
+
+    .. |los_angeles_flights| image:: ./examples/los-angeles-flights.png
+        :width: 500px
+
+    .. _los_angeles_flights: ./examples/los-angeles-flights.html
+
 
     |dc_street_network|_
 
@@ -106,14 +120,6 @@ Sankey
         :width: 500px
 
     .. _dc_street_network: ./examples/dc-street-network.html
-
-
-    |los_angeles_flights|_
-
-    .. |los_angeles_flights| image:: ./examples/los-angeles-flights.png
-        :width: 500px
-
-    .. _los_angeles_flights: ./examples/los-angeles-flights.html
 
 
     |minard_napoleon_russia|_
