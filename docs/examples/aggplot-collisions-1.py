@@ -27,6 +27,7 @@ zip_codes = gpd.read_file("../../data/nyc_zip_codes/ZIP_CODE_040114.shp")
 zip_codes['ZIPCODE'] = zip_codes['ZIPCODE'].astype(int)
 zip_codes = zip_codes.set_index("ZIPCODE")
 zip_codes = zip_codes.reset_index().drop_duplicates('ZIPCODE').set_index('ZIPCODE')
+zip_codes = zip_codes.to_crs(epsg=4326)
 
 
 # Plot the data.
@@ -69,3 +70,6 @@ ax3 = gplt.aggplot(collisions, projection=ccrs.AlbersEqualArea(),
                    by='ZIP CODE', geometry=zip_codes.geometry,
                    cmap='Reds', linewidth=0.5, edgecolor='white', ax=axarr[2])
 ax3.set_title("Geometry Provided (Choropleth)")
+
+
+plt.savefig("aggplot-collisions-1.png", bbox_inches='tight', pad_inches=0.1)
