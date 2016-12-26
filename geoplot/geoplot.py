@@ -988,6 +988,8 @@ def aggplot(df, projection=None,
 
             geometry = geometry.map(geom_convert)
 
+        sectors = []
+        colors = []
         for label, p in df.groupby(by):
             if geometry is not None:
                 try:
@@ -996,7 +998,10 @@ def aggplot(df, projection=None,
                     raise IndexError("Data contains a '{0}' label which lacks a corresponding value in the provided "
                                      "geometry.".format(label))
             else:
-                sector = shapely.geometry.MultiPoint(p.geometry).convex_hull
+                xs = [c.x for c in p.geometry]
+                ys = [c.y for c in p.geometry]
+                coords = list(zip(xs, ys))
+                sector = shapely.geometry.MultiPoint(coords).convex_hull
 
             # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
             # extrema of the hulls we are generating.
@@ -1012,8 +1017,19 @@ def aggplot(df, projection=None,
                     if not bymax or hymax > bymax:
                         bymax = hymax
 
-            # We draw here.
+            sectors.append(sector)
             color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
+            colors.append(color)
+
+        # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
+        # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
+        sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area),
+                                         key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
+        sectors = np.array(sectors)[sorted_indices]
+        colors = np.array(colors)[sorted_indices]
+
+        for sector, color in zip(sectors, colors):
+            # We draw here.
             if projection:
                 features = ShapelyFeature([sector], ccrs.PlateCarree())
                 ax.add_feature(features, facecolor=color, **kwargs)
@@ -1892,7 +1908,6 @@ def sankey(*args, projection=None,
     elif end is not None:
         end = gpd.GeoSeries(end)
     if (start is not None) and (end is not None) and hasattr(path, "__iter__"):
-        import pdb; pdb.set_trace()
         raise ValueError("One of 'start' and 'end' OR 'path' must be specified, but they cannot be specified "
                          "simultaneously.")
     if path is None:
@@ -1934,7 +1949,6 @@ def sankey(*args, projection=None,
         clong, clat = np.mean(xs), np.mean(ys)
         n = len(points) / 2
     else:  # path_geoms is an iterable
-        import pdb; pdb.set_trace()
         xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path_geoms.envelope.exterior)
         clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
         n = len(path_geoms)
