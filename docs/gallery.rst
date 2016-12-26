@@ -122,3 +122,18 @@ Sankey
         :width: 500px
 
     .. _minard_napoleon_russia: ./examples/minard-napoleon-russia.html
+
+
+.. _gallery-tag-Aggplot:
+
+Aggplot
+-------
+
+.. container:: gallery_images
+
+    |aggplot_collisions_1|_
+
+    .. |aggplot_collisions_1| image:: ./examples/aggplot-collisions-1.png
+        :width: 500px
+
+    .. _aggplot_collisions_1: ./examples/aggplot-collisions-1.html
