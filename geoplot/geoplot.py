@@ -979,9 +979,9 @@ def aggplot(df, projection=None,
             # append a list with one element, the ``Polygon`` itself.
             def geom_convert(geom):
                 if isinstance(geom, shapely.geometry.MultiPolygon):
-                    return shapely.ops.cascaded_union([p for p in geom])
+                    return shapely.ops.cascaded_union([p for p in geom])[0]
                 elif isinstance(geom, shapely.geometry.Polygon):
-                    return [geom]
+                    return geom
                 else:  # Anything else, raise.
                     raise ValueError("Shapely geometries of Polygon or MultiPolygon types are expected, but one of {0} "
                                      "type was provided.".format(type(geom)))
@@ -992,6 +992,8 @@ def aggplot(df, projection=None,
         colors = []
         for label, p in df.groupby(by):
             if geometry is not None:
+                # Due to the use of the cascaded union, the shape is guaranteed to be a Polygon (?).
+                # This may change in the future.
                 try:
                     sector = geometry.loc[label]
                 except IndexError:
@@ -1003,9 +1005,18 @@ def aggplot(df, projection=None,
                 coords = list(zip(xs, ys))
                 sector = shapely.geometry.MultiPoint(coords).convex_hull
 
-            # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
-            # extrema of the hulls we are generating.
-            if not extent:
+            # Depending on the source, sector can be a single Polygon or multiple Polygons in a list (the latter
+            # arises if we read the sector out of a data source, which turns out to describe a MultiPolygon).
+            # print(type(sector))
+            sectors.append(sector)
+            color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
+            colors.append(color)
+
+        # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
+        # extrema of the hulls we are generating.
+        bxmin = bxmax = bymin = bymax = None
+        if not extent:
+            for sector in sectors:
                 if not isinstance(sector.envelope, shapely.geometry.Point):
                     hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(sector.envelope.exterior))
                     if not bxmin or hxmin < bxmin:
@@ -1017,13 +1028,10 @@ def aggplot(df, projection=None,
                     if not bymax or hymax > bymax:
                         bymax = hymax
 
-            sectors.append(sector)
-            color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
-            colors.append(color)
-
         # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
         # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
-        sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area),
+        import pdb; pdb.set_trace()
+        sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area.values),
                                          key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
         sectors = np.array(sectors)[sorted_indices]
         colors = np.array(colors)[sorted_indices]
@@ -1072,8 +1080,6 @@ def aggplot(df, projection=None,
             else:
                 feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
                 ax.add_patch(feature)
-                # Note: patches.append(...); ax.add_collection(PatchCollection(patches)) will not work.
-                # cf. http://stackoverflow.com/questions/10550477/how-do-i-set-color-to-rectangle-in-matplotlib
 
         # Set extent.
         extrema = (bxmin, bxmax, bymin, bymax)
