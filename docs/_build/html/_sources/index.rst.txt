@@ -60,8 +60,8 @@ Geoplot: geospatial data visualization
 * **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
 
 Browse the `Gallery <./gallery.html>`_ to see what ``geoplot`` can do, then jump into the `Tutorial <./tutorial.html>`_
-or the `API Reference <./api.html>`_ to see how to do it. For help installing, check out the
-`Introduction <./Introduction.html>`_.
+or the `API Reference <./api.html>`_ to see how to do it. For help installing, check out
+`Installation <./installing.html>`_.
 
 .. raw:: html
 
