@@ -1,28 +1,30 @@
 ## geoplot: geospatial data visualization
 
 <div class="row">
-<a href=http://seaborn.pydata.org/examples/many_facets.html>
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb.png" height="135" width="135">
 </a>
 
-<a href=http://seaborn.pydata.org/examples/many_pairwise_correlations.html>
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb.png" height="135" width="135">
 </a>
 
-<a href=http://seaborn.pydata.org/examples/scatterplot_matrix.html>
+<!--
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/aggplot-collisions-thumb.png" height="135" width="135">
 </a>
+-->
 
-<a href=http://seaborn.pydata.org/examples/hexbin_marginals.html>
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/usa-city-elevations-thumb.png"
  height="135">
 </a>
 
-<a href=http://seaborn.pydata.org/examples/scatterplot_categorical.html>
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb.png" height="135" width="135">
 </a>
 
-<a href=http://seaborn.pydata.org/examples/anscombes_quartet.html>
+<a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb.png" height="135" width="135">
 </a>
 
