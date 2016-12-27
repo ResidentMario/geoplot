@@ -1,4 +1,7 @@
-## geoplot: geospatial data visualization
+## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-alpha-red.svg)
+
+<!-- [![PyPi version](https://img.shields.io/pypi/v/missingno.svg)]
+(https://pypi.python.org/pypi/geoplot/)-->
 
 <div class="row">
 <a href=.>
@@ -30,27 +33,21 @@
 
 </div>
 
-`geoplot` is an in-progress, very early-iteration library for high-level geographic data visualization, akin to
-`seaborn`. It is based on `cartopy`, `geopandas`, and the rest of the modern geospatial Python stack.
 
+``geoplot`` is a high-level Python geospatial plotting library. It comes with the following features:
 
-Here are a few teasers of what it can do:
-
-![a](./figures/example.png)
-
-![a](./figures/example_2.png)
+* **High-level plotting API**: geoplot is cartographic plotting for the 90% of use cases. All of the standard-bearer
+maps that you’ve probably seen in your geography textbook are easily accessible.
+* **Native projection support**: The most fundamental peculiarity of geospatial plotting is projection: how do you
+unroll a sphere onto a flat surface (a map) in an accurate way? The answer depends on what you’re trying to depict.
+geoplot provides these options.
+* **Compatibility with `matplotlib`**: While `matplotlib` is not a good fit for working with geospatial data directly,
+it’s a format that’s well-incorporated by other tools.
+* **Built with modern geospatial Python in mind**: Innovations in recent years have made working with such data much
+ easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
 
 ### Status
 
-WIP.
-
-#### References
-
-* http://geoffboeing.com/2016/11/osmnx-python-street-networks/
-* http://seaborn.pydata.org/api.html
-* http://scitools.org.uk/cartopy/docs/latest/gallery.html
-* http://darribas.org/gds_scipy16/ipynb_md/02_geovisualization.html
-
-### To-do
-
-Tons.
+`geoplot` is alpha software. It aims to be an easy-to-use but powerful high-level
+geographic data visualization too&mdash;like `seaborn` for geospatial. It is based on `cartopy`, `geopandas`, and the
+rest of the modern geospatial Python stack.
