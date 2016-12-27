@@ -86,21 +86,21 @@ poles). Here's what the world looks like in this projection:
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_5_0.jpg
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_5_0.jpeg
 
 
 
 To place our plot in a projection, we need to pass the projection of
 interest to the ``projection`` keyword parameter. ``geoplot`` functions
 expect input to come from the ``geoplot.crs`` module, imported as
-``ccrs`` by convention.
+``gcrs`` by convention.
 
 .. code:: python
 
-    import geoplot.crs as ccrs
+    import geoplot.crs as gcrs
     
-    # ax = gplt.polyplot(usa, projection=ccrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717)); pass
-    gplt.polyplot(usa, projection=ccrs.AlbersEqualArea())
+    # ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717)); pass
+    gplt.polyplot(usa, projection=gcrs.AlbersEqualArea())
 
 
 
@@ -156,7 +156,7 @@ projection, our skew is fixed!
 
 .. code:: python
 
-    gplt.polyplot(usa, projection=ccrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))
+    gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))
 
 
 
@@ -185,7 +185,7 @@ demonstrative exame is provided below.
 
 .. code:: python
 
-    ax = gplt.polyplot(usa, projection=ccrs.Orthographic())
+    ax = gplt.polyplot(usa, projection=gcrs.Orthographic())
     ax.set_global()
     ax.gridlines()
     ax.stock_img()
