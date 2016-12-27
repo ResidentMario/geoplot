@@ -29,79 +29,74 @@ def pointplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-        formats. Defaults to None, in which case no colormap will be applied at all.
+        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
     categorical : boolean, optional
-        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
-        is set to None or not specified.
+        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
+        if ``hue`` is set to None or not specified.
     scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
-        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
-    k : int, optional
+    k : int or None, optional
         If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
         many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
         ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
         ignored.
     cmap : matplotlib color, optional
-        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
-        for a colormap to be applied at all, so this parameter is ignored otherwise.
+        The matplotlib colormap to be applied to this dataset (`ref
+        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
+        specified.
     vmin : float, optional
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value.
+        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
+        colored the same threshold value. Defaults to the minimum value in the dataset.
     vmax : float, optional
-        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value.
+        The value that "tops out" the colormap. Data column entries whose value is above this level will be
+        colored the same threshold value. Defaults to the maximum value in the dataset.
     scale : str or iterable, optional
-        The data parameter against which the geometries will be scaled.
+        A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
+        applied.
     limits : (min, max) tuple, optional
-        The minimum and maximum limits against which the shape will be scaled.
-    scale_func : unfunc, optional
-        The default scaling function is a linear one. You can change the scaling function to whatever you want by
-        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
-        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+        The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
+    scale_func : ufunc, optional
+        The function used to scale point sizes. This should be a factory function of two 
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        gallery <examples/usa-city-elevations.html>`_.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
-        None or left unspecified.
+        Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
+        ``scale`` is unspecified.
     legend_values : list, optional
-        This variable will only have an effect if the ``scale`` parameter is in use (e.g. size is a variable) and
-        ``legend=True``. Equal intervals will be used for the "points" in the legend by default. However,
-        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
-        well, the values included in the input will be used by the legend instead.
+        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
+        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
+        included in the input will be used by the legend instead.
     legend_labels : list, optional
         If a legend is specified, this parameter can be used to control what names will be attached to the values.
     legend_var : "hue" or "scale", optional
-        The name of the visual variable for which a legend will be displayed. ``geoplot`` visualizations can only
-        have one legend at a time out-of-the-box, and this variable (set to "hue" by default) controls which one
-        gets precedence. Note that ``legend_var`` does nothing if both variables aren't used.
+        The name of the visual variable for which a legend will be displayed. Does nothing if ``legend`` is False
+        or multiple variables aren't used simultaneously.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
-        refer to the `the matplotlib documentation
-        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
+        <http://matplotlib.org/users/legend_guide.html>`_).
     extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
-        outliers---that input will be used instead.
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.scatter`` instance (`ref
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
 
@@ -148,7 +143,6 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-legend-labels.png
 
-
     ``pointplot`` will default to binning the observations in the given data column into five ordinal classes
     containing equal numbers of observations - a `quantile <https://en.wikipedia.org/wiki/Quantile>`_ scheme. An
     alternative binning scheme can be specified using the ``scheme`` parameter. Valid options are ``Quantile``,
@@ -162,8 +156,8 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scheme.png
 
-    If your variable of interest is already `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, you can specify ``categorical=True`` to
+    If the variable of interest is already `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, specify ``categorical=True`` to
     use the labels in your dataset directly.
 
     .. code-block:: python
@@ -256,7 +250,7 @@ def pointplot(df, projection=None,
     The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
     between them in size. To specify an alternative scaling function, use the ``scale_func`` parameter. This should
     be a factory function of two variables which, when given the maximum and minimum of the dataset,
-    returns a scaling function which will be applied to the rest of the data. A ``scale_func`` demo is available in
+    returns a scaling function which will be applied to the rest of the data. A demo is available in
     the `example gallery <examples/usa-city-elevations.html>`_.
 
     .. code-block:: python
@@ -414,11 +408,10 @@ def polyplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
@@ -426,28 +419,28 @@ def polyplot(df, projection=None,
     facecolor : matplotlib color, optional
         The color that will be used for the fill "inside" of the polygon. This parameter defaults to the string
         ``'None'``, which creates transparent polygons.
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
     Examples
     --------
 
-    A trivial example can be created with just two parameters, a geometry and a projection.
+    A trivial example can be created with just a geometry and, optionally, a projection.
 
     .. code-block:: python
 
@@ -470,6 +463,17 @@ def polyplot(df, projection=None,
 
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
+
+    Additional keyword arguments are passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
+    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+
+    .. code-block:: python
+
+        ax = gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(),
+                           linewidth=0, facecolor='lightgray')
+
+
+    .. image:: ../figures/polyplot/polyplot-kwargs.png
     """
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
@@ -515,6 +519,7 @@ def polyplot(df, projection=None,
     return ax
 
 
+# TODO: Add legend_values for hue.
 def choropleth(df, projection=None,
                hue=None,
                scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
@@ -530,67 +535,64 @@ def choropleth(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
-    hue : None, Series, GeoSeries, iterable, or str, optional
-        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-        formats. Defaults to None, in which case no colormap will be applied at all.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
+    hue : None, Series, GeoSeries, iterable, or str
+        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
     categorical : boolean, optional
-        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
-        is set to None or not specified.
-    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
-        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
+        if ``hue`` is set to None or not specified.
+    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
+        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
-    k : int, optional
-        If ``categorical`` is False, this number, set to 5 by default, will determine how many bins will exist in
-        the output visualization. If this variable is set to ``None``, a continuous colormap will be used.
+    k : int or None, optional
+        If ``categorical`` is False or left unspecified, this number, set to 5 by default, will determine how
+        many bins will exist in the output visualization. If this variable is set to ``None``, a continuous colormap
+        will be used.
     cmap : matplotlib color, optional
-        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
-        for a colormap to be applied at all, so this parameter is ignored otherwise.
+        The matplotlib colormap to be applied to this dataset (`ref
+        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). Defaults to ``viridis``.
     vmin : float, optional
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value.
+        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
+        colored the same threshold value. Defaults to the minimum value in the dataset.
     vmax : float, optional
-        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value.
+        The value that "tops out" the colormap. Data column entries whose value is above this level will be
+        colored the same threshold value. Defaults to the maximum value in the dataset.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
-        None or left unspecified.
+        Whether or not to include a legend in the output plot.
+    legend_values : list, optional
+        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
+        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
+        included in the input will be used by the legend instead.
     legend_labels : list, optional
         If a legend is specified, this parameter can be used to control what names will be attached to the values.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
-        refer to `the matplotlib documentation
-        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
+        <http://matplotlib.org/users/legend_guide.html>`_).
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
-        outliers---that input will be used instead.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
     Examples
     --------
 
-    A basic choropleth specifies a collection of polygons, a projection, and a ``hue`` variable to colorize with.
+    A basic choropleth requires geometry, a ``hue`` variable, and, optionally, a projection.
 
     .. code-block:: python
 
@@ -600,8 +602,7 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-initial.png
 
-
-    You can change the colormap with the ``cmap`` parameter.
+    Change the colormap with the ``cmap`` parameter.
 
     .. code-block:: python
 
@@ -609,8 +610,9 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-cmap.png
 
-    If your data column is already categorical, you can use its values directly by specifying the ``categorical``
-    parameter.
+    If your variable of interest is already `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, you can specify ``categorical=True`` to
+    use the labels in your dataset directly.
 
     .. code-block:: python
 
@@ -760,6 +762,7 @@ def choropleth(df, projection=None,
     return ax
 
 
+# TODO: Standardize the hue stuff with the same stuff used everywhere else.
 def aggplot(df, projection=None,
             hue=None,
             by=None,
@@ -779,11 +782,10 @@ def aggplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
         formats. Defaults to None, in which case no colormap will be applied at all.
@@ -1117,80 +1119,73 @@ def cartogram(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
-    scale : str or iterable, optional
-        The data parameter against which the geometries will be scaled.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
+    scale : str or iterable
+        A data column whose values will be used to scale the points.
     limits : (min, max) tuple, optional
-        The minimum and maximum limits against which the shape will be scaled.
-    scale_func : unfunc, optional
-        The default scaling function is a linear one. You can change the scaling function to whatever you want by
-        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
-        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+        The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
+    scale_func : ufunc, optional
+        The function used to scale point sizes. This should be a factory function of two 
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        gallery <examples/usa-city-elevations.html>`_.
     trace : boolean, optional
         Whether or not to include a trace of the polygon's original outline in the plot result.
     trace_kwargs : dict, optional
         If ``trace`` is set to ``True``, this parameter can be used to adjust the properties of the trace outline. This
         parameter is ignored if trace is ``False``.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-        formats. Defaults to None, in which case no colormap will be applied at all.
+        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
     categorical : boolean, optional
-        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
-        is set to None or not specified.
-    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
-        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
+        if ``hue`` is set to None or not specified.
+    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
+        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
-    k : int, optional
+    k : int or None, optional
         If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
         many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
         ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
         ignored.
     cmap : matplotlib color, optional
-        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
-        for a colormap to be applied at all, so this parameter is ignored otherwise.
+        The matplotlib colormap to be applied to this dataset (`ref
+        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
+        specified.
     vmin : float, optional
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value.
+        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
+        colored the same threshold value. Defaults to the minimum value in the dataset.
     vmax : float, optional
-        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value.
+        The value that "tops out" the colormap. Data column entries whose value is above this level will be
+        colored the same threshold value. Defaults to the maximum value in the dataset.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
-        None or left unspecified.
+        Whether or not to include a legend in the output plot.
     legend_values : list, optional
-        If a legend is specified, equal intervals will be used for the "points" in the legend by default. However,
-        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
-        well, the values included in the input will be used by the legend instead.
+        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
+        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
+        included in the input will be used by the legend instead.
     legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached to
-    legend_kwargs : dict, optional
-        Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
-        refer to `the matplotlib documentation
-        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+        If a legend is specified, this parameter can be used to control what names will be attached to the values.
     legend_var : "hue" or "scale", optional
-        The name of the visual variable for which a legend will be displayed. ``geoplot`` visualizations can only
-        have one legend at a time out-of-the-box, and this variable (set to "hue" by default) controls which one
-        gets precedence. Note that ``legend_var`` does nothing if both variables aren't used.
+        The name of the visual variable for which a legend will be displayed. Does nothing if ``legend`` is False
+        or multiple variables aren't used simultaneously.
+    legend_kwargs : dict, optional
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
+        <http://matplotlib.org/users/legend_guide.html>`_).
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
-        outliers---that input will be used instead.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
 
     Returns
     -------
@@ -1431,11 +1426,10 @@ def kdeplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     clip : iterable or GeoSeries, optional
         An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
         "cleaning up" the plot. This feature has not yet actually been implemented!
@@ -1449,19 +1443,22 @@ def kdeplot(df, projection=None,
     clip : None or iterable or GeoSeries, optional
         If this argument is specified, ``kdeplot`` output will be clipped so that the heatmap only appears when it
         is inside the boundaries of the given geometries.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        Defaults to (8, 6), the ``matplotlib`` default global.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``sns.kdeplot`` method doing the plotting. For a list of possible
-        arguments refer to `the seaborn documentation
-        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html>`_.
+        Keyword arguments to be passed to the ``sns.kdeplot`` method doing the plotting (`ref
+        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
     Examples
@@ -1583,6 +1580,7 @@ def kdeplot(df, projection=None,
     return ax
 
 
+# TODO: Add legend_var.
 def sankey(*args, projection=None,
            start=None, end=None, path=None,
            hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
@@ -1596,14 +1594,13 @@ def sankey(*args, projection=None,
     Parameters
     ----------
     df : GeoDataFrame, optional.
-        The data being plotted. Uniquely amongst ``geoplot`` functions, this parameter is optional&mdash;it is not
-        needed if ``start`` and ``end`` (and ``hue``, if provided) are iterables.
+        The data being plotted. This parameter is optional - it is not needed if ``start`` and ``end`` (and ``hue``,
+        if provided) are iterables.
     projection : geoplot.crs object instance, optional
-        A geographic coordinate reference system projection. Must be an instance of an object in the ``geoplot.crs``
-        module, e.g. ``geoplot.crs.PlateCarree()``. Refer to ``geoplot.crs`` for further object parameters.
-
-        If this parameter is not specified this method will return an unprojected pure ``matplotlib`` version of the
-        chart, which allow certain operations not possible with projected ``cartopy`` results.
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     start : str or iterable
         Linear starting points: either the name of a column in ``df`` or a self-contained iterable. This parameter is
         required.
@@ -1612,73 +1609,75 @@ def sankey(*args, projection=None,
         required.
     path : geoplot.crs object instance or iterable, optional
         If this parameter is provided as an iterable, it is assumed to contain the lines that the user wishes to
-        draw to connect the points. This is useful if one wishes to e.g. build their own line-bundles.
-
-        If this parameter is provided as a projection, that projection will be used for determining how the line is
-        plotted. This parameter defaults to ``ccrs.Geodetic()``, which means that the *true* (e.g. shortest path
-        will be plotted (e.g. `great circle distance<https://en.wikipedia.org/wiki/Great-circle_distance>`_); any
-        other choice will result in what the shortest path is in that projection instead.
+        draw to connect the points. If this parameter is provided as a projection, that projection will be used for
+        determining how the line is plotted. The default is ``ccrs.Geodetic()``, which means
+        that the true shortest path will be plotted
+        (`great circle distance <https://en.wikipedia.org/wiki/Great-circle_distance>`_); any other choice of
+        projection will result in what the shortest path is in that projection instead.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-        formats. Defaults to None, in which case no colormap will be applied at all.
+        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
     categorical : boolean, optional
-        Whether the inputted ``hue`` is already a categorical variable or not. Defaults to False. Ignored if ``hue``
-        is set to None or not specified.
-    scheme : None or {"quartiles"|"quantiles"|"equal_interval"|"fisher_jenks"} (?), optional
-        The PySAL scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
+        if ``hue`` is set to None or not specified.
+    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
+        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
         left unspecified or set to None this variable is ignored.
-    k : int, optional
+    k : int or None, optional
         If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is left unspecified or set to None this
-        variable is ignored.
+        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
+        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
+        ignored.
     cmap : matplotlib color, optional
-        The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
-        for a colormap to be applied at all, so this parameter is ignored otherwise.
+        The matplotlib colormap to be applied to this dataset (`ref
+        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
+        specified.
     vmin : float, optional
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data column entries whose
-        value is below this level will all be colored by the same threshold value.
+        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
+        colored the same threshold value. Defaults to the minimum value in the dataset.
     vmax : float, optional
-        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data column entries whose
-        value is above this level will all be colored by the same threshold value.
+        The value that "tops out" the colormap. Data column entries whose value is above this level will be
+        colored the same threshold value. Defaults to the maximum value in the dataset.
     scale : str or iterable, optional
-        The data parameter against which the geometries will be scaled.
+        A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
+        applied.
     limits : (min, max) tuple, optional
-        The minimum and maximum limits against which the shape will be scaled.
-    scale_func : unfunc, optional
-        The default scaling function is a linear one. You can change the scaling function to whatever you want by
-        specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
-        maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+        The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
+    scale_func : ufunc, optional
+        The function used to scale point sizes. This should be a factory function of two 
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        gallery <examples/usa-city-elevations.html>`_.
+    legend : boolean, optional
+        Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
+        ``scale`` is unspecified.
     legend_values : list, optional
-        This variable will only have an effect if the ``scale`` parameter is in use (e.g. size is a variable) and
-        ``legend=True``. Equal intervals will be used for the "points" in the legend by default. However,
-        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
-        well, the values included in the input will be used by the legend instead.
+        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
+        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
+        included in the input will be used by the legend instead.
     legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached to
+        If a legend is specified, this parameter can be used to control what names will be attached to the values.
+    legend_var : "hue" or "scale", optional
+        The name of the visual variable for which a legend will be displayed. Does nothing if ``legend`` is False
+        or multiple variables aren't used simultaneously.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the ``matplotlib`` ``ax.legend`` method. For a list of possible arguments
-        refer to `the matplotlib documentation
-        <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
+        <http://matplotlib.org/users/legend_guide.html>`_).
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
-    extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
-        outliers---that input will be used instead.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.lines.Line2D`` instances (`ref
+        <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
     Examples
@@ -1761,7 +1760,6 @@ def sankey(*args, projection=None,
 
     .. image:: ../figures/sankey/sankey-hue.png
 
-
     ``cmap`` changes the colormap.
 
     .. code-block:: python
@@ -1842,7 +1840,9 @@ def sankey(*args, projection=None,
 
     .. image:: ../figures/sankey/sankey-scheme.png
 
-    Specify ``categorical=True`` to plot an already-categorical variable.
+    If your variable of interest is already `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, specify ``categorical=True`` to
+    use the labels in your dataset directly.
 
     .. code-block:: python
 
