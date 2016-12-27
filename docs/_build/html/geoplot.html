@@ -537,7 +537,7 @@ alternative metric, like the use of <code class="docutils literal"><span class="
 
 <dl class="function">
 <dt id="geoplot.geoplot.cartogram">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">cartogram</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>scale=None</em>, <em>limits=(0.2</em>, <em>1)</em>, <em>scale_func=None</em>, <em>trace=True</em>, <em>trace_kwargs=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">cartogram</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>scale=None</em>, <em>limits=(0.2</em>, <em>1)</em>, <em>scale_func=None</em>, <em>trace=True</em>, <em>trace_kwargs=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='scale'</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>This plot scales the size of polygonal inputs based on the value of a particular data parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -893,7 +893,7 @@ a parameter you may need to additionally specify <code class="docutils literal">
 
 <dl class="function">
 <dt id="geoplot.geoplot.pointplot">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='hue'</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial scatter plot. The simplest useful plot type available.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1162,7 +1162,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 
 <dl class="function">
 <dt id="geoplot.geoplot.sankey">
-<code class="descclassname">geoplot.geoplot.</code><code class="descname">sankey</code><span class="sig-paren">(</span><em>*args</em>, <em>projection=None</em>, <em>start=None</em>, <em>end=None</em>, <em>path=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>scale=None</em>, <em>limits=(1</em>, <em>5)</em>, <em>scale_func=None</em>, <em>legend_values=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">geoplot.geoplot.</code><code class="descname">sankey</code><span class="sig-paren">(</span><em>*args</em>, <em>projection=None</em>, <em>start=None</em>, <em>end=None</em>, <em>path=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>legend_values=None</em>, <em>legend_var=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>scale=None</em>, <em>limits=(1</em>, <em>5)</em>, <em>scale_func=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial Sankey diagram (flow map).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1397,14 +1397,30 @@ specifying a <code class="docutils literal"><span class="pre">scale_func</span><
 maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">0.5</span>
+        <span class="k">return</span> <span class="mi">2</span>
     <span class="k">return</span> <span class="n">scalar</span>
 
-<span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+                 <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">,</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/sankey-scale-func.png" src="_images/sankey-scale-func.png" />
+<p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+         <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
+         <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span>
+         <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+         <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s2">&quot;hue&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/sankey-legend-var.png" src="_images/sankey-legend-var.png" />
 </dd></dl>
 
 </div>
