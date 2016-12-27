@@ -6,12 +6,69 @@
 Geoplot: geospatial data visualization
 ======================================
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus molestie aliquam. Ut tempor pellentesque tortor, quis semper enim cursus a. Ut sem nisl, pulvinar vitae lacus eu, tempor tempor neque. Nulla hendrerit dignissim metus eu bibendum. Sed posuere tellus ut metus feugiat, ut blandit felis elementum. Proin imperdiet nulla arcu, in rhoncus felis pretium at. Sed ac aliquam sem, in molestie arcu. Aenean non posuere purus, quis posuere augue. Maecenas dapibus malesuada est ut facilisis. Nam congue, justo a placerat placerat, ante dolor tincidunt libero, a tempor eros mi a nisi. Suspendisse ullamcorper justo non nisi scelerisque, non suscipit neque finibus. Suspendisse non felis tellus. Etiam sit amet mattis dui. Proin sodales nunc libero, et ultrices massa efficitur sed.
+.. raw:: html
 
-Morbi mattis hendrerit ultrices. Vivamus semper risus vitae dui suscipit fringilla. Nunc vitae libero sit amet velit sagittis blandit. Sed quis tortor et erat pulvinar cursus ac sit amet urna. Suspendisse ullamcorper ultricies nisi, nec accumsan ipsum feugiat id. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras tempor dapibus urna in molestie.
+    <div class="row">
+    <a href=./examples/nyc-collision-factors.html>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors
+    -thumb.png" height="200" width="200">
+    </a>
 
-Documentation
--------------
+    <a href=./examples/los-angeles-flights.html>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb
+    .png" height="200" width="200">
+    </a>
+
+    <!--
+    <a href=.>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/aggplot-collisions-thumb
+    .png" height="200" width="200">
+    </a>
+    -->
+
+    <a href=./examples/usa-city-elevations.html>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/usa-city-elevations-thumb.png"
+     height="200">
+    </a>
+
+    <a href=./examples/nyc-parking-tickets.html>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb
+    .png" height="200" width="200">
+    </a>
+
+    <a href=./examples/dc-street-network.html>
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb
+    .png" height="200" width="200">
+    </a>
+
+    </div>
+
+.. raw:: html
+
+    <div style="float:left; width:66%;">
+
+    <span style="font-weight:bold; font-size:28px; margin-bottom:1em">About</span>
+
+``geoplot`` is a high-level Python geospatial plotting library. It comes with the following features:
+
+* **High-level plotting API**: ``geoplot`` is cartographic plotting for the 90% of use cases. All of the standard-bearermaps that you’ve probably seen in your geography textbook are easily accessible.
+
+* **Native projection support**: The most fundamental peculiarity of geospatial plotting is projection: how do you unroll a sphere onto a flat surface (a map) in an accurate way? The answer depends on what you’re trying to depict. ``geoplot`` provides these options.
+
+* **Compatibility with matplotlib**: While ``matplotlib`` is not a good fit for working with geospatial data directly, it’s a format that’s well-incorporated by other tools.
+
+* **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
+
+Browse the `Gallery <./gallery.html>`_ to see what ``geoplot`` can do, then jump into the `Tutorial <./tutorial.html>`_
+or the `API Reference <./api.html>`_ to see how to do it. For help installing, check out the
+`Introduction <./Introduction.html>`_.
+
+.. raw:: html
+
+    </div>
+    <div style="float:right; width:33%;">
+
+    <span style="font-weight:bold; font-size:28px; margin-bottom:1em">Documentation</span>
 
 .. toctree::
    :maxdepth: 1
@@ -20,6 +77,9 @@ Documentation
    gallery
    api
    tutorial
+
+.. raw:: html
+    </div>
 
 ..  Indices and tables
     ==================
