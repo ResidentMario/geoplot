@@ -40,10 +40,10 @@
 maps that you’ve probably seen in your geography textbook are easily accessible.
 * **Native projection support**: The most fundamental peculiarity of geospatial plotting is projection: how do you
 unroll a sphere onto a flat surface (a map) in an accurate way? The answer depends on what you’re trying to depict.
-geoplot provides these options.
+`geoplot` provides these options.
 * **Compatibility with `matplotlib`**: While `matplotlib` is not a good fit for working with geospatial data directly,
 it’s a format that’s well-incorporated by other tools.
-* **Built with modern geospatial Python in mind**: Innovations in recent years have made working with such data much
+* **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data
  easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
 
 ### Status
