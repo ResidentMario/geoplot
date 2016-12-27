@@ -517,7 +517,7 @@ def polyplot(df, projection=None,
 
 def choropleth(df, projection=None,
                hue=None,
-               scheme=None, k=None, cmap='Set1', categorical=False, vmin=None, vmax=None,
+               scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
                legend=False, legend_kwargs=None, legend_labels=None,
                extent=None,
                figsize=(8, 6), ax=None,
@@ -982,15 +982,17 @@ def aggplot(df, projection=None,
             if isinstance(geometry, gpd.GeoDataFrame):
                 geometry = geometry.geometry
 
+            # import pdb; pdb.set_trace()
+
             # Valid polygons are simple polygons (``shapely.geometry.Polygon``) and complex multi-piece polygons
             # (``shapely.geometry.MultiPolygon``). The latter is an iterable of its components, so if the shape is
             # a ``MultiPolygon``, append it as that list. Otherwise if the shape is a basic ``Polygon``,
             # append a list with one element, the ``Polygon`` itself.
             def geom_convert(geom):
                 if isinstance(geom, shapely.geometry.MultiPolygon):
-                    return shapely.ops.cascaded_union([p for p in geom])[0]
+                    return shapely.ops.cascaded_union([p for p in geom])
                 elif isinstance(geom, shapely.geometry.Polygon):
-                    return geom
+                    return [geom]
                 else:  # Anything else, raise.
                     raise ValueError("Shapely geometries of Polygon or MultiPolygon types are expected, but one of {0} "
                                      "type was provided.".format(type(geom)))
@@ -1924,13 +1926,15 @@ def sankey(*args, projection=None,
     if (start is not None) and (end is not None) and hasattr(path, "__iter__"):
         raise ValueError("One of 'start' and 'end' OR 'path' must be specified, but they cannot be specified "
                          "simultaneously.")
-    if path is None:
+    if path is None:  # No path provided.
         path = ccrs.Geodetic()
         path_geoms = None
-    elif isinstance(path, str):
+    elif isinstance(path, str):  # Path is a column in the dataset.
         path_geoms = df[path]
-    else:
+    elif hasattr(path, "__iter__"):  # Path is an iterable.
         path_geoms = gpd.GeoSeries(path)
+    else:  # Path is a cartopy.crs object.
+        path_geoms = None
     if start is not None and end is not None:
         points = pd.concat([start, end])
     else:
@@ -2010,7 +2014,7 @@ def sankey(*args, projection=None,
         if legend:
             _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
     else:
-        colors = [None]*n
+        colors = [None]*int(n)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
