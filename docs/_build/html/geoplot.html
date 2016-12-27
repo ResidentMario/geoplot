@@ -616,7 +616,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id30"><span class="problematic" id="id31">`matplotlib Legend instance
+necessary to properly position the legend, will be passed to the underlying <a href="#id32"><span class="problematic" id="id33">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
@@ -730,20 +730,20 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>A basic choropleth specifies a collection of polygons, a projection, and a <code class="docutils literal"><span class="pre">hue</span></code> variable to colorize with.</p>
+<p>A basic choropleth requires geometry, a <code class="docutils literal"><span class="pre">hue</span></code> variable, and, optionally, a projection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
 <img alt="_images/choropleth-initial.png" src="_images/choropleth-initial.png" />
-<p>You can change the colormap with the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
+<p>Change the colormap with the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/choropleth-cmap.png" src="_images/choropleth-cmap.png" />
-<p>If your data column is already categorical, you can use its values directly by specifying the <code class="docutils literal"><span class="pre">categorical</span></code>
-parameter.</p>
+<p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -995,7 +995,7 @@ and <code class="docutils literal"><span class="pre">Fisher_jenks</span></code> 
 </pre></div>
 </div>
 <img alt="_images/pointplot-scheme.png" src="_images/pointplot-scheme.png" />
-<p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+<p>If the variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -1182,8 +1182,9 @@ required.</li>
 <li><strong>path</strong> (<em>geoplot.crs object instance</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; If this parameter is provided as an iterable, it is assumed to contain the lines that the user wishes to
 draw to connect the points. If this parameter is provided as a projection, that projection will be used for
 determining how the line is plotted. The default is <code class="docutils literal"><span class="pre">ccrs.Geodetic()</span></code>, which means
-that the true shortest path will be plotted (<a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>); any
-other choice of projection will result in what the shortest path is in that projection instead.</li>
+that the true shortest path will be plotted
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>); any other choice of
+projection will result in what the shortest path is in that projection instead.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
 <li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
 if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
@@ -1356,7 +1357,8 @@ to an ortographic projection.</p>
 </pre></div>
 </div>
 <img alt="_images/sankey-scheme.png" src="_images/sankey-scheme.png" />
-<p>Specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to plot an already-categorical variable.</p>
+<p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
                  <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;above_meridian&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlBu&#39;</span><span class="p">,</span>
