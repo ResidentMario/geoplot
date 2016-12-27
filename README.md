@@ -5,8 +5,8 @@
 
 <div class="row">
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb
-.png" height="150" width="150">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb.png"
+ height="150" width="150">
 </a>
 
 <a href=.>
