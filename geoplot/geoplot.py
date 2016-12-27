@@ -335,7 +335,7 @@ def pointplot(df, projection=None,
 
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+                _paint_hue_legend(ax, categories, legend_values, legend_labels, cmap, legend_kwargs)
         else:
             if 'color' not in kwargs.keys():
                 colors = ['steelblue']*len(df)
@@ -350,7 +350,7 @@ def pointplot(df, projection=None,
 
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
-            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+            _paint_colorbar_legend(ax, hue_values, legend_values, legend_labels, cmap, legend_kwargs)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -519,7 +519,6 @@ def polyplot(df, projection=None,
     return ax
 
 
-# TODO: Add legend_values for hue.
 def choropleth(df, projection=None,
                hue=None,
                scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
@@ -983,8 +982,6 @@ def aggplot(df, projection=None,
             # Downconvert GeoDataFrame to GeoSeries objects.
             if isinstance(geometry, gpd.GeoDataFrame):
                 geometry = geometry.geometry
-
-            # import pdb; pdb.set_trace()
 
             # Valid polygons are simple polygons (``shapely.geometry.Polygon``) and complex multi-piece polygons
             # (``shapely.geometry.MultiPolygon``). The latter is an iterable of its components, so if the shape is
@@ -2355,7 +2352,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     return cmap, categories, values
 
 
-def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
+def _paint_hue_legend(ax, categories, legend_values, legend_labels, cmap, legend_kwargs):
     """
     Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
 
@@ -2381,50 +2378,24 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
     -------
     None
     """
+
+    # Paint patches.
     patches = []
-    for value, cat in enumerate(categories):
-        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
-                              marker="o",
-                              markersize=10, markerfacecolor=cmap.to_rgba(value)))
+    if legend_values is None:
+        for value, _ in enumerate(categories):
+            patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
+                                            marker="o",
+                                            markersize=10, markerfacecolor=cmap.to_rgba(value)))
+    else:
+        raise NotImplementedError("Custom hue legend values have not yet been implemented.")
+        # TODO: Implement.
+        # This turns out to be very hard to do, given the way that the geoplot norm_cmap method behaves.
+
     # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
     # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
     # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
     if not legend_kwargs: legend_kwargs = dict()
-
-    # If we are given labels use those, if we are not just use the categories.
-    if legend_labels:
-        ax.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
-    else:
-        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
-
-
-def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
-    """
-    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance on which a legend is being painted.
-    values : list
-        A list of values being plotted. May be either a list of int types or a list of unique entities in the
-        data column (e.g. as generated via ``numpy.unique(data)``. This parameter is meant to be the same as that
-        returned by the ``_discrete_colorize`` method.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the legend entries. This should be the
-        same one used for colorizing the plot's geometries.
-    legend_kwargs : dict
-        Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
-        is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
-        finicky.
-
-    Returns
-    -------
-    None.
-    """
-    if not legend_kwargs: legend_kwargs = dict()
-    cmap.set_array(values)
-    plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
+    ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
 
 def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
@@ -2473,6 +2444,35 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
                        markerfacecolor='None'))
     if not legend_kwargs: legend_kwargs = dict()
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
+
+
+def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
+    """
+    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
+
+    Parameters
+    ----------
+    ax : matplotlib.Axes instance
+        The ``matplotlib.Axes`` instance on which a legend is being painted.
+    values : list
+        A list of values being plotted. May be either a list of int types or a list of unique entities in the
+        data column (e.g. as generated via ``numpy.unique(data)``. This parameter is meant to be the same as that
+        returned by the ``_discrete_colorize`` method.
+    cmap : ``matplotlib.cm`` instance
+        The `matplotlib` colormap instance which will be used to colorize the legend entries. This should be the
+        same one used for colorizing the plot's geometries.
+    legend_kwargs : dict
+        Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
+        is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
+        finicky.
+
+    Returns
+    -------
+    None.
+    """
+    if not legend_kwargs: legend_kwargs = dict()
+    cmap.set_array(values)
+    plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
 
 def _validate_buckets(categorical, k, scheme):
