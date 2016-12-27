@@ -1,6 +1,6 @@
 import sys; sys.path.insert(0, '../')
 import geoplot as gplt
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import geopandas as gpd
 import numpy as np
 import shapely
@@ -21,15 +21,15 @@ continental_usa = shapely.ops.cascaded_union(continental_usa.geometry)
 # Plot the data.
 
 f, axarr = plt.subplots(2, 2, figsize=(12, 8), subplot_kw={
-    'projection': ccrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5)
+    'projection': gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5)
 })
 
 polyplot_kwargs = {
-    'projection': ccrs.AlbersEqualArea(), 'facecolor': (0.9, 0.9, 0.9),
+    'projection': gcrs.AlbersEqualArea(), 'facecolor': (0.9, 0.9, 0.9),
     'zorder': -100, 'linewidth': 0
 }
 pointplot_kwargs = {
-    'projection': ccrs.AlbersEqualArea(), 'scale': 'ELEV_IN_FT',
+    'projection': gcrs.AlbersEqualArea(), 'scale': 'ELEV_IN_FT',
     'edgecolor': 'white', 'linewidth': 0.5, 'color': 'black'
 }
 ylim = (-1647757.3894385984, 1457718.4893930717)

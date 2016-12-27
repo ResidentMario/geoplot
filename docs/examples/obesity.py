@@ -2,7 +2,7 @@ import sys; sys.path.insert(0, '../')
 import pandas as pd
 import geopandas as gpd
 import geoplot as gplt
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
 
 
@@ -30,7 +30,7 @@ continental_usa['Obesity Rate'] = continental_usa['State'].map(
 
 # Plot the data.
 ax = gplt.cartogram(continental_usa, scale='Obesity Rate',
-                    projection=ccrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5),
+                    projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5),
                     limits=(0.75, 1),
                     linewidth=0.5, facecolor='steelblue', trace_kwargs={'linewidth': 0.5})
 ax.set_ylim((-1597757.3894385984, 1457718.4893930717))

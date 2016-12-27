@@ -112,7 +112,7 @@ def pointplot(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
+        import geoplot.crs as gcrs
         gplt.pointplot(points)
 
     .. image:: ../figures/pointplot/pointplot-initial.png
@@ -122,7 +122,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT')
+        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT')
 
     .. image:: ../figures/pointplot/pointplot-hue.png
 
@@ -130,7 +130,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT', legend=True)
+        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT', legend=True)
 
     .. image:: ../figures/pointplot/pointplot-legend.png
 
@@ -138,7 +138,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT',
+        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT',
                        legend=True, legend_labels=list('ABCDE'))
 
     .. image:: ../figures/pointplot/pointplot-legend-labels.png
@@ -151,7 +151,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(cities, projection=ccrs.AlbersEqualArea(), hue='ELEV_IN_FT',
+        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT',
                        legend=True, scheme='equal_interval')
 
     .. image:: ../figures/pointplot/pointplot-scheme.png
@@ -162,7 +162,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(), hue='BOROUGH',
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), hue='BOROUGH',
                        legend=True, categorical=True)
 
     .. image:: ../figures/pointplot/pointplot-categorical.png
@@ -174,7 +174,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(), hue='BOROUGH',
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), hue='BOROUGH',
                        categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/pointplot/pointplot-legend-kwargs.png
@@ -184,7 +184,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], projection=gcrs.AlbersEqualArea(),
                        hue='BOROUGH', categorical=True,
                        legend=True, legend_kwargs={'loc': 'upper left'},
                        edgecolor='white', linewidth=0.5)
@@ -195,7 +195,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(data, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
                        hue='var', k=8,
                        edgecolor='white', linewidth=0.5,
                        legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
@@ -207,7 +207,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(data, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
                hue='var', cmap='inferno', k=8,
                edgecolor='white', linewidth=0.5,
                legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
@@ -220,7 +220,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(data, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
                hue='var', cmap='inferno', k=None,
                edgecolor='white', linewidth=0.5,
                legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
@@ -231,7 +231,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
                        scale='NUMBER OF PERSONS INJURED',
                        legend=True, legend_kwargs={'loc': 'upper left'})
 
@@ -241,7 +241,7 @@ def pointplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
                        scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
                        legend=True, legend_kwargs={'loc': 'upper left'})
 
@@ -260,7 +260,7 @@ def pointplot(df, projection=None,
                 return 2
             return scalar
 
-        gplt.pointplot(collisions, projection=ccrs.AlbersEqualArea(),
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
                        scale='NUMBER OF PERSONS INJURED', scale_func=trivial_scale,
                        legend=True, legend_kwargs={'loc': 'upper left'})
 
@@ -271,7 +271,7 @@ def pointplot(df, projection=None,
     .. code-block:: python
 
         gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
-                       projection=ccrs.AlbersEqualArea(),
+                       projection=gcrs.AlbersEqualArea(),
                        hue='BOROUGH', categorical=True,
                        scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
                        legend=True, legend_kwargs={'loc': 'upper left'})
@@ -283,7 +283,7 @@ def pointplot(df, projection=None,
     .. code-block:: python
 
         gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
-                       projection=ccrs.AlbersEqualArea(),
+                       projection=gcrs.AlbersEqualArea(),
                        hue='BOROUGH', categorical=True,
                        scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
                        legend=True, legend_kwargs={'loc': 'upper left'},
@@ -452,8 +452,8 @@ def polyplot(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea())
+        import geoplot.crs as gcrs
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
 
 
     .. image:: ../figures/polyplot/polyplot-initial.png
@@ -462,8 +462,8 @@ def polyplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea())
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], projection=ccrs.AlbersEqualArea(),
+        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], projection=gcrs.AlbersEqualArea(),
                        hue='BOROUGH', categorical=True,
                        legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
                        ax=ax)
@@ -476,7 +476,7 @@ def polyplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(),
+        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(),
                            linewidth=0, facecolor='lightgray')
 
 
@@ -603,8 +603,8 @@ def choropleth(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.choropleth(polydata, hue='latdep', projection=ccrs.PlateCarree())
+        import geoplot.crs as gcrs
+        gplt.choropleth(polydata, hue='latdep', projection=gcrs.PlateCarree())
 
     .. image:: ../figures/choropleth/choropleth-initial.png
 
@@ -612,7 +612,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(polydata, hue='latdep', projection=ccrs.PlateCarree(), cmap='Blues')
+        gplt.choropleth(polydata, hue='latdep', projection=gcrs.PlateCarree(), cmap='Blues')
 
     .. image:: ../figures/choropleth/choropleth-cmap.png
 
@@ -622,7 +622,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True)
+        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName', categorical=True)
 
     .. image:: ../figures/choropleth/choropleth-categorical.png
 
@@ -630,7 +630,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName',
+        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
                         categorical=True, legend=True)
 
     .. image:: ../figures/choropleth/choropleth-legend.png
@@ -641,7 +641,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName',
+        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
                         categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
@@ -651,7 +651,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=ccrs.AlbersEqualArea(), hue='BoroName', categorical=True,
+        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName', categorical=True,
                         linewidth=0)
 
     .. image:: ../figures/choropleth/choropleth-kwargs.png
@@ -661,7 +661,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(census_tracts, hue='mock_data', projection=ccrs.AlbersEqualArea(),
+        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
                 legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
                 k=2)
 
@@ -672,7 +672,7 @@ def choropleth(df, projection=None,
     .. code-block:: python
 
         gplt.choropleth(polydata, hue='latdep', cmap='Blues', k=None, legend=True,
-                        projection=ccrs.PlateCarree())
+                        projection=gcrs.PlateCarree())
 
     .. image:: ../figures/choropleth/choropleth-k-none.png
 
@@ -680,7 +680,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(census_tracts, hue='mock_data', projection=ccrs.AlbersEqualArea(),
+        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
                         edgecolor='white', linewidth=0.5,
                         legend=True, legend_kwargs={'loc': 'upper left'},
                         legend_labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
@@ -692,7 +692,7 @@ def choropleth(df, projection=None,
 
     .. code-block:: python
 
-        gplt.choropleth(census_tracts, hue='mock_data', projection=ccrs.AlbersEqualArea(),
+        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
                 legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
                 scheme='equal_interval')
 
@@ -890,8 +890,8 @@ def aggplot(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.aggplot(collisions, projection=ccrs.PlateCarree(), hue='LATDEP')
+        import geoplot.crs as gcrs
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='LATDEP')
 
     .. image:: ../figures/aggplot/aggplot-initial.png
 
@@ -901,7 +901,7 @@ def aggplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.aggplot(collisions, nmin=20, nmax=500, projection=ccrs.PlateCarree(), hue='LATDEP', cmap='Blues')
+        gplt.aggplot(collisions, nmin=20, nmax=500, projection=gcrs.PlateCarree(), hue='LATDEP', cmap='Blues')
 
     .. image:: ../figures/aggplot/aggplot-quadtree.png
 
@@ -912,7 +912,7 @@ def aggplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.aggplot(collisions, nmin=20, nmax=500, nsig=5, projection=ccrs.PlateCarree(), hue='LATDEP', cmap='Reds')
+        gplt.aggplot(collisions, nmin=20, nmax=500, nsig=5, projection=gcrs.PlateCarree(), hue='LATDEP', cmap='Reds')
 
     .. image:: ../figures/aggplot/aggplot-quadtree-tuned.png
 
@@ -923,7 +923,7 @@ def aggplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.aggplot(collisions[collisions['ZIP CODE'].notnull()], projection=ccrs.PlateCarree(),
+        gplt.aggplot(collisions[collisions['ZIP CODE'].notnull()], projection=gcrs.PlateCarree(),
                  hue='LATDEP', by='ZIP CODE', cmap='Greens')
 
     .. image:: ../figures/aggplot/aggplot-hulls.png
@@ -934,7 +934,7 @@ def aggplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.aggplot(collisions, projection=ccrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
                      geometry=boroughs_2, by='BOROUGH', agg=np.max)
 
     .. image:: ../figures/aggplot/aggplot-by.png
@@ -1200,8 +1200,8 @@ def cartogram(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea())
+        import geoplot.crs as gcrs
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea())
 
     .. image:: ../figures/cartogram/cartogram-initial.png
 
@@ -1209,7 +1209,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        trace=False, legend=True)
 
     .. image:: ../figures/cartogram/cartogram-trace-legend.png
@@ -1220,7 +1220,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        trace=False, legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/cartogram/cartogram-legend-kwargs.png
@@ -1229,7 +1229,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(), legend=True,
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(), legend=True,
                legend_values=[2.32779655e-07, 6.39683197e-07, 1.01364661e-06, 1.17380941e-06, 2.33642596e-06][::-1],
                legend_labels=['Manhattan', 'Brooklyn', 'Queens', 'The Bronx', 'Staten Island'],
                legend_kwargs={'loc': 'upper left'})
@@ -1242,7 +1242,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        edgecolor='darkgreen')
 
     .. image:: ../figures/cartogram/cartogram-kwargs.png
@@ -1252,7 +1252,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        trace_kwargs={'edgecolor': 'lightgreen'})
 
     .. image:: ../figures/cartogram/cartogram-trace-kwargs.png
@@ -1262,7 +1262,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        limits=(0.5, 1))
 
     .. image:: ../figures/cartogram/cartogram-limits.png
@@ -1280,7 +1280,7 @@ def cartogram(df, projection=None,
                 return 0.5
             return scalar
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        limits=(0.5, 1), scale_func=trivial_scale)
 
     .. image:: ../figures/cartogram/cartogram-scale-func.png
@@ -1292,7 +1292,7 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
+        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        hue='Population Density', k=None, cmap='Blues')
 
     .. image:: ../figures/cartogram/cartogram-hue.png
@@ -1472,8 +1472,8 @@ def kdeplot(df, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
+        import geoplot.crs as gcrs
+        gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea())
 
     .. image:: ../figures/kdeplot/kdeplot-initial.png
 
@@ -1482,8 +1482,8 @@ def kdeplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea())
-        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea())
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-overlay.png
 
@@ -1493,9 +1493,9 @@ def kdeplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
                           shade=True)
-        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-shade.png
 
@@ -1503,9 +1503,9 @@ def kdeplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
                           n_levels=30)
-        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-n-levels.png
 
@@ -1513,9 +1513,9 @@ def kdeplot(df, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
              cmap='Purples')
-        gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax)
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-cmap.png
 
@@ -1525,7 +1525,7 @@ def kdeplot(df, projection=None,
 
     .. code-block:: python
 
-        gplt.kdeplot(collisions, projection=ccrs.AlbersEqualArea(),
+        gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
                      shade=True, clip=boroughs)
 
     .. image:: ../figures/kdeplot/kdeplot-clip.png
@@ -1694,8 +1694,8 @@ def sankey(*args, projection=None,
     .. code-block:: python
 
         import geoplot as gplt
-        import geoplot.crs as ccrs
-        gplt.sankey(mock_data, start='origin', end='destination', projection=ccrs.PlateCarree())
+        import geoplot.crs as gcrs
+        gplt.sankey(mock_data, start='origin', end='destination', projection=gcrs.PlateCarree())
 
     .. image:: ../figures/sankey/sankey-initial.png
 
@@ -1704,7 +1704,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(mock_data, start='origin', end='destination', projection=ccrs.PlateCarree())
+        ax = gplt.sankey(mock_data, start='origin', end='destination', projection=gcrs.PlateCarree())
         ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-geospatial-context.png
@@ -1714,7 +1714,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(projection=ccrs.PlateCarree(), start=network['from'], end=network['to'])
+        ax = gplt.sankey(projection=gcrs.PlateCarree(), start=network['from'], end=network['to'])
         ax.set_global()
         ax.coastlines()
 
@@ -1727,7 +1727,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(projection=ccrs.Orthographic(), start=network['from'], end=network['to'],
+        ax = gplt.sankey(projection=gcrs.Orthographic(), start=network['from'], end=network['to'],
                  extent=(-180, 180, -90, 90))
         ax.set_global()
         ax.coastlines()
@@ -1740,7 +1740,7 @@ def sankey(*args, projection=None,
     .. code-block:: python
 
         from cartopy.crs import PlateCarree
-        ax = gplt.sankey(projection=ccrs.PlateCarree(), start=network['from'], end=network['to'],
+        ax = gplt.sankey(projection=gcrs.PlateCarree(), start=network['from'], end=network['to'],
                          path=PlateCarree())
         ax.set_global()
         ax.coastlines()
@@ -1754,7 +1754,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to', path=PlateCarree(),
                          hue='mock_variable')
         ax.set_global()
@@ -1766,7 +1766,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu')
         ax.set_global()
@@ -1778,7 +1778,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu',
                          legend=True)
@@ -1791,7 +1791,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)})
@@ -1804,7 +1804,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
@@ -1818,7 +1818,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
@@ -1832,7 +1832,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='mock_variable', cmap='RdYlBu',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
@@ -1848,7 +1848,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='above_meridian', cmap='RdYlBu',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
@@ -1862,7 +1862,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          scale='mock_data',
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
@@ -1878,7 +1878,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          scale='mock_data', limits=(1, 3),
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
@@ -1899,7 +1899,7 @@ def sankey(*args, projection=None,
                 return 2
             return scalar
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          scale='mock_data', scale_func=trivial_scale,
                          legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
@@ -1913,7 +1913,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                  start='from', end='to',
                  scale='mock_data',
                  legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
@@ -1973,7 +1973,7 @@ def sankey(*args, projection=None,
     # 1. Projective mode. In this case ``path_geoms`` is None, while ``points`` contains a concatenation of our
     #    points (for use in initializing the plot extents). This case occurs when the user specifies ``start`` and
     #    ``end``, and not ``path``. This is "projective mode" because it means that ``path`` will be a
-    #    projection---if one is not provided explicitly, the ``ccrs.Geodetic()`` projection.
+    #    projection---if one is not provided explicitly, the ``gcrs.Geodetic()`` projection.
     # 2. Path mode. In this case ``path_geoms`` is an iterable of LineString entities to be plotted, while ``points``
     #    is None. This occurs when the user specifies ``path``, and not ``start`` or ``end``. This is path mode
     #    because we will need to plot exactly those paths!

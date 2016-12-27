@@ -2,7 +2,7 @@ import sys; sys.path.insert(0, '../')
 import pandas as pd
 import geopandas as gpd
 import geoplot as gplt
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -56,15 +56,15 @@ def tickets_by_precinct(state):
 # This function defines a method for plotting the data.
 def plot_state_to_ax(state, ax):
     n = state_ticket_totals.loc[state]['Count']
-    gplt.choropleth(tickets_by_precinct(state), projection=ccrs.AlbersEqualArea(), cmap='Blues',
+    gplt.choropleth(tickets_by_precinct(state), projection=gcrs.AlbersEqualArea(), cmap='Blues',
                     linewidth=0.0, ax=ax)
-    gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), edgecolor='black', linewidth=0.5, ax=ax)
+    gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), edgecolor='black', linewidth=0.5, ax=ax)
     ax.set_title("{0} (n={1})".format(state, n))
 
 
 # Finally, plot the data.
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
-    'projection': ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
+    'projection': gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
 })
 
 
