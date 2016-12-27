@@ -24,7 +24,7 @@ geometry put into it.
 
 
 
-.. image:: output_1_0.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_1_0.png
 
 
 This map is an example of an **unprojected plot**: it faithfully
@@ -59,7 +59,7 @@ map of New York City, for example, is reasonably accurate:
 
 
 
-.. image:: output_3_1.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_3_1.png
 
 
 More consequentially, ``geoplot`` returns unprojected plots as pure
@@ -86,7 +86,7 @@ poles). Here's what the world looks like in this projection:
 
 
 
-.. image:: output_5_0.jpg
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_5_0.jpg
 
 
 
@@ -112,7 +112,7 @@ expect input to come from the ``geoplot.crs`` module, imported as
 
 
 
-.. image:: output_7_1.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_7_1.png
 
 
 .. code:: python
@@ -168,7 +168,7 @@ projection, our skew is fixed!
 
 
 
-.. image:: output_10_1.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_10_1.png
 
 
 A not cut-off (again, work in progress—you can fix this issue by
@@ -200,7 +200,7 @@ demonstrative exame is provided below.
 
 
 
-.. image:: output_12_1.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_12_1.png
 
 
 The gallery has an `example <../../examples/los-angeles-flights.html>`__
@@ -243,7 +243,7 @@ this:
 
 
 
-.. image:: output_14_0.png
+.. image:: ../../scripts/Projections_files/../../scripts/Projections_14_0.png
 
 
 
