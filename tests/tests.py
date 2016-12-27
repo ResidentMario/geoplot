@@ -1,18 +1,21 @@
 """
-Tests for core methods (meaning basically methods with _ or __ before their name).
+Tests.
 """
 
 import unittest
+import hypothesis
+from hypothesis import given
+from hypothesis.strategies import text
 import geopandas as gpd
 from geopandas import GeoDataFrame, GeoSeries
 from pandas import DataFrame, Series
-import geoplot.core
+import geoplot as gplt
+import geoplot.crs as ccrs
 
-
-class TestCoreMethods(unittest.TestCase):
-
-    def setUp(self):
-        pass
+# class TestCoreMethods(unittest.TestCase):
+#     @given(s=text())
+#     def test_decode_inverts_encode(self, s):
+#         self.assertEqual(decode(encode(s)), s)
 
     # def _test__cast_as_geodataframe(self):
     #     """
