@@ -413,11 +413,9 @@ to be used as parameters to the <code class="docutils literal"><span class="pre"
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
-</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
 <li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
@@ -547,58 +545,50 @@ alternative metric, like the use of <code class="docutils literal"><span class="
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
-<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; The data parameter against which the geometries will be scaled.</li>
-<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled.</li>
-<li><strong>scale_func</strong> (<em>unfunc</em><em>, </em><em>optional</em>) &#8211; The default scaling function is a linear one. You can change the scaling function to whatever you want by
-specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
-maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em>) &#8211; A data column whose values will be used to scale the points.</li>
+<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is not specified.</li>
+<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) &#8211; The function used to scale point sizes. This should be a factory function of two
+variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+applied to the rest of the data. Defaults to a linear scale. A demo is available in the <a class="reference external" href="examples/usa-city-elevations.html">example
+gallery</a>.</li>
 <li><strong>trace</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a trace of the polygon&#8217;s original outline in the plot result.</li>
 <li><strong>trace_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">trace</span></code> is set to <code class="docutils literal"><span class="pre">True</span></code>, this parameter can be used to adjust the properties of the trace outline. This
 parameter is ignored if trace is <code class="docutils literal"><span class="pre">False</span></code>.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-formats. Defaults to None, in which case no colormap will be applied at all.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
-is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
 many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
 <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
 ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
-for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
-None or left unspecified.</li>
-<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, equal intervals will be used for the &#8220;points&#8221; in the legend by default. However,
-particularly if your scale is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as
-well, the values included in the input will be used by the legend instead.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
-refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
+specified.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
+colored the same threshold value. Defaults to the minimum value in the dataset.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
+colored the same threshold value. Defaults to the maximum value in the dataset.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However, particularly if your scale
+is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as well, the values
+included in the input will be used by the legend instead.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. Does nothing if <code class="docutils literal"><span class="pre">legend</span></code> is False
+or multiple variables aren&#8217;t used simultaneously.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
 </li>
-<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. <code class="docutils literal"><span class="pre">geoplot</span></code> visualizations can only
-have one legend at a time out-of-the-box, and this variable (set to &#8220;hue&#8221; by default) controls which one
-gets precedence. Note that <code class="docutils literal"><span class="pre">legend_var</span></code> does nothing if both variables aren&#8217;t used.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -626,7 +616,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id14"><span class="problematic" id="id15">`matplotlib Legend instance
+necessary to properly position the legend, will be passed to the underlying <a href="#id30"><span class="problematic" id="id31">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
@@ -695,42 +685,38 @@ to use the same data column for both. For more information on <code class="docut
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-formats. Defaults to None, in which case no colormap will be applied at all.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
-is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how many bins will exist in
-the output visualization. If this variable is set to <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
-for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
-None or left unspecified.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
-refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">categorical</span></code> is False or left unspecified, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If this variable is set to <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap
+will be used.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; <p>The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). Defaults to <code class="docutils literal"><span class="pre">viridis</span></code>.</p>
 </li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
+colored the same threshold value. Defaults to the minimum value in the dataset.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
+colored the same threshold value. Defaults to the maximum value in the dataset.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However, particularly if your scale
+is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as well, the values
+included in the input will be used by the legend instead.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -738,7 +724,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -824,10 +810,9 @@ for example, will generate buckets of equal data distribution size instead.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
 <li><strong>clip</strong> (<em>None</em><em> or </em><em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
 &#8220;cleaning up&#8221; the plot. This feature has not yet actually been implemented!</li>
@@ -838,19 +823,21 @@ an extrema tuple is passed&#8212;useful if you want to focus on a particular are
 outliers&#8212;that input will be used instead.</li>
 <li><strong>clip</strong> &#8211; If this argument is specified, <code class="docutils literal"><span class="pre">kdeplot</span></code> output will be clipped so that the heatmap only appears when it
 is inside the boundaries of the given geometries.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">sns.kdeplot</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://seaborn.pydata.org/generated/seaborn.kdeplot.html">the seaborn documentation</a>.</li>
+<li><strong>extent</strong> &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
+<li><strong>figsize</strong> &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">sns.kdeplot</span></code> method doing the plotting (<a class="reference external" href="http://seaborn.pydata.org/generated/seaborn.kdeplot.html">ref</a>).</p>
+</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -914,55 +901,51 @@ a parameter you may need to additionally specify <code class="docutils literal">
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.
-If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-formats. Defaults to None, in which case no colormap will be applied at all.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
-is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
+</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
 many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
 <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
 ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
-for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value.</li>
-<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; The data parameter against which the geometries will be scaled.</li>
-<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled.</li>
-<li><strong>scale_func</strong> (<em>unfunc</em><em>, </em><em>optional</em>) &#8211; The default scaling function is a linear one. You can change the scaling function to whatever you want by
-specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
-maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
-None or left unspecified.</li>
-<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; This variable will only have an effect if the <code class="docutils literal"><span class="pre">scale</span></code> parameter is in use (e.g. size is a variable) and
-<code class="docutils literal"><span class="pre">legend=True</span></code>. Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However,
-particularly if your scale is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as
-well, the values included in the input will be used by the legend instead.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
-<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. <code class="docutils literal"><span class="pre">geoplot</span></code> visualizations can only
-have one legend at a time out-of-the-box, and this variable (set to &#8220;hue&#8221; by default) controls which one
-gets precedence. Note that <code class="docutils literal"><span class="pre">legend_var</span></code> does nothing if both variables aren&#8217;t used.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
-refer to the <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; <p>The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
+specified.</p>
 </li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
+colored the same threshold value. Defaults to the minimum value in the dataset.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
+colored the same threshold value. Defaults to the maximum value in the dataset.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
+applied.</li>
+<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is not specified.</li>
+<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) &#8211; <p>The function used to scale point sizes. This should be a factory function of two
+variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+applied to the rest of the data. Defaults to a linear scale. A demo is available in the <a class="reference external" href="examples/usa-city-elevations.html">example
+gallery</a>.</p>
+</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will not work if neither <code class="docutils literal"><span class="pre">hue</span></code> nor
+<code class="docutils literal"><span class="pre">scale</span></code> is unspecified.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However, particularly if your scale
+is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as well, the values
+included in the input will be used by the legend instead.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. Does nothing if <code class="docutils literal"><span class="pre">legend</span></code> is False
+or multiple variables aren&#8217;t used simultaneously.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -970,7 +953,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -1079,7 +1062,7 @@ a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></c
 <p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
 between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
-returns a scaling function which will be applied to the rest of the data. A <code class="docutils literal"><span class="pre">scale_func</span></code> demo is available in
+returns a scaling function which will be applied to the rest of the data. A demo is available in
 the <a class="reference external" href="examples/usa-city-elevations.html">example gallery</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
@@ -1124,24 +1107,22 @@ more interesting plot types.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
 <li><strong>facecolor</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The color that will be used for the fill &#8220;inside&#8221; of the polygon. This parameter defaults to the string
 <code class="docutils literal"><span class="pre">'None'</span></code>, which creates transparent polygons.</li>
+<li><strong>extent</strong> &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -1149,13 +1130,13 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>A trivial example can be created with just two parameters, a geometry and a projection.</p>
+<p>A trivial example can be created with just a geometry and, optionally, a projection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
@@ -1171,6 +1152,12 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 </pre></div>
 </div>
 <img alt="_images/polyplot-stacked.png" src="_images/polyplot-stacked.png" />
+<p>Additional keyword arguments are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+                   <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/polyplot-kwargs.png" src="_images/polyplot-kwargs.png" />
 </dd></dl>
 
 <dl class="function">
@@ -1182,63 +1169,62 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>df</strong> (<em>GeoDataFrame</em><em>, </em><em>optional.</em>) &#8211; The data being plotted. Uniquely amongst <code class="docutils literal"><span class="pre">geoplot</span></code> functions, this parameter is optional&amp;mdash;it is not
-needed if <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">end</span></code> (and <code class="docutils literal"><span class="pre">hue</span></code>, if provided) are iterables.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic coordinate reference system projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code>
-module, e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. Refer to <code class="docutils literal"><span class="pre">geoplot.crs</span></code> for further object parameters.</p>
-<p>If this parameter is not specified this method will return an unprojected pure <code class="docutils literal"><span class="pre">matplotlib</span></code> version of the
-chart, which allow certain operations not possible with projected <code class="docutils literal"><span class="pre">cartopy</span></code> results.</p>
+<li><strong>df</strong> (<em>GeoDataFrame</em><em>, </em><em>optional.</em>) &#8211; The data being plotted. This parameter is optional - it is not needed if <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">end</span></code> (and <code class="docutils literal"><span class="pre">hue</span></code>,
+if provided) are iterables.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; <p>A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</p>
 </li>
 <li><strong>start</strong> (<em>str</em><em> or </em><em>iterable</em>) &#8211; Linear starting points: either the name of a column in <code class="docutils literal"><span class="pre">df</span></code> or a self-contained iterable. This parameter is
 required.</li>
 <li><strong>end</strong> (<em>str</em><em> or </em><em>iterable</em>) &#8211; Linear ending points: either the name of a column in <code class="docutils literal"><span class="pre">df</span></code> or a self-contained iterable. This parameter is
 required.</li>
-<li><strong>path</strong> (<em>geoplot.crs object instance</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; <p>If this parameter is provided as an iterable, it is assumed to contain the lines that the user wishes to
-draw to connect the points. This is useful if one wishes to e.g. build their own line-bundles.</p>
-<p>If this parameter is provided as a projection, that projection will be used for determining how the line is
-plotted. This parameter defaults to <code class="docutils literal"><span class="pre">ccrs.Geodetic()</span></code>, which means that the <em>true</em> (e.g. shortest path
-will be plotted (e.g. <a href="#id16"><span class="problematic" id="id17">`great circle distance&lt;https://en.wikipedia.org/wiki/Great-circle_distance&gt;`_</span></a>); any
-other choice will result in what the shortest path is in that projection instead.</p>
-</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
-formats. Defaults to None, in which case no colormap will be applied at all.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether the inputted <code class="docutils literal"><span class="pre">hue</span></code> is already a categorical variable or not. Defaults to False. Ignored if <code class="docutils literal"><span class="pre">hue</span></code>
-is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quartiles&quot;|&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em> (</em><em>?</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; The PySAL scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+<li><strong>path</strong> (<em>geoplot.crs object instance</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; If this parameter is provided as an iterable, it is assumed to contain the lines that the user wishes to
+draw to connect the points. If this parameter is provided as a projection, that projection will be used for
+determining how the line is plotted. The default is <code class="docutils literal"><span class="pre">ccrs.Geodetic()</span></code>, which means
+that the true shortest path will be plotted (<a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>); any
+other choice of projection will result in what the shortest path is in that projection instead.</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
 left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
-many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this
-variable is ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
-for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
-value is below this level will all be colored by the same threshold value.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
-value is above this level will all be colored by the same threshold value.</li>
-<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; The data parameter against which the geometries will be scaled.</li>
-<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled.</li>
-<li><strong>scale_func</strong> (<em>unfunc</em><em>, </em><em>optional</em>) &#8211; The default scaling function is a linear one. You can change the scaling function to whatever you want by
-specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
-maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</li>
-<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; This variable will only have an effect if the <code class="docutils literal"><span class="pre">scale</span></code> parameter is in use (e.g. size is a variable) and
-<code class="docutils literal"><span class="pre">legend=True</span></code>. Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However,
-particularly if your scale is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as
-well, the values included in the input will be used by the legend instead.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.legend</span></code> method. For a list of possible arguments
-refer to <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">the matplotlib documentation</a>.</p>
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
+<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
+ignored.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; <p>The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
+specified.</p>
 </li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
+colored the same threshold value. Defaults to the minimum value in the dataset.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
+colored the same threshold value. Defaults to the maximum value in the dataset.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
+applied.</li>
+<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is not specified.</li>
+<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) &#8211; <p>The function used to scale point sizes. This should be a factory function of two
+variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+applied to the rest of the data. Defaults to a linear scale. A demo is available in the <a class="reference external" href="examples/usa-city-elevations.html">example
+gallery</a>.</p>
+</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will not work if neither <code class="docutils literal"><span class="pre">hue</span></code> nor
+<code class="docutils literal"><span class="pre">scale</span></code> is unspecified.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However, particularly if your scale
+is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as well, the values
+included in the input will be used by the legend instead.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. Does nothing if <code class="docutils literal"><span class="pre">legend</span></code> is False
+or multiple variables aren&#8217;t used simultaneously.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.lines.Line2D</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -1246,7 +1232,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>

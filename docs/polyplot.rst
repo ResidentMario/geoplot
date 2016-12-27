@@ -1,5 +1,5 @@
-geoplot.pointplot
-=================
+geoplot.polyplot
+================
 
 .. currentmodule:: geoplot
 
