@@ -19,7 +19,7 @@ import descartes
 def pointplot(df, projection=None,
               hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
               scale=None, limits=(0.5, 2), scale_func=None,
-              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="hue",
+              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var=None,
               figsize=(8, 6), extent=None, ax=None, **kwargs):
     """
     A geospatial scatter plot. The simplest useful plot type available.
@@ -322,6 +322,13 @@ def pointplot(df, projection=None,
 
     # Validate hue input.
     hue = _validate_hue(df, hue, required=False)
+
+    # Set legend variable.
+    if legend_var is None:
+        if hue is not None:
+            legend_var = "hue"
+        elif scale is not None:
+            legend_var = "scale"
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
@@ -1104,7 +1111,7 @@ def aggplot(df, projection=None,
 def cartogram(df, projection=None,
               scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
               hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
-              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="hue",
+              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
               extent=None,
               figsize=(8, 6), ax=None,
               **kwargs):
@@ -1581,9 +1588,9 @@ def kdeplot(df, projection=None,
 def sankey(*args, projection=None,
            start=None, end=None, path=None,
            hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
-           legend=False, legend_kwargs=None, legend_labels=None,
+           legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
            extent=None, figsize=(8, 6), ax=None,
-           scale=None, limits=(1, 5), scale_func=None, legend_values=None,
+           scale=None, limits=(1, 5), scale_func=None,
            **kwargs):
     """
     A geospatial Sankey diagram (flow map).
@@ -1891,13 +1898,33 @@ def sankey(*args, projection=None,
 
         def trivial_scale(minval, maxval):
             def scalar(val):
-                return 0.5
+                return 2
             return scalar
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=ccrs.AlbersEqualArea(),
-                       limits=(0.5, 1), scale_func=trivial_scale)
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                         start='from', end='to',
+                         scale='mock_data', scale_func=trivial_scale,
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
+                         color='lightblue')
+        ax.set_global()
+        ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-scale-func.png
+
+    In case more than one visual variable is used, control which one appears in the legend using ``legend_var``.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(network, projection=ccrs.PlateCarree(),
+                 start='from', end='to',
+                 scale='mock_data',
+                 legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
+                 hue='mock_data', legend_var="hue")
+        ax.set_global()
+        ax.coastlines()
+
+    .. image:: ../figures/sankey/sankey-legend-var.png
+
     """
     # Validate df.
     if len(args) > 1:
@@ -1936,6 +1963,13 @@ def sankey(*args, projection=None,
         points = pd.concat([start, end])
     else:
         points = None
+
+    # Set legend variable.
+    if legend_var is None:
+        if scale is not None:
+            legend_var = "scale"
+        elif hue is not None:
+            legend_var = "hue"
 
     # After validating the inputs, we are in one of two modes:
     # 1. Projective mode. In this case ``path_geoms`` is None, while ``points`` contains a concatenation of our
@@ -2008,7 +2042,7 @@ def sankey(*args, projection=None,
         cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
         colors = [cmap.to_rgba(v) for v in values]
 
-        if legend:
+        if legend and (legend_var == "hue"):
             _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
     else:
         colors = [None]*int(n)
@@ -2033,7 +2067,7 @@ def sankey(*args, projection=None,
         widths = scalar_multiples * 1
 
         # Draw a legend, if appropriate.
-        if legend:
+        if legend and (legend_var == "scale"):
             _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
         widths = [1] * len(df)  # pyplot default
