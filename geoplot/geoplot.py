@@ -768,7 +768,6 @@ def choropleth(df, projection=None,
     return ax
 
 
-# TODO: Standardize the hue stuff with the same stuff used everywhere else.
 def aggplot(df, projection=None,
             hue=None,
             by=None,
@@ -1009,13 +1008,11 @@ def aggplot(df, projection=None,
         colors = []
         for label, p in df.groupby(by):
             if geometry is not None:
-                # Due to the use of the cascaded union, the shape is guaranteed to be a Polygon (?).
-                # This may change in the future.
                 try:
                     sector = geometry.loc[label]
-                except IndexError:
-                    raise IndexError("Data contains a '{0}' label which lacks a corresponding value in the provided "
-                                     "geometry.".format(label))
+                except KeyError:
+                    raise KeyError("Data contains a '{0}' label which lacks a corresponding value in the provided "
+                                   "geometry.".format(label))
             else:
                 xs = [c.x for c in p.geometry]
                 ys = [c.y for c in p.geometry]
@@ -1270,9 +1267,11 @@ def cartogram(df, projection=None,
 
     .. image:: ../figures/cartogram/cartogram-limits.png
 
-    The default scaling function is a linear one. You can change the scaling function to whatever you want by
-    specifying a ``scale_func`` input. This should be a factory function of two variables which, when given the
-    maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.
+    The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
+    between them in size. To specify an alternative scaling function, use the ``scale_func`` parameter. This should
+    be a factory function of two variables which, when given the maximum and minimum of the dataset,
+    returns a scaling function which will be applied to the rest of the data. A demo is available in
+    the `example gallery <examples/usa-city-elevations.html>`_.
 
     .. code-block:: python
 
@@ -1584,7 +1583,6 @@ def kdeplot(df, projection=None,
     return ax
 
 
-# TODO: Add legend_var.
 def sankey(*args, projection=None,
            start=None, end=None, path=None,
            hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
