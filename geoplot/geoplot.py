@@ -335,7 +335,7 @@ def pointplot(df, projection=None,
 
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, legend_values, legend_labels, cmap, legend_kwargs)
+                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
         else:
             if 'color' not in kwargs.keys():
                 colors = ['steelblue']*len(df)
@@ -2352,7 +2352,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     return cmap, categories, values
 
 
-def _paint_hue_legend(ax, categories, legend_values, legend_labels, cmap, legend_kwargs):
+def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
     """
     Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
 
@@ -2381,21 +2381,20 @@ def _paint_hue_legend(ax, categories, legend_values, legend_labels, cmap, legend
 
     # Paint patches.
     patches = []
-    if legend_values is None:
-        for value, _ in enumerate(categories):
-            patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
-                                            marker="o",
-                                            markersize=10, markerfacecolor=cmap.to_rgba(value)))
-    else:
-        raise NotImplementedError("Custom hue legend values have not yet been implemented.")
-        # TODO: Implement.
-        # This turns out to be very hard to do, given the way that the geoplot norm_cmap method behaves.
-
+    for value, cat in enumerate(categories):
+        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
+                              marker="o",
+                              markersize=10, markerfacecolor=cmap.to_rgba(value)))
     # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
     # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
     # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
     if not legend_kwargs: legend_kwargs = dict()
-    ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+
+    # If we are given labels use those, if we are not just use the categories.
+    if legend_labels:
+        ax.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
+    else:
+        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
 
 def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
