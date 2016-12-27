@@ -5,30 +5,35 @@
 
 <div class="row">
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb.png" height="135" width="135">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb
+.png" height="150" width="150">
 </a>
 
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb.png" height="135" width="135">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb.png"
+ height="150" width="150">
 </a>
 
 <!--
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/aggplot-collisions-thumb.png" height="135" width="135">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/aggplot-collisions-thumb.png"
+height="150" width="150">
 </a>
 -->
 
 <a href=.>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/usa-city-elevations-thumb.png"
- height="135">
+ height="150">
 </a>
 
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb.png" height="135" width="135">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb.png"
+ height="150" width="150">
 </a>
 
 <a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb.png" height="135" width="135">
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb.png"
+height="150" width="150">
 </a>
 
 </div>
