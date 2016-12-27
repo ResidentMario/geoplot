@@ -1,10 +1,9 @@
 import sys; sys.path.insert(0, '../')
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import geoplot as gplt
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
-import numpy as np
 import matplotlib.pyplot as plt
 import shapely
 
@@ -27,18 +26,18 @@ collisions = collisions[collisions.geometry.map(lambda srs: not (srs.x == 0))]
 # Plot the data.
 fig = plt.figure(figsize=(10,5))
 
-ax1 = plt.subplot(121, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+ax1 = plt.subplot(121, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
 
 gplt.kdeplot(collisions[collisions["CONTRIBUTING FACTOR VEHICLE 1"] == 'Failure to Yield Right-of-Way'],
-             projection=ccrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax1)
-gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax1)
+             projection=gcrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax1)
+gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax1)
 plt.title("Failure to Yield Right-of-Way Crashes, 2016")
 
-ax2 = plt.subplot(122, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+ax2 = plt.subplot(122, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
 
 gplt.kdeplot(collisions[collisions["CONTRIBUTING FACTOR VEHICLE 1"] == 'Lost Consciousness'],
-             projection=ccrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax2)
-gplt.polyplot(boroughs, projection=ccrs.AlbersEqualArea(), ax=ax2)
+             projection=gcrs.AlbersEqualArea(), shade=True, clip=boroughs.geometry, shade_lowest=False, ax=ax2)
+gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax2)
 plt.title("Loss of Consciousness Crashes, 2016")
 
 

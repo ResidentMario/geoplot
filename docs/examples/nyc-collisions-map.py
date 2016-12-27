@@ -1,7 +1,7 @@
 import sys; sys.path.insert(0, '../../')
 import geopandas as gpd
 import geoplot as gplt
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import pandas as pd
 import matplotlib.pyplot as plt
 from shapely.geometry import Point
@@ -37,9 +37,9 @@ injurious_collisions = injurious_collisions[injurious_collisions['DATE'].map(lam
 # Plot the data.
 fig = plt.figure(figsize=(10,5))
 
-ax1 = plt.subplot(121, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
-gplt.polyplot(boroughs, ax=ax1, projection=ccrs.AlbersEqualArea())
-gplt.pointplot(fatal_collisions, projection=ccrs.AlbersEqualArea(),
+ax1 = plt.subplot(121, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+gplt.polyplot(boroughs, ax=ax1, projection=gcrs.AlbersEqualArea())
+gplt.pointplot(fatal_collisions, projection=gcrs.AlbersEqualArea(),
                hue='BOROUGH', categorical=True,
                edgecolor='white', linewidth=0.5, zorder=10,
                scale='NUMBER OF PERSONS KILLED', limits=(2, 8),
@@ -48,9 +48,9 @@ gplt.pointplot(fatal_collisions, projection=ccrs.AlbersEqualArea(),
                ax=ax1)
 plt.title("Fatal Crashes in New York City, 2016")
 
-ax2 = plt.subplot(122, projection=ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
-gplt.polyplot(boroughs, ax=ax2, projection=ccrs.AlbersEqualArea())
-gplt.pointplot(injurious_collisions, projection=ccrs.AlbersEqualArea(),
+ax2 = plt.subplot(122, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))
+gplt.polyplot(boroughs, ax=ax2, projection=gcrs.AlbersEqualArea())
+gplt.pointplot(injurious_collisions, projection=gcrs.AlbersEqualArea(),
                hue='BOROUGH', categorical=True,
                edgecolor='white', linewidth=0.5, zorder=10,
                scale='NUMBER OF PERSONS INJURED', limits=(1, 10),

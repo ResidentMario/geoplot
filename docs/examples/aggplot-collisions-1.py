@@ -1,6 +1,6 @@
 import sys; sys.path.insert(0, '../')
 import geoplot as gplt
-import geoplot.crs as ccrs
+import geoplot.crs as gcrs
 import geopandas as gpd
 import pandas as pd
 import numpy as np
@@ -32,7 +32,7 @@ zip_codes = zip_codes.to_crs(epsg=4326)
 
 # Plot the data.
 f, axarr = plt.subplots(3, 1, figsize=(12, 12), subplot_kw={
-    'projection': ccrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
+    'projection': gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
 })
 plt.suptitle('Max(Injuries) in Collision by Area, 2016', fontsize=16)
 plt.subplots_adjust(top=0.95)
@@ -45,7 +45,7 @@ plt.subplots_adjust(top=0.95)
 # square for that square to be considered significant (insignificant and empty squares are not colored in). The agg
 # parameter controls the method by which the observations are aggregated---in the default case np.mean is used,
 # in this case we have specified a maximum (np.max) instead.
-ax1 = gplt.aggplot(collisions, projection=ccrs.AlbersEqualArea(),
+ax1 = gplt.aggplot(collisions, projection=gcrs.AlbersEqualArea(),
                    hue='NUMBER OF PERSONS INJURED', agg=np.max,
                    nmin=100, nmax=500, cmap='Reds', linewidth=0.5, edgecolor='white', ax=axarr[0])
 ax1.set_title("No Geometry (Quadtree)")
@@ -55,7 +55,7 @@ ax1.set_title("No Geometry (Quadtree)")
 # dataset corresponding with sort of encoded geography---in this example, the postal zip code. Aggplot computes the
 # geometries it needs itself, using a simple convex hull around the observations' point cloud. Albeit not elegant,
 # the resulting geometry is functional---and, again, spares us the task of having to find our own.
-ax2 = gplt.aggplot(collisions, projection=ccrs.AlbersEqualArea(),
+ax2 = gplt.aggplot(collisions, projection=gcrs.AlbersEqualArea(),
                    hue='NUMBER OF PERSONS INJURED', agg=np.max, by='ZIP CODE',
                    cmap='Reds', linewidth=0.5, edgecolor='white', ax=axarr[1])
 ax2.set_title("Categorical Geometry (Convex Hull)")
@@ -65,7 +65,7 @@ ax2.set_title("Categorical Geometry (Convex Hull)")
 # somewhere else on the Internet. In this case the result snaps into focus quite clearly, and is equivalent in form
 # to the geoplot.choropleth facility (with k=None; the later provides more options but doesn't aggregate geometries
 # for you, however).
-ax3 = gplt.aggplot(collisions, projection=ccrs.AlbersEqualArea(),
+ax3 = gplt.aggplot(collisions, projection=gcrs.AlbersEqualArea(),
                    hue='NUMBER OF PERSONS INJURED', agg=np.max,
                    by='ZIP CODE', geometry=zip_codes.geometry,
                    cmap='Reds', linewidth=0.5, edgecolor='white', ax=axarr[2])
