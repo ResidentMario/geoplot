@@ -1,5 +1,6 @@
 ## geoplot: geospatial data visualization
 
+<div class="row">
 <a href=http://seaborn.pydata.org/examples/many_facets.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb.png" height="135" width="135">
 </a>
@@ -21,7 +22,6 @@
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb.png" height="135" width="135">
 </a>
 
-<div class="row">
 <a href=http://seaborn.pydata.org/examples/anscombes_quartet.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb.png" height="135" width="135">
 </a>
