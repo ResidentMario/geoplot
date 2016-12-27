@@ -616,7 +616,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id32"><span class="problematic" id="id33">`matplotlib Legend instance
+necessary to properly position the legend, will be passed to the underlying <a href="#id33"><span class="problematic" id="id34">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
@@ -651,9 +651,11 @@ using <a class="reference external" href="http://matplotlib.org/api/patches_api.
 </pre></div>
 </div>
 <img alt="_images/cartogram-limits.png" src="_images/cartogram-limits.png" />
-<p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
-specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
-maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
+<p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
+between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
+be a factory function of two variables which, when given the maximum and minimum of the dataset,
+returns a scaling function which will be applied to the rest of the data. A demo is available in
+the <a class="reference external" href="examples/usa-city-elevations.html">example gallery</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
         <span class="k">return</span> <span class="mf">0.5</span>
