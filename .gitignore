@@ -1,5 +1,6 @@
 .idea/
 .ipynb_checkpoints/
+.hypothesis/
 dependencies/
 .DS_Store
 *.pyc
