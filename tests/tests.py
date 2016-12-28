@@ -2,36 +2,34 @@
 Tests.
 """
 
+import geoplot as gplt
+import geoplot.crs as gcrs
 import unittest
 import hypothesis
 from hypothesis import given
-from hypothesis.strategies import text
+import hypothesis.strategies as hyp
 import geopandas as gpd
 from geopandas import GeoDataFrame, GeoSeries
 from pandas import DataFrame, Series
-import geoplot as gplt
-import geoplot.crs as ccrs
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import cartopy
+import cartopy.crs as ccrs
+import shapely
 
-# class TestCoreMethods(unittest.TestCase):
-#     @given(s=text())
-#     def test_decode_inverts_encode(self, s):
-#         self.assertEqual(decode(encode(s)), s)
 
-    # def _test__cast_as_geodataframe(self):
-    #     """
-    #     Tests the __cast_as_geodataframe core method.
-    #     """
-    #     # GeoDataFrame test.
-    #     # In this case the method naively returns the input.
-    #     gdf = gpd.read_file(gpd.datasets.get_path(gpd.datasets.available[0])) # World cities geopandas test dataset.
-    #     gdf_c = geoplot.core.__cast_as_geodataframe(gdf)
-    #     self.assertIsInstance(gdf_c, GeoDataFrame)
+class TestCoreMethods(unittest.TestCase):
+
+    # def test_init_figure(self):
+    #     gplt._init_figure(None, (8, 6))  # Case 1: No axis is passed.
+    #     gplt._init_figure(plt.gca(), (8, 6))  # Case 2: An AxesSubplot is passed.
+    #     gplt._init_figure(plt.axes(projection=ccrs.PlateCarree()), (8, 6))  # Case 3: A GeoAxesSubplot is passed.
     #
-    #     # GeoSeries test.
-    #     gs = gdf['geometry']
-    #     gdf_c = geoplot.core.__cast_as_geodataframe(gs)
-    #     self.assertIsInstance(gdf_c, GeoDataFrame)
-    #
-    #     # Series test.
-    #     # s = gdf['geometry']
-    #     # self.assertEqual(gdf._geometry_column_name, geometry_column_name)
+    # @given(s=hyp.lists(hyp.tuples(hyp.floats(allow_nan=False, allow_infinity=False),
+    #                               hyp.floats(allow_nan=False, allow_infinity=False))).map(
+    #     lambda coords: shapely.geometry.Polygon(coords).envelope
+    # ).example())
+    # def test_get_envelopes_min_maxes(self, s):
+    #     gplt._get_envelopes_min_maxes(s)
+
+    pass
