@@ -27,7 +27,16 @@ def gaussian_polygons(points, n=10):
     for i in range(n):
         sel_points = gdf[gdf['cluster_number'] == i].geometry
         polygons.append(shapely.geometry.MultiPoint([(p.x, p.y) for p in sel_points]).convex_hull)
+    polygons = [p for p in polygons if
+                (not isinstance(p, shapely.geometry.Point)) and (not isinstance(p, shapely.geometry.LineString))]
     return gpd.GeoSeries(polygons)
+
+
+def gaussian_multi_polygons(points, n=10):
+    polygons = gaussian_polygons(points, n*2)
+    # Randomly stitch them together.
+    polygon_pairs = [shapely.geometry.MultiPolygon(list(pair)) for pair in np.array_split(polygons.values, n)]
+    return gpd.GeoSeries(polygon_pairs)
 
 
 def uniform_random_global_points(n=100):
