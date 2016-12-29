@@ -34,6 +34,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import shapely
+import numpy as np
 
 
 # Define strategies.
@@ -54,131 +55,114 @@ datasets_numeric = st.lists(st.floats(allow_nan=False, allow_infinity=False, min
                             min_size=10, max_size=10, unique=True)
 datasets_categorical = st.lists(st.text(st.characters(max_codepoint=1000, blacklist_categories=('Cc', 'Cs')),
                                                       max_size=20), min_size=10, max_size=10)
-is_categorical = st.booleans()
+categorical = st.booleans()
 use_hue = st.booleans()
+
+
+@st.composite
+def hue_vars(draw, required=False):
+    kwargs = dict()
+    if draw(use_hue) or required:
+        if draw(categorical):
+            kwargs['hue'] = draw(datasets_categorical)
+            kwargs['categorical'] = True
+        else:
+            kwargs['hue'] = draw(datasets_numeric)
+            kwargs['scheme'] = draw(schemes)
+            kwargs['k'] = draw(k)
+    return kwargs
+
 
 # Scale data
 use_scale = st.booleans()
 scale_data = datasets_numeric
 
+
+@st.composite
+def scale_vars(draw, required=False):
+    kwargs = dict()
+    if draw(use_scale) or required:
+        kwargs['scale'] = draw(datasets_numeric)
+    return kwargs
+
+
 # Legend
-use_legend = st.booleans()
+legend = st.booleans()
 legend_var = st.sampled_from(("scale", "hue"))
+
+
+@st.composite
+def legend_vars(draw, has_legend_var=True):
+    kwargs = dict()
+    if draw(legend):
+        kwargs['legend'] = True
+        if has_legend_var:
+            kwargs['legend_var'] = draw(legend_var)
+    return kwargs
 
 
 # class TestPointPlot(unittest.TestCase):
 #
 #     @given(projections,
-#            datasets_categorical, datasets_numeric,
-#            use_hue, is_categorical, schemes, k,
-#            use_scale,
-#            use_legend, legend_var)
+#            hue_vars(),
+#            scale_vars(),
+#            legend_vars())
 #     def test_pointplot(self, projection,
-#                        data_categorical, data_numeric,
-#                        use_hue, categorical, scheme, k,
-#                        use_scale,
-#                        use_legend, legend_var):
-#         kwargs = {'projection': projection, 'categorical': categorical}
-#
-#         # Hue.
-#         if use_hue and categorical:  kwargs['hue'] = data_categorical
-#         elif use_hue and (not categorical):
-#             kwargs['hue'] = data_numeric; kwargs['scheme'] = scheme; kwargs['k'] = k
-#
-#         # Scale.
-#         if use_scale: kwargs['scale'] = data_numeric  # No harm or decreased coverage in reuse.
-#
-#         # Legend.
-#         if use_legend: kwargs['legend'] = True; kwargs['legend_var'] = legend_var
-#
-#         try:
-#             gplt.pointplot(gaussian_points, **kwargs)
-#        except:
-#             import pdb; pdb.set_trace()
-#             gplt.pointplot(gaussian_points, **kwargs)
-#         finally:
-#             plt.close()
+#                        hue_vars,
+#                        scale_vars,
+#                        legend_vars):
+#         kwargs = {'projection': projection}
+#         kwargs = {**kwargs, **hue_vars, **scale_vars, **legend_vars}
+#         try: gplt.pointplot(gaussian_points, **kwargs)
+#         finally: plt.close()
 
 
 # class TestPolyPlot(unittest.TestCase):
 #
 #     # Just two code paths.
-#     def test_polyplot(self, projection):
+#     def test_polyplot(self):
 #         gplt.polyplot(gaussian_polys, projection=None)
-#         gplt.polyplot(gaussian_polys, projection=projection)
+#         gplt.polyplot(gaussian_polys, projection=ccrs.PlateCarree())
 #         plt.close()
-
-
-# # Additional strategies.
-# trace = st.booleans()
-# # The dataset used for the scale variable is defined such that it avoids the "infinite slope" error caught and raised
-# # in the method.
-# scale_datasets = st.lists(
-#     st.floats(allow_nan=False, allow_infinity=False).map(lambda f: f + np.random.random_sample()),
-#     min_size=10, max_size=10#, unique=True
-# )
 #
 #
+# Additional strategies.
+trace = st.booleans()
+
+# The default scaling function in the cartogram is defined in a way that will raise a ValueError for certain very
+# small differences in values, so it needs a custom dataset.
+scale_datasets = st.lists(
+    st.floats(allow_nan=False, allow_infinity=False).map(lambda f: f + np.random.random_sample()),
+    min_size=10, max_size=10
+)
+
+
 # class TestCartogram(unittest.TestCase):
 #
 #     @given(projections,
-#            datasets_categorical, datasets_numeric,
 #            scale_datasets,
-#            use_hue, is_categorical, schemes, k,
-#            use_legend, legend_var,
+#            hue_vars(),
+#            legend_vars(has_legend_var=False),
 #            trace)
-#     def test_cartogram(self, projection,
-#                        data_categorical, data_numeric,
-#                        scale_dataset,
-#                        use_hue, categorical, scheme, k,
-#                        use_legend, legend_var,
-#                        trace):
-#         kwargs = {'projection': projection, 'categorical': categorical, 'scale': scale_dataset, 'trace': trace}
-#
-#         # Hue.
-#         if use_hue and categorical:
-#             kwargs['hue'] = data_categorical
-#         elif use_hue and (not categorical):
-#             kwargs['hue'] = data_numeric; kwargs['scheme'] = scheme; kwargs['k'] = k
-#
-#         # Legend.
-#         if use_legend: kwargs['legend'] = True; kwargs['legend_var'] = legend_var
-#
-#         try:
-#             gplt.cartogram(gaussian_polys, **kwargs)
-#         # except:
-#         #     import pdb; pdb.set_trace()
-#         #     gplt.cartogram(gaussian_polys, **kwargs)
-#         finally:
-#             plt.close()
+#     def test_cartogram(self, projection, scale_dataset, hue_vars, legend_vars, trace):
+#         kwargs = {'projection': projection, 'scale': scale_dataset, 'trace': trace}
+#         kwargs = {**kwargs, **hue_vars, **legend_vars}
+#         try: gplt.cartogram(gaussian_polys, **kwargs)
+#         finally: plt.close()
 
 
 # class TestChoropleth(unittest.TestCase):
 #
 #     @given(projections,
-#            datasets_categorical, datasets_numeric,
-#            is_categorical, schemes, k,
-#            use_legend)
+#            hue_vars(required=True),
+#            legend_vars(has_legend_var=False))
 #     def test_choropleth(self, projection,
-#                        data_categorical, data_numeric,
-#                        categorical, scheme, k,
-#                        use_legend):
-#         kwargs = {'projection': projection, 'categorical': categorical, 'hue': data_numeric}
-#
-#         # Hue.
-#         if categorical:  kwargs['hue'] = data_categorical
-#         else: kwargs['hue'] = data_numeric; kwargs['scheme'] = scheme; kwargs['k'] = k
-#
-#         # Legend.
-#         if use_legend: kwargs['legend'] = True
-#
-#         try:
-#             gplt.choropleth(gaussian_polys, **kwargs)
-#         # except:
-#         #      import pdb; pdb.set_trace()
-#         #      gplt.choropleth(gaussian_points, **kwargs)
-#         finally:
-#             plt.close()
+#                        hue_vars,
+#                        legend_vars):
+#         kwargs = {'projection': projection}
+#         kwargs = {**kwargs, **hue_vars, **legend_vars}
+#         try: gplt.choropleth(gaussian_polys, **kwargs)
+#         finally: plt.close()
 
 
 # class TestKDEPlot(unittest.TestCase):
@@ -191,9 +175,6 @@ legend_var = st.sampled_from(("scale", "hue"))
 #             gplt.kdeplot(gaussian_points, projection=None, clip=gaussian_polys)
 #             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
 #             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
-#         # except:
-#         #      import pdb; pdb.set_trace()
-#         #      gplt.choropleth(gaussian_points, **kwargs)
 #         finally:
 #             plt.close()
 
@@ -219,9 +200,9 @@ class TestSankey(unittest.TestCase):
 
     @given(projections,
            datasets_categorical, datasets_numeric,
-           use_hue, is_categorical, schemes, k,
+           use_hue, categorical, schemes, k,
            use_scale,
-           use_legend, legend_var,
+           legend, legend_var,
            data_kwargs)
     def test_sankey(self, projection,
                     data_categorical, data_numeric,
