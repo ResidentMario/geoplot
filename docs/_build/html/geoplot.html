@@ -423,32 +423,20 @@ Specifying <code class="docutils literal"><span class="pre">by</span></code> kic
 <li><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">geopandas</span></code> object containing geometries. When both <code class="docutils literal"><span class="pre">by</span></code> and <code class="docutils literal"><span class="pre">geometry</span></code> are provided <code class="docutils literal"><span class="pre">aggplot</span></code>
 plots in geometry plotting mode, matching points in the <code class="docutils literal"><span class="pre">by</span></code> column with the geometries given by their index
 label in the <code class="docutils literal"><span class="pre">geometry</span></code> column, aggregating those, and plotting the results.</li>
-<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; <p>This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
-will be ignored. This variable specifies the maximum number of observations that will be contained in each
-quadrangle; any quadrangle containing more than <code class="docutils literal"><span class="pre">nmax</span></code> observations will be forcefully partitioned.</p>
-<p>This is useful as a way of &#8220;forcing&#8221; the quadtree to subpartition further than it would otherwise,
-as using a minimum-obsevations rule alone will cause partitioning to halt early whenever a hole in the data
-is found. For those familiar with them, an analog may be drawn here to splitting rules in decision trees.</p>
-<p>This variable may be left unspecified, in which case no maximum splitting rule will be used. If this
-value is specified it is enforced more strictly than the minimum splitting <code class="docutils literal"><span class="pre">nmin</span></code> parameter, and may result
-in partitions containing no or statistically insignificant amounts of points.</p>
-</li>
-<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; <p>This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
-will be ignored.</p>
-<p>This value specifies the minimum number of observations that must be present in each quadtree split for the
-split to be followed through. For example, if we specify a value of 5, partition a quadrangle, and find that it
-contains a subquadrangle with just 4 points inside, this rule will cause the algorithm to return the parent
-quadrangle instead of its children.</p>
-<p>This is the primary variable controlling how deep a quadtree partition can go. Note that if <code class="docutils literal"><span class="pre">nmax</span></code> is
-specified that rule is given higher priority.</p>
-</li>
+<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; This variable will only be used if the plot is functioning in quadtree mode. It specifies the
+maximum number of observations that will be contained in each quadrangle; any quadrangle containing more
+than <code class="docutils literal"><span class="pre">nmax</span></code> observations will be forcefully partitioned. <code class="docutils literal"><span class="pre">nmax</span></code> may be left unspecified, in which case
+no maximum splitting rule will be used.</li>
+<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; This variable will only be used if the plot is functioning in quadtree mode. It specifies the minimum number
+of observations that must be present in each quadtree split for the split to be followed through. For
+example, if we specify a value of 5, partition a quadrangle, and find that it contains a subquadrangle with
+just 4 points inside, this rule will cause the algorithm to return the parent quadrangle instead of its
+children.</li>
 <li><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
 <code class="docutils literal"><span class="pre">nsig</span></code> points are not aggregated and are instead returned as white patches, indicative of their status as
-&#8220;empty&#8221; spaces. This value defaults to 0. It should be set higher than that if one wishes to control for
-outliers.</li>
+&#8220;empty&#8221; spaces. Defaults to 0.</li>
 <li><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) &#8211; The aggregation ufunc that will be applied to the <code class="docutils literal"><span class="pre">numpy</span></code> array of values for the variable of interest of
-observations inside of each quadrangle. Defaults to <code class="docutils literal"><span class="pre">np.mean</span></code>. Other options are <code class="docutils literal"><span class="pre">np.median</span></code>,
-<code class="docutils literal"><span class="pre">np.count</span></code>, etc.</li>
+observations inside of each quadrangle. Defaults to <code class="docutils literal"><span class="pre">np.mean</span></code>.</li>
 <li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
@@ -457,21 +445,16 @@ value is below this level will all be colored by the same threshold value.</li>
 value is above this level will all be colored by the same threshold value.</li>
 <li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method. For a list of possible arguments
-refer to <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar">the matplotlib documentation</a>.
-<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend</a></li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</li>
 <li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
 <li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
 <li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
 an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
 outliers&#8212;that input will be used instead.</li>
-<li><strong>ax</strong> (<em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot will be graphed, used for overplotting
-multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-<code class="docutils literal"><span class="pre">ax</span></code> is the convention for this) or by using the <code class="docutils literal"><span class="pre">plt.gca()</span></code> matplotlib convenience method.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">ax.scatter</span></code> method doing the plotting. For a list of possible
-arguments refer to <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">the matplotlib documentation</a>.</p>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -479,7 +462,7 @@ arguments refer to <a class="reference external" href="http://matplotlib.org/api
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
 </td>
 </tr>
 </tbody>
@@ -567,8 +550,9 @@ left unspecified or set to None this variable is ignored.</li>
 many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
 <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
 ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
-specified.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; <p>The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
+specified.</p>
+</li>
 <li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
 colored the same threshold value. Defaults to the minimum value in the dataset.</li>
 <li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
@@ -616,7 +600,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id33"><span class="problematic" id="id34">`matplotlib Legend instance
+necessary to properly position the legend, will be passed to the underlying <a href="#id34"><span class="problematic" id="id35">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
