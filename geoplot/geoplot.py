@@ -1015,6 +1015,7 @@ def aggplot(df, projection=None,
 
         # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
         # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
+        import pdb; pdb.set_trace()
         sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area.values),
                                          key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
         sectors = np.array(sectors)[sorted_indices]
