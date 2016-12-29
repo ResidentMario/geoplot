@@ -321,7 +321,7 @@ def pointplot(df, projection=None,
     _lay_out_axes(ax, projection)
 
     # Validate hue input.
-    hue = _validate_hue(df, hue, required=False)
+    hue = _validate_hue(df, hue)
 
     # Set legend variable.
     if legend_var is None:
@@ -725,6 +725,8 @@ def choropleth(df, projection=None,
 
     # Format the data to be displayed for input.
     hue = _validate_hue(df, hue)
+    if hue is None:
+        raise ValueError("No 'hue' specified.")
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
@@ -1346,7 +1348,7 @@ def cartogram(df, projection=None,
         _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
 
     # Validate hue input.
-    hue = _validate_hue(df, hue, required=False)
+    hue = _validate_hue(df, hue)
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
@@ -2036,17 +2038,45 @@ def sankey(*args, projection=None,
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
 
-    # Generate colormaps.
-    if hue:
-        hue = _validate_hue(df, hue)
+    # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
+    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    if k is not None:
+        # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
-        cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
-        colors = [cmap.to_rgba(v) for v in values]
 
-        if legend and (legend_var == "hue"):
-            _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-    else:
-        colors = [None]*int(n)
+        if hue is not None:
+            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            colors = [cmap.to_rgba(v) for v in hue_values]
+
+            # Add a legend, if appropriate.
+            if legend and (legend_var != "scale" or scale is None):
+                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+        else:
+            if 'color' not in kwargs.keys():
+                colors = ['steelblue'] * len(df)
+            else:
+                colors = [kwargs['color']] * len(df)
+                kwargs.pop('color')
+    elif k is None and hue is not None:
+        # Continuous colormap code path.
+        hue_values = hue
+        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
+
+        # Add a legend, if appropriate.
+        if legend and (legend_var != "scale" or scale is None):
+            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+    # # Generate colormaps.
+    # if hue:
+    #     hue = _validate_hue(df, hue)
+    #     categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+    #     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+    #     colors = [cmap.to_rgba(v) for v in values]
+    #
+    #     if legend and (legend_var == "hue"):
+    #         _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+    # else:
+    #     colors = [None]*int(n)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -2262,7 +2292,7 @@ def _lay_out_axes(ax, projection):
         plt.gca().axison = False
 
 
-def _validate_hue(df, hue, required=True):
+def _validate_hue(df, hue):
     """
     The top-level ``hue`` parameter present in most plot types accepts a variety of input types. This method
     condenses this variety into a single preferred format---an iterable---which is expected by all submethods working
@@ -2284,16 +2314,7 @@ def _validate_hue(df, hue, required=True):
         The ``hue`` parameter input as an iterable.
     """
     if hue is None:
-        if required:
-            nongeom = set(df.columns) - {df.geometry.name}
-            if len(nongeom) > 1:
-                raise ValueError("Ambiguous input: no 'hue' parameter was specified and the inputted DataFrame has more "
-                                 "than one column of data.")
-            else:
-                hue = df[list(nongeom)[0]]
-                return hue
-        else:
-            return None
+        return None
     elif isinstance(hue, str):
         hue = df[hue]
         return hue
