@@ -357,7 +357,7 @@ def pointplot(df, projection=None,
 
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
-            _paint_colorbar_legend(ax, hue_values, legend_values, legend_labels, cmap, legend_kwargs)
+            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -370,6 +370,9 @@ def pointplot(df, projection=None,
         dmin, dmax = np.min(scalar_values), np.max(scalar_values)
         if not scale_func:
             dslope = (limits[1] - limits[0]) / (dmax - dmin)
+            if np.isinf(dslope):  # Edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
+                raise ValueError("The data range provided to the 'scale' variable is too small for the default "
+                                 "scaling function. Normalize your data or provide a custom 'scale_func'.")
             dscale = lambda dval: limits[0] + dslope * (dval - dmin)
         else:
             dscale = scale_func(dmin, dmax)
@@ -1394,7 +1397,7 @@ def cartogram(df, projection=None,
                         feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
                         ax.add_patch(feature)
                 except (TypeError, AssertionError):  # Shapely Polygon.
-                    feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                    feature = descartes.PolygonPatch(polygon, **trace_kwargs)
                     ax.add_patch(feature)
 
     # Finally, draw the scaled geometries.
