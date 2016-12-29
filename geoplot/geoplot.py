@@ -807,37 +807,23 @@ def aggplot(df, projection=None,
         plots in geometry plotting mode, matching points in the ``by`` column with the geometries given by their index
         label in the ``geometry`` column, aggregating those, and plotting the results.
     nmax : int or None, optional
-        This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
-        will be ignored. This variable specifies the maximum number of observations that will be contained in each
-        quadrangle; any quadrangle containing more than ``nmax`` observations will be forcefully partitioned.
-
-        This is useful as a way of "forcing" the quadtree to subpartition further than it would otherwise,
-        as using a minimum-obsevations rule alone will cause partitioning to halt early whenever a hole in the data
-        is found. For those familiar with them, an analog may be drawn here to splitting rules in decision trees.
-
-        This variable may be left unspecified, in which case no maximum splitting rule will be used. If this
-        value is specified it is enforced more strictly than the minimum splitting ``nmin`` parameter, and may result
-        in partitions containing no or statistically insignificant amounts of points.
+        This variable will only be used if the plot is functioning in quadtree mode. It specifies the
+        maximum number of observations that will be contained in each quadrangle; any quadrangle containing more
+        than ``nmax`` observations will be forcefully partitioned. ``nmax`` may be left unspecified, in which case
+        no maximum splitting rule will be used.
     nmin : int, optional
-        This variable will only be used if the plot is functioning in quadtree mode; if it is not, the value here
-        will be ignored.
-
-        This value specifies the minimum number of observations that must be present in each quadtree split for the
-        split to be followed through. For example, if we specify a value of 5, partition a quadrangle, and find that it
-        contains a subquadrangle with just 4 points inside, this rule will cause the algorithm to return the parent
-        quadrangle instead of its children.
-
-        This is the primary variable controlling how deep a quadtree partition can go. Note that if ``nmax`` is
-        specified that rule is given higher priority.
+        This variable will only be used if the plot is functioning in quadtree mode. It specifies the minimum number
+        of observations that must be present in each quadtree split for the split to be followed through. For
+        example, if we specify a value of 5, partition a quadrangle, and find that it contains a subquadrangle with
+        just 4 points inside, this rule will cause the algorithm to return the parent quadrangle instead of its
+        children.
     nsig : int, optional
         A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
         ``nsig`` points are not aggregated and are instead returned as white patches, indicative of their status as
-        "empty" spaces. This value defaults to 0. It should be set higher than that if one wishes to control for
-        outliers.
+        "empty" spaces. Defaults to 0.
     agg : function, optional
         The aggregation ufunc that will be applied to the ``numpy`` array of values for the variable of interest of
-        observations inside of each quadrangle. Defaults to ``np.mean``. Other options are ``np.median``,
-        ``np.count``, etc.
+        observations inside of each quadrangle. Defaults to ``np.mean``.
     cmap : matplotlib color, optional
         The string representation for a matplotlib colormap to be applied to this dataset. ``hue`` must be non-empty
         for a colormap to be applied at all, so this parameter is ignored otherwise.
@@ -851,10 +837,8 @@ def aggplot(df, projection=None,
         Whether or not to include a legend in the output plot. This parameter will be ignored if ``hue`` is set to
         None or left unspecified.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the ``matplotlib`` ``ax.colorbar`` method. For a list of possible arguments
-        refer to `the matplotlib documentation
-        <http://matplotlib.org/api/colorbar_api.html#matplotlib.colorbar.Colorbar>`_.
-        http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend
+        Keyword arguments to be passed to the ``matplotlib`` ``ax.colorbar`` method (`ref
+        <http://matplotlib.org/api/colorbar_api.html>`_).
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
@@ -864,19 +848,16 @@ def aggplot(df, projection=None,
         If this parameter is set to None (default) this method will calculate its own cartographic display region. If
         an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
         outliers---that input will be used instead.
-    ax : GeoAxesSubplot instance, optional
-        A ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot will be graphed, used for overplotting
-        multiple plots on one chart. If this parameter is left undefined a new axis will be created and used
-        instead. A valid axis subplot instance can be obtained by saving the output of a prior plot to a variable (
-        ``ax`` is the convention for this) or by using the ``plt.gca()`` matplotlib convenience method.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
     kwargs: dict, optional
-        Keyword arguments to be passed to the ``ax.scatter`` method doing the plotting. For a list of possible
-        arguments refer to `the matplotlib documentation
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
 
     Returns
     -------
-    GeoAxesSubplot instance
+    AxesSubplot or GeoAxesSubplot instance
         The axis object with the plot on it.
 
     Examples
@@ -985,7 +966,7 @@ def aggplot(df, projection=None,
         #    any optimizations that the user can make by doing classification "by hand" is worth it.
         # There should perhaps be a separate library or ``geopandas`` function for doing this.
 
-    elif by:
+    elif by is not None:
         bxmin = bxmax = bymin = bymax = None
 
         # Side-convert geometry for ease of use.
@@ -993,21 +974,6 @@ def aggplot(df, projection=None,
             # Downconvert GeoDataFrame to GeoSeries objects.
             if isinstance(geometry, gpd.GeoDataFrame):
                 geometry = geometry.geometry
-
-            # Valid polygons are simple polygons (``shapely.geometry.Polygon``) and complex multi-piece polygons
-            # (``shapely.geometry.MultiPolygon``). The latter is an iterable of its components, so if the shape is
-            # a ``MultiPolygon``, append it as that list. Otherwise if the shape is a basic ``Polygon``,
-            # append a list with one element, the ``Polygon`` itself.
-            def geom_convert(geom):
-                if isinstance(geom, shapely.geometry.MultiPolygon):
-                    return shapely.ops.cascaded_union([p for p in geom])
-                elif isinstance(geom, shapely.geometry.Polygon):
-                    return [geom]
-                else:  # Anything else, raise.
-                    raise ValueError("Shapely geometries of Polygon or MultiPolygon types are expected, but one of {0} "
-                                     "type was provided.".format(type(geom)))
-
-            geometry = geometry.map(geom_convert)
 
         sectors = []
         colors = []
