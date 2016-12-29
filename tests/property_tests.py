@@ -101,90 +101,77 @@ def legend_vars(draw, has_legend_var=True):
     return kwargs
 
 
-# class TestPointPlot(unittest.TestCase):
-#
-#     @given(projections,
-#            hue_vars(),
-#            scale_vars(),
-#            legend_vars())
-#     def test_pointplot(self, projection,
-#                        hue_vars,
-#                        scale_vars,
-#                        legend_vars):
-#         kwargs = {'projection': projection}
-#         kwargs = {**kwargs, **hue_vars, **scale_vars, **legend_vars}
-#         try: gplt.pointplot(gaussian_points, **kwargs)
-#         finally: plt.close()
+class TestPointPlot(unittest.TestCase):
+
+    @given(projections, hue_vars(), scale_vars(), legend_vars())
+    def test_pointplot(self, projection,
+                       hue_vars,
+                       scale_vars,
+                       legend_vars):
+        kwargs = {'projection': projection}
+        kwargs = {**kwargs, **hue_vars, **scale_vars, **legend_vars}
+        try: gplt.pointplot(gaussian_points, **kwargs)
+        finally: plt.close()
 
 
-# class TestPolyPlot(unittest.TestCase):
-#
-#     # Just two code paths.
-#     def test_polyplot(self):
-#         gplt.polyplot(gaussian_polys, projection=None)
-#         gplt.polyplot(gaussian_polys, projection=ccrs.PlateCarree())
-#         plt.close()
-#
-#
+class TestPolyPlot(unittest.TestCase):
+
+    # Just two code paths.
+    def test_polyplot(self):
+        gplt.polyplot(gaussian_polys, projection=None)
+        gplt.polyplot(gaussian_polys, projection=gcrs.PlateCarree())
+        plt.close()
+
+
 # Additional strategies.
 trace = st.booleans()
-
 # The default scaling function in the cartogram is defined in a way that will raise a ValueError for certain very
 # small differences in values, so it needs a custom dataset.
 scale_datasets = st.lists(
-    st.floats(allow_nan=False, allow_infinity=False).map(lambda f: f + np.random.random_sample()),
-    min_size=10, max_size=10
+    st.floats(allow_nan=False, allow_infinity=False, min_value=10**-10, max_value=10**10).map(
+        lambda f: f + np.random.random_sample()
+    ), min_size=10, max_size=10
 )
 
 
-# class TestCartogram(unittest.TestCase):
-#
-#     @given(projections,
-#            scale_datasets,
-#            hue_vars(),
-#            legend_vars(has_legend_var=False),
-#            trace)
-#     def test_cartogram(self, projection, scale_dataset, hue_vars, legend_vars, trace):
-#         kwargs = {'projection': projection, 'scale': scale_dataset, 'trace': trace}
-#         kwargs = {**kwargs, **hue_vars, **legend_vars}
-#         try: gplt.cartogram(gaussian_polys, **kwargs)
-#         finally: plt.close()
+class TestCartogram(unittest.TestCase):
+
+    @given(projections, scale_datasets, hue_vars(), legend_vars(has_legend_var=False), trace)
+    def test_cartogram(self, projection, scale_dataset, hue_vars, legend_vars, trace):
+        kwargs = {'projection': projection, 'scale': scale_dataset, 'trace': trace}
+        kwargs = {**kwargs, **hue_vars, **legend_vars}
+        try: gplt.cartogram(gaussian_polys, **kwargs)
+        finally: plt.close()
 
 
-# class TestChoropleth(unittest.TestCase):
-#
-#     @given(projections,
-#            hue_vars(required=True),
-#            legend_vars(has_legend_var=False))
-#     def test_choropleth(self, projection,
-#                        hue_vars,
-#                        legend_vars):
-#         kwargs = {'projection': projection}
-#         kwargs = {**kwargs, **hue_vars, **legend_vars}
-#         try: gplt.choropleth(gaussian_polys, **kwargs)
-#         finally: plt.close()
+class TestChoropleth(unittest.TestCase):
+
+    @given(projections, hue_vars(required=True), legend_vars(has_legend_var=False))
+    def test_choropleth(self, projection,
+                       hue_vars,
+                       legend_vars):
+        kwargs = {'projection': projection}
+        kwargs = {**kwargs, **hue_vars, **legend_vars}
+        try: gplt.choropleth(gaussian_polys, **kwargs)
+        finally: plt.close()
 
 
-# class TestKDEPlot(unittest.TestCase):
-#
-#     def test_kdeplot(self, projection):
-#
-#         # Just four code paths.
-#         try:
-#             gplt.kdeplot(gaussian_points, projection=None, clip=None)
-#             gplt.kdeplot(gaussian_points, projection=None, clip=gaussian_polys)
-#             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
-#             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
-#         finally:
-#             plt.close()
+class TestKDEPlot(unittest.TestCase):
+
+    def test_kdeplot(self):
+
+        # Just four code paths.
+        try:
+            gplt.kdeplot(gaussian_points, projection=None, clip=None)
+            gplt.kdeplot(gaussian_points, projection=None, clip=gaussian_polys)
+            gplt.kdeplot(gaussian_points, projection=gcrs.PlateCarree(), clip=gaussian_polys)
+            gplt.kdeplot(gaussian_points, projection=gcrs.PlateCarree(), clip=gaussian_polys)
+        finally:
+            plt.close()
 
 
 # Additional strategies.
-
-# Data
 network = gplt.utils.uniform_random_global_network(n=10)
-
-# Inputs.
 data_kwargs = st.sampled_from(({'start': 'from', 'end': 'to'},
                                {'start': 'from', 'end': 'to', 'path': ccrs.PlateCarree()},
                                {'path': gpd.GeoSeries(
@@ -199,34 +186,13 @@ data_kwargs = st.sampled_from(({'start': 'from', 'end': 'to'},
 class TestSankey(unittest.TestCase):
 
     @given(projections,
-           datasets_categorical, datasets_numeric,
-           use_hue, categorical, schemes, k,
-           use_scale,
-           legend, legend_var,
+           hue_vars(),
+           scale_vars(),
+           legend_vars(),
            data_kwargs)
-    def test_sankey(self, projection,
-                    data_categorical, data_numeric,
-                    use_hue, categorical, scheme, k,
-                    use_scale,
-                    use_legend, legend_var,
-                    data_kwargs):
-        kwargs = {'projection': projection, 'categorical': categorical}
+    def test_sankey(self, projection, hue_vars, scale_vars, legend_vars, data_kwargs):
+        kwargs = {'projection': projection}
+        kwargs = {**kwargs, **hue_vars, **scale_vars, **legend_vars, **data_kwargs}
 
-        # Hue.
-        if use_hue and categorical:  kwargs['hue'] = data_categorical
-        elif use_hue and (not categorical):
-            kwargs['hue'] = data_numeric; kwargs['scheme'] = scheme; kwargs['k'] = k
-
-        # Scale.
-        if use_scale: kwargs['scale'] = data_numeric  # No harm or decreased coverage in reuse.
-
-        # Legend.
-        if use_legend: kwargs['legend'] = True; kwargs['legend_var'] = legend_var
-
-        try:
-            gplt.sankey(network, **data_kwargs, **kwargs)
-        # except:
-        #     import pdb; pdb.set_trace()
-        #     gplt.sankey(network, **data_kwargs, **kwargs)
-        finally:
-            plt.close()
+        try: gplt.sankey(network, **kwargs)
+        finally: plt.close()
