@@ -102,8 +102,9 @@ legend_var = st.sampled_from(("scale", "hue"))
 
 # class TestPolyPlot(unittest.TestCase):
 #
-#     @given(projections)
+#     # Just two code paths.
 #     def test_polyplot(self, projection):
+#         gplt.polyplot(gaussian_polys, projection=None)
 #         gplt.polyplot(gaussian_polys, projection=projection)
 #         plt.close()
 
@@ -182,10 +183,19 @@ legend_var = st.sampled_from(("scale", "hue"))
 
 # class TestKDEPlot(unittest.TestCase):
 #
-#     @given(projections)
 #     def test_kdeplot(self, projection):
-#         gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
-#         plt.close()
+#
+#         # Just four code paths.
+#         try:
+#             gplt.kdeplot(gaussian_points, projection=None, clip=None)
+#             gplt.kdeplot(gaussian_points, projection=None, clip=gaussian_polys)
+#             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
+#             gplt.kdeplot(gaussian_points, projection=projection, clip=gaussian_polys)
+#         # except:
+#         #      import pdb; pdb.set_trace()
+#         #      gplt.choropleth(gaussian_points, **kwargs)
+#         finally:
+#             plt.close()
 
 
 # Additional strategies.
