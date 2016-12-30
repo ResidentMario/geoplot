@@ -947,10 +947,8 @@ def aggplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
-    # Format hue and generate a colormap
+    # Name hue column.
     hue_col = hue
-    values = _validate_hue(df, hue)
-    cmap = _continuous_colormap(values, cmap, vmin, vmax)
 
     if geometry is not None and by is None:
         raise NotImplementedError("Aggregation by geometry alone is not currently implemented and unlikely to be "
@@ -967,7 +965,6 @@ def aggplot(df, projection=None,
         # There should perhaps be a separate library or ``geopandas`` function for doing this.
 
     elif by is not None:
-        bxmin = bxmax = bymin = bymax = None
 
         # Side-convert geometry for ease of use.
         if geometry is not None:
@@ -976,7 +973,7 @@ def aggplot(df, projection=None,
                 geometry = geometry.geometry
 
         sectors = []
-        colors = []
+        values = []
         for label, p in df.groupby(by):
             if geometry is not None:
                 try:
@@ -990,12 +987,8 @@ def aggplot(df, projection=None,
                 coords = list(zip(xs, ys))
                 sector = shapely.geometry.MultiPoint(coords).convex_hull
 
-            # Depending on the source, sector can be a single Polygon or multiple Polygons in a list (the latter
-            # arises if we read the sector out of a data source, which turns out to describe a MultiPolygon).
-            # print(type(sector))
             sectors.append(sector)
-            color = cmap.to_rgba(agg(p[hue_col])) if len(p) > nsig else "white"
-            colors.append(color)
+            values.append(agg(p[hue_col]))
 
         # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
         # extrema of the hulls we are generating.
@@ -1015,14 +1008,17 @@ def aggplot(df, projection=None,
 
         # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
         # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
-        import pdb; pdb.set_trace()
         sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area.values),
                                          key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
         sectors = np.array(sectors)[sorted_indices]
-        colors = np.array(colors)[sorted_indices]
+        values = np.array(values)[sorted_indices]
 
+        # Generate a colormap.
+        cmap = _continuous_colormap(values, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(value) for value in values]
+
+        #  Draw.
         for sector, color in zip(sectors, colors):
-            # We draw here.
             if projection:
                 features = ShapelyFeature([sector], ccrs.PlateCarree())
                 ax.add_feature(features, facecolor=color, **kwargs)
@@ -1047,12 +1043,14 @@ def aggplot(df, projection=None,
         # Generate a quadtree.
         quad = QuadTree(df)
         bxmin, bxmax, bymin, bymax = quad.bounds
+
         # Assert that nmin is not smaller than the largest number of co-located observations (otherwise the algorithm
         # would continue running until the recursion limit).
         max_coloc = np.max([len(l) for l in quad.agg.values()])
         if max_coloc > nmin:
             raise ValueError("nmin is set to {0}, but there is a coordinate containing {1} observations in the "
                              "dataset.".format(nmin, max_coloc))
+
         # Run the partitions, then paint the results.
         partitions = quad.partition(nmin, nmax)
         for p in partitions:
