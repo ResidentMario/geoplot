@@ -137,6 +137,13 @@ Aggplot
 
 .. container:: gallery_images
 
+    |boston_airbnb_aggplot|_
+
+    .. |boston_airbnb_aggplot| image:: ./examples/boston-airbnb-aggplot.png
+        :width: 500px
+
+    .. _boston_airbnb_aggplot: ./examples/boston-airbnb-aggplot.html
+
     |aggplot_collisions_1|_
 
     .. |aggplot_collisions_1| image:: ./examples/aggplot-collisions-1.png
