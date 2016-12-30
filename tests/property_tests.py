@@ -196,3 +196,60 @@ class TestSankey(unittest.TestCase):
 
         try: gplt.sankey(network, **kwargs)
         finally: plt.close()
+
+
+# Additional strategies
+# Static inputs.
+agg_gaussian_points = gplt.utils.gaussian_points(n=100)
+agg_gaussian_polys = gplt.utils.gaussian_polygons(gplt.utils.gaussian_points(n=100), n=2)
+agg_gaussian_multipolys = gplt.utils.gaussian_multi_polygons(gplt.utils.gaussian_points(n=100), n=2)
+agg_data = gpd.GeoDataFrame(geometry=agg_gaussian_points)
+
+# Data input.
+# For quadtree mode.
+mode = st.integers(min_value=0, max_value=2)
+nmin = st.integers(min_value=10, max_value=21).map(lambda v: v if v < 21 else None)
+nmax = st.integers(min_value=20, max_value=51).map(lambda v: v if v < 51 else None)
+nsig = st.integers(min_value=0, max_value=10)
+
+# For by mode.
+cats = st.lists(st.integers(min_value=0, max_value=1), min_size=100, max_size=100)
+
+# For geometry mode.
+indexed_geometry = gpd.GeoSeries({0: agg_gaussian_polys[0], 1: agg_gaussian_multipolys[1]})
+
+# For hue.
+sankey_datasets_numeric = st.lists(st.floats(allow_nan=False, allow_infinity=False,
+                                             min_value=10 ** -10, max_value=10 ** 10),
+                                   min_size=100, max_size=100)
+sankey_hue = sankey_datasets_numeric
+
+
+@st.composite
+def sankey_data_inputs(draw):
+    kwargs = dict()
+    md = draw(mode)
+    if md == 0:
+        kwargs['nmin'] = draw(nmin); kwargs['nmax'] = draw(nmax); kwargs['nsig'] = draw(nsig)
+    elif md == 1:
+        kwargs['by'] = draw(cats)
+    elif md == 2:
+        kwargs['by'] = draw(cats); kwargs['geometry'] = indexed_geometry
+    return kwargs
+
+
+class TestAggPlot(unittest.TestCase):
+
+    @given(projections, sankey_hue, legend_vars(has_legend_var=False), sankey_data_inputs())
+    def test_aggplot(self, projection,
+                     sankey_hue,
+                     legend_vars,
+                     sankey_data_inputs):
+        print("Running a test...")
+        kwargs = {'projection': projection, 'hue': sankey_hue}
+        kwargs = {**kwargs, **legend_vars, **sankey_data_inputs}
+        try: gplt.aggplot(agg_data, **kwargs)
+        except:
+            import pdb; pdb.set_trace()
+            gplt.aggplot(agg_data, **kwargs)
+        finally: plt.close()
