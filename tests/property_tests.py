@@ -22,7 +22,6 @@ Testing assumptions:
 """
 # TODO: Number 8 should be a separate test.
 # TODO: Number 9 should be a separate test.
-# TODO: Number 11 should be a seperate test.
 
 import sys; sys.path.insert(0, '../')
 import geoplot as gplt
