@@ -947,8 +947,12 @@ def aggplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
-    # Name hue column.
-    hue_col = hue
+    # Validate hue.
+    if not isinstance(hue, str):
+        hue_col = hash(str(hue))
+        df[hue_col] = _validate_hue(df, hue)
+    else:
+        hue_col = hue
 
     if geometry is not None and by is None:
         raise NotImplementedError("Aggregation by geometry alone is not currently implemented and unlikely to be "
@@ -1051,8 +1055,14 @@ def aggplot(df, projection=None,
             raise ValueError("nmin is set to {0}, but there is a coordinate containing {1} observations in the "
                              "dataset.".format(nmin, max_coloc))
 
-        # Run the partitions, then paint the results.
-        partitions = quad.partition(nmin, nmax)
+        # Run the partitions.
+        # partitions = quad.partition(nmin, nmax)
+        partitions = list(quad.partition(nmin, nmax))
+
+        # Generate colormap.
+        values = [agg(p.data[hue_col]) for p in partitions if p.n > nsig]
+        cmap = _continuous_colormap(values, cmap, vmin, vmax)
+
         for p in partitions:
             xmin, xmax, ymin, ymax = p.bounds
             rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
