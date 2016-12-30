@@ -947,6 +947,9 @@ def aggplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
+    # Upconvert input to a GeoDataFrame (necessary for quadtree comprehension).
+    df = gpd.GeoDataFrame(df, geometry=df.geometry)
+
     # Validate hue.
     if not isinstance(hue, str):
         hue_col = hash(str(hue))
@@ -978,6 +981,12 @@ def aggplot(df, projection=None,
 
         sectors = []
         values = []
+
+        # The groupby operation does not take generators as inputs, so we duck test and convert them to lists.
+        if not isinstance(by, str):
+            try: len(by)
+            except TypeError: by = list(by)
+
         for label, p in df.groupby(by):
             if geometry is not None:
                 try:
@@ -1042,7 +1051,7 @@ def aggplot(df, projection=None,
     else:
         # Set reasonable defaults for the n-params if appropriate.
         nmax = nmax if nmax else len(df)
-        nmin = nmin if nmin else np.min([20, int(0.05 * len(df))])
+        nmin = nmin if nmin else np.max([1, np.min([20, int(0.05 * len(df))])])
 
         # Generate a quadtree.
         quad = QuadTree(df)
@@ -1974,8 +1983,9 @@ def sankey(*args, projection=None,
         ys = np.array([p.y for p in points])
         xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
         clong, clat = np.mean(xs), np.mean(ys)
-        n = len(points) / 2
+        n = int(len(points) / 2)
     else:  # path_geoms is an iterable
+        path_geoms = gpd.GeoSeries(path_geoms)
         xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path_geoms.envelope.exterior)
         clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
         n = len(path_geoms)
@@ -2028,9 +2038,9 @@ def sankey(*args, projection=None,
                 _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
         else:
             if 'color' not in kwargs.keys():
-                colors = ['steelblue'] * len(df)
+                colors = ['steelblue'] * n
             else:
-                colors = [kwargs['color']] * len(df)
+                colors = [kwargs['color']] * n
                 kwargs.pop('color')
     elif k is None and hue is not None:
         # Continuous colormap code path.
@@ -2041,17 +2051,6 @@ def sankey(*args, projection=None,
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
-    # # Generate colormaps.
-    # if hue:
-    #     hue = _validate_hue(df, hue)
-    #     categorical, k, scheme = _validate_buckets(categorical, k, scheme)
-    #     cmap, categories, values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
-    #     colors = [cmap.to_rgba(v) for v in values]
-    #
-    #     if legend and (legend_var == "hue"):
-    #         _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-    # else:
-    #     colors = [None]*int(n)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale:
@@ -2076,7 +2075,7 @@ def sankey(*args, projection=None,
         if legend and (legend_var == "scale"):
             _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
-        widths = [1] * len(df)  # pyplot default
+        widths = [1] * n  # pyplot default
 
     # Allow overwriting visual arguments.
     if 'linestyle' in kwargs.keys():
@@ -2096,7 +2095,7 @@ def sankey(*args, projection=None,
                 ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
                         linestyle=linestyle, linewidth=width, color=color, **kwargs)
         except TypeError:
-            for line, color, width in zip(path, colors, widths):
+            for line, color, width in zip(path_geoms, colors, widths):
                 feature = ShapelyFeature([line], ccrs.PlateCarree())
                 ax.add_feature(feature, linestyle=linestyle, linewidth=width, edgecolor=color, facecolor='None',
                 **kwargs)
@@ -2106,7 +2105,7 @@ def sankey(*args, projection=None,
                 ax.plot([origin.x, destination.x], [origin.y, destination.y],
                         linestyle=linestyle, linewidth=width, color=color, **kwargs)
         except TypeError:
-            for path, color, width in zip(path, colors, widths):
+            for path, color, width in zip(path_geoms, colors, widths):
                 # We have to implement different methods for dealing with LineString and MultiLineString objects.
                 # This calls for, yep, another duck test.
                 try:  # LineString
