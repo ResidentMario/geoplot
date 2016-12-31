@@ -394,7 +394,7 @@ def pointplot(df, projection=None,
         if legend and (legend_var == "scale" or hue is None):
             _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
     else:
-        sizes = 20  # pyplot default
+        sizes = kwargs.pop('s') if 's' in kwargs.keys() else 20
 
     # Draw.
     if projection:
@@ -1336,7 +1336,7 @@ def cartogram(df, projection=None,
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
     # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
-    if k is not None:
+    if k is not None and hue is not None:
         # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
@@ -1358,6 +1358,8 @@ def cartogram(df, projection=None,
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+    elif 'facecolor' in kwargs:
+        colors = [kwargs.pop('facecolor')]*len(df)
     else:
         colors = ['None']*len(df)
 
@@ -2083,9 +2085,11 @@ def sankey(*args, projection=None,
     else:
         linestyle = '-'
     if 'color' in kwargs.keys():
-        colors = [kwargs['color']]*len(df); kwargs.pop('color')
+        colors = [kwargs['color']]*n; kwargs.pop('color')
+    elif 'edgecolor' in kwargs.keys():  # plt.plot uses 'color', mpl.ax.add_feature uses 'edgecolor'. Support both.
+        colors = [kwargs['edgecolor']]*n; kwargs.pop('edgecolor')
     if 'linewidth' in kwargs.keys():
-        widths = [kwargs['linewidth']]*len(df); kwargs.pop('linewidth')
+        widths = [kwargs['linewidth']]*n; kwargs.pop('linewidth')
 
     if projection:
         # Duck test plot. The first will work if a valid transformation is passed to ``path`` (e.g. we are in the
@@ -2464,7 +2468,7 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         display_values = np.linspace(np.max(values), np.min(values), num=5)
     display_labels = legend_labels if (legend_labels is not None) else display_values
 
-    # Paint patches.
+    # Paint patche s.
     patches = []
     for value in display_values:
         patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
