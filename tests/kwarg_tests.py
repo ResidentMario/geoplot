@@ -103,4 +103,4 @@ class TestDataInputFormats(unittest.TestCase):
         gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linewidth=1)
 
         gplt.sankey(path=list_paths, linestyle='--')
-        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linestype='--')
+        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linestyle='--')
