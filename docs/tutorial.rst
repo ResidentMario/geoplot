@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-* `Introduction <./tutorial/introduction.html>`_
-* `Working with Geospatial Data <./tutorial/data.html>`_
-* `Projections <./tutorial/projections.html>`_
-* `Plotting <./tutorial/plotting.html>`_
+* `Introduction <./tutorial/Introduction.html>`_
+* `Working with Geospatial Data <./tutorial/Data.html>`_
+* `Projections <./tutorial/Projections.html>`_
+* `Plotting <./tutorial/Plotting.html>`_
