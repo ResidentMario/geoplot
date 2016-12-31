@@ -51,8 +51,9 @@ it’s a format that’s well-incorporated by other tools.
 * **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data
  easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
 
+[See the documentation for help getting started](http://www.residentmar.io/geoplot/_build/html/index.html).
+
 ### Status
 
-`geoplot` is alpha software. It aims to be an easy-to-use but powerful high-level
-geographic data visualization too&mdash;like `seaborn` for geospatial. It is based on `cartopy`, `geopandas`, and the
-rest of the modern geospatial Python stack.
+Although the library itself is roughly read, `geoplot` is not yet ready for installation due to dependency hell
+issues which still remain to be sorted out.
