@@ -244,11 +244,7 @@ class TestAggPlot(unittest.TestCase):
                      sankey_hue,
                      legend_vars,
                      sankey_data_inputs):
-        print("Running a test...")
         kwargs = {'projection': projection, 'hue': sankey_hue}
         kwargs = {**kwargs, **legend_vars, **sankey_data_inputs}
         try: gplt.aggplot(agg_data, **kwargs)
-        except:
-            import pdb; pdb.set_trace()
-            gplt.aggplot(agg_data, **kwargs)
         finally: plt.close()

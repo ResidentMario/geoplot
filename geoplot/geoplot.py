@@ -862,16 +862,32 @@ def aggplot(df, projection=None,
 
     Examples
     --------
-    This plot type is intricate: it accepts all geometry types, including a mixture of points and polygons if you
-    have them, unlike most of the other plot types included in this library; and its end result can fall into any of
-    three general patterns of output.
+    This plot type accepts any geometry, including mixtures of polygons and points, averages the value of a certain
+    data parameter at their centroids, and plots the result, using a colormap is the visual variable.
 
-    When you have a number of geometries but are unable or unwilling (given time and/or interest constraints) to
-    provide geospatial context for them, ``aggplot`` will lump your observations into a recursive quadtree. Each of
-    the boxes in your result will contain in between some minimum and some maximum number of observations.
+    For the purposes of comparison, this library's ``choropleth`` function takes some sort of data as input,
+    polygons as geospatial context, and combines themselves into a colorful map. This is useful if, for example,
+    you have data on the amount of crimes committed per neigborhood, and you want to plot that.
 
-    To start with, here's an aggplot with a minimal amount of information provided, just data, a projection,
-    and a data column:
+    But suppose your original dataset came in terms of individual observations - instead of "n collisions happened
+    in this neighborhood", you have "one collision occured at this specific coordinate at this specific date".
+    This is obviously more useful data - it can be made to do more things - but in order to generate the same map,
+    you will first have to do all of the work of geolocating your points to neighborhoods (not trivial),
+    then aggregating them (by, in this case, taking a count).
+
+    ``aggplot`` handles this work for you. It takes input in the form of observations, and outputs as useful as
+    possible a visualization of their "regional" statistics. What a "region" corresponds to depends on how much
+    geospatial information you can provide.
+
+    If you can't provide *any* geospatial context, ``aggplot`` will output what's known as a quadtree: it will break
+    your data down into recursive squares, and use them to aggregate the data. This is a very experimental format,
+    is very fiddly to make, and has not yet been optimized for speed; but it provides a useful baseline which
+    requires no additional work and can be used to expose interesting geospatial correlations right away. And,
+    if you have enough observations, it can be `a pretty good approximation
+    <../figures/aggplot/aggplot-initial.png>`_ (collisions in New York City pictured).
+
+    Our first few examples are of just such figures. A simple ``aggplot`` quadtree can be generated with just a
+    dataset, a data column of interest, and, optionally, a projection.
 
     .. code-block:: python
 
@@ -881,9 +897,10 @@ def aggplot(df, projection=None,
 
     .. image:: ../figures/aggplot/aggplot-initial.png
 
-    Quadtree decompositions look a bit like abstract paintings, but they do succeed in getting a point across. To
-    get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters, controlling the minimum and
-    maximum number of observations per box, respectively, yourself. Changing the ``cmap`` can also be helpful.
+    To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters, controlling the minimum and
+    maximum number of observations per box, respectively, yourself. In this case we'll also choose a different
+    `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_, using the ``cmap``
+    parameter.
 
     .. code-block:: python
 
@@ -891,10 +908,10 @@ def aggplot(df, projection=None,
 
     .. image:: ../figures/aggplot/aggplot-quadtree.png
 
-    Note that ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may result in
-    spaces without observations, or ones lacking a statistically significant number of observations. This is
-    necessary in order to break up "spaces" that the algorithm would otherwise end on. You can control the
-    maximum number of observations in the holes using the ``nsig`` parameter.
+    ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may result in spaces
+    without observations, or ones lacking a statistically significant number of observations. This is necessary in
+    order to break up "spaces" that the algorithm would otherwise end on. You can control the maximum number of
+    observations in the blank spaces using the ``nsig`` parameter.
 
     .. code-block:: python
 
@@ -902,33 +919,75 @@ def aggplot(df, projection=None,
 
     .. image:: ../figures/aggplot/aggplot-quadtree-tuned.png
 
-    Usually you'll just have to play around with these parameters to get the clearest picture.
+    You'll have to play around with these parameters to get the clearest picture.
 
-    If you can provide some sense of space in the form of a categorical variable, you can get a more readable
-    picture using convex hull -calculated spaces by passing that variable into the ``by`` parameter.
+    Usually, however, observations with a geospatial component will be provided with some form of spatial
+    categorization. In the case of our collisions example, this comes in the form of a postal zip code. With the
+    simple addition of this data column via the ``by`` parameter, our output changes radically, taking advantage of
+    the additional context we now have to sort and aggregate our observations by (hopefully) geospatially
+    meaningful, if still crude, grouped convex hulls.
 
     .. code-block:: python
 
-        gplt.aggplot(collisions[collisions['ZIP CODE'].notnull()], projection=gcrs.PlateCarree(),
-                 hue='LATDEP', by='ZIP CODE', cmap='Greens')
+
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+                     by='BOROUGH')
 
     .. image:: ../figures/aggplot/aggplot-hulls.png
 
-    Finally, if you actually know exactly the geometries that you would like to aggregate by, and can provide a
-    ``GeoSeries`` whose index matches your categorical variable of interest, then you can generate an exact
-    choropleth.
+    Finally, suppose you actually know exactly the geometries that you would like to aggregate by. Provide these in
+    the form of a ``geopandas`` ``GeoSeries``, one whose index matches the values in your ``by`` column (so
+    ``BROOKLYN`` matches ``BROOKLYN`` for example), to the ``geometry`` parameter. Your output will now be an
+    ordinary choropleth.
 
     .. code-block:: python
 
         gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-                     geometry=boroughs_2, by='BOROUGH', agg=np.max)
+                     by='BOROUGH', geometry=boroughs)
 
     .. image:: ../figures/aggplot/aggplot-by.png
 
-    Note also the usage of the ``agg`` parameter, which controls what you mean by the "agg" in ``aggplot``. By
-    default it will be the mean of the observations contained in the polygon, but you can also specify an
-    alternative metric, like the use of ``np.max`` instead here.
+    Observations will be aggregated by average, by default. In our example case, our plot shows that accidents in
+    Manhattan tend to result in significantly fewer injuries than accidents occuring in other boroughs.
 
+    Choose which aggregation to use by passing a function to the ``agg`` parameter.
+
+    .. code-block:: python
+
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+                 geometry=boroughs_2, by='BOROUGH', agg=len)
+
+    .. image:: ../figures/aggplot/aggplot-agg.png
+
+    ``legend`` toggles the legend.
+
+    .. code-block:: python
+
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+                 geometry=boroughs_2, by='BOROUGH', agg=len, legend=False)
+
+    .. image:: ../figures/aggplot/aggplot-legend.png
+
+    Additional keyword arguments are passed to the underlying ``matplotlib.patches.Polygon`` instances
+    (`ref <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+
+    .. code-block:: python
+
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+                 geometry=boroughs_2, by='BOROUGH', agg=len, linewidth=0)
+
+    .. image:: ../figures/aggplot/aggplot-kwargs.png
+
+    Additional keyword arguments for styling the `colorbar <http://matplotlib.org/api/colorbar_api.html>`_ legend are
+    passed using ``legend_kwargs``.
+
+    .. code-block:: python
+
+        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+                     geometry=boroughs_2, by='BOROUGH', agg=len, linewidth=0,
+                     legend_kwargs={'orientation': 'horizontal'})
+
+    .. image:: ../figures/aggplot/aggplot-legend-kwargs.png
     """
     fig = _init_figure(ax, figsize)
 
@@ -2030,6 +2089,8 @@ def sankey(*args, projection=None,
     if k is not None:
         # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+
+        hue = _validate_hue(df, hue)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
