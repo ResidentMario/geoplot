@@ -104,10 +104,10 @@ def pointplot(df, projection=None,
     Examples
     --------
 
-    The ``pointplot`` is a simple `geospatial scatter plot <https://en.wikipedia.org/wiki/Scatter_plot>`_. The
-    expected input is a ``geopandas`` ``GeoDataFrame`` with geometries consisting of ``shapely.geometry.Point``
-    entities. The simplest possible plot can be made by specifying the input data (and, optionally, a
-    `projection <./tutorial/projections.html>`_).
+    The ``pointplot`` is a simple `geospatial scatter plot <https://en.wikipedia.org/wiki/Scatter_plot>`_,
+    with each point corresponding with one observation in your dataset. The expected input is a ``geopandas``
+    ``GeoDataFrame`` with geometries consisting of ``shapely.geometry.Point`` entities. The simplest possible plot
+    can be made by specifying the input data (and, optionally, a `projection <./tutorial/projections.html>`_).
 
     .. code-block:: python
 
@@ -601,7 +601,10 @@ def choropleth(df, projection=None,
     Examples
     --------
 
-    A basic choropleth requires geometry, a ``hue`` variable, and, optionally, a projection.
+    The choropleth is a standard-bearer of the field. To make one yourself, you will need a series of enclosed areas,
+    consisting of ``shapely`` ``Polygon`` or ``MultiPolygon`` entities, and a series of data about them that you
+    would like to express in color. A basic choropleth requires geometry, a ``hue`` variable, and, optionally,
+    a projection.
 
     .. code-block:: python
 
@@ -1155,7 +1158,7 @@ def aggplot(df, projection=None,
 
 def cartogram(df, projection=None,
               scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
-              hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
+              hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
               legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
               extent=None,
               figsize=(8, 6), ax=None,
@@ -1243,6 +1246,11 @@ def cartogram(df, projection=None,
 
     Examples
     --------
+    A cartogram is a plot type which ingests a series of enclosed shapes (``shapely`` ``Polygon`` or ``MultiPolygon``
+    entities, in the ``geoplot`` example) and spits out a view of these shapes in which area is distorted according
+    to the size of some parameter of interest. These are two types of cartograms, contiguous and non-contiguous
+    ones; only the former is implemented in ``geoplot`` at the moment.
+
     A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
     .. code-block:: python
@@ -1336,7 +1344,7 @@ def cartogram(df, projection=None,
     ``cartogram`` also provides the same ``hue`` visual variable parameters provided by e.g. ``pointplot``. Although
     it's possible for ``hue`` and ``scale`` to refer to different aspects of the data, it's strongly recommended
     to use the same data column for both. For more information on ``hue``-related arguments, refer to e.g. the
-    ``pointplot`` `documentation <../pointplot.html>`_.
+    ``pointplot`` `documentation <./pointplot.html>`_.
 
     .. code-block:: python
 
@@ -1516,8 +1524,11 @@ def kdeplot(df, projection=None,
 
     Examples
     --------
-    A basic `kernel density estimate <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ plot specifies data
-    and a projection.
+    Give it a dataset containing a geometry of ``shapely`` ``Point`` observations, and ``kdeplot`` will return a
+    geospatial `kernel density estimate <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ plot
+    showing where they are.
+
+    A basic ``kdeplot`` specified data and, optionally, a projection.
 
     .. code-block:: python
 
@@ -1570,7 +1581,7 @@ def kdeplot(df, projection=None,
     .. image:: ../figures/kdeplot/kdeplot-cmap.png
 
     Oftentimes given the geometry of the location, a "regular" continuous KDEPlot doesn't make sense. We can specify a
-    ``clip`` of iterable geometries, which will be used to trim the KDEPlot (note: if you have set ``shade=True`` as
+    ``clip`` of iterable geometries, which will be used to trim the ``kdeplot`` (note: if you have set ``shade=True`` as
     a parameter you may need to additionally specify ``shade_lowest=False`` to avoid inversion at the edges).
 
     .. code-block:: python
@@ -1735,11 +1746,14 @@ def sankey(*args, projection=None,
     Examples
     --------
     A `Sankey diagram <https://en.wikipedia.org/wiki/Sankey_diagram>`_ is a type of plot useful for visualizing flow
-    through a network. Its most famous historical example is cartographic -
-    `Minard's classic diagram of Napolean's invasion of Russia <https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png>`_.
+    through a network. Minard's `diagram <https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png>`_ of
+    Napolean's ill-fated invasion of Russia is a classical example. A Sankey diagram is useful when you wish to show
+    movement within a network (a `graph <https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)>`_): traffic
+    load a road network, for example, or typical airport traffic patterns.
 
     This plot type is unusual amongst ``geoplot`` types in that it is meant for *two* columns of geography,
-    resulting in a slightly different API. A basic ``sankey`` specifies data, origins, and destinations.
+    resulting in a slightly different API. A basic ``sankey`` specifies data, ``start`` points, ``end`` points, and,
+    optionally, a projection.
 
     .. code-block:: python
 
@@ -1772,8 +1786,7 @@ def sankey(*args, projection=None,
 
     You may be wondering why the lines are curved. By default, the paths followed by the plot are the *actual*
     shortest paths between those two points, in the spherical sense. This is known as `great circle distance
-    <https://en.wikipedia.org/wiki/Great-circle_distance>`_. We can see this more clearly if we temporarily switch
-    to an ortographic projection.
+    <https://en.wikipedia.org/wiki/Great-circle_distance>`_. We can see this clearly in an ortographic projection.
 
     .. code-block:: python
 
@@ -1781,6 +1794,7 @@ def sankey(*args, projection=None,
                  extent=(-180, 180, -90, 90))
         ax.set_global()
         ax.coastlines()
+        ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-greatest-circle-distance.png
 
@@ -1789,16 +1803,25 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        from cartopy.crs import PlateCarree
+        import cartopy.ccrs as ccrs
         ax = gplt.sankey(projection=gcrs.PlateCarree(), start=network['from'], end=network['to'],
-                         path=PlateCarree())
+                         path=ccrs.PlateCarree())
         ax.set_global()
         ax.coastlines()
 
 
-    .. image:: ../figures/sankey/sankey-path.png
+    .. image:: ../figures/sankey/sankey-path-projection.png
 
-    User-provided custom pathing, a planned future feature, is still a work in progress.
+    One of the most powerful ``sankey`` features is that if your data has custom paths, you can use those instead
+    with the ``path`` parameter.
+
+    .. code-block:: python
+
+        gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(), scale='aadt',
+                limits=(0.1, 10))
+
+
+    .. image:: ../figures/sankey/sankey-path.png
 
     The ``hue`` parameter colorizes paths based on data.
 
