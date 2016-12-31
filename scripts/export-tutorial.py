@@ -17,6 +17,7 @@ for notebook in tutorial_notebooks:
 # Get the list of generated files.
 gened_files = [f for f in os.listdir(".") if (".py" not in f)]
 
-# Move them to where they need to be.
+# Move them to where they need to be. Lowercase the filenames along the way, otherwise it causes issues once the
+# files are hosted.
 for file in gened_files:
-    os.rename(file, "../docs/tutorial/{0}".format(file))
+    os.rename(file, "../docs/tutorial/{0}".format(file.lower()))
