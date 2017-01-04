@@ -3,11 +3,9 @@ Working with Projections
 ------------------------
 
 `Projections <https://en.wikipedia.org/wiki/Map_projection>`__ are
-``geoplot``'s killer feature.
-
-Our explaination is by example. Throughout this segment of the tutorial
-we'll use the ``polyplot`` plot type, which faithfully displays whatever
-geometry put into it.
+``geoplot``'s killer feature. Our explaination is by example. Throughout
+this segment of the tutorial we'll use the ``polyplot`` plot type, which
+faithfully displays whatever geometry put into it.
 
 .. code:: python
 
@@ -24,24 +22,19 @@ geometry put into it.
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_1_0.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_1_0.png
 
 
-This map is an example of an **unprojected plot**: it faithfully
-reproduces exact latitude and longitudes as Cartesian coordinates on a
-plane.
-
-But remember, the Earth is not a flat surface; it's a sphere. This isn't
-a map of the United States that you'd seen in print anywhere because it
-badly distorts both of the `two
+This map is an example of an unprojected plot: it reproduces our
+coordinates as if they were on a flat Cartesian plane. But remember, the
+Earth is not a flat surface; it's a sphere. This isn't a map of the
+United States that you'd seen in print anywhere because it badly
+distorts both of the `two
 criteria <http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/Map%20coordinate%20systems/How%20to%20choose%20a%20projection.htm>`__
 most projections are evaluated on: *shape* and *area*.
 
-``geoplot`` can render both projected and unprojected plots.
-
-Unprojected plots do have their uses, however. Most immediately, for
-sufficiently small areas, the amount of distortion is very small. This
-map of New York City, for example, is reasonably accurate:
+For sufficiently small areas, the amount of distortion is very small.
+This map of New York City, for example, is reasonably accurate:
 
 .. code:: python
 
@@ -59,19 +52,18 @@ map of New York City, for example, is reasonably accurate:
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_3_1.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_3_1.png
 
 
 More consequentially, ``geoplot`` returns unprojected plots as pure
 ``matplotlib`` ``AxesSubplot`` objects, while projected plots, which
 require heavy-lifting in the form of coordinate transformations, are
-returned as ``cartopy`` ``GeoAxesSubplot`` objects.
-
-To understand why this matters, let's first take a look at how we
-generate projected plots, and what they look like.
+returned as ``cartopy`` ``GeoAxesSubplot`` objects. To understand why
+this matters, let's first take a look at how we generate projected
+plots, and what they look like.
 
 In the case of the contiguous United States, the projection most often
-used is known as the `Albers equal area
+used is known as the `Albers Equal Area
 projection <https://en.wikipedia.org/wiki/Albers_projection>`__. This
 projection works by wrapping the Earth around a cone, one that's
 particularly well optimized for locations near the middle of the
@@ -86,7 +78,7 @@ poles). Here's what the world looks like in this projection:
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_5_0.jpeg
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_5_0.jpg
 
 
 
@@ -99,33 +91,13 @@ expect input to come from the ``geoplot.crs`` module, imported as
 
     import geoplot.crs as gcrs
     
-    # ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717)); pass
+    # ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717))
+    # pass
     gplt.polyplot(usa, projection=gcrs.AlbersEqualArea())
 
 
 
-
-.. parsed-literal::
-
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x113fbef98>
-
-
-
-
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_7_1.png
-
-
-.. code:: python
-
-    ax.get_ylim()
-
-
-
-
-.. parsed-literal::
-
-    (-990405.63456327142, 1710695.8163137436)
-
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_7_0.png
 
 
 ``geoplot`` projections are actually a very thin wrapper on
@@ -156,26 +128,18 @@ projection, our skew is fixed!
 
 .. code:: python
 
+    # ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))\
+    #         .set_ylim((-1597757.3894385984, 1457718.4893930717))
+    # pass
     gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))
 
 
 
-
-.. parsed-literal::
-
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11561c438>
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_9_0.png
 
 
-
-
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_10_1.png
-
-
-A not cut-off (again, work in progress—you can fix this issue by
-specifying
-``ax = plt.gca(); ax.set_ylim((-1597757.3894385984, 1457718.4893930717))``)
-version of this is the version of the map of the United States that
-you're probably most familiar with.
+This is the version of the map of the United States that you're probably
+most familiar with.
 
 Of course, why stop there? I encourage you to experiment with some of
 the crazier projections (like ``Gnomonic``) that ``cartopy`` provides.
@@ -200,35 +164,26 @@ demonstrative exame is provided below.
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_12_1.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_11_1.png
 
 
 The gallery has an `example <../../examples/los-angeles-flights.html>`__
 that further demonstrates these globes and the things you can do with
 them.
 
-Now, back to where we left off earlier re: projected versus unprojected
-plots. Recall that ``geoplot`` returns unprojected plots as pure
+Now, recall that ``geoplot`` returns unprojected plots as pure
 ``matplotlib`` ``AxesSubplot`` objects, while projected plots are
-returned as ``cartopy`` ``GeoAxesSubplot`` objects.
+returned as ``cartopy`` ``GeoAxesSubplot`` objects. But ``cartopy``
+``GeoAxesSublot`` objects cannot be colocated with ``matplotlib``
+``AxesSubplot`` objects, nor vice versa! Once you have a graph, you're
+stuck in whatever "ecosystem" you chose to be in at runtime. This is the
+major reason why we even bother providing an option to get
+"inferior-looking" ``AxesSubplot`` output at all: because it can
+integrated with other "stuff" in the wider ``matplotlib`` ecosystem.
 
-But ``cartopy`` ``GeoAxesSublot`` objects cannot be colocated with
-``matplotlib`` ``AxesSubplot`` objects, nor vice versa!
-
-Once you have a graph, you're stuck in whatever "ecosystem" you chose to
-be in at runtime. This is the major reason why we even bother providing
-an option to get "inferior-looking" ``AxesSubplot`` output at all:
-because it can integrated with other "stuff" in the wider ``matplotlib``
-ecosystem.
-
-The biggest such win, in my opinion, is ``mplleaflet``, a small library
-which allows you to place ``matplotlib`` plots on an interactive
-`Leaflet <http://leafletjs.com/>`__ webmap.
-
-And while ``cartopy`` projected plots are almost universially
-better-looking on their own, most of the tools out there are
-``matplotlib``-based. This is super handy, and looks something like
-this:
+The biggest reason to ask for ``matplotlib`` output is ``mplleaflet``, a
+small library which allows you to place ``matplotlib`` plots on an
+interactive `Leaflet <http://leafletjs.com/>`__ webmap:
 
 .. code:: python
 
@@ -243,7 +198,7 @@ this:
 
 
 
-.. image:: ../../scripts/Projections_files/../../scripts/Projections_14_0.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_13_0.png
 
 
 

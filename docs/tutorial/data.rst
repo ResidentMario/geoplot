@@ -105,9 +105,9 @@ accessible using the ``geometry`` attribute:
 
 
 
-That geometry is stored with reference to some kind of `**coordinate
+That geometry is stored with reference to some kind of `coordinate
 reference
-system** <https://en.wikipedia.org/wiki/Spatial_reference_system>`__, or
+system <https://en.wikipedia.org/wiki/Spatial_reference_system>`__, or
 CRS. You can extract what CRS your polygons are stored in using the
 ``crs`` attribute:
 
@@ -253,7 +253,7 @@ Island State Plane coordinate reference system:
 
 The file we just read in provided embedded information about its
 coordinate reference system, which ``geopandas`` stores as a
-```proj4`` <https://github.com/OSGeo/proj.4>`__ string:
+`proj4 <https://github.com/OSGeo/proj.4>`__ string:
 
 .. code:: python
 
@@ -307,8 +307,7 @@ Now all of our building footprints are in ordinary coordinates!
 
 
 You should also know, at a minimum, that all of these geometries are
-always ```shapely`` <http://toblerity.org/shapely/manual.html>`__
-objects:
+always `shapely <http://toblerity.org/shapely/manual.html>`__ objects:
 
 .. code:: python
 
