@@ -24,3 +24,30 @@ img {
 .col-md-12.content {
     /* CSS for the text block goes here. */
 }
+.highlight {
+    margin-top:15px;
+    margin-bottom:15px;
+}
+p {
+    margin-top:15px;
+    margin-bottom:15px;
+}
+/* DataFrame CSS */
+.dataframe * {
+    border-color: #c0c0c0 !important;
+    padding: 0.5em;
+}
+table {
+    margin-bottom:3em;
+}
+.dataframe th{background: #eee;}
+.dataframe td {
+    background: #fff;
+    text-align: right;
+    min-width: 5em;
+}
+.dataframe-summary-row tr:last-child,
+.dataframe-summary-col td:last-child{
+    background: #eee;
+    font-weight: 500;
+}
