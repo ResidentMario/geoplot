@@ -5,7 +5,10 @@ import numpy as np
 import shapely
 import geopandas as gpd
 import pandas as pd
-from sklearn.cluster import KMeans
+try:
+    from sklearn.cluster import KMeans
+except ImportError:  # Optional dependency, only used for development.
+    pass
 
 
 def gaussian_points(loc=(0, 0), scale=(10, 10), n=100):
