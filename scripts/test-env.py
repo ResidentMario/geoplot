@@ -2,7 +2,7 @@
 This script tests whether the current environment works correctly or not.
 """
 
-import sys; sys.path.insert(0, '../geoplot/')
+import sys; sys.path.insert(0, '../')
 import geoplot as gplt
 from geoplot import crs as gcrs
 import geopandas as gpd
