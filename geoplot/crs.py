@@ -41,6 +41,7 @@ class Mercator:
 
     def _as_mpl_axes(self): return _as_mpl_axes(self)
 
+
 class Miller:
     def __init__(self, **kwargs): self.args = kwargs
 
