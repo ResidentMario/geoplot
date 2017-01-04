@@ -12,7 +12,7 @@ import geopandas as gpd
 
 # Fiona/Shapely/Geopandas test.
 cities = gpd.read_file("../data/cities/citiesx010g.shp")
-boroughs = gpd.read_file("../data/nyc_boroughs/boroughs.geojson")
+census_tracts = gpd.read_file("../data/nyc_census_tracts/census_tracts_2010.geojson")
 
 
 # Cartopy test.
