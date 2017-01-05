@@ -18,14 +18,13 @@ console:
 
     # Add the conda-forge channel.
     conda config --add channels conda-forge
-    # Initialize an environment.
+    # Initialize and enter an environment.
     conda create --name YOUR_ENVIRONMENT_NAME seaborn cartopy geopandas python=3.5
+    source activate YOUR_ENVIRONMENT_NAME
     # Install geoplot.
     pip install geoplot
     # (Optionally) drop the conda-forge channel
     conda config --remove channels conda-forge
-    # Enter the environment.
-    source activate YOUR_ENVIRONMENT_NAME
 
 Mac OSX
 -------
@@ -45,8 +44,6 @@ console:
     # Install geopandas and (finally) geoplot via pip, *not* conda!
     pip install geopandas
     pip install geoplot
-    # Enter the environment.
-    source activate YOUR_ENVIRONMENT_NAME
 
 
 Windows
