@@ -408,6 +408,7 @@ def pointplot(df, projection=None,
 def polyplot(df, projection=None,
              extent=None,
              figsize=(8, 6), ax=None,
+             edgecolor='black',
              facecolor='None', **kwargs):
     """
     Trivially plots whatever geometries are passed to it. Mostly meant to be used in concert with other,
@@ -422,13 +423,6 @@ def polyplot(df, projection=None,
         e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
         ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-        an extrema tuple is passed---useful if you want to focus on a particular area, for example, or exclude certain
-        outliers---that input will be used instead.
-    facecolor : matplotlib color, optional
-        The color that will be used for the fill "inside" of the polygon. This parameter defaults to the string
-        ``'None'``, which creates transparent polygons.
     extent : None or (minx, maxx, miny, maxy), optional
         If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
         that input will be used instead.
@@ -515,15 +509,15 @@ def polyplot(df, projection=None,
     if projection:
         for geom in df.geometry:
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=facecolor, **kwargs)
+            ax.add_feature(features, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
     else:
         for geom in df.geometry:
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=facecolor, **kwargs)
+                    feature = descartes.PolygonPatch(subgeom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
                     ax.add_patch(feature)
             except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=facecolor, **kwargs)
+                feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
                 ax.add_patch(feature)
 
     return ax
