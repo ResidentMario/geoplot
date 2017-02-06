@@ -2230,7 +2230,6 @@ def _init_figure(ax, figsize):
         fig = plt.figure(figsize=figsize)
         return fig
 
-
 def _get_envelopes_min_maxes(envelopes):
     """
     Returns the extrema of the inputted polygonal envelopes. Used for setting chart extent where appropriate. Note
