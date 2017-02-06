@@ -9,7 +9,7 @@ bit about the format it expects to recieves its data in: a ``geopandas``
 The ``GeoDataFrame`` is an augmented version of a ``pandas``
 ``DataFrame`` with an attached geometry:
 
-.. code:: python
+.. code:: ipython3
 
     import pandas as pd; pd.set_option('max_columns', 6)  # Unclutter display.
     
@@ -87,7 +87,7 @@ features for dealing with geometry not present in the former. The most
 obvious of these is the addition of a column for storing geometries,
 accessible using the ``geometry`` attribute:
 
-.. code:: python
+.. code:: ipython3
 
     boroughs.geometry
 
@@ -111,7 +111,7 @@ system <https://en.wikipedia.org/wiki/Spatial_reference_system>`__, or
 CRS. You can extract what CRS your polygons are stored in using the
 ``crs`` attribute:
 
-.. code:: python
+.. code:: ipython3
 
     boroughs.crs
 
@@ -148,7 +148,7 @@ the dataset which powers some pretty amazing visualizations, like
 `Bklynr's Brooklyn building age
 map <http://bklynr.com/block-by-block-brooklyns-past-and-present/>`__.
 
-.. code:: python
+.. code:: ipython3
 
     manhattan_buildings = gpd.read_file('../../data/manhattan_mappluto/MN_Dcp_Mappinglot.shp')
     manhattan_buildings.head()
@@ -233,7 +233,7 @@ map <http://bklynr.com/block-by-block-brooklyns-past-and-present/>`__.
 But, unlike our easy coordinates above, this data is stored in the Long
 Island State Plane coordinate reference system:
 
-.. code:: python
+.. code:: ipython3
 
     manhattan_buildings.geometry.head()
 
@@ -255,7 +255,7 @@ The file we just read in provided embedded information about its
 coordinate reference system, which ``geopandas`` stores as a
 `proj4 <https://github.com/OSGeo/proj.4>`__ string:
 
-.. code:: python
+.. code:: ipython3
 
     manhattan_buildings.crs
 
@@ -282,13 +282,13 @@ This is required because it's so easy to do: to convert your data from
 one CRS to another, you can just use the ``geopandas`` ``to_crs``
 method:
 
-.. code:: python
+.. code:: ipython3
 
     manhattan_buildings = manhattan_buildings.to_crs(epsg=4326)
 
 Now all of our building footprints are in ordinary coordinates!
 
-.. code:: python
+.. code:: ipython3
 
     manhattan_buildings.geometry.head()
 
@@ -309,7 +309,7 @@ Now all of our building footprints are in ordinary coordinates!
 You should also know, at a minimum, that all of these geometries are
 always `shapely <http://toblerity.org/shapely/manual.html>`__ objects:
 
-.. code:: python
+.. code:: ipython3
 
     type(manhattan_buildings.geometry.iloc[0])
 
@@ -322,7 +322,7 @@ always `shapely <http://toblerity.org/shapely/manual.html>`__ objects:
 
 
 
-.. code:: python
+.. code:: ipython3
 
     type(boroughs.geometry.iloc[0])
 
@@ -356,7 +356,7 @@ were a `Shapefile <https://en.wikipedia.org/wiki/Shapefile>`__. What if
 we have geospatial data embedded in an ordinary ``CSV`` or ``JSON``
 file, which read into an ordinary ``pandas`` ``DataFrame``?
 
-.. code:: python
+.. code:: ipython3
 
     collisions = pd.read_csv("../../data/nyc_collisions/NYPD_Motor_Vehicle_Collisions.csv", index_col=0).sample(5000)
     collisions = collisions[collisions['LOCATION'].notnull()]
@@ -449,7 +449,7 @@ file, which read into an ordinary ``pandas`` ``DataFrame``?
 
 
 
-.. code:: python
+.. code:: ipython3
 
     collisions[['LATITUDE', 'LONGITUDE']].head()
 
@@ -508,7 +508,7 @@ In that case we can import ``shapely`` directly, use it to define our
 own geometries, using the data from our ``DataFrame``, and use that to
 initialize a ``GeoDataFrame``.
 
-.. code:: python
+.. code:: ipython3
 
     import shapely
     
@@ -534,7 +534,7 @@ initialize a ``GeoDataFrame``.
 From there we pass this iterable of geometries to the ``geometry``
 property of the ``GeoDataFrame`` initializer, and we're done!
 
-.. code:: python
+.. code:: ipython3
 
     collisions_geocoded = gpd.GeoDataFrame(collisions, geometry=collision_points)
     collisions_geocoded.head(5)
@@ -626,7 +626,7 @@ property of the ``GeoDataFrame`` initializer, and we're done!
 
 
 
-.. code:: python
+.. code:: ipython3
 
     type(collisions_geocoded)
 

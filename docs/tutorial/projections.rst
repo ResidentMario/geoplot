@@ -7,7 +7,7 @@ Working with Projections
 this segment of the tutorial we'll use the ``polyplot`` plot type, which
 faithfully displays whatever geometry put into it.
 
-.. code:: python
+.. code:: ipython3
 
     import sys; sys.path.insert(0, '../../')  # ignore this
     import geopandas as gpd
@@ -36,7 +36,7 @@ most projections are evaluated on: *shape* and *area*.
 For sufficiently small areas, the amount of distortion is very small.
 This map of New York City, for example, is reasonably accurate:
 
-.. code:: python
+.. code:: ipython3
 
     boroughs = gpd.read_file("../../data/nyc_boroughs/boroughs.geojson")
     
@@ -68,26 +68,14 @@ projection <https://en.wikipedia.org/wiki/Albers_projection>`__. This
 projection works by wrapping the Earth around a cone, one that's
 particularly well optimized for locations near the middle of the
 Northern Hemisphere (and particularly poorly for locations at the
-poles). Here's what the world looks like in this projection:
-
-.. code:: python
-
-    from IPython.display import Image
-    Image("./figures/albers-equal-area-world.jpg")
-
-
-
-
-.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_5_0.jpg
-
-
+poles).
 
 To place our plot in a projection, we need to pass the projection of
 interest to the ``projection`` keyword parameter. ``geoplot`` functions
 expect input to come from the ``geoplot.crs`` module, imported as
 ``gcrs`` by convention.
 
-.. code:: python
+.. code:: ipython3
 
     import geoplot.crs as gcrs
     
@@ -97,7 +85,7 @@ expect input to come from the ``geoplot.crs`` module, imported as
 
 
 
-.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_7_0.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_6_0.png
 
 
 ``geoplot`` projections are actually a very thin wrapper on
@@ -126,7 +114,7 @@ is 39°50′N 98°35′W. If we provide approximately these coordinates as
 ``central_latitude`` and ``central_longitude`` coordinates to our
 projection, our skew is fixed!
 
-.. code:: python
+.. code:: ipython3
 
     # ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))\
     #         .set_ylim((-1597757.3894385984, 1457718.4893930717))
@@ -135,7 +123,7 @@ projection, our skew is fixed!
 
 
 
-.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_9_0.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_8_0.png
 
 
 This is the version of the map of the United States that you're probably
@@ -147,7 +135,7 @@ Of particular value are global projections, which provide a way of
 visualizing your data on top of an actual for-real sphere—neat! A
 demonstrative exame is provided below.
 
-.. code:: python
+.. code:: ipython3
 
     ax = gplt.polyplot(usa, projection=gcrs.Orthographic())
     ax.set_global()
@@ -164,7 +152,7 @@ demonstrative exame is provided below.
 
 
 
-.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_11_1.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_10_1.png
 
 
 The gallery has an `example <../../examples/los-angeles-flights.html>`__
@@ -185,7 +173,7 @@ The biggest reason to ask for ``matplotlib`` output is ``mplleaflet``, a
 small library which allows you to place ``matplotlib`` plots on an
 interactive `Leaflet <http://leafletjs.com/>`__ webmap:
 
-.. code:: python
+.. code:: ipython3
 
     # Code:
     # import mplleaflet
@@ -198,7 +186,7 @@ interactive `Leaflet <http://leafletjs.com/>`__ webmap:
 
 
 
-.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_13_0.png
+.. image:: ../../docs/tutorial/projections_files/../../docs/tutorial/projections_12_0.png
 
 
 
