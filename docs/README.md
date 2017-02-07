@@ -1,3 +1,5 @@
+### Building
+
 The documentation for `geoplot` is in the form of a fairly complicated `sphinx` website, with a bunch of 
 enabled extensions (most prominently `autosummary`) and a palette swap (for the `sphinx-bootstrap-theme`).
 
@@ -48,3 +50,9 @@ notebooks and then exported to ReStructured Text using `nbconvert.` This output 
     
 Once you're done making changes to documentation, `cd` to `/docs` and run `make html` (or `make html clean`, if 
 you've made CSS changes) to rebuild the docs.
+
+### Publishing
+
+I publish the docs as a set of directory-hosted static pages in a `/geoplot` sub-path on my personal website. To get 
+that hosted I copy-paste the entire `/docs` directory into a renamed `/geoplot_docs` top-level directory on the 
+`mysite` repository (`docs` alone is ambiguous).

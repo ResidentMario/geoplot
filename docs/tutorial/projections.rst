@@ -193,6 +193,3 @@ interactive `Leaflet <http://leafletjs.com/>`__ webmap:
 For an interactive version, see `this
 example <../examples/boston-airbnb-kde.html>`__ or `this
 one <../examples/minard-napoleon-russia.html>`__ from the gallery.
-
-`Click here to continue to the next section of the tutorial:
-"Plotting" <.>`__.
