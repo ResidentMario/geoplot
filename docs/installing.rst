@@ -26,5 +26,5 @@ Then run ``conda install geoplot`` and you're done.
 Windows
 -------
 
-Unforunately ``geoplot`` is not available on Windows yet due to `a irresolvable dependency issue <https://github.com/SciTools/cartopy/issues/805>`.
+Unforunately ``geoplot`` is not available on Windows yet due to `a irresolvable dependency issue <https://github.com/SciTools/cartopy/issues/805>`_.
 Sorry.
