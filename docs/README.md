@@ -45,3 +45,6 @@ notebooks and then exported to ReStructured Text using `nbconvert.` This output 
     ```
     
     All this isn't ideal, but it works for now.
+    
+Once you're done making changes to documentation, `cd` to `/docs` and run `make html` (or `make html clean`, if 
+you've made CSS changes) to rebuild the docs.
