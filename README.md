@@ -51,4 +51,4 @@ it’s a format that’s well-incorporated by other tools.
 * **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data
  easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
 
-Installation is simple with `conda install geoplot`. [See the documentation for help getting started](http://www.residentmar.io/geoplot/index.html).
+Installation is simple with `conda install geoplot -c conda-forge`. [See the documentation for help getting started](http://www.residentmar.io/geoplot/index.html).
