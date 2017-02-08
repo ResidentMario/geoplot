@@ -9,7 +9,7 @@
  height="150" width="150">
 </a>
 
-<a href=http://www.residentmar.io/geoplot/examples/nyc-collision-factors.html>
+<a href=http://www.residentmar.io/geoplot/examples/los-angeles-flights.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb.png"
  height="150" width="150">
 </a>
