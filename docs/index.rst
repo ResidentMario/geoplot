@@ -49,7 +49,8 @@ Geoplot: geospatial data visualization
 
     <span style="font-weight:bold; font-size:28px; margin-bottom:1em">About</span>
 
-``geoplot`` is a high-level Python geospatial plotting library. It comes with the following features:
+``geoplot`` is a high-level Python geospatial plotting library. It's an extension to ``cartopy`` and ``matplotlib``
+which makes mapping easy: like ``seaborn`` for geospatial. It comes with the following features:
 
 * **High-level plotting API**: ``geoplot`` is cartographic plotting for the 90% of use cases. All of the standard-bearermaps that you’ve probably seen in your geography textbook are easily accessible.
 
