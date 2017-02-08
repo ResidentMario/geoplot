@@ -4,12 +4,12 @@
 (https://pypi.python.org/pypi/geoplot/)-->
 
 <div class="row">
-<a href=.>
+<a href=http://www.residentmar.io/geoplot/examples/nyc-collision-factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors-thumb.png"
  height="150" width="150">
 </a>
 
-<a href=.>
+<a href=http://www.residentmar.io/geoplot/examples/nyc-collision-factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb.png"
  height="150" width="150">
 </a>
@@ -21,17 +21,17 @@ height="150" width="150">
 </a>
 -->
 
-<a href=.>
+<a href=http://www.residentmar.io/geoplot/examples/usa-city-elevations.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/usa-city-elevations-thumb.png"
  height="150">
 </a>
 
-<a href=.>
+<a href=http://www.residentmar.io/geoplot/examples/nyc-parking-tickets.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb.png"
  height="150" width="150">
 </a>
 
-<a href=.>
+<a href=http://www.residentmar.io/geoplot/examples/dc-street-network.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb.png"
 height="150" width="150">
 </a>
@@ -39,7 +39,8 @@ height="150" width="150">
 </div>
 
 
-``geoplot`` is a high-level Python geospatial plotting library. It comes with the following features:
+``geoplot`` is a high-level Python geospatial plotting library. It's an extension to `cartopy` and `matplotlib` 
+which makes mapping easy: like `seaborn` for geospatial. It comes with the following features:
 
 * **High-level plotting API**: geoplot is cartographic plotting for the 90% of use cases. All of the standard-bearer
 maps that you’ve probably seen in your geography textbook are easily accessible.
