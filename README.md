@@ -1,4 +1,4 @@
-## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-alpha-red.svg)
+## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-beta-yellow.svg)
 
 <!-- [![PyPi version](https://img.shields.io/pypi/v/missingno.svg)]
 (https://pypi.python.org/pypi/geoplot/)-->
