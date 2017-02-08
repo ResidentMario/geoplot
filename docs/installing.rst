@@ -18,9 +18,9 @@ Without Conda
 +++++++++++++
 
 Things are much trickier if you don't have access to ``conda``, for whatever reason. You will need
-``matplotlib``, ``seaborn``, the ``proj4`` (`docs <http://proj4.org/>`_) and ``GEOS`` (`docs <https://trac.osgeo
-.org/geos/>`_) external libraries, and ``cartopy`` (which relies on ``proj4`` and ``GEOS``). Here's an approximate
-code path:
+``matplotlib``, ``seaborn``, ``geopandas``, the ``proj4`` (`docs <http://proj4.org/>`_) and ``GEOS`` (`docs
+<https://trac.osgeo.org/geos/>`_) external libraries, and ``cartopy`` (which relies on ``proj4`` and ``GEOS``).
+Here's an approximate code path:
 
 .. code-block:: bash
 
@@ -34,9 +34,9 @@ code path:
     # Install shapely with the no-binary option.
     # See https://github.com/Toblerity/Shapely/issues/435
     pip install --no-binary shapely
-    # Install cartopy.
+    # Install the rest.
+    pip install geopandas
     pip install cartopy
-    # Install geoplot.
     pip install geoplot
 
 It's difficult to succeed installing this way, due to conflicts deep within the stack with reference to the C
