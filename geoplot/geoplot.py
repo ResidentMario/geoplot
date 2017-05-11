@@ -392,7 +392,7 @@ def pointplot(df, projection=None,
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale" or hue is None):
-            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
+            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs,  map_kwargs=kwargs)
     else:
         sizes = kwargs.pop('s') if 's' in kwargs.keys() else 20
 
@@ -1390,7 +1390,7 @@ def cartogram(df, projection=None,
 
     # Create a legend, if appropriate.
     if legend:
-        _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
+        _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs,  map_kwargs=kwargs)
 
     # Validate hue input.
     hue = _validate_hue(df, hue)
@@ -2153,7 +2153,7 @@ def sankey(*args, projection=None,
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale"):
-            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs)
+            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs,  map_kwargs=kwargs)
     else:
         widths = [1] * n  # pyplot default
 
@@ -2508,7 +2508,7 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
         ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
 
-def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
+def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs, map_kwargs):
     """
     Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
 
@@ -2532,6 +2532,8 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
         is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
         finicky.
+    map_kwargs : dict
+        Vis properties from the original map.
 
     Returns
     -------
@@ -2545,14 +2547,16 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         display_values = np.linspace(np.max(values), np.min(values), num=5)
     display_labels = legend_labels if (legend_labels is not None) else display_values
 
+    if map_kwargs is None:
+        map_kwargs = dict()
     # Paint patche s.
     patches = []
     for value in display_values:
-        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
+        patches.append(mpl.lines.Line2D([0], [0], linestyle=map_kwargs.get('linestyle', 'None'),
                        marker="o",
                        markersize=(20*scale_func(value))**(1/2),
-                       markerfacecolor='None'))
-    if not legend_kwargs: legend_kwargs = dict()
+                       markerfacecolor=map_kwargs.get('markerfacecolor', 'None')))
+    if legend_kwargs is None: legend_kwargs = dict()
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
 
 
