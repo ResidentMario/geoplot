@@ -2150,7 +2150,7 @@ def sankey(*args, projection=None,
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
 
-    if 'solid_capstyle' not in kwargs.keys():  # not the best place, though
+    if 'solid_capstyle' not in kwargs:  # not the best place but want to pass it to _paint_carto_legend
         kwargs['solid_capstyle'] = 'round'
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
@@ -2209,6 +2209,7 @@ def sankey(*args, projection=None,
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale"):
+
             _paint_sankey_legend(ax, scalar_values, legend_values, legend_labels, dscale,
                                  legend_kwargs=legend_kwargs, map_kwargs=map_kwargs)
     else:
@@ -2230,6 +2231,8 @@ def sankey(*args, projection=None,
     if 'linewidth' in kwargs.keys():
         widths = [kwargs['linewidth']]*n
         kwargs.pop('linewidth')
+
+
 
     if projection:
         # Duck test plot. The first will work if a valid transformation is passed to ``path`` (e.g. we are in the
