@@ -295,6 +295,8 @@ def pointplot(df, projection=None,
     # Initialize the figure, if one hasn't been initialized already.
     fig = _init_figure(ax, figsize)
 
+    map_kwargs = kwargs.copy()
+
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
@@ -331,18 +333,21 @@ def pointplot(df, projection=None,
             legend_var = "scale"
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
-    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    # based on whether or not ``k`` is specified (``hue`` must be specified
+    # for either to work).
     if k is not None:
         # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
         if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            cmap, categories, hue_values = _discrete_colorize(
+                categorical, hue, scheme, k, cmap, vmin, vmax)
             colors = [cmap.to_rgba(v) for v in hue_values]
 
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+                _paint_hue_legend(ax, categories, cmap,
+                                  legend_labels, legend_kwargs)
         else:
             if 'color' not in kwargs.keys():
                 colors = ['steelblue']*len(df)
@@ -350,6 +355,7 @@ def pointplot(df, projection=None,
                 colors = [kwargs['color']]*len(df)
                 kwargs.pop('color')
     elif k is None and hue is not None:
+
         # Continuous colormap code path.
         hue_values = hue
         cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
@@ -359,7 +365,8 @@ def pointplot(df, projection=None,
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    # Check if the ``scale`` parameter is filled, and use it to fill a
+    # ``values`` name.
     if scale:
         if isinstance(scale, str):
             scalar_values = df[scale]
@@ -370,7 +377,9 @@ def pointplot(df, projection=None,
         dmin, dmax = np.min(scalar_values), np.max(scalar_values)
         if not scale_func:
             dslope = (limits[1] - limits[0]) / (dmax - dmin)
-            if np.isinf(dslope):  # Edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
+            # Edge case: if dmax, dmin are <=10**-30 or so, will overflow and
+            # eval to infinity.
+            if np.isinf(dslope):
                 raise ValueError("The data range provided to the 'scale' variable is too small for the default "
                                  "scaling function. Normalize your data or provide a custom 'scale_func'.")
             dscale = lambda dval: limits[0] + dslope * (dval - dmin)
@@ -384,7 +393,8 @@ def pointplot(df, projection=None,
         # When a scale is applied, large points will tend to obfuscate small ones. Bringing the smaller
         # points to the front (by plotting them last) is a necessary intermediate step, which is what this bit of
         # code does.
-        sorted_indices = np.array(sorted(enumerate(sizes), key=lambda tup: tup[1])[::-1])[:,0].astype(int)
+        sorted_indices = np.array(sorted(enumerate(sizes), key=lambda tup: tup[1])[
+                                  ::-1])[:, 0].astype(int)
         xs = np.array(xs)[sorted_indices]
         ys = np.array(ys)[sorted_indices]
         sizes = np.array(sizes)[sorted_indices]
@@ -392,13 +402,16 @@ def pointplot(df, projection=None,
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale" or hue is None):
-            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs,  map_kwargs=kwargs)
+            _paint_carto_legend(ax, scalar_values, legend_values,
+                                legend_labels, dscale,
+                                legend_kwargs=legend_kwargs, map_kwargs=map_kwargs)
     else:
         sizes = kwargs.pop('s') if 's' in kwargs.keys() else 20
 
     # Draw.
     if projection:
-        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
+        ax.scatter(xs, ys, transform=ccrs.PlateCarree(),
+                   c=colors, s=sizes, **kwargs)
     else:
         ax.scatter(xs, ys, c=colors, s=sizes, **kwargs)
 
@@ -509,15 +522,18 @@ def polyplot(df, projection=None,
     if projection:
         for geom in df.geometry:
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+            ax.add_feature(features, facecolor=facecolor,
+                           edgecolor=edgecolor, **kwargs)
     else:
         for geom in df.geometry:
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+                    feature = descartes.PolygonPatch(
+                        subgeom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
                     ax.add_patch(feature)
             except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+                feature = descartes.PolygonPatch(
+                    geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
                 ax.add_patch(feature)
 
     return ax
@@ -726,7 +742,8 @@ def choropleth(df, projection=None,
         raise ValueError("No 'hue' specified.")
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
-    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    # based on whether or not ``k`` is specified (``hue`` must be specified
+    # for either to work).
     if k is not None:
         # Categorical colormap code path.
 
@@ -734,12 +751,14 @@ def choropleth(df, projection=None,
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
         if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            cmap, categories, hue_values = _discrete_colorize(
+                categorical, hue, scheme, k, cmap, vmin, vmax)
             colors = [cmap.to_rgba(v) for v in hue_values]
 
             # Add a legend, if appropriate.
             if legend:
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+                _paint_hue_legend(ax, categories, cmap,
+                                  legend_labels, legend_kwargs)
         else:
             colors = ['steelblue']*len(df)
     elif k is None and hue is not None:
@@ -761,10 +780,12 @@ def choropleth(df, projection=None,
         for color, geom in zip(colors, df.geometry):
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
+                    feature = descartes.PolygonPatch(
+                        subgeom, facecolor=color, **kwargs)
                     ax.add_patch(feature)
             except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=color, **kwargs)
+                feature = descartes.PolygonPatch(
+                    geom, facecolor=color, **kwargs)
                 ax.add_patch(feature)
 
     return ax
@@ -1025,7 +1046,8 @@ def aggplot(df, projection=None,
         #    to the algorithm.
         # 2. Point-in-polygon and, worse, polygon-in-polygon algorithms are extremely slow, to the point that almost
         #    any optimizations that the user can make by doing classification "by hand" is worth it.
-        # There should perhaps be a separate library or ``geopandas`` function for doing this.
+        # There should perhaps be a separate library or ``geopandas`` function
+        # for doing this.
 
     elif by is not None:
 
@@ -1038,10 +1060,13 @@ def aggplot(df, projection=None,
         sectors = []
         values = []
 
-        # The groupby operation does not take generators as inputs, so we duck test and convert them to lists.
+        # The groupby operation does not take generators as inputs, so we duck
+        # test and convert them to lists.
         if not isinstance(by, str):
-            try: len(by)
-            except TypeError: by = list(by)
+            try:
+                len(by)
+            except TypeError:
+                by = list(by)
 
         for label, p in df.groupby(by):
             if geometry is not None:
@@ -1065,7 +1090,8 @@ def aggplot(df, projection=None,
         if not extent:
             for sector in sectors:
                 if not isinstance(sector.envelope, shapely.geometry.Point):
-                    hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(sector.envelope.exterior))
+                    hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(
+                        pd.Series(sector.envelope.exterior))
                     if not bxmin or hxmin < bxmin:
                         bxmin = hxmin
                     if not bxmax or hxmax > bxmax:
@@ -1076,7 +1102,8 @@ def aggplot(df, projection=None,
                         bymax = hymax
 
         # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
-        # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
+        # larger ones we have to bring the smaller ones in front in the
+        # plotting order. This bit of code does that.
         sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area.values),
                                          key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
         sectors = np.array(sectors)[sorted_indices]
@@ -1094,10 +1121,12 @@ def aggplot(df, projection=None,
             else:
                 try:  # Duck test for MultiPolygon.
                     for subgeom in sector:
-                        feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
+                        feature = descartes.PolygonPatch(
+                            subgeom, facecolor=color, **kwargs)
                         ax.add_patch(feature)
                 except (TypeError, AssertionError):  # Shapely Polygon.
-                    feature = descartes.PolygonPatch(sector, facecolor=color, **kwargs)
+                    feature = descartes.PolygonPatch(
+                        sector, facecolor=color, **kwargs)
                     ax.add_patch(feature)
 
         # Set extent.
@@ -1130,13 +1159,16 @@ def aggplot(df, projection=None,
 
         for p in partitions:
             xmin, xmax, ymin, ymax = p.bounds
-            rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-            color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
+            rect = shapely.geometry.Polygon(
+                [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
+            color = cmap.to_rgba(
+                agg(p.data[hue_col])) if p.n > nsig else "white"
             if projection:
                 feature = ShapelyFeature([rect], ccrs.PlateCarree())
                 ax.add_feature(feature, facecolor=color, **kwargs)
             else:
-                feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
+                feature = descartes.PolygonPatch(
+                    rect, facecolor=color, **kwargs)
                 ax.add_patch(feature)
 
         # Set extent.
@@ -1358,7 +1390,7 @@ def cartogram(df, projection=None,
         })
 
         # Set up the axis.
-        if not ax:
+        if ax is None:
             ax = plt.subplot(111, projection=projection)
 
         # Clean up patches.
@@ -1372,7 +1404,8 @@ def cartogram(df, projection=None,
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     _set_extent(ax, projection, extent, extrema)
 
-    # Check that the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    # Check that the ``scale`` parameter is filled, and use it to fill a
+    # ``values`` name.
     if not scale:
         raise ValueError("No scale parameter provided.")
     elif isinstance(scale, str):
@@ -1390,24 +1423,28 @@ def cartogram(df, projection=None,
 
     # Create a legend, if appropriate.
     if legend:
-        _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs,  map_kwargs=kwargs)
+        _paint_carto_legend(ax, values, legend_values, legend_labels,
+                            dscale, legend_kwargs,  map_kwargs=kwargs)
 
     # Validate hue input.
     hue = _validate_hue(df, hue)
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
-    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    # based on whether or not ``k`` is specified (``hue`` must be specified
+    # for either to work).
     if k is not None and hue is not None:
         # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
 
         if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            cmap, categories, hue_values = _discrete_colorize(
+                categorical, hue, scheme, k, cmap, vmin, vmax)
             colors = [cmap.to_rgba(v) for v in hue_values]
 
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+                _paint_hue_legend(ax, categories, cmap,
+                                  legend_labels, legend_kwargs)
         else:
             colors = ['None']*len(df)
     elif k is None and hue is not None:
@@ -1443,7 +1480,8 @@ def cartogram(df, projection=None,
             for polygon in df.geometry:
                 try:  # Duck test for MultiPolygon.
                     for subgeom in polygon:
-                        feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                        feature = descartes.PolygonPatch(
+                            subgeom, **trace_kwargs)
                         ax.add_patch(feature)
                 except (TypeError, AssertionError):  # Shapely Polygon.
                     feature = descartes.PolygonPatch(polygon, **trace_kwargs)
@@ -1452,17 +1490,20 @@ def cartogram(df, projection=None,
     # Finally, draw the scaled geometries.
     for value, color, polygon in zip(values, colors, df.geometry):
         scale_factor = dscale(value)
-        scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
+        scaled_polygon = shapely.affinity.scale(
+            polygon, xfact=scale_factor, yfact=scale_factor)
         if projection:
             features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, **kwargs)
         else:
             try:  # Duck test for MultiPolygon.
                 for subgeom in scaled_polygon:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
+                    feature = descartes.PolygonPatch(
+                        subgeom, facecolor=color, **kwargs)
                     ax.add_patch(feature)
             except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(scaled_polygon, facecolor=color, **kwargs)
+                feature = descartes.PolygonPatch(
+                    scaled_polygon, facecolor=color, **kwargs)
                 ax.add_patch(feature)
 
     return ax
@@ -1625,10 +1666,12 @@ def kdeplot(df, projection=None,
                         transform=ccrs.PlateCarree(), ax=ax, **kwargs)
             clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
             feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+            ax.add_feature(feature, facecolor=(
+                1, 1, 1), linewidth=0, zorder=100)
     else:
         if clip is None:
-            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series([p.y for p in df.geometry]), ax=ax, **kwargs)
+            sns.kdeplot(pd.Series([p.x for p in df.geometry]), pd.Series(
+                [p.y for p in df.geometry]), ax=ax, **kwargs)
         else:
             clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
             polyplot(gpd.GeoSeries(clip_geom),
@@ -1991,6 +2034,9 @@ def sankey(*args, projection=None,
     .. image:: ../figures/sankey/sankey-legend-var.png
 
     """
+    if legend:
+        map_kwargs = kwargs.copy()
+
     # Validate df.
     if len(args) > 1:
         raise ValueError("Invalid input.")
@@ -2001,7 +2047,8 @@ def sankey(*args, projection=None,
 
     # Validate the rest of the input.
     if ((start is None) or (end is None)) and not hasattr(path, "__iter__"):
-        raise ValueError("The 'start' and 'end' parameters must both be specified.")
+        raise ValueError(
+            "The 'start' and 'end' parameters must both be specified.")
     if (isinstance(start, str) or isinstance(end, str)) and (df is None):
         raise ValueError("Invalid input.")
     if isinstance(start, str):
@@ -2053,7 +2100,8 @@ def sankey(*args, projection=None,
     # Variables we need to generate at this point, and why we need them:
     # 1. (clong, clat) --- To pass this to the projection settings.
     # 2. (xmin. xmax, ymin. ymax) --- To pass this to the extent settings.
-    # 3. n --- To pass this to the color array in case no ``color`` is specified.
+    # 3. n --- To pass this to the color array in case no ``color`` is
+    # specified.
     if path_geoms is None and points is not None:
         if df is None:
             df = gpd.GeoDataFrame(geometry=points)
@@ -2064,7 +2112,8 @@ def sankey(*args, projection=None,
         n = int(len(points) / 2)
     else:  # path_geoms is an iterable
         path_geoms = gpd.GeoSeries(path_geoms)
-        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path_geoms.envelope.exterior)
+        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(
+            path_geoms.envelope.exterior)
         clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
         n = len(path_geoms)
 
@@ -2101,11 +2150,12 @@ def sankey(*args, projection=None,
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
 
-    if 'solid_capstyle' not in kwargs:  # not the best place but want to pass it to _paint_carto_legend
+    if 'solid_capstyle' not in kwargs.keys():  # not the best place, though
         kwargs['solid_capstyle'] = 'round'
 
     # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
-    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    # based on whether or not ``k`` is specified (``hue`` must be specified
+    # for either to work).
     if k is not None:
         # Categorical colormap code path.
         categorical, k, scheme = _validate_buckets(categorical, k, scheme)
@@ -2113,18 +2163,20 @@ def sankey(*args, projection=None,
         hue = _validate_hue(df, hue)
 
         if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            cmap, categories, hue_values = _discrete_colorize(
+                categorical, hue, scheme, k, cmap, vmin, vmax)
             colors = [cmap.to_rgba(v) for v in hue_values]
 
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+                _paint_hue_legend(ax, categories, cmap,
+                                  legend_labels, legend_kwargs)
         else:
             if 'color' not in kwargs.keys():
                 colors = ['steelblue'] * n
             else:
                 colors = [kwargs['color']] * n
-                kwargs.pop('color')
+                # kwargs.pop('color')
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
@@ -2135,7 +2187,8 @@ def sankey(*args, projection=None,
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    # Check if the ``scale`` parameter is filled, and use it to fill a
+    # ``values`` name.
     if scale:
         if isinstance(scale, str):
             scalar_values = df[scale]
@@ -2156,23 +2209,27 @@ def sankey(*args, projection=None,
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale"):
-            _paint_carto_legend(ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs, map_kwargs=kwargs)
+            _paint_sankey_legend(ax, scalar_values, legend_values, legend_labels, dscale,
+                                 legend_kwargs=legend_kwargs, map_kwargs=map_kwargs)
     else:
         widths = [1] * n  # pyplot default
 
     # Allow overwriting visual arguments.
     if 'linestyle' in kwargs.keys():
-        linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
+        linestyle = kwargs['linestyle']
+        kwargs.pop('linestyle')
     else:
         linestyle = '-'
     if 'color' in kwargs.keys():
-        colors = [kwargs['color']]*n; kwargs.pop('color')
-    elif 'edgecolor' in kwargs.keys():  # plt.plot uses 'color', mpl.ax.add_feature uses 'edgecolor'. Support both.
-        colors = [kwargs['edgecolor']]*n; kwargs.pop('edgecolor')
+        colors = [kwargs['color']]*n
+        kwargs.pop('color')
+    # plt.plot uses 'color', mpl.ax.add_feature uses 'edgecolor'. Support both.
+    elif 'edgecolor' in kwargs.keys():
+        colors = [kwargs['edgecolor']]*n
+        kwargs.pop('edgecolor')
     if 'linewidth' in kwargs.keys():
-        widths = [kwargs['linewidth']]*n; kwargs.pop('linewidth')
-
-
+        widths = [kwargs['linewidth']]*n
+        kwargs.pop('linewidth')
 
     if projection:
         # Duck test plot. The first will work if a valid transformation is passed to ``path`` (e.g. we are in the
@@ -2185,7 +2242,7 @@ def sankey(*args, projection=None,
             for line, color, width in zip(path_geoms, colors, widths):
                 feature = ShapelyFeature([line], ccrs.PlateCarree())
                 ax.add_feature(feature, linestyle=linestyle, linewidth=width, edgecolor=color, facecolor='None',
-                **kwargs)
+                               **kwargs)
     else:
         try:
             for origin, destination, color, width in zip(start, end, colors, widths):
@@ -2197,13 +2254,15 @@ def sankey(*args, projection=None,
                 # This calls for, yep, another duck test.
                 try:  # LineString
                     line = mpl.lines.Line2D([coord[0] for coord in path.coords],
-                                            [coord[1] for coord in path.coords],
+                                            [coord[1]
+                                                for coord in path.coords],
                                             linestyle=linestyle, linewidth=width, color=color, **kwargs)
                     ax.add_line(line)
                 except NotImplementedError:  # MultiLineString
                     for line in path:
                         line = mpl.lines.Line2D([coord[0] for coord in line.coords],
-                                                [coord[1] for coord in line.coords],
+                                                [coord[1]
+                                                    for coord in line.coords],
                                                 linestyle=linestyle, linewidth=width, color=color, **kwargs)
                         ax.add_line(line)
     return ax
@@ -2235,6 +2294,7 @@ def _init_figure(ax, figsize):
         fig = plt.figure(figsize=figsize)
         return fig
 
+
 def _get_envelopes_min_maxes(envelopes):
     """
     Returns the extrema of the inputted polygonal envelopes. Used for setting chart extent where appropriate. Note
@@ -2252,20 +2312,28 @@ def _get_envelopes_min_maxes(envelopes):
 
     """
     xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
-                                                          linearring.coords[2][0],
-                                                          linearring.coords[3][0],
-                                                          linearring.coords[4][0]])))
+                                                           linearring.coords[
+                                                               2][0],
+                                                           linearring.coords[
+                                                               3][0],
+                                                           linearring.coords[4][0]])))
     xmax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][0],
-                                                          linearring.coords[2][0],
-                                                          linearring.coords[3][0],
-                                                          linearring.coords[4][0]])))
+                                                           linearring.coords[
+                                                               2][0],
+                                                           linearring.coords[
+                                                               3][0],
+                                                           linearring.coords[4][0]])))
     ymin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][1],
-                                                           linearring.coords[2][1],
-                                                           linearring.coords[3][1],
+                                                           linearring.coords[
+                                                               2][1],
+                                                           linearring.coords[
+                                                               3][1],
                                                            linearring.coords[4][1]])))
     ymax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][1],
-                                                           linearring.coords[2][1],
-                                                           linearring.coords[3][1],
+                                                           linearring.coords[
+                                                               2][1],
+                                                           linearring.coords[
+                                                               3][1],
                                                            linearring.coords[4][1]])))
     return xmin, xmax, ymin, ymax
 
@@ -2464,7 +2532,8 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
                           "This is not recommended!")
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
-    cmap = norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm, vmin=vmin, vmax=vmax)
+    cmap = norm_cmap(values, cmap, mpl.colors.Normalize,
+                     mpl.cm, vmin=vmin, vmax=vmax)
     return cmap, categories, values
 
 
@@ -2499,18 +2568,24 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
     patches = []
     for value, cat in enumerate(categories):
         patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
-                              marker="o",
-                              markersize=10, markerfacecolor=cmap.to_rgba(value)))
+                                        marker="o",
+                                        markersize=10, markerfacecolor=cmap.to_rgba(value)))
     # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument mutability quirks.
     # cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my default argument is None,
-    # but that doesn't unpack correctly, necessitating setting and passing an empty dict here. Awkward...
-    if not legend_kwargs: legend_kwargs = dict()
+    # but that doesn't unpack correctly, necessitating setting and passing an
+    # empty dict here. Awkward...
+    if not legend_kwargs:
+        legend_kwargs = dict()
 
     # If we are given labels use those, if we are not just use the categories.
     if legend_labels:
-        ax.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
+        legend =  ax.legend(patches, legend_labels, numpoints=1,
+                            fancybox=True, **legend_kwargs)
     else:
-        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+        legend =  ax.legend(patches, categories, numpoints=1,
+                            fancybox=True, **legend_kwargs)
+    plt.gca().add_artist(legend)
+
 
 
 def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs, map_kwargs):
@@ -2550,19 +2625,31 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         display_values = legend_values
     else:
         display_values = np.linspace(np.max(values), np.min(values), num=5)
-    display_labels = legend_labels if (legend_labels is not None) else display_values
+    display_labels = legend_labels if (
+        legend_labels is not None) else display_values
 
     if map_kwargs is None:
         map_kwargs = dict()
-    # Paint patche s.
+
+    # Paint patches.
     patches = []
+    
+    
     for value in display_values:
         patches.append(mpl.lines.Line2D([0], [0], linestyle=map_kwargs.get('linestyle', 'None'),
-                       marker="o",
-                       markersize=(20*scale_func(value))**(1/2),
-                       markerfacecolor=map_kwargs.get('markerfacecolor', 'None')))
-    if legend_kwargs is None: legend_kwargs = dict()
-    ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
+                                        marker="o",
+                                        markersize=scale_func(value),
+                                        alpha=map_kwargs.get('alpha', 1,),
+                                        markerfacecolor=map_kwargs.get('color', 'None'),
+                                        markeredgecolor=map_kwargs.get('edgecolor', 'None')))
+    if legend_kwargs is None:
+        legend_kwargs = dict()
+
+
+    legend = ax.legend(patches, display_labels, numpoints=1,
+                        fancybox=True, **legend_kwargs)
+
+    plt.gca().add_artist(legend)
 
 
 def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
@@ -2589,10 +2676,66 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     -------
     None.
     """
-    if not legend_kwargs: legend_kwargs = dict()
+    if not legend_kwargs:
+        legend_kwargs = dict()
     cmap.set_array(values)
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
+
+def _paint_sankey_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs, map_kwargs={}):
+    """
+    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
+
+    Parameters
+    ----------
+    ax : matplotlib.Axes instance
+        The ``matplotlib.Axes`` instance on which a legend is being painted.
+    values : list
+        A list of values being plotted. May be either a list of int types or a list of unique entities in the
+        data column (e.g. as generated via ``numpy.unique(data)``. This parameter is meant to be the same as that
+        returned by the ``_discrete_colorize`` method.
+    legend_values : list, optional
+        If a legend is specified, equal intervals will be used for the "points" in the legend by default. However,
+        particularly if your scale is non-linear, oftentimes this isn't what you want. If this variable is provided as
+        well, the values included in the input will be used by the legend instead.
+    legend_labels : list, optional
+        If a legend is specified, this parameter can be used to control what names will be attached to
+    scale_func : ufunc
+        The scaling function being used.
+    legend_kwargs : dict
+        Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
+        is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
+        finicky.
+    map_kwargs : dict
+        Vis properties from the original map.
+
+    Returns
+    -------
+    None.
+    """
+
+    # Set up the legend values.
+    if legend_values is not None:
+        display_values = legend_values
+    else:
+        display_values = np.linspace(np.max(values), np.min(values), num=5)
+    display_labels = legend_labels if (legend_labels is not None) else display_values
+
+    # Paint patche s.
+    patches = []
+
+    for value in display_values[::-1]:
+        patches.append(mpl.lines.Line2D([0, 15], [0, 0], linestyle=map_kwargs.get('linestyle', '-'),
+                                        linewidth= scale_func(value),
+                                        solid_capstyle='butt',
+                                        color=map_kwargs.get('color', 'None')))
+    if legend_kwargs is None:
+        legend_kwargs = dict()
+
+    legend = ax.legend(patches, display_labels, numpoints=1,
+                        fancybox=True, **legend_kwargs)
+
+    plt.gca().add_artist(legend)
 
 def _validate_buckets(categorical, k, scheme):
     """
@@ -2644,7 +2787,8 @@ def _get_clip(extent, clip):
     xmin, xmax, ymin, ymax = extent
     # We have to add a little bit of padding to the edges of the box, as otherwise the edges will invert a little,
     # surprisingly.
-    rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)])
+    rect = shapely.geometry.Polygon(
+        [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)])
     rect = shapely.affinity.scale(rect, xfact=1.05, yfact=1.05)
     for geom in clip:
         rect = rect.symmetric_difference(geom)
