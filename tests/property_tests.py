@@ -34,7 +34,7 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import shapely
 import numpy as np
-
+plt.rcParams.update({'figure.max_open_warning': 0})
 
 # Define strategies.
 

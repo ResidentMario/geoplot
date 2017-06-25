@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Point, LineString
 import numpy as np
 import pandas as pd
+plt.rcParams.update({'figure.max_open_warning': 0})
 
 
 # Point-type DataFrame input.
