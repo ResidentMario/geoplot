@@ -11,7 +11,7 @@ from shapely.geometry import Point, LineString
 import numpy as np
 import pandas as pd
 import geoplot.crs as gcrs
-
+plt.rcParams.update({'figure.max_open_warning': 0})
 
 # Point-type DataFrame input.
 list_gaussian_points = gplt.utils.gaussian_points(n=4)
