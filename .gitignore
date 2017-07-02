@@ -11,3 +11,4 @@ source/
 html/
 dist/
 geoplot.egg-info/
+src/*
