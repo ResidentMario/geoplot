@@ -2533,7 +2533,10 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
         finicky.
      map_kwargs : dict
-        Vis properties from the original map.
+        Keyword arguments of the map, which will take map keywards and pass them to the matplotlib legend instance
+        on initialization. As for now, map_kwargs applies map `linestyle` and `markerfacecolor` to the legend,
+        ensuring its consistency with the map.
+
 
     Returns
     -------
