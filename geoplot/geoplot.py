@@ -3,7 +3,7 @@ This module defines the majority of geoplot functions, including all plot types.
 """
 
 import geopandas as gpd
-from geopandas.plotting import __pysal_choro, norm_cmap
+from geopandas.plotting import __pysal_choro
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -2640,3 +2640,19 @@ def _get_clip(extent, clip):
     for geom in clip:
         rect = rect.symmetric_difference(geom)
     return rect
+
+
+#######################
+# COMPATIBILITY SHIMS #
+#######################
+
+def norm_cmap(values, cmap, normalize, cm, vmin=None, vmax=None):
+    """
+    Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.
+    """
+
+    mn = min(values) if vmin is None else vmin
+    mx = max(values) if vmax is None else vmax
+    norm = normalize(vmin=mn, vmax=mx)
+    n_cmap = cm.ScalarMappable(norm=norm, cmap=cmap)
+    return n_cmap
