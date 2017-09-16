@@ -320,6 +320,10 @@ def pointplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
     # Validate hue input.
     hue = _validate_hue(df, hue)
 
@@ -482,8 +486,6 @@ def polyplot(df, projection=None,
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
 
-    # In this case we can return a `matplotlib` plot directly.
-
     if projection:
         # Properly set up the projection.
         projection = projection.load(df, {
@@ -500,6 +502,10 @@ def polyplot(df, projection=None,
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
 
     # Set extent.
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
@@ -715,6 +721,10 @@ def choropleth(df, projection=None,
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
 
     # Set extent.
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
@@ -1003,7 +1013,11 @@ def aggplot(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
-    # Upconvert input to a GeoDataFrame (necessary for quadtree comprehension).
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
+    # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
     df = gpd.GeoDataFrame(df, geometry=df.geometry)
 
     # Validate hue.
@@ -1368,6 +1382,10 @@ def cartogram(df, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
     # Set extent.
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     _set_extent(ax, projection, extent, extrema)
@@ -1611,6 +1629,10 @@ def kdeplot(df, projection=None,
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
 
     # Set extent.
     extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
@@ -2086,6 +2108,10 @@ def sankey(*args, projection=None,
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
 
     # Set extent.
     if projection:
