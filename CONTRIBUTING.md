@@ -55,3 +55,6 @@ The remaining pages are all written in `rst` format. They are located at the top
 update these simply edit these files then run `make html` again.
 
 I deploy and serve the HTML from a subfolder on my personal website. Transfer is via a manual copy-paste job.
+
+Finally, note that the data files for the example images in the gallery are hosted 
+[separately](https://github.com/ResidentMario/geoplot-data).
