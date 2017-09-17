@@ -5,7 +5,7 @@
 
 <div class="row">
 <a href=http://www.residentmar.io/geoplot/examples/nyc-collision-factors.html>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors-thumb.png"
+<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
  height="150" width="150">
 </a>
 
