@@ -1,3 +1,7 @@
+"""
+Test that projections in `geoplot` function correctly.
+"""
+
 import pytest
 import geoplot as gplt
 import geoplot.crs as gcrs
