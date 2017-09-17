@@ -1,7 +1,5 @@
 """
-This test file runs static tests of argument inputs for arguments of the various plot types which accept a variety
-of input formats. When the library passes this test, that ought to mean that all of the input formats supported and
-listed in the API Reference work.
+Tests that raw data inputs function correctly.
 """
 
 import sys; sys.path.insert(0, '../')
@@ -32,6 +30,7 @@ list_hue_values = [1, 2, 3, 4]
 series_hue_values = pd.Series(list_hue_values)
 def map_hue_values(): return map(lambda i: list_hue_values[i], list(range(len(list_hue_values))))
 
+
 # (Sankey) point input.
 # Start and End variables.
 list_start_points = [Point(a + 2, a - 2) for a in range(0, 4)]
@@ -41,11 +40,13 @@ def map_start_points(): return map(lambda i: list_start_points[i], list(range(le
 def map_end_points(): return map(lambda i: list_end_points[i], list(range(len(list_end_points))))
 dataframe_gaussian_points = dataframe_gaussian_points.assign(starts=list_start_points, ends=list_end_points)
 
+
 # (Sankey) paths.
 list_paths = [LineString([[a.x, a.y], [b.x, b.y]]) for a, b in zip(list_start_points, list_end_points)]
 series_paths = gpd.GeoSeries(list_paths)
 def map_paths(): return map(lambda i: list_paths[i], list(range(len(list_paths))))
 dataframe_gaussian_points = dataframe_gaussian_points.assign(paths=list_paths)
+
 
 # (Aggplot) geometry.
 dataframe_gaussian_points = dataframe_gaussian_points.assign(mock_category=np.random.randint(1, 5))

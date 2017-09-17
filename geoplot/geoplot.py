@@ -2109,9 +2109,10 @@ def sankey(*args, projection=None,
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
-    # Immediately return if input geometry is empty.
-    if len(df.geometry) == 0:
-        return ax
+    # TODO: Provide the same null-input safety in the Sankey case.
+    # # Immediately return if input geometry is empty.
+    # if len(df.geometry) == 0:
+    #     return ax
 
     # Set extent.
     if projection:
@@ -2255,6 +2256,7 @@ def _init_figure(ax, figsize):
     if not ax:
         fig = plt.figure(figsize=figsize)
         return fig
+
 
 def _get_envelopes_min_maxes(envelopes):
     """
