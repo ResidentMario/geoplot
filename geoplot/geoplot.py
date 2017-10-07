@@ -2487,7 +2487,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
                           "This is not recommended!")
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
-    cmap = norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm, vmin=vmin, vmax=vmax)
+    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm, vmin=vmin, vmax=vmax)
     return cmap, categories, values
 
 
@@ -2674,7 +2674,7 @@ def _get_clip(extent, clip):
 # COMPATIBILITY SHIMS #
 #######################
 
-def norm_cmap(values, cmap, normalize, cm, vmin=None, vmax=None):
+def _norm_cmap(values, cmap, normalize, cm, vmin=None, vmax=None):
     """
     Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.
     """
