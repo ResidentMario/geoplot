@@ -1,15 +1,13 @@
 """
 User-facing utility module for downloading example datasets. Similar to the `geopandas.datasets` namespace.
-
-WIP!
 """
-# TODO: Just using GitHub as a filehost for now, move to AWS for file hosting later on.
 
 import geopandas as gpd
-import requests
+import fiona
+from zipfile import ZipFile
 
 
-def get_path(dname):
+def load(dname):
     """
     Retrieves a dataset by name.
 
@@ -23,11 +21,9 @@ def get_path(dname):
     GeoDataFrame instance
         The dataset being referenced.
     """
-    dmap = {
-        "nyc_boroughs": "https://github.com/ResidentMario/geoplot-data/raw/master/nyc_boroughs/boroughs.geojson",
-    }
+    z = ZipFile("examples.zip")
 
-    if dname not in dmap:
-        raise ValueError("No dataset by the name")
-
-    return gpd.GeoDataFrame(requests.get(dmap[dname]))
+    with fiona.BytesCollection(z.read('geoplot-data/{0}.geojson'.format(dname))) as f:
+        crs = f.crs
+        gdf = gpd.GeoDataFrame.from_features(f, crs=crs)
+        return gdf

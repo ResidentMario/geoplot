@@ -1,1 +1,1 @@
-from .datasets import get_path
+from .datasets import load
