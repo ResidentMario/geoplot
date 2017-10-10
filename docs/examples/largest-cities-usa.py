@@ -6,13 +6,8 @@ import matplotlib.pyplot as plt
 
 
 # Shape the data.
-cities = gpd.read_file("../../data/cities/citiesx010g.shp")
-continental_cities = cities[cities['STATE'].map(lambda s: s not in ['PR', 'AK', 'HI', 'VI'])]
-continental_cities = continental_cities[continental_cities['POP_2010'] > 100000]
-
-usa = gpd.read_file("../../data/united_states/usa.geojson")
-continental_usa = usa[~usa['adm1_code'].isin(['USA-3517', 'USA-3563'])]
-
+continental_cities = gplt.datasets.load('usa-cities').query('POP_2010 > 100000')
+continental_usa = gplt.datasets.load('contiguous-usa')
 
 # Plot the figure.
 poly_kwargs = {'linewidth': 0.5, 'edgecolor': 'gray', 'zorder': -1}

@@ -150,11 +150,3 @@ Aggplot
         :width: 500px
 
     .. _aggplot_collisions_1: ./examples/aggplot-collisions-1.html
-
-
-    |aggplot_singular|_
-
-    .. |aggplot_singular| image:: ./examples/aggplot-singular.png
-        :width: 500px
-
-    .. _aggplot_singular: ./examples/aggplot-singular.html

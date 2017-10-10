@@ -10,9 +10,12 @@ import cartopy
 # For more information visit http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html.
 
 
-# Fetch the data. Note: this script doesn't actually work! For the moment.
-airline_city_pairs = pd.read_csv('../../data/world_flights/flights.csv', index_col=0)
-
+# Fetch the data.
+la_flights = gplt.datasets.load('la-flights')
+la_flights = la_flights.assign(
+    start=la_flights.geometry.map(lambda mp: mp[0]),
+    end=la_flights.geometry.map(lambda mp: mp[1])
+)
 
 # Plot the data.
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
@@ -21,28 +24,28 @@ f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
 plt.suptitle('Popular Flights out of Los Angeles, 2016', fontsize=16)
 plt.subplots_adjust(top=0.95)
 
-ax = gplt.sankey(airline_city_pairs.query('Origin == "Los Angeles, CA"'), start='Starting Point', end='Ending Point',
-                 projection=gcrs.Orthographic(), scale='PASSENGERS', hue='PASSENGERS', cmap='Purples', ax=axarr[0][0])
+ax = gplt.sankey(la_flights, start='start', end='end',
+                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][0])
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.coastlines()
 
-ax = gplt.sankey(airline_city_pairs.query('Origin == "Los Angeles, CA"'), start='Starting Point', end='Ending Point',
-                 projection=gcrs.Orthographic(), scale='PASSENGERS', hue='PASSENGERS', cmap='Purples', ax=axarr[0][1])
+ax = gplt.sankey(la_flights, start='start', end='end',
+                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][1])
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.stock_img()
 
-ax = gplt.sankey(airline_city_pairs.query('Origin == "Los Angeles, CA"'), start='Starting Point', end='Ending Point',
-                 projection=gcrs.Orthographic(), scale='PASSENGERS', hue='PASSENGERS', cmap='Purples', ax=axarr[1][0])
+ax = gplt.sankey(la_flights, start='start', end='end',
+                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][0])
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.gridlines()
 ax.coastlines()
 ax.add_feature(cartopy.feature.BORDERS)
 
-ax = gplt.sankey(airline_city_pairs.query('Origin == "Los Angeles, CA"'), start='Starting Point', end='Ending Point',
-                 projection=gcrs.Orthographic(), scale='PASSENGERS', hue='PASSENGERS', cmap='Purples', ax=axarr[1][1])
+ax = gplt.sankey(la_flights, start='start', end='end',
+                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][1])
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.coastlines()

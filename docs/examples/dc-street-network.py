@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 
 
 # Load the data.
-dc = gpd.read_file("../../data/us_roads/District_Sections.shp")
+dc = gplt.datasets.load('dc-roads')
 
 
 # Plot the data.
 ax = gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(), scale='aadt',
                  limits=(0.1, 10))
 plt.title("Streets in Washington DC by Average Daily Traffic, 2015")
-plt.savefig("largest-cities-usa.png", bbox_inches='tight', pad_inches=0.1)
+plt.savefig("dc-street-network.png", bbox_inches='tight', pad_inches=0.1)

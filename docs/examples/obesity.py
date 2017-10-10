@@ -1,18 +1,16 @@
 import sys; sys.path.insert(0, '../')
-import pandas as pd
-import geopandas as gpd
 import geoplot as gplt
 import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
 
 
-# This script was inspired by: https://bl.ocks.org/mbostock/4055908
-
+# This examples was inspired by https://bl.ocks.org/mbostock/4055908
 
 # Shape the data.
-obesity = pd.read_csv("../../data/obesity/obesity_by_state.tsv", sep='\t')
-usa = gpd.read_file("../../data/united_states/usa.geojson")
-continental_usa = usa[~usa['adm1_code'].isin(['USA-3517', 'USA-3563'])]
+obesity = gplt.datasets.load('obesity-by-state')
+# usa = gpd.read_file("../../data/united_states/usa.geojson")
+# continental_usa = usa[~usa['adm1_code'].isin(['USA-3517', 'USA-3563'])]
+continental_usa = gplt.datasets.load('contiguous-usa')
 continental_usa['State'] = [
     'Minnesota', 'Montana', 'North Dakota', 'Idaho', 'Washington', 'Arizona',
     'California', 'Colorado', 'Nevada', 'New Mexico', 'Oregon', 'Utah', 'Wyoming',

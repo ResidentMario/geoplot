@@ -9,18 +9,8 @@ import shapely
 
 
 # Load the data.
-boroughs = gpd.read_file("../../data/nyc_boroughs/boroughs.geojson", driver='GeoJSON')
-collisions = pd.read_csv("../../data/nyc_collisions/NYPD_Motor_Vehicle_Collisions_2016.csv", index_col=0)
-
-def pointify(srs):
-    lat, long = srs['LATITUDE'], srs['LONGITUDE']
-    if pd.isnull(lat) or pd.isnull(long):
-        return shapely.geometry.Point(0, 0)
-    else:
-        return shapely.geometry.Point(long, lat)
-
-collisions = gpd.GeoDataFrame(collisions.head(100000), geometry=collisions.head(100000).apply(pointify, axis='columns'))
-collisions = collisions[collisions.geometry.map(lambda srs: not (srs.x == 0))]
+boroughs = gplt.datasets.load('nyc-boroughs')
+collisions = gplt.datasets.load('nyc-collision-factors')
 
 
 # Plot the data.

@@ -1,34 +1,13 @@
 import sys; sys.path.insert(0, '../')
 import geoplot as gplt
 import geoplot.crs as gcrs
-import geopandas as gpd
 import pandas as pd
 import numpy as np
-from shapely.geometry import Point
 import matplotlib.pyplot as plt
 
 
-# Shape the data.
-collisions = pd.read_csv("../../data/nyc_collisions/NYPD_Motor_Vehicle_Collisions_2016.csv", index_col=0)
-
-
-def pointify(srs):
-    lat, long = srs['LATITUDE'], srs['LONGITUDE']
-    if pd.isnull(lat) or pd.isnull(long):
-        return Point(0, 0)
-    else:
-        return Point(long, lat)
-
-
-collisions = gpd.GeoDataFrame(collisions, geometry=collisions.apply(pointify, axis='columns'))
-collisions = collisions[collisions.geometry.map(lambda srs: not (srs.x == 0))]
-collisions = collisions[~collisions['ZIP CODE'].isin([10000, 10803, 11242])]
-zip_codes = gpd.read_file("../../data/nyc_zip_codes/ZIP_CODE_040114.shp")
-zip_codes['ZIPCODE'] = zip_codes['ZIPCODE'].astype(int)
-zip_codes = zip_codes.set_index("ZIPCODE")
-zip_codes = zip_codes.reset_index().drop_duplicates('ZIPCODE').set_index('ZIPCODE')
-zip_codes = zip_codes.to_crs(epsg=4326)
-
+# Load the data. Note that due to the large size of this dataset it is NOT distributed with the rest of the examples!
+collisions = pd.read_csv("...")  # Please load locally.
 
 # Plot the data.
 f, axarr = plt.subplots(3, 1, figsize=(12, 12), subplot_kw={
@@ -65,6 +44,7 @@ ax2.set_title("Categorical Geometry (Convex Hull)")
 # somewhere else on the Internet. In this case the result snaps into focus quite clearly, and is equivalent in form
 # to the geoplot.choropleth facility (with k=None; the later provides more options but doesn't aggregate geometries
 # for you, however).
+zip_codes = gplt.datasets.load('nyc-zip-codes')
 ax3 = gplt.aggplot(collisions, projection=gcrs.AlbersEqualArea(),
                    hue='NUMBER OF PERSONS INJURED', agg=np.max,
                    by='ZIP CODE', geometry=zip_codes.geometry,
