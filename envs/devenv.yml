@@ -19,3 +19,4 @@ dependencies:
     - geopandas
     - sphinx-bootstrap-theme
     - hypothesis
+    - quilt
