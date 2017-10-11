@@ -1,16 +1,17 @@
-import sys; sys.path.insert(0, '../../')
+# Load the data.
+import geopandas as gpd
+from quilt.data.ResidentMario import geoplot_data
+
+troop_movements = gpd.read_file(geoplot_data.napoleon_troop_movements())
+troop_movements['from'] = troop_movements.geometry.map(lambda v: v[0])
+troop_movements['to'] = troop_movements.geometry.map(lambda v: v[1])
+
+
+# Plot the data. We'll use a custom colormap, to match the one that Minard uses.
 import geoplot as gplt
 import matplotlib.pyplot as plt
 import mplleaflet
 
-
-# Shape the data.
-import pdb; pdb.set_trace()
-troop_movements = gplt.datasets.load('napoleon-troop-movements')
-troop_movements['from'] = troop_movements.geometry.map(lambda v: v[0])
-troop_movements['to'] = troop_movements.geometry.map(lambda v: v[1])
-
-# Plot the data. We'll use a custom colormap, to match the one that Minard uses.
 from matplotlib.colors import LinearSegmentedColormap
 colors = [(215/255, 193/255, 126/255), (37/255, 37/255, 37/255)]
 cm = LinearSegmentedColormap.from_list('minard', colors)

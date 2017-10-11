@@ -1,21 +1,23 @@
-import sys; sys.path.insert(0, '../')
-import geoplot as gplt
-import geoplot.crs as gcrs
-import matplotlib.pyplot as plt
+# Load the data.
+import geopandas as gpd
+from quilt.data.ResidentMario import geoplot_data
 
+boroughs = gpd.read_file(geoplot_data.nyc_boroughs())
+precincts = gpd.read_file(geoplot_data.nyc_police_precincts())
+tickets = gpd.read_file(geoplot_data.nyc_parking_tickets_sample())
 
 # This example inspired by:
 # http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love
 
 
-# Load the data.
-precincts = gplt.datasets.load('nyc-police-precincts')
-tickets = gplt.datasets.load('nyc-parking-tickets-sample')
-boroughs = gplt.datasets.load('nyc-boroughs')
+# Plot the data.
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
 
 
-# This function is a reusable wrapper for plotting the data.
 def plot_state_to_ax(state, ax):
+    """Reusable plotting wrapper."""
     gplt.choropleth(tickets.set_index('id').loc[:, [state, 'geometry']],
                     hue=state,
                     projection=gcrs.AlbersEqualArea(), cmap='Blues',

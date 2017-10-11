@@ -1,17 +1,17 @@
-import sys; sys.path.insert(0, '../../')
+# Load the data.
 import geopandas as gpd
-import geoplot as gplt
-import geoplot.crs as gcrs
-import pandas as pd
-import matplotlib.pyplot as plt
-from shapely.geometry import Point
+from quilt.data.ResidentMario import geoplot_data
 
-# Fetch the data.
-boroughs = gplt.datasets.load('nyc-boroughs')
-fatal_collisions = gplt.datasets.load('nyc-fatal-collisions')
-injurious_collisions = gplt.datasets.load('nyc-injurious-collisions')
+boroughs = gpd.read_file(geoplot_data.nyc_boroughs())
+fatal_collisions = gpd.read_file(geoplot_data.nyc_fatal_collisions())
+injurious_collisions = gpd.read_file(geoplot_data.nyc_injurious_collisions())
+
 
 # Plot the data.
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
+
 fig = plt.figure(figsize=(10,5))
 
 ax1 = plt.subplot(121, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))

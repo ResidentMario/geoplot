@@ -1,19 +1,16 @@
-import sys; sys.path.insert(0, '../')
-import geoplot.crs as gcrs
-import geoplot as gplt
-import pandas as pd
-import geopandas as gpd
-from shapely.geometry import Point
-import matplotlib.pyplot as plt
-import shapely
-
-
 # Load the data.
-boroughs = gplt.datasets.load('nyc-boroughs')
-collisions = gplt.datasets.load('nyc-collision-factors')
+import geopandas as gpd
+from quilt.data.ResidentMario import geoplot_data
+
+boroughs = gpd.read_file(geoplot_data.nyc_boroughs())
+collisions = gpd.read_file(geoplot_data.nyc_collision_factors())
 
 
 # Plot the data.
+import geoplot.crs as gcrs
+import geoplot as gplt
+import matplotlib.pyplot as plt
+
 fig = plt.figure(figsize=(10,5))
 
 ax1 = plt.subplot(121, projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059))

@@ -1,17 +1,12 @@
-import sys; sys.path.insert(0, '../')
-import geoplot as gplt
-import geoplot.crs as gcrs
-import matplotlib.pyplot as plt
-
-
 # This examples was inspired by https://bl.ocks.org/mbostock/4055908
 
-# Shape the data.
-obesity = gplt.datasets.load('obesity-by-state')
-# usa = gpd.read_file("../../data/united_states/usa.geojson")
-# continental_usa = usa[~usa['adm1_code'].isin(['USA-3517', 'USA-3563'])]
-continental_usa = gplt.datasets.load('contiguous-usa')
-continental_usa['State'] = [
+# Load the data.
+import geopandas as gpd
+from quilt.data.ResidentMario import geoplot_data
+
+obesity = geoplot_data.obesity_by_state()
+contiguous_usa = gpd.read_file(geoplot_data.contiguous_usa())
+contiguous_usa['State'] = [
     'Minnesota', 'Montana', 'North Dakota', 'Idaho', 'Washington', 'Arizona',
     'California', 'Colorado', 'Nevada', 'New Mexico', 'Oregon', 'Utah', 'Wyoming',
     'Arkansas', 'Iowa', 'Kansas', 'Missouri', 'Nebraska', 'Oklahoma', 'South Dakota',
@@ -21,13 +16,17 @@ continental_usa['State'] = [
     'Tennessee', 'Virginia', 'Wisconsin', 'West Virginia', 'Delaware', 'District of Columbia',
     'Maryland', 'New Jersey', 'New York', 'Pennsylvania', 'Maine', 'Michigan'
 ]
-continental_usa['Obesity Rate'] = continental_usa['State'].map(
+contiguous_usa['Obesity Rate'] = contiguous_usa['State'].map(
     lambda state: obesity.query("State == @state").iloc[0]['Percent']
 )
 
 
 # Plot the data.
-ax = gplt.cartogram(continental_usa, scale='Obesity Rate',
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
+
+ax = gplt.cartogram(contiguous_usa, scale='Obesity Rate',
                     projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5),
                     limits=(0.75, 1),
                     linewidth=0.5, facecolor='steelblue', trace_kwargs={'linewidth': 0.5})

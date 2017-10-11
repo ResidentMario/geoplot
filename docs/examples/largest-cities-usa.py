@@ -1,15 +1,16 @@
-import sys; sys.path.insert(0, '../../')
-import geoplot as gplt
-import geoplot.crs as gcrs
+# Load the data.
 import geopandas as gpd
-import matplotlib.pyplot as plt
+from quilt.data.ResidentMario import geoplot_data
 
+continental_cities = gpd.read_file(geoplot_data.usa_cities()).query('POP_2010 > 100000')
+continental_usa = gpd.read_file(geoplot_data.contiguous_usa())
 
-# Shape the data.
-continental_cities = gplt.datasets.load('usa-cities').query('POP_2010 > 100000')
-continental_usa = gplt.datasets.load('contiguous-usa')
 
 # Plot the figure.
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
+
 poly_kwargs = {'linewidth': 0.5, 'edgecolor': 'gray', 'zorder': -1}
 point_kwargs = {'linewidth': 0.5, 'edgecolor': 'black', 'alpha': 1}
 legend_kwargs = {'bbox_to_anchor': (1.2, 0.9), 'frameon': False}

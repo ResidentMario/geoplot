@@ -1,4 +1,3 @@
-import sys; sys.path.insert(0, '../')
 import geoplot as gplt
 import geoplot.crs as gcrs
 import pandas as pd
@@ -6,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Load the data. Note that due to the large size of this dataset it is NOT distributed with the rest of the examples!
+# TODO: Make this easy to download.
 collisions = pd.read_csv("...")  # Please load locally.
 
 # Plot the data.

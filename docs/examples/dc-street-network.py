@@ -1,20 +1,15 @@
-import sys; sys.path.insert(0, '../')
-import geoplot as gplt
-import geoplot.crs as gcrs
-import geopandas as gpd
-import matplotlib.pyplot as plt
-
-
-# The data being used here is the DC portion of the Federal Highway Administration's roadway traffic volume
-# shapefiles, retrieved from http://www.fhwa.dot.gov/policyinformation/hpms/shapefiles.cfm. The AADT column of
-# interest here is the FHA's traffic volume estimates.
-
-
 # Load the data.
-dc = gplt.datasets.load('dc-roads')
+import geopandas as gpd
+from quilt.data.ResidentMario import geoplot_data
+
+dc = gpd.read_file(geoplot_data.dc_roads())
 
 
 # Plot the data.
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
+
 ax = gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(), scale='aadt',
                  limits=(0.1, 10))
 plt.title("Streets in Washington DC by Average Daily Traffic, 2015")

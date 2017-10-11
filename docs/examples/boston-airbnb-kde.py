@@ -1,18 +1,14 @@
-import sys; sys.path.insert(0, '../')
-import geoplot as gplt
+# Load the data.
+from quilt.data.ResidentMario import geoplot_data
 import geopandas as gpd
-import pandas as pd
-from shapely.geometry import Point
-import shapely
-import matplotlib.pyplot as plt
-import mplleaflet
 
-
-# Shape the data.
-listings = gplt.datasets.load('boston-airbnb-listings')
+listings = gpd.read_file(geoplot_data.boston_airbnb_listings())
 
 
 # Plot the data.
+import geoplot as gplt
+import matplotlib.pyplot as plt
+import mplleaflet
 
 # We're building a webmap, so we'll first create an unprojected map.
 ax = gplt.kdeplot(listings)

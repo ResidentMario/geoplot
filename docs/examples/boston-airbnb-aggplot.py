@@ -1,19 +1,20 @@
-import sys; sys.path.insert(0, '../')
-import geoplot.crs as gcrs
-import geoplot as gplt
-import numpy as np
-import matplotlib.pyplot as plt
-
-
 # Load the data.
-boston_zip_codes = gplt.datasets.load('boston-zip-codes')
+from quilt.data.ResidentMario import geoplot_data
+import geopandas as gpd
+
+boston_zip_codes = gpd.read_file(geoplot_data.boston_zip_codes())
 boston_zip_codes = boston_zip_codes.assign(id=boston_zip_codes.id.astype(float)).set_index('id')
 
-listings = gplt.datasets.load('boston-airbnb-listings')
+listings = gpd.read_file(geoplot_data.boston_airbnb_listings())
 listings = listings.assign(zipcode=listings.zipcode.astype(float))
 
 
 # Plot the data.
+import geoplot as gplt
+import geoplot.crs as gcrs
+import numpy as np
+import matplotlib.pyplot as plt
+
 ax = gplt.polyplot(boston_zip_codes.geometry, projection=gcrs.AlbersEqualArea(),
                    facecolor='lightgray', edgecolor='gray', linewidth=0)
 
