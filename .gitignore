@@ -10,6 +10,6 @@ source/
 dist/
 geoplot.egg-info/
 baseline/
-
+quilt_packages/
 # Temp files
 Untitled.ipynb
