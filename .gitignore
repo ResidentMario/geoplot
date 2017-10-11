@@ -5,11 +5,8 @@ tests/.hypothesis/
 dependencies/
 .DS_Store
 *.pyc
-docs/_build
-build/
 __pycache__/
 source/
-html/
 dist/
 geoplot.egg-info/
 baseline/
