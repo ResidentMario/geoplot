@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with Projections &#8212; geoplot 0.0.5 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          geoplot</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.5</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Working with Projections</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/tutorial/projections.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="working-with-projections">
+<h1>Working with Projections<a class="headerlink" href="#working-with-projections" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Map_projection">Projections</a> are
+<code class="docutils literal"><span class="pre">geoplot</span></code>&#8216;s killer feature. Our explaination is by example. Throughout
+this segment of the tutorial we&#8217;ll use the <code class="docutils literal"><span class="pre">polyplot</span></code> plot type, which
+faithfully displays whatever geometry put into it.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;../../&#39;</span><span class="p">)</span>  <span class="c1"># ignore this</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+
+<span class="n">usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/united_states/usa.geojson&quot;</span><span class="p">)</span>
+<span class="n">usa</span> <span class="o">=</span> <span class="n">usa</span><span class="p">[</span><span class="o">~</span><span class="n">usa</span><span class="p">[</span><span class="s1">&#39;adm1_code&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;USA-3517&#39;</span><span class="p">,</span> <span class="s1">&#39;USA-3563&#39;</span><span class="p">])]</span>
+
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">)</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_1_0.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_1_0.png" />
+<p>This map is an example of an unprojected plot: it reproduces our
+coordinates as if they were on a flat Cartesian plane. But remember, the
+Earth is not a flat surface; it&#8217;s a sphere. This isn&#8217;t a map of the
+United States that you&#8217;d seen in print anywhere because it badly
+distorts both of the <a class="reference external" href="http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/Map%20coordinate%20systems/How%20to%20choose%20a%20projection.htm">two
+criteria</a>
+most projections are evaluated on: <em>shape</em> and <em>area</em>.</p>
+<p>For sufficiently small areas, the amount of distortion is very small.
+This map of New York City, for example, is reasonably accurate:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_boroughs/boroughs.geojson&quot;</span><span class="p">)</span>
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x114482eb8</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_3_1.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_3_1.png" />
+<p>More consequentially, <code class="docutils literal"><span class="pre">geoplot</span></code> returns unprojected plots as pure
+<code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">AxesSubplot</span></code> objects, while projected plots, which
+require heavy-lifting in the form of coordinate transformations, are
+returned as <code class="docutils literal"><span class="pre">cartopy</span></code> <code class="docutils literal"><span class="pre">GeoAxesSubplot</span></code> objects. To understand why
+this matters, let&#8217;s first take a look at how we generate projected
+plots, and what they look like.</p>
+<p>In the case of the contiguous United States, the projection most often
+used is known as the <a class="reference external" href="https://en.wikipedia.org/wiki/Albers_projection">Albers Equal Area
+projection</a>. This
+projection works by wrapping the Earth around a cone, one that&#8217;s
+particularly well optimized for locations near the middle of the
+Northern Hemisphere (and particularly poorly for locations at the
+poles).</p>
+<p>To place our plot in a projection, we need to pass the projection of
+interest to the <code class="docutils literal"><span class="pre">projection</span></code> keyword parameter. <code class="docutils literal"><span class="pre">geoplot</span></code> functions
+expect input to come from the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module, imported as
+<code class="docutils literal"><span class="pre">gcrs</span></code> by convention.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+
+<span class="c1"># ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea()).set_ylim((-1597757.3894385984, 1457718.4893930717))</span>
+<span class="c1"># pass</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_6_0.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_6_0.png" />
+<p><code class="docutils literal"><span class="pre">geoplot</span></code> projections are actually a very thin wrapper on
+<code class="docutils literal"><span class="pre">cartopy.crs</span></code> projections, and every <code class="docutils literal"><span class="pre">cartopy</span></code> projection is
+implemented in <code class="docutils literal"><span class="pre">geoplot.crs</span></code>. Refer to <a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/crs/projections.html">this
+page</a>
+to see the list of projections that <code class="docutils literal"><span class="pre">geoplot</span></code> implements.</p>
+<!--
+You may be wondering, if ``geoplot.crs`` is a wrapper on ``cartopy.crs``, why not just use Cartopy CRS objects directly? This comes down to an important implementation detail: when Cartopy CRS objects are used as the library  intends for them to be used, projection geolocation settings are supposed to be defined as parameters to the projection and cannot be modified after instantiation. This means that if you don't explicitly specify otherwise yourself, a Cartopy CRS object will result in a map centered on mid-Africa&mdash;coordinate `(0, 0)`!</p>
+
+``geoplot`` avoids forcing this extra work on the user by computing sensible defaults, based on the data provided, when exact settings are not provided. This is why the plot above "just works": ``geoplot`` computed the mean centroid of the polygons and centered the plot on that coordinate in the background. This feature comes at the cost of a little bit of awkwardness, requiring our wrapper classes, but overall the tradeoff seems to be very "worth it".</p>
+--><p>At this time, the defaults are still a work in progress, however. If you
+look closely at this figure you&#8217;ll notice that our copy of the United
+States is ever so slightly skewed downwards and to the right, indicating
+that the default settings <code class="docutils literal"><span class="pre">geoplot</span></code> calculates for us are off. We can
+correct this by specifying center coordinates ourselves.</p>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Geographic_center_of_the_contiguous_United_States">center of the contiguous United
+States</a>
+is 39°50′N 98°35′W. If we provide approximately these coordinates as
+<code class="docutils literal"><span class="pre">central_latitude</span></code> and <code class="docutils literal"><span class="pre">central_longitude</span></code> coordinates to our
+projection, our skew is fixed!</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># ax = gplt.polyplot(usa, projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5))\</span>
+<span class="c1">#         .set_ylim((-1597757.3894385984, 1457718.4893930717))</span>
+<span class="c1"># pass</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_8_0.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_8_0.png" />
+<p>This is the version of the map of the United States that you&#8217;re probably
+most familiar with.</p>
+<p>Of course, why stop there? I encourage you to experiment with some of
+the crazier projections (like <code class="docutils literal"><span class="pre">Gnomonic</span></code>) that <code class="docutils literal"><span class="pre">cartopy</span></code> provides.
+Of particular value are global projections, which provide a way of
+visualizing your data on top of an actual for-real sphere—neat! A
+demonstrative exame is provided below.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">())</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stock_img</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span> <span class="n">at</span> <span class="mh">0x11405ce10</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_10_1.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_10_1.png" />
+<p>The gallery has an <a class="reference external" href="../../examples/los-angeles-flights.html">example</a>
+that further demonstrates these globes and the things you can do with
+them.</p>
+<p>Now, recall that <code class="docutils literal"><span class="pre">geoplot</span></code> returns unprojected plots as pure
+<code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">AxesSubplot</span></code> objects, while projected plots are
+returned as <code class="docutils literal"><span class="pre">cartopy</span></code> <code class="docutils literal"><span class="pre">GeoAxesSubplot</span></code> objects. But <code class="docutils literal"><span class="pre">cartopy</span></code>
+<code class="docutils literal"><span class="pre">GeoAxesSublot</span></code> objects cannot be colocated with <code class="docutils literal"><span class="pre">matplotlib</span></code>
+<code class="docutils literal"><span class="pre">AxesSubplot</span></code> objects, nor vice versa! Once you have a graph, you&#8217;re
+stuck in whatever &#8220;ecosystem&#8221; you chose to be in at runtime. This is the
+major reason why we even bother providing an option to get
+&#8220;inferior-looking&#8221; <code class="docutils literal"><span class="pre">AxesSubplot</span></code> output at all: because it can
+integrated with other &#8220;stuff&#8221; in the wider <code class="docutils literal"><span class="pre">matplotlib</span></code> ecosystem.</p>
+<p>The biggest reason to ask for <code class="docutils literal"><span class="pre">matplotlib</span></code> output is <code class="docutils literal"><span class="pre">mplleaflet</span></code>, a
+small library which allows you to place <code class="docutils literal"><span class="pre">matplotlib</span></code> plots on an
+interactive <a class="reference external" href="http://leafletjs.com/">Leaflet</a> webmap:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Code:</span>
+<span class="c1"># import mplleaflet</span>
+<span class="c1"># gplt.polyplot(boroughs)</span>
+<span class="c1"># mplleaflet.display()</span>
+
+<span class="c1"># Result:</span>
+<span class="n">Image</span><span class="p">(</span><span class="s2">&quot;./figures/leaflet-webmap-example.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_12_0.png" src="tutorial/../../docs/tutorial/projections_files/../../docs/tutorial/projections_12_0.png" />
+<p>For an interactive version, see <a class="reference external" href="../examples/boston-airbnb-kde.html">this
+example</a> or <a class="reference external" href="../examples/minard-napoleon-russia.html">this
+one</a> from the gallery.</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

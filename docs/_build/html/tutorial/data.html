@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with Geospatial Data &#8212; geoplot 0.0.5 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          geoplot</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.5</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Working with Geospatial Data</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/tutorial/data.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="working-with-geospatial-data">
+<h1>Working with Geospatial Data<a class="headerlink" href="#working-with-geospatial-data" title="Permalink to this headline">¶</a></h1>
+<p>In order to understand how to use <code class="docutils literal"><span class="pre">geoplot</span></code>, we need to understand a
+bit about the format it expects to recieves its data in: a <code class="docutils literal"><span class="pre">geopandas</span></code>
+<code class="docutils literal"><span class="pre">GeoDataFrame</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> is an augmented version of a <code class="docutils literal"><span class="pre">pandas</span></code>
+<code class="docutils literal"><span class="pre">DataFrame</span></code> with an attached geometry:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span><span class="p">;</span> <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;max_columns&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># Unclutter display.</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_boroughs/boroughs.geojson&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+<span class="n">boroughs</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>BoroCode</th>
+      <th>BoroName</th>
+      <th>Shape_Area</th>
+      <th>Shape_Leng</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5</td>
+      <td>Staten Island</td>
+      <td>1.623853e+09</td>
+      <td>330385.03697</td>
+      <td>(POLYGON ((-74.05050806403247 40.5664220341608...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>Queens</td>
+      <td>3.049947e+09</td>
+      <td>861038.47930</td>
+      <td>(POLYGON ((-73.83668274106708 40.5949466970158...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Brooklyn</td>
+      <td>1.959432e+09</td>
+      <td>726568.94634</td>
+      <td>(POLYGON ((-73.8670614947212 40.58208797679338...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>Manhattan</td>
+      <td>6.364422e+08</td>
+      <td>358532.95642</td>
+      <td>(POLYGON ((-74.01092841268033 40.6844914725429...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>Bronx</td>
+      <td>1.186804e+09</td>
+      <td>464517.89055</td>
+      <td>(POLYGON ((-73.89680883223775 40.7958084451597...</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>Any operation that will work on a <code class="docutils literal"><span class="pre">DataFrame</span></code> will work on a
+<code class="docutils literal"><span class="pre">GeoDataFrame</span></code>, but the latter adds a few additional methods and
+features for dealing with geometry not present in the former. The most
+obvious of these is the addition of a column for storing geometries,
+accessible using the <code class="docutils literal"><span class="pre">geometry</span></code> attribute:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.05050806403247</span> <span class="mf">40.5664220341608</span><span class="o">...</span>
+<span class="mi">1</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.83668274106708</span> <span class="mf">40.5949466970158</span><span class="o">...</span>
+<span class="mi">2</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.8670614947212</span> <span class="mf">40.58208797679338</span><span class="o">...</span>
+<span class="mi">3</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.01092841268033</span> <span class="mf">40.6844914725429</span><span class="o">...</span>
+<span class="mi">4</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.89680883223775</span> <span class="mf">40.7958084451597</span><span class="o">...</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>That geometry is stored with reference to some kind of <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">coordinate
+reference
+system</a>, or
+CRS. You can extract what CRS your polygons are stored in using the
+<code class="docutils literal"><span class="pre">crs</span></code> attribute:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">boroughs</span><span class="o">.</span><span class="n">crs</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="s1">&#39;epsg:4326&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In this case <code class="docutils literal"><span class="pre">epsg:4326</span></code> is an identifier for what the rest of us more
+commonly refer to as &#8220;longitude and latitude&#8221;. EPSG itself is a
+standardized system for refering to coordinate reference systems;
+<a class="reference external" href="http://spatialreference.org/ref/epsg/wgs-84/">spatialreference.org</a>
+is the best place to look these identifiers up.</p>
+<p>Coordinate reference systems are, basically, different ways of
+mathematically calculating locations. Due to the complexity of the
+surface of the earth, different geographically sensitive systems of
+measurement are more or less useful for different tasks. For example,
+the United States Geolocial Service, which provides extremely
+high-accuracy maps of United States localities, maintains individual
+coordinate reference systems, refered to as &#8220;state plane systems&#8221;, for
+the various states of the union. These are used throughout government,
+and look nothing like the latitude and longitude coordinates that we are
+generally more used to.</p>
+<p>For example, New York City approximately twice per year releases an
+updated version of MapPLUTO, a geospatial dataset which provides
+building footprint polygons for all buildings in New York City. This is
+the dataset which powers some pretty amazing visualizations, like
+<a class="reference external" href="http://bklynr.com/block-by-block-brooklyns-past-and-present/">Bklynr&#8217;s Brooklyn building age
+map</a>.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../../data/manhattan_mappluto/MN_Dcp_Mappinglot.shp&#39;</span><span class="p">)</span>
+<span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>BLOCK</th>
+      <th>BORO</th>
+      <th>CREATED_BY</th>
+      <th>...</th>
+      <th>Shape_Area</th>
+      <th>Shape_Leng</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20009</td>
+      <td>1</td>
+      <td>None</td>
+      <td>...</td>
+      <td>10289.237892</td>
+      <td>836.495687</td>
+      <td>POLYGON ((986519.6798000038 200244.1201999933,...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20031</td>
+      <td>1</td>
+      <td>None</td>
+      <td>...</td>
+      <td>8943.539985</td>
+      <td>478.609196</td>
+      <td>POLYGON ((992017.6599999964 216103.8700000048,...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20027</td>
+      <td>1</td>
+      <td>None</td>
+      <td>...</td>
+      <td>10156.610383</td>
+      <td>486.181920</td>
+      <td>POLYGON ((991564.0900000036 215278.3798999935,...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20012</td>
+      <td>1</td>
+      <td>None</td>
+      <td>...</td>
+      <td>7657.969093</td>
+      <td>357.345276</td>
+      <td>POLYGON ((986364.6000999957 201496.4998999983,...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20067</td>
+      <td>1</td>
+      <td>None</td>
+      <td>...</td>
+      <td>9171.078777</td>
+      <td>479.281556</td>
+      <td>POLYGON ((995870.7099999934 223069.0699999928,...</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 10 columns</p>
+</div><p>But, unlike our easy coordinates above, this data is stored in the Long
+Island State Plane coordinate reference system:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="mf">986519.6798000038</span> <span class="mf">200244.1201999933</span><span class="p">,</span><span class="o">...</span>
+<span class="mi">1</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="mf">992017.6599999964</span> <span class="mf">216103.8700000048</span><span class="p">,</span><span class="o">...</span>
+<span class="mi">2</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="mf">991564.0900000036</span> <span class="mf">215278.3798999935</span><span class="p">,</span><span class="o">...</span>
+<span class="mi">3</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="mf">986364.6000999957</span> <span class="mf">201496.4998999983</span><span class="p">,</span><span class="o">...</span>
+<span class="mi">4</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="mf">995870.7099999934</span> <span class="mf">223069.0699999928</span><span class="p">,</span><span class="o">...</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>The file we just read in provided embedded information about its
+coordinate reference system, which <code class="docutils literal"><span class="pre">geopandas</span></code> stores as a
+<a class="reference external" href="https://github.com/OSGeo/proj.4">proj4</a> string:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">crs</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;datum&#39;</span><span class="p">:</span> <span class="s1">&#39;NAD83&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;lat_0&#39;</span><span class="p">:</span> <span class="mf">40.16666666666666</span><span class="p">,</span>
+ <span class="s1">&#39;lat_1&#39;</span><span class="p">:</span> <span class="mf">40.66666666666666</span><span class="p">,</span>
+ <span class="s1">&#39;lat_2&#39;</span><span class="p">:</span> <span class="mf">41.03333333333333</span><span class="p">,</span>
+ <span class="s1">&#39;lon_0&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">74</span><span class="p">,</span>
+ <span class="s1">&#39;no_defs&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+ <span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;lcc&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;us-ft&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;x_0&#39;</span><span class="p">:</span> <span class="mi">300000</span><span class="p">,</span>
+ <span class="s1">&#39;y_0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">geoplot</span></code> expects its input to be in terms of latitude and longitude.
+This is required because it&#8217;s so easy to do: to convert your data from
+one CRS to another, you can just use the <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">to_crs</span></code>
+method:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span> <span class="o">=</span> <span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now all of our building footprints are in ordinary coordinates!</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.99181250685882</span> <span class="mf">40.71630025841903</span><span class="o">...</span>
+<span class="mi">1</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.97196114404649</span> <span class="mf">40.75982822136702</span><span class="o">...</span>
+<span class="mi">2</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.97359928976277</span> <span class="mf">40.75756284914222</span><span class="o">...</span>
+<span class="mi">3</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.99237153770106</span> <span class="mf">40.71973777834428</span><span class="o">...</span>
+<span class="mi">4</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.95804078098135</span> <span class="mf">40.77894165663843</span><span class="o">...</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>You should also know, at a minimum, that all of these geometries are
+always <a class="reference external" href="http://toblerity.org/shapely/manual.html">shapely</a> objects:</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">manhattan_buildings</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">polygon</span><span class="o">.</span><span class="n">Polygon</span>
+</pre></div>
+</div>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">multipolygon</span><span class="o">.</span><span class="n">MultiPolygon</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">shapely</span></code> provides a large API surface for any geometric
+transformation or operations that you can think of, and <code class="docutils literal"><span class="pre">geopandas</span></code>
+wraps many of these even further, creating a convenient way of getting
+&#8220;classical&#8221; GIS operations done on your data. Like <code class="docutils literal"><span class="pre">geopandas</span></code>,
+<code class="docutils literal"><span class="pre">shapely</span></code> is very well-documented, so to dive into these further <a class="reference external" href="http://toblerity.org/shapely/manual.html">read
+the documentation</a>.</p>
+<p>In this tutorial, we&#8217;ll focus on one particular aspect of <code class="docutils literal"><span class="pre">shapely</span></code>
+which is likely to come up: defining your own geometries. A decision I
+made early on in the design stages of <code class="docutils literal"><span class="pre">geoplot</span></code> was mandating input as
+a <code class="docutils literal"><span class="pre">GeoDataFrame</span></code>, as doing so (as opposed to, say, also supporting
+<code class="docutils literal"><span class="pre">DataFrame</span></code> input) greatly simplifies both internal and external
+library design.</p>
+<p>However, in the cases above we read a GeoDataFrame straight out of
+geospatial files: our borough information was stored in the
+<a class="reference external" href="http://geojson.org/">GeoJSON</a> format, while our building footprints
+were a <a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a>. What if
+we have geospatial data embedded in an ordinary <code class="docutils literal"><span class="pre">CSV</span></code> or <code class="docutils literal"><span class="pre">JSON</span></code>
+file, which read into an ordinary <code class="docutils literal"><span class="pre">pandas</span></code> <code class="docutils literal"><span class="pre">DataFrame</span></code>?</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">collisions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/nyc_collisions/NYPD_Motor_Vehicle_Collisions.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;LOCATION&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
+<span class="n">collisions</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TIME</th>
+      <th>BOROUGH</th>
+      <th>ZIP CODE</th>
+      <th>...</th>
+      <th>VEHICLE TYPE CODE 3</th>
+      <th>VEHICLE TYPE CODE 4</th>
+      <th>VEHICLE TYPE CODE 5</th>
+    </tr>
+    <tr>
+      <th>DATE</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>12/16/2014</th>
+      <td>17:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>10/21/2015</th>
+      <td>19:45</td>
+      <td>QUEENS</td>
+      <td>11691.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>08/12/2015</th>
+      <td>8:50</td>
+      <td>QUEENS</td>
+      <td>11103.0</td>
+      <td>...</td>
+      <td>UNKNOWN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>08/04/2012</th>
+      <td>4:40</td>
+      <td>QUEENS</td>
+      <td>11102.0</td>
+      <td>...</td>
+      <td>PASSENGER VEHICLE</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>07/15/2016</th>
+      <td>10:50</td>
+      <td>BRONX</td>
+      <td>10456.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 28 columns</p>
+</div><div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">collisions</span><span class="p">[[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">,</span> <span class="s1">&#39;LONGITUDE&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LATITUDE</th>
+      <th>LONGITUDE</th>
+    </tr>
+    <tr>
+      <th>DATE</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>12/16/2014</th>
+      <td>40.677672</td>
+      <td>-73.803327</td>
+    </tr>
+    <tr>
+      <th>10/21/2015</th>
+      <td>40.602834</td>
+      <td>-73.765749</td>
+    </tr>
+    <tr>
+      <th>08/12/2015</th>
+      <td>40.764354</td>
+      <td>-73.911304</td>
+    </tr>
+    <tr>
+      <th>08/04/2012</th>
+      <td>40.775731</td>
+      <td>-73.926023</td>
+    </tr>
+    <tr>
+      <th>07/15/2016</th>
+      <td>40.835011</td>
+      <td>-73.903520</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>In that case we can import <code class="docutils literal"><span class="pre">shapely</span></code> directly, use it to define our
+own geometries, using the data from our <code class="docutils literal"><span class="pre">DataFrame</span></code>, and use that to
+initialize a <code class="docutils literal"><span class="pre">GeoDataFrame</span></code>.</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shapely</span>
+
+<span class="n">collision_points</span> <span class="o">=</span> <span class="n">collisions</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">srs</span><span class="p">:</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LONGITUDE&#39;</span><span class="p">],</span> <span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">]),</span>
+                                    <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+<span class="n">collision_points</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DATE</span>
+<span class="mi">12</span><span class="o">/</span><span class="mi">16</span><span class="o">/</span><span class="mi">2014</span>           <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.8033269</span> <span class="mf">40.6776723</span><span class="p">)</span>
+<span class="mi">10</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">2015</span>    <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.76574859999999</span> <span class="mf">40.6028338</span><span class="p">)</span>
+<span class="mi">08</span><span class="o">/</span><span class="mi">12</span><span class="o">/</span><span class="mi">2015</span>    <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.9113038</span> <span class="mf">40.76435410000001</span><span class="p">)</span>
+<span class="mi">08</span><span class="o">/</span><span class="mi">04</span><span class="o">/</span><span class="mi">2012</span>    <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.92602340000001</span> <span class="mf">40.7757305</span><span class="p">)</span>
+<span class="mi">07</span><span class="o">/</span><span class="mi">15</span><span class="o">/</span><span class="mi">2016</span>           <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.9035195</span> <span class="mf">40.8350109</span><span class="p">)</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>From there we pass this iterable of geometries to the <code class="docutils literal"><span class="pre">geometry</span></code>
+property of the <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> initializer, and we&#8217;re done!</p>
+<div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="n">collisions_geocoded</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">collision_points</span><span class="p">)</span>
+<span class="n">collisions_geocoded</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TIME</th>
+      <th>BOROUGH</th>
+      <th>ZIP CODE</th>
+      <th>...</th>
+      <th>VEHICLE TYPE CODE 4</th>
+      <th>VEHICLE TYPE CODE 5</th>
+      <th>geometry</th>
+    </tr>
+    <tr>
+      <th>DATE</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>12/16/2014</th>
+      <td>17:00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>POINT (-73.8033269 40.6776723)</td>
+    </tr>
+    <tr>
+      <th>10/21/2015</th>
+      <td>19:45</td>
+      <td>QUEENS</td>
+      <td>11691.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>POINT (-73.76574859999999 40.6028338)</td>
+    </tr>
+    <tr>
+      <th>08/12/2015</th>
+      <td>8:50</td>
+      <td>QUEENS</td>
+      <td>11103.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>POINT (-73.9113038 40.76435410000001)</td>
+    </tr>
+    <tr>
+      <th>08/04/2012</th>
+      <td>4:40</td>
+      <td>QUEENS</td>
+      <td>11102.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>POINT (-73.92602340000001 40.7757305)</td>
+    </tr>
+    <tr>
+      <th>07/15/2016</th>
+      <td>10:50</td>
+      <td>BRONX</td>
+      <td>10456.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>POINT (-73.9035195 40.8350109)</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 29 columns</p>
+</div><div class="code ipython3 highlight-default"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">collisions_geocoded</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">geopandas</span><span class="o">.</span><span class="n">geodataframe</span><span class="o">.</span><span class="n">GeoDataFrame</span>
+</pre></div>
+</div>
+<p>In most cases, data with geospatial information provided in a CSV will
+be point data corresponding with individual coordinates. Sometimes,
+however, one may wish to define more complex geometry: square areas, for
+example, and <em>maybe</em> even complex polygons. While we won&#8217;t cover these
+cases, they&#8217;re quite similar to the extremely simple point case we&#8217;ve
+shown here. For further reference on such a task, refer to the
+<code class="docutils literal"><span class="pre">shapely</span></code> documentation.</p>
+<p><a class="reference external" href="./projections.html">Click here to continue to the next section of the tutorial:
+&#8220;Projections&#8221;</a>.</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
