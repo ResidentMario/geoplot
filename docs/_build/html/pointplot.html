@@ -202,23 +202,23 @@ can be made by specifying the input data (and, optionally, a <a class="reference
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-initial.png" src="../figures/pointplot/pointplot-initial.png" />
+<img alt="_images/pointplot-initial.png" src="_images/pointplot-initial.png" />
 <p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter accepts a data column and applies a colormap to the output.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-hue.png" src="../figures/pointplot/pointplot-hue.png" />
+<img alt="_images/pointplot-hue.png" src="_images/pointplot-hue.png" />
 <p>The <code class="docutils literal"><span class="pre">legend</span></code> parameter toggles a legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend.png" src="../figures/pointplot/pointplot-legend.png" />
+<img alt="_images/pointplot-legend.png" src="_images/pointplot-legend.png" />
 <p><code class="docutils literal"><span class="pre">legend_labels</span></code> specifies custom legend labels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDE&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-labels.png" src="../figures/pointplot/pointplot-legend-labels.png" />
+<img alt="_images/pointplot-legend-labels.png" src="_images/pointplot-legend-labels.png" />
 <p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes
 containing equal numbers of observations - a <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile">quantile</a> scheme. An
 alternative binning scheme can be specified using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. Valid options are <code class="docutils literal"><span class="pre">Quantile</span></code>,
@@ -228,14 +228,14 @@ and <code class="docutils literal"><span class="pre">Fisher_jenks</span></code> 
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scheme.png" src="../figures/pointplot/pointplot-scheme.png" />
+<img alt="_images/pointplot-scheme.png" src="_images/pointplot-scheme.png" />
 <p>If the variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-categorical.png" src="../figures/pointplot/pointplot-categorical.png" />
+<img alt="_images/pointplot-categorical.png" src="_images/pointplot-categorical.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments will be
 passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.legend.Legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">ref</a>). The <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">bbox_to_anchor</span></code>
 parameters are particularly useful for positioning the legend.</p>
@@ -243,7 +243,7 @@ parameters are particularly useful for positioning the legend.</p>
                <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-kwargs.png" src="../figures/pointplot/pointplot-legend-kwargs.png" />
+<img alt="_images/pointplot-legend-kwargs.png" src="_images/pointplot-legend-kwargs.png" />
 <p>Additional arguments will be interpreted as keyword arguments to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code>
 instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -252,7 +252,7 @@ instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_a
                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-kwargs.png" src="../figures/pointplot/pointplot-kwargs.png" />
+<img alt="_images/pointplot-kwargs.png" src="_images/pointplot-kwargs.png" />
 <p>Change the number of bins by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
@@ -260,7 +260,7 @@ instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_a
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-k.png" src="../figures/pointplot/pointplot-k.png" />
+<img alt="_images/pointplot-k.png" src="_images/pointplot-k.png" />
 <p>Adjust the <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any
 colormap recognizable to <code class="docutils literal"><span class="pre">matplotlib</span></code> using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -269,7 +269,7 @@ colormap recognizable to <code class="docutils literal"><span class="pre">matplo
        <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-cmap.png" src="../figures/pointplot/pointplot-cmap.png" />
+<img alt="_images/pointplot-cmap.png" src="_images/pointplot-cmap.png" />
 <p>To use a continuous colormap, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note that if <code class="docutils literal"><span class="pre">legend=True</span></code>,
 a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></code> legend will be used (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -278,21 +278,21 @@ a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></c
        <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-k-None.png" src="../figures/pointplot/pointplot-k-None.png" />
+<img alt="_images/pointplot-k-None.png" src="_images/pointplot-k-None.png" />
 <p><code class="docutils literal"><span class="pre">scale</span></code> provides an alternative or additional visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scale.png" src="../figures/pointplot/pointplot-scale.png" />
+<img alt="_images/pointplot-scale.png" src="_images/pointplot-scale.png" />
 <p>The limits can be adjusted to fit your data using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-limits.png" src="../figures/pointplot/pointplot-limits.png" />
+<img alt="_images/pointplot-limits.png" src="_images/pointplot-limits.png" />
 <p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
 between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
@@ -308,7 +308,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scale-func.png" src="../figures/pointplot/pointplot-scale-func.png" />
+<img alt="_images/pointplot-scale-func.png" src="_images/pointplot-scale-func.png" />
 <p><code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> can co-exist.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
                <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -317,7 +317,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-hue-scale.png" src="../figures/pointplot/pointplot-hue-scale.png" />
+<img alt="_images/pointplot-hue-scale.png" src="_images/pointplot-hue-scale.png" />
 <p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
                <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -327,7 +327,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-var.png" src="../figures/pointplot/pointplot-legend-var.png" />
+<img alt="_images/pointplot-legend-var.png" src="_images/pointplot-legend-var.png" />
 </dd></dl>
 
 </div>

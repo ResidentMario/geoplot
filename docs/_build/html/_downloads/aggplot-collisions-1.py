@@ -1,14 +1,32 @@
+# Load the data.
+from quilt.data.ResidentMario import nyc_collisions
+import shapely
+import geopandas as gpd
+import pandas as pd
+
+collisions = nyc_collisions.collisions()
+
+def pointify(srs):
+    try:
+        lat, long = float(srs['LATITUDE']), float(srs['LONGITUDE'])
+        if pd.isnull(lat) or pd.isnull(long):
+            return shapely.geometry.Point((0, 0))
+        else:
+            return shapely.geometry.Point((long, lat))
+    except ValueError:
+        return shapely.geometry.Point((0, 0))
+
+collisions = gpd.GeoDataFrame(collisions.head(5000), geometry=collisions.head(5000).apply(pointify, axis='columns'))
+collisions = collisions[collisions.geometry.map(lambda srs: not (srs.x == 0))]
+collisions['BOROUGH'] = collisions['BOROUGH'].str.strip().map(lambda v: np.nan if len(v) == 0 else v)
+
+
+# Plot the data.
 import geoplot as gplt
 import geoplot.crs as gcrs
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-# TODO: Make this easy to download.
-collisions = pd.read_csv("...")  # Please load locally.
-
-# Plot the data.
 f, axarr = plt.subplots(3, 1, figsize=(12, 12), subplot_kw={
     'projection': gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
 })

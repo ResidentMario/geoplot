@@ -10,13 +10,11 @@ Geoplot: geospatial data visualization
 
     <div class="row">
     <a href=./examples/nyc-collision-factors.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-collision-factors
-    -thumb.png" height="200" width="200">
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png" height="200" width="200">
     </a>
 
     <a href=./examples/los-angeles-flights.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/los-angeles-flights-thumb
-    .png" height="200" width="200">
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png" height="200" width="200">
     </a>
 
     <!--
@@ -27,18 +25,16 @@ Geoplot: geospatial data visualization
     -->
 
     <a href=./examples/usa-city-elevations.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/usa-city-elevations-thumb.png"
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
      height="200">
     </a>
 
     <a href=./examples/nyc-parking-tickets.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/nyc-parking-tickets-thumb
-    .png" height="200" width="200">
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png" height="200" width="200">
     </a>
 
     <a href=./examples/dc-street-network.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/demos/dc-street-network-thumb
-    .png" height="200" width="200">
+    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png" height="200" width="200">
     </a>
 
     </div>

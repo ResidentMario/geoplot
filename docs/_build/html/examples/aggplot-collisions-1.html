@@ -130,16 +130,34 @@
 <h1>Aggplot types<a class="headerlink" href="#aggplot-types" title="Permalink to this headline">¶</a></h1>
 <img alt="../_images/aggplot-collisions-1.png" src="../_images/aggplot-collisions-1.png" />
 <p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/aggplot-collisions-1.py" download=""><code class="xref download docutils literal"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">aggplot-collisions-1]</span></code></a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quilt.data.ResidentMario</span> <span class="k">import</span> <span class="n">nyc_collisions</span>
+<span class="kn">import</span> <span class="nn">shapely</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">nyc_collisions</span><span class="o">.</span><span class="n">collisions</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">pointify</span><span class="p">(</span><span class="n">srs</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lat</span><span class="p">,</span> <span class="n">long</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LONGITUDE&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">long</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">long</span><span class="p">,</span> <span class="n">lat</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span> <span class="n">geometry</span><span class="o">=</span><span class="n">collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pointify</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">))</span>
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">srs</span><span class="p">:</span> <span class="ow">not</span> <span class="p">(</span><span class="n">srs</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))]</span>
+<span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">v</span><span class="p">)</span>
+
+
+<span class="c1"># Plot the data.</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-
-<span class="c1"># TODO: Make this easy to download.</span>
-<span class="n">collisions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>  <span class="c1"># Please load locally.</span>
-
-<span class="c1"># Plot the data.</span>
 <span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span>
     <span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><span class="mf">40.7128</span><span class="p">,</span> <span class="n">central_longitude</span><span class="o">=-</span><span class="mf">74.0059</span><span class="p">)</span>
 <span class="p">})</span>

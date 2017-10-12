@@ -217,14 +217,14 @@ optionally, a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-initial.png" src="../figures/sankey/sankey-initial.png" />
+<img alt="_images/sankey-initial.png" src="_images/sankey-initial.png" />
 <p>However, Sankey diagrams need additional geospatial context to be interpretable. In this case (and for the
 remainder of the examples) we will provide this by overlaying world geometry.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-geospatial-context.png" src="../figures/sankey/sankey-geospatial-context.png" />
+<img alt="_images/sankey-geospatial-context.png" src="_images/sankey-geospatial-context.png" />
 <p>This function is very <code class="docutils literal"><span class="pre">seaborn</span></code>-like in that the usual <code class="docutils literal"><span class="pre">df</span></code> argument is optional. If geometries are provided
 as independent iterables it can be dropped.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">])</span>
@@ -232,7 +232,7 @@ as independent iterables it can be dropped.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-alternative-method-signature.png" src="../figures/sankey/sankey-alternative-method-signature.png" />
+<img alt="_images/sankey-alternative-method-signature.png" src="_images/sankey-alternative-method-signature.png" />
 <p>You may be wondering why the lines are curved. By default, the paths followed by the plot are the <em>actual</em>
 shortest paths between those two points, in the spherical sense. This is known as <a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>. We can see this clearly in an ortographic projection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">],</span>
@@ -242,7 +242,7 @@ shortest paths between those two points, in the spherical sense. This is known a
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-greatest-circle-distance.png" src="../figures/sankey/sankey-greatest-circle-distance.png" />
+<img alt="_images/sankey-greatest-circle-distance.png" src="_images/sankey-greatest-circle-distance.png" />
 <p>Plot using a different distance metric, pass it as an argument to the <code class="docutils literal"><span class="pre">path</span></code> parameter. Awkwardly, <code class="docutils literal"><span class="pre">cartopy</span></code>
 <code class="docutils literal"><span class="pre">crs</span></code> objects (<em>not</em> <code class="docutils literal"><span class="pre">geoplot</span></code> ones) are required.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cartopy.ccrs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
@@ -252,14 +252,14 @@ shortest paths between those two points, in the spherical sense. This is known a
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-path-projection.png" src="../figures/sankey/sankey-path-projection.png" />
+<img alt="_images/sankey-path-projection.png" src="_images/sankey-path-projection.png" />
 <p>One of the most powerful <code class="docutils literal"><span class="pre">sankey</span></code> features is that if your data has custom paths, you can use those instead
 with the <code class="docutils literal"><span class="pre">path</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">dc</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;aadt&#39;</span><span class="p">,</span>
         <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-path.png" src="../figures/sankey/sankey-path.png" />
+<img alt="_images/sankey-path.png" src="_images/sankey-path.png" />
 <p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter colorizes paths based on data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -268,7 +268,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-hue.png" src="../figures/sankey/sankey-hue.png" />
+<img alt="_images/sankey-hue.png" src="_images/sankey-hue.png" />
 <p><code class="docutils literal"><span class="pre">cmap</span></code> changes the colormap.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -277,7 +277,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-cmap.png" src="../figures/sankey/sankey-cmap.png" />
+<img alt="_images/sankey-cmap.png" src="_images/sankey-cmap.png" />
 <p><code class="docutils literal"><span class="pre">legend</span></code> adds a legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -287,7 +287,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend.png" src="../figures/sankey/sankey-legend.png" />
+<img alt="_images/sankey-legend.png" src="_images/sankey-legend.png" />
 <p>Pass keyword arguments to the legend with <code class="docutils literal"><span class="pre">legend_kwargs</span></code>. This is often necessary for positioning.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -297,7 +297,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-kwargs.png" src="../figures/sankey/sankey-legend-kwargs.png" />
+<img alt="_images/sankey-legend-kwargs.png" src="_images/sankey-legend-kwargs.png" />
 <p>Specify custom legend labels with <code class="docutils literal"><span class="pre">legend_labels</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -308,7 +308,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-labels.png" src="../figures/sankey/sankey-legend-labels.png" />
+<img alt="_images/sankey-legend-labels.png" src="_images/sankey-legend-labels.png" />
 <p>Change the number of bins with <code class="docutils literal"><span class="pre">k</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -319,7 +319,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-k.png" src="../figures/sankey/sankey-k.png" />
+<img alt="_images/sankey-k.png" src="_images/sankey-k.png" />
 <p>Change the binning sceme with <code class="docutils literal"><span class="pre">scheme</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -330,7 +330,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scheme.png" src="../figures/sankey/sankey-scheme.png" />
+<img alt="_images/sankey-scheme.png" src="_images/sankey-scheme.png" />
 <p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -342,7 +342,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-categorical.png" src="../figures/sankey/sankey-categorical.png" />
+<img alt="_images/sankey-categorical.png" src="_images/sankey-categorical.png" />
 <p><code class="docutils literal"><span class="pre">scale</span></code> can be used to enable <code class="docutils literal"><span class="pre">linewidth</span></code> as a visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -353,7 +353,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scale.png" src="../figures/sankey/sankey-scale.png" />
+<img alt="_images/sankey-scale.png" src="_images/sankey-scale.png" />
 <p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
 0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -365,7 +365,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-limits.png" src="../figures/sankey/sankey-limits.png" />
+<img alt="_images/sankey-limits.png" src="_images/sankey-limits.png" />
 <p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
 specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
 maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
@@ -383,7 +383,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scale-func.png" src="../figures/sankey/sankey-scale-func.png" />
+<img alt="_images/sankey-scale-func.png" src="_images/sankey-scale-func.png" />
 <p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
          <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -394,7 +394,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-var.png" src="../figures/sankey/sankey-legend-var.png" />
+<img alt="_images/sankey-legend-var.png" src="_images/sankey-legend-var.png" />
 </dd></dl>
 
 </div>

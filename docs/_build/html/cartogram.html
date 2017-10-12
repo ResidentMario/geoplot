@@ -204,13 +204,13 @@ ones; only the former is implemented in <code class="docutils literal"><span cla
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-initial.png" src="../figures/cartogram/cartogram-initial.png" />
+<img alt="_images/cartogram-initial.png" src="_images/cartogram-initial.png" />
 <p>The gray outline can be turned off by specifying <code class="docutils literal"><span class="pre">trace</span></code>, and a legend can be added by specifying <code class="docutils literal"><span class="pre">legend</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-trace-legend.png" src="../figures/cartogram/cartogram-trace-legend.png" />
+<img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
 necessary to properly position the legend, will be passed to the underlying <a href="#id5"><span class="problematic" id="id6">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
@@ -218,7 +218,7 @@ http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-legend-kwargs.png" src="../figures/cartogram/cartogram-legend-kwargs.png" />
+<img alt="_images/cartogram-legend-kwargs.png" src="_images/cartogram-legend-kwargs.png" />
 <p>Specify an alternative legend display using the <code class="docutils literal"><span class="pre">legend_values</span></code> and <code class="docutils literal"><span class="pre">legend_labels</span></code> parameters.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
        <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.32779655e-07</span><span class="p">,</span> <span class="mf">6.39683197e-07</span><span class="p">,</span> <span class="mf">1.01364661e-06</span><span class="p">,</span> <span class="mf">1.17380941e-06</span><span class="p">,</span> <span class="mf">2.33642596e-06</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
@@ -226,27 +226,27 @@ http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.
        <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-legend-labels.png" src="../figures/cartogram/cartogram-legend-labels.png" />
+<img alt="_images/cartogram-legend-labels.png" src="_images/cartogram-legend-labels.png" />
 <p>Additional arguments to <code class="docutils literal"><span class="pre">cartogram</span></code> will be interpreted as keyword arguments for the scaled polygons,
 using <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patch</a> rules.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-kwargs.png" src="../figures/cartogram/cartogram-kwargs.png" />
+<img alt="_images/cartogram-kwargs.png" src="_images/cartogram-kwargs.png" />
 <p>Manipulate the outlines use the <code class="docutils literal"><span class="pre">trace_kwargs</span></code> argument, which accepts the same <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patch</a> parameters.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;lightgreen&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-trace-kwargs.png" src="../figures/cartogram/cartogram-trace-kwargs.png" />
+<img alt="_images/cartogram-trace-kwargs.png" src="_images/cartogram-trace-kwargs.png" />
 <p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
 0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-limits.png" src="../figures/cartogram/cartogram-limits.png" />
+<img alt="_images/cartogram-limits.png" src="_images/cartogram-limits.png" />
 <p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
 between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
@@ -261,7 +261,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-scale-func.png" src="../figures/cartogram/cartogram-scale-func.png" />
+<img alt="_images/cartogram-scale-func.png" src="_images/cartogram-scale-func.png" />
 <p><code class="docutils literal"><span class="pre">cartogram</span></code> also provides the same <code class="docutils literal"><span class="pre">hue</span></code> visual variable parameters provided by e.g. <code class="docutils literal"><span class="pre">pointplot</span></code>. Although
 it&#8217;s possible for <code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> to refer to different aspects of the data, it&#8217;s strongly recommended
 to use the same data column for both. For more information on <code class="docutils literal"><span class="pre">hue</span></code>-related arguments, refer to e.g. the
@@ -270,7 +270,7 @@ to use the same data column for both. For more information on <code class="docut
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-hue.png" src="../figures/cartogram/cartogram-hue.png" />
+<img alt="_images/cartogram-hue.png" src="_images/cartogram-hue.png" />
 </dd></dl>
 
 </div>

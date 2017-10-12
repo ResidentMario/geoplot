@@ -167,7 +167,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-initial.png" src="../figures/polyplot/polyplot-initial.png" />
+<img alt="_images/polyplot-initial.png" src="_images/polyplot-initial.png" />
 <p>However, note that <code class="docutils literal"><span class="pre">polyplot</span></code> is mainly intended to be used in concert with other plot types.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -176,13 +176,13 @@ will be graphed. If this parameter is left undefined a new axis will be created 
                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-stacked.png" src="../figures/polyplot/polyplot-stacked.png" />
+<img alt="_images/polyplot-stacked.png" src="_images/polyplot-stacked.png" />
 <p>Additional keyword arguments are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-kwargs.png" src="../figures/polyplot/polyplot-kwargs.png" />
+<img alt="_images/polyplot-kwargs.png" src="_images/polyplot-kwargs.png" />
 </dd></dl>
 
 </div>

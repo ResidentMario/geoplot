@@ -190,38 +190,38 @@ a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-initial.png" src="../figures/choropleth/choropleth-initial.png" />
+<img alt="_images/choropleth-initial.png" src="_images/choropleth-initial.png" />
 <p>Change the colormap with the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-cmap.png" src="../figures/choropleth/choropleth-cmap.png" />
+<img alt="_images/choropleth-cmap.png" src="_images/choropleth-cmap.png" />
 <p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-categorical.png" src="../figures/choropleth/choropleth-categorical.png" />
+<img alt="_images/choropleth-categorical.png" src="_images/choropleth-categorical.png" />
 <p>To add a legend, specify <code class="docutils literal"><span class="pre">legend</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span>
                 <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend.png" src="../figures/choropleth/choropleth-legend.png" />
+<img alt="_images/choropleth-legend.png" src="_images/choropleth-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
 necessary to properly position the legend, will be passed to the underlying <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">matplotlib Legend instance</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span>
                 <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend-kwargs.png" src="../figures/choropleth/choropleth-legend-kwargs.png" />
+<img alt="_images/choropleth-legend-kwargs.png" src="_images/choropleth-legend-kwargs.png" />
 <p>Additional arguments not in the method signature will be passed as keyword parameters to the underlying
 <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patches</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-kwargs.png" src="../figures/choropleth/choropleth-kwargs.png" />
+<img alt="_images/choropleth-kwargs.png" src="_images/choropleth-kwargs.png" />
 <p>Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
 them. Change the number of buckets by specifying <code class="docutils literal"><span class="pre">k</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -229,13 +229,13 @@ them. Change the number of buckets by specifying <code class="docutils literal">
         <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-k.png" src="../figures/choropleth/choropleth-k.png" />
+<img alt="_images/choropleth-k.png" src="_images/choropleth-k.png" />
 <p>To use a continuous colormap, specify <code class="docutils literal"><span class="pre">k=None</span></code>. In this case a colorbar legend will be used.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-k-none.png" src="../figures/choropleth/choropleth-k-none.png" />
+<img alt="_images/choropleth-k-none.png" src="_images/choropleth-k-none.png" />
 <p><code class="docutils literal"><span class="pre">legend_labels</span></code> controls the legend labels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                 <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -243,7 +243,7 @@ them. Change the number of buckets by specifying <code class="docutils literal">
                 <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Very Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Very High&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend-labels.png" src="../figures/choropleth/choropleth-legend-labels.png" />
+<img alt="_images/choropleth-legend-labels.png" src="_images/choropleth-legend-labels.png" />
 <p>Alternatively, change the scheme used to generate the buckets with the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. <code class="docutils literal"><span class="pre">equal_interval</span></code>,
 for example, will generate buckets of equal data distribution size instead.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -251,7 +251,7 @@ for example, will generate buckets of equal data distribution size instead.</p>
         <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-scheme.png" src="../figures/choropleth/choropleth-scheme.png" />
+<img alt="_images/choropleth-scheme.png" src="_images/choropleth-scheme.png" />
 </dd></dl>
 
 </div>

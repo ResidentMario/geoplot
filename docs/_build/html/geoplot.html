@@ -234,7 +234,7 @@ dataset, a data column of interest, and, optionally, a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-initial.png" src="../figures/aggplot/aggplot-initial.png" />
+<img alt="_images/aggplot-initial.png" src="_images/aggplot-initial.png" />
 <p>To get the best output, you often need to tweak the <code class="docutils literal"><span class="pre">nmin</span></code> and <code class="docutils literal"><span class="pre">nmax</span></code> parameters, controlling the minimum and
 maximum number of observations per box, respectively, yourself. In this case we&#8217;ll also choose a different
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a>, using the <code class="docutils literal"><span class="pre">cmap</span></code>
@@ -250,7 +250,7 @@ observations in the blank spaces using the <code class="docutils literal"><span 
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-quadtree-tuned.png" src="../figures/aggplot/aggplot-quadtree-tuned.png" />
+<img alt="_images/aggplot-quadtree-tuned.png" src="_images/aggplot-quadtree-tuned.png" />
 <p>You&#8217;ll have to play around with these parameters to get the clearest picture.</p>
 <p>Usually, however, observations with a geospatial component will be provided with some form of spatial
 categorization. In the case of our collisions example, this comes in the form of a postal zip code. With the
@@ -261,7 +261,7 @@ meaningful, if still crude, grouped convex hulls.</p>
              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-hulls.png" src="../figures/aggplot/aggplot-hulls.png" />
+<img alt="_images/aggplot-hulls.png" src="_images/aggplot-hulls.png" />
 <p>Finally, suppose you actually know exactly the geometries that you would like to aggregate by. Provide these in
 the form of a <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">GeoSeries</span></code>, one whose index matches the values in your <code class="docutils literal"><span class="pre">by</span></code> column (so
 <code class="docutils literal"><span class="pre">BROOKLYN</span></code> matches <code class="docutils literal"><span class="pre">BROOKLYN</span></code> for example), to the <code class="docutils literal"><span class="pre">geometry</span></code> parameter. Your output will now be an
@@ -270,7 +270,7 @@ ordinary choropleth.</p>
              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-by.png" src="../figures/aggplot/aggplot-by.png" />
+<img alt="_images/aggplot-by.png" src="_images/aggplot-by.png" />
 <p>Observations will be aggregated by average, by default. In our example case, our plot shows that accidents in
 Manhattan tend to result in significantly fewer injuries than accidents occuring in other boroughs.</p>
 <p>Choose which aggregation to use by passing a function to the <code class="docutils literal"><span class="pre">agg</span></code> parameter.</p>
@@ -278,20 +278,20 @@ Manhattan tend to result in significantly fewer injuries than accidents occuring
          <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-agg.png" src="../figures/aggplot/aggplot-agg.png" />
+<img alt="_images/aggplot-agg.png" src="_images/aggplot-agg.png" />
 <p><code class="docutils literal"><span class="pre">legend</span></code> toggles the legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
          <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-legend.png" src="../figures/aggplot/aggplot-legend.png" />
+<img alt="_images/aggplot-legend.png" src="_images/aggplot-legend.png" />
 <p>Additional keyword arguments are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances
 (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
          <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-kwargs.png" src="../figures/aggplot/aggplot-kwargs.png" />
+<img alt="_images/aggplot-kwargs.png" src="_images/aggplot-kwargs.png" />
 <p>Additional keyword arguments for styling the <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">colorbar</a> legend are
 passed using <code class="docutils literal"><span class="pre">legend_kwargs</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
@@ -299,7 +299,7 @@ passed using <code class="docutils literal"><span class="pre">legend_kwargs</spa
              <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/aggplot/aggplot-legend-kwargs.png" src="../figures/aggplot/aggplot-legend-kwargs.png" />
+<img alt="_images/aggplot-legend-kwargs.png" src="_images/aggplot-legend-kwargs.png" />
 </dd></dl>
 
 <dl class="function">
@@ -380,13 +380,13 @@ ones; only the former is implemented in <code class="docutils literal"><span cla
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-initial.png" src="../figures/cartogram/cartogram-initial.png" />
+<img alt="_images/cartogram-initial.png" src="_images/cartogram-initial.png" />
 <p>The gray outline can be turned off by specifying <code class="docutils literal"><span class="pre">trace</span></code>, and a legend can be added by specifying <code class="docutils literal"><span class="pre">legend</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-trace-legend.png" src="../figures/cartogram/cartogram-trace-legend.png" />
+<img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
 necessary to properly position the legend, will be passed to the underlying <a href="#id35"><span class="problematic" id="id36">`matplotlib Legend instance
 http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
@@ -394,7 +394,7 @@ http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-legend-kwargs.png" src="../figures/cartogram/cartogram-legend-kwargs.png" />
+<img alt="_images/cartogram-legend-kwargs.png" src="_images/cartogram-legend-kwargs.png" />
 <p>Specify an alternative legend display using the <code class="docutils literal"><span class="pre">legend_values</span></code> and <code class="docutils literal"><span class="pre">legend_labels</span></code> parameters.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
        <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.32779655e-07</span><span class="p">,</span> <span class="mf">6.39683197e-07</span><span class="p">,</span> <span class="mf">1.01364661e-06</span><span class="p">,</span> <span class="mf">1.17380941e-06</span><span class="p">,</span> <span class="mf">2.33642596e-06</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
@@ -402,27 +402,27 @@ http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.
        <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-legend-labels.png" src="../figures/cartogram/cartogram-legend-labels.png" />
+<img alt="_images/cartogram-legend-labels.png" src="_images/cartogram-legend-labels.png" />
 <p>Additional arguments to <code class="docutils literal"><span class="pre">cartogram</span></code> will be interpreted as keyword arguments for the scaled polygons,
 using <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patch</a> rules.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-kwargs.png" src="../figures/cartogram/cartogram-kwargs.png" />
+<img alt="_images/cartogram-kwargs.png" src="_images/cartogram-kwargs.png" />
 <p>Manipulate the outlines use the <code class="docutils literal"><span class="pre">trace_kwargs</span></code> argument, which accepts the same <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patch</a> parameters.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;lightgreen&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-trace-kwargs.png" src="../figures/cartogram/cartogram-trace-kwargs.png" />
+<img alt="_images/cartogram-trace-kwargs.png" src="_images/cartogram-trace-kwargs.png" />
 <p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
 0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-limits.png" src="../figures/cartogram/cartogram-limits.png" />
+<img alt="_images/cartogram-limits.png" src="_images/cartogram-limits.png" />
 <p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
 between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
@@ -437,7 +437,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-scale-func.png" src="../figures/cartogram/cartogram-scale-func.png" />
+<img alt="_images/cartogram-scale-func.png" src="_images/cartogram-scale-func.png" />
 <p><code class="docutils literal"><span class="pre">cartogram</span></code> also provides the same <code class="docutils literal"><span class="pre">hue</span></code> visual variable parameters provided by e.g. <code class="docutils literal"><span class="pre">pointplot</span></code>. Although
 it&#8217;s possible for <code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> to refer to different aspects of the data, it&#8217;s strongly recommended
 to use the same data column for both. For more information on <code class="docutils literal"><span class="pre">hue</span></code>-related arguments, refer to e.g. the
@@ -446,7 +446,7 @@ to use the same data column for both. For more information on <code class="docut
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/cartogram/cartogram-hue.png" src="../figures/cartogram/cartogram-hue.png" />
+<img alt="_images/cartogram-hue.png" src="_images/cartogram-hue.png" />
 </dd></dl>
 
 <dl class="function">
@@ -513,38 +513,38 @@ a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-initial.png" src="../figures/choropleth/choropleth-initial.png" />
+<img alt="_images/choropleth-initial.png" src="_images/choropleth-initial.png" />
 <p>Change the colormap with the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-cmap.png" src="../figures/choropleth/choropleth-cmap.png" />
+<img alt="_images/choropleth-cmap.png" src="_images/choropleth-cmap.png" />
 <p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, you can specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-categorical.png" src="../figures/choropleth/choropleth-categorical.png" />
+<img alt="_images/choropleth-categorical.png" src="_images/choropleth-categorical.png" />
 <p>To add a legend, specify <code class="docutils literal"><span class="pre">legend</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span>
                 <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend.png" src="../figures/choropleth/choropleth-legend.png" />
+<img alt="_images/choropleth-legend.png" src="_images/choropleth-legend.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
 necessary to properly position the legend, will be passed to the underlying <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">matplotlib Legend instance</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span>
                 <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend-kwargs.png" src="../figures/choropleth/choropleth-legend-kwargs.png" />
+<img alt="_images/choropleth-legend-kwargs.png" src="_images/choropleth-legend-kwargs.png" />
 <p>Additional arguments not in the method signature will be passed as keyword parameters to the underlying
 <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patches</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BoroName&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-kwargs.png" src="../figures/choropleth/choropleth-kwargs.png" />
+<img alt="_images/choropleth-kwargs.png" src="_images/choropleth-kwargs.png" />
 <p>Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
 them. Change the number of buckets by specifying <code class="docutils literal"><span class="pre">k</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -552,13 +552,13 @@ them. Change the number of buckets by specifying <code class="docutils literal">
         <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-k.png" src="../figures/choropleth/choropleth-k.png" />
+<img alt="_images/choropleth-k.png" src="_images/choropleth-k.png" />
 <p>To use a continuous colormap, specify <code class="docutils literal"><span class="pre">k=None</span></code>. In this case a colorbar legend will be used.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-k-none.png" src="../figures/choropleth/choropleth-k-none.png" />
+<img alt="_images/choropleth-k-none.png" src="_images/choropleth-k-none.png" />
 <p><code class="docutils literal"><span class="pre">legend_labels</span></code> controls the legend labels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                 <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -566,7 +566,7 @@ them. Change the number of buckets by specifying <code class="docutils literal">
                 <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Very Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Very High&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-legend-labels.png" src="../figures/choropleth/choropleth-legend-labels.png" />
+<img alt="_images/choropleth-legend-labels.png" src="_images/choropleth-legend-labels.png" />
 <p>Alternatively, change the scheme used to generate the buckets with the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. <code class="docutils literal"><span class="pre">equal_interval</span></code>,
 for example, will generate buckets of equal data distribution size instead.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;mock_data&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -574,7 +574,7 @@ for example, will generate buckets of equal data distribution size instead.</p>
         <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/choropleth/choropleth-scheme.png" src="../figures/choropleth/choropleth-scheme.png" />
+<img alt="_images/choropleth-scheme.png" src="_images/choropleth-scheme.png" />
 </dd></dl>
 
 <dl class="function">
@@ -629,14 +629,14 @@ showing where they are.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-initial.png" src="../figures/kdeplot/kdeplot-initial.png" />
+<img alt="_images/kdeplot-initial.png" src="_images/kdeplot-initial.png" />
 <p>However, kdeplots need additional geospatial context to be interpretable. In this case (and for the remainder of
 the examples) we will provide this by overlaying borough geometry.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-overlay.png" src="../figures/kdeplot/kdeplot-overlay.png" />
+<img alt="_images/kdeplot-overlay.png" src="_images/kdeplot-overlay.png" />
 <p>Most of the rest of the parameters to <code class="docutils literal"><span class="pre">kdeplot</span></code> are parameters inherited from <a class="reference external" href="http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot">the seaborn method by the same
 name</a>, on which this plot type is
 based. For example, specifying <code class="docutils literal"><span class="pre">shade=True</span></code> provides a filled KDE instead of a contour one:</p>
@@ -645,21 +645,21 @@ based. For example, specifying <code class="docutils literal"><span class="pre">
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-shade.png" src="../figures/kdeplot/kdeplot-shade.png" />
+<img alt="_images/kdeplot-shade.png" src="_images/kdeplot-shade.png" />
 <p>Use <code class="docutils literal"><span class="pre">n_levels</span></code> to specify the number of contour levels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                   <span class="n">n_levels</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-n-levels.png" src="../figures/kdeplot/kdeplot-n-levels.png" />
+<img alt="_images/kdeplot-n-levels.png" src="_images/kdeplot-n-levels.png" />
 <p>Or specify <code class="docutils literal"><span class="pre">cmap</span></code> to change the colormap.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
      <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-cmap.png" src="../figures/kdeplot/kdeplot-cmap.png" />
+<img alt="_images/kdeplot-cmap.png" src="_images/kdeplot-cmap.png" />
 <p>Oftentimes given the geometry of the location, a &#8220;regular&#8221; continuous KDEPlot doesn&#8217;t make sense. We can specify a
 <code class="docutils literal"><span class="pre">clip</span></code> of iterable geometries, which will be used to trim the <code class="docutils literal"><span class="pre">kdeplot</span></code> (note: if you have set <code class="docutils literal"><span class="pre">shade=True</span></code> as
 a parameter you may need to additionally specify <code class="docutils literal"><span class="pre">shade_lowest=False</span></code> to avoid inversion at the edges).</p>
@@ -667,7 +667,7 @@ a parameter you may need to additionally specify <code class="docutils literal">
              <span class="n">shade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/kdeplot/kdeplot-clip.png" src="../figures/kdeplot/kdeplot-clip.png" />
+<img alt="_images/kdeplot-clip.png" src="_images/kdeplot-clip.png" />
 </dd></dl>
 
 <dl class="function">
@@ -747,23 +747,23 @@ can be made by specifying the input data (and, optionally, a <a class="reference
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-initial.png" src="../figures/pointplot/pointplot-initial.png" />
+<img alt="_images/pointplot-initial.png" src="_images/pointplot-initial.png" />
 <p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter accepts a data column and applies a colormap to the output.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-hue.png" src="../figures/pointplot/pointplot-hue.png" />
+<img alt="_images/pointplot-hue.png" src="_images/pointplot-hue.png" />
 <p>The <code class="docutils literal"><span class="pre">legend</span></code> parameter toggles a legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend.png" src="../figures/pointplot/pointplot-legend.png" />
+<img alt="_images/pointplot-legend.png" src="_images/pointplot-legend.png" />
 <p><code class="docutils literal"><span class="pre">legend_labels</span></code> specifies custom legend labels.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDE&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-labels.png" src="../figures/pointplot/pointplot-legend-labels.png" />
+<img alt="_images/pointplot-legend-labels.png" src="_images/pointplot-legend-labels.png" />
 <p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes
 containing equal numbers of observations - a <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile">quantile</a> scheme. An
 alternative binning scheme can be specified using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. Valid options are <code class="docutils literal"><span class="pre">Quantile</span></code>,
@@ -773,14 +773,14 @@ and <code class="docutils literal"><span class="pre">Fisher_jenks</span></code> 
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scheme.png" src="../figures/pointplot/pointplot-scheme.png" />
+<img alt="_images/pointplot-scheme.png" src="_images/pointplot-scheme.png" />
 <p>If the variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-categorical.png" src="../figures/pointplot/pointplot-categorical.png" />
+<img alt="_images/pointplot-categorical.png" src="_images/pointplot-categorical.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments will be
 passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.legend.Legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">ref</a>). The <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">bbox_to_anchor</span></code>
 parameters are particularly useful for positioning the legend.</p>
@@ -788,7 +788,7 @@ parameters are particularly useful for positioning the legend.</p>
                <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-kwargs.png" src="../figures/pointplot/pointplot-legend-kwargs.png" />
+<img alt="_images/pointplot-legend-kwargs.png" src="_images/pointplot-legend-kwargs.png" />
 <p>Additional arguments will be interpreted as keyword arguments to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code>
 instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -797,7 +797,7 @@ instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_a
                <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-kwargs.png" src="../figures/pointplot/pointplot-kwargs.png" />
+<img alt="_images/pointplot-kwargs.png" src="_images/pointplot-kwargs.png" />
 <p>Change the number of bins by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
@@ -805,7 +805,7 @@ instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_a
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-k.png" src="../figures/pointplot/pointplot-k.png" />
+<img alt="_images/pointplot-k.png" src="_images/pointplot-k.png" />
 <p>Adjust the <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any
 colormap recognizable to <code class="docutils literal"><span class="pre">matplotlib</span></code> using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -814,7 +814,7 @@ colormap recognizable to <code class="docutils literal"><span class="pre">matplo
        <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-cmap.png" src="../figures/pointplot/pointplot-cmap.png" />
+<img alt="_images/pointplot-cmap.png" src="_images/pointplot-cmap.png" />
 <p>To use a continuous colormap, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note that if <code class="docutils literal"><span class="pre">legend=True</span></code>,
 a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></code> legend will be used (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -823,21 +823,21 @@ a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></c
        <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-k-None.png" src="../figures/pointplot/pointplot-k-None.png" />
+<img alt="_images/pointplot-k-None.png" src="_images/pointplot-k-None.png" />
 <p><code class="docutils literal"><span class="pre">scale</span></code> provides an alternative or additional visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scale.png" src="../figures/pointplot/pointplot-scale.png" />
+<img alt="_images/pointplot-scale.png" src="_images/pointplot-scale.png" />
 <p>The limits can be adjusted to fit your data using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-limits.png" src="../figures/pointplot/pointplot-limits.png" />
+<img alt="_images/pointplot-limits.png" src="_images/pointplot-limits.png" />
 <p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
 between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
@@ -853,7 +853,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-scale-func.png" src="../figures/pointplot/pointplot-scale-func.png" />
+<img alt="_images/pointplot-scale-func.png" src="_images/pointplot-scale-func.png" />
 <p><code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> can co-exist.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
                <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -862,7 +862,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-hue-scale.png" src="../figures/pointplot/pointplot-hue-scale.png" />
+<img alt="_images/pointplot-hue-scale.png" src="_images/pointplot-hue-scale.png" />
 <p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
                <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -872,7 +872,7 @@ the <a class="reference external" href="examples/usa-city-elevations.html">examp
                <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/pointplot/pointplot-legend-var.png" src="../figures/pointplot/pointplot-legend-var.png" />
+<img alt="_images/pointplot-legend-var.png" src="_images/pointplot-legend-var.png" />
 </dd></dl>
 
 <dl class="function">
@@ -916,7 +916,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-initial.png" src="../figures/polyplot/polyplot-initial.png" />
+<img alt="_images/polyplot-initial.png" src="_images/polyplot-initial.png" />
 <p>However, note that <code class="docutils literal"><span class="pre">polyplot</span></code> is mainly intended to be used in concert with other plot types.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -925,13 +925,13 @@ will be graphed. If this parameter is left undefined a new axis will be created 
                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-stacked.png" src="../figures/polyplot/polyplot-stacked.png" />
+<img alt="_images/polyplot-stacked.png" src="_images/polyplot-stacked.png" />
 <p>Additional keyword arguments are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/polyplot/polyplot-kwargs.png" src="../figures/polyplot/polyplot-kwargs.png" />
+<img alt="_images/polyplot-kwargs.png" src="_images/polyplot-kwargs.png" />
 </dd></dl>
 
 <dl class="function">
@@ -1026,14 +1026,14 @@ optionally, a projection.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-initial.png" src="../figures/sankey/sankey-initial.png" />
+<img alt="_images/sankey-initial.png" src="_images/sankey-initial.png" />
 <p>However, Sankey diagrams need additional geospatial context to be interpretable. In this case (and for the
 remainder of the examples) we will provide this by overlaying world geometry.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">mock_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;destination&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-geospatial-context.png" src="../figures/sankey/sankey-geospatial-context.png" />
+<img alt="_images/sankey-geospatial-context.png" src="_images/sankey-geospatial-context.png" />
 <p>This function is very <code class="docutils literal"><span class="pre">seaborn</span></code>-like in that the usual <code class="docutils literal"><span class="pre">df</span></code> argument is optional. If geometries are provided
 as independent iterables it can be dropped.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">])</span>
@@ -1041,7 +1041,7 @@ as independent iterables it can be dropped.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-alternative-method-signature.png" src="../figures/sankey/sankey-alternative-method-signature.png" />
+<img alt="_images/sankey-alternative-method-signature.png" src="_images/sankey-alternative-method-signature.png" />
 <p>You may be wondering why the lines are curved. By default, the paths followed by the plot are the <em>actual</em>
 shortest paths between those two points, in the spherical sense. This is known as <a class="reference external" href="https://en.wikipedia.org/wiki/Great-circle_distance">great circle distance</a>. We can see this clearly in an ortographic projection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="n">network</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">],</span>
@@ -1051,7 +1051,7 @@ shortest paths between those two points, in the spherical sense. This is known a
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-greatest-circle-distance.png" src="../figures/sankey/sankey-greatest-circle-distance.png" />
+<img alt="_images/sankey-greatest-circle-distance.png" src="_images/sankey-greatest-circle-distance.png" />
 <p>Plot using a different distance metric, pass it as an argument to the <code class="docutils literal"><span class="pre">path</span></code> parameter. Awkwardly, <code class="docutils literal"><span class="pre">cartopy</span></code>
 <code class="docutils literal"><span class="pre">crs</span></code> objects (<em>not</em> <code class="docutils literal"><span class="pre">geoplot</span></code> ones) are required.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cartopy.ccrs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
@@ -1061,14 +1061,14 @@ shortest paths between those two points, in the spherical sense. This is known a
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-path-projection.png" src="../figures/sankey/sankey-path-projection.png" />
+<img alt="_images/sankey-path-projection.png" src="_images/sankey-path-projection.png" />
 <p>One of the most powerful <code class="docutils literal"><span class="pre">sankey</span></code> features is that if your data has custom paths, you can use those instead
 with the <code class="docutils literal"><span class="pre">path</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">dc</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;aadt&#39;</span><span class="p">,</span>
         <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-path.png" src="../figures/sankey/sankey-path.png" />
+<img alt="_images/sankey-path.png" src="_images/sankey-path.png" />
 <p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter colorizes paths based on data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -1077,7 +1077,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-hue.png" src="../figures/sankey/sankey-hue.png" />
+<img alt="_images/sankey-hue.png" src="_images/sankey-hue.png" />
 <p><code class="docutils literal"><span class="pre">cmap</span></code> changes the colormap.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1086,7 +1086,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-cmap.png" src="../figures/sankey/sankey-cmap.png" />
+<img alt="_images/sankey-cmap.png" src="_images/sankey-cmap.png" />
 <p><code class="docutils literal"><span class="pre">legend</span></code> adds a legend.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1096,7 +1096,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend.png" src="../figures/sankey/sankey-legend.png" />
+<img alt="_images/sankey-legend.png" src="_images/sankey-legend.png" />
 <p>Pass keyword arguments to the legend with <code class="docutils literal"><span class="pre">legend_kwargs</span></code>. This is often necessary for positioning.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1106,7 +1106,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-kwargs.png" src="../figures/sankey/sankey-legend-kwargs.png" />
+<img alt="_images/sankey-legend-kwargs.png" src="_images/sankey-legend-kwargs.png" />
 <p>Specify custom legend labels with <code class="docutils literal"><span class="pre">legend_labels</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1117,7 +1117,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-labels.png" src="../figures/sankey/sankey-legend-labels.png" />
+<img alt="_images/sankey-legend-labels.png" src="_images/sankey-legend-labels.png" />
 <p>Change the number of bins with <code class="docutils literal"><span class="pre">k</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1128,7 +1128,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-k.png" src="../figures/sankey/sankey-k.png" />
+<img alt="_images/sankey-k.png" src="_images/sankey-k.png" />
 <p>Change the binning sceme with <code class="docutils literal"><span class="pre">scheme</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1139,7 +1139,7 @@ with the <code class="docutils literal"><span class="pre">path</span></code> par
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scheme.png" src="../figures/sankey/sankey-scheme.png" />
+<img alt="_images/sankey-scheme.png" src="_images/sankey-scheme.png" />
 <p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
 use the labels in your dataset directly.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -1151,7 +1151,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-categorical.png" src="../figures/sankey/sankey-categorical.png" />
+<img alt="_images/sankey-categorical.png" src="_images/sankey-categorical.png" />
 <p><code class="docutils literal"><span class="pre">scale</span></code> can be used to enable <code class="docutils literal"><span class="pre">linewidth</span></code> as a visual variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1162,7 +1162,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scale.png" src="../figures/sankey/sankey-scale.png" />
+<img alt="_images/sankey-scale.png" src="_images/sankey-scale.png" />
 <p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
 0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
@@ -1174,7 +1174,7 @@ use the labels in your dataset directly.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-limits.png" src="../figures/sankey/sankey-limits.png" />
+<img alt="_images/sankey-limits.png" src="_images/sankey-limits.png" />
 <p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
 specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
 maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
@@ -1192,7 +1192,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-scale-func.png" src="../figures/sankey/sankey-scale-func.png" />
+<img alt="_images/sankey-scale-func.png" src="_images/sankey-scale-func.png" />
 <p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
          <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>
@@ -1203,7 +1203,7 @@ maximum and minimum of the dataset, returns a scaling function which will be app
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../figures/sankey/sankey-legend-var.png" src="../figures/sankey/sankey-legend-var.png" />
+<img alt="_images/sankey-legend-var.png" src="_images/sankey-legend-var.png" />
 </dd></dl>
 
 </div>

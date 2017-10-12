@@ -89,11 +89,7 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
-<li><a class="reference internal" href="#linux-and-mac-osx">Linux and Mac OSX</a><ul>
-<li><a class="reference internal" href="#with-conda">With Conda</a></li>
-<li><a class="reference internal" href="#without-conda">Without Conda</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#linux-and-mac-osx">Linux and Mac OSX</a></li>
 <li><a class="reference internal" href="#windows">Windows</a></li>
 </ul>
 </li>
@@ -148,38 +144,8 @@
 <span id="installing"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="linux-and-mac-osx">
 <h2>Linux and Mac OSX<a class="headerlink" href="#linux-and-mac-osx" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="with-conda">
-<h3>With Conda<a class="headerlink" href="#with-conda" title="Permalink to this headline">¶</a></h3>
-<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>.  You&#8217;ll also need to have the
-<code class="docutils literal"><span class="pre">conda-forge</span></code> channel enabled: if you don&#8217;t already, you can do so with <code class="docutils literal"><span class="pre">conda</span> <span class="pre">config</span> <span class="pre">--add</span> <span class="pre">channels</span> <span class="pre">conda-forge</span></code>.</p>
-<p>Then run <code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span></code> and you&#8217;re done.</p>
-</div>
-<div class="section" id="without-conda">
-<h3>Without Conda<a class="headerlink" href="#without-conda" title="Permalink to this headline">¶</a></h3>
-<p>Things are much trickier if you don&#8217;t have access to <code class="docutils literal"><span class="pre">conda</span></code>, for whatever reason. You will need
-<code class="docutils literal"><span class="pre">matplotlib</span></code>, <code class="docutils literal"><span class="pre">seaborn</span></code>, <code class="docutils literal"><span class="pre">geopandas</span></code>, the <code class="docutils literal"><span class="pre">proj4</span></code> (<a class="reference external" href="http://proj4.org/">docs</a>) and <code class="docutils literal"><span class="pre">GEOS</span></code> (<a class="reference external" href="https://trac.osgeo.org/geos/">docs</a>) external libraries, and <code class="docutils literal"><span class="pre">cartopy</span></code> (which relies on <code class="docutils literal"><span class="pre">proj4</span></code> and <code class="docutils literal"><span class="pre">GEOS</span></code>).
-Here&#8217;s an approximate code path:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># Use of a virtualenv is strongly encouraged.</span>
-mkdir my_project
-<span class="nb">cd</span> my_project
-virtualenv venv
-<span class="c1"># Easy installs that shouldn&#39;t cause any problems.</span>
-pip install matplotlib seaborn
-<span class="c1"># ... install proj4 and GEOS using brew, apt-get, etc. ...</span>
-<span class="c1"># Install shapely with the no-binary option.</span>
-<span class="c1"># See https://github.com/Toblerity/Shapely/issues/435</span>
-pip install --no-binary shapely
-<span class="c1"># Install the rest.</span>
-pip install geopandas
-pip install cartopy
-pip install geoplot
-</pre></div>
-</div>
-<p>It&#8217;s difficult to succeed installing this way, due to conflicts deep within the stack with reference to the C
-dependencies. <a class="reference external" href="https://github.com/SciTools/cartopy/issues/805">This</a>,
-<a class="reference external" href="https://github.com/Toblerity/Shapely/issues/435">this</a>, and <a class="reference external" href="https://github.com/SciTools/cartopy/issues/823">this</a>
-are reference issues.</p>
-</div>
+<p>If you haven&#8217;t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>. Then run
+<code class="docutils literal"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span> <span class="pre">-c</span> <span class="pre">conda-forge</span></code> and you&#8217;re done.</p>
 </div>
 <div class="section" id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
