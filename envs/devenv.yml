@@ -1,6 +1,6 @@
-name: geoplot
+name: geoplot-dev
 dependencies:
-  - python=3.5
+  - python>=3.5
   - numpy
   - pandas
   - jupyter

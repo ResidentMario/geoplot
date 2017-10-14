@@ -11,6 +11,6 @@ tutorial_notebooks = [f for f in os.listdir("../notebooks/tutorial") if (".ipynb
 # Run them in-place.
 for notebook in tutorial_notebooks:
     print(" ".join(["jupyter", "nbconvert", "--to", "rst", "../notebooks/tutorial/{0}".format(notebook),
-                    "--output", "../docs/tutorial/{0}".format(notebook.replace(".ipynb", ".rst"))]))
+                    "--output", "../../docs/tutorial/{0}".format(notebook.replace(".ipynb", ".rst"))]))
     subprocess.run(["jupyter", "nbconvert", "--to", "rst", "../notebooks/tutorial/{0}".format(notebook),
                     "--output", "../../docs/tutorial/{0}".format(notebook.replace(".ipynb", ".rst").lower())])
