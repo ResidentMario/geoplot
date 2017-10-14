@@ -9,7 +9,7 @@ __pycache__/
 source/
 dist/
 geoplot.egg-info/
-baseline/
+tests/baseline/
 quilt_packages/
 # Temp files
 Untitled.ipynb
