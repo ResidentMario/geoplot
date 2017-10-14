@@ -2333,7 +2333,7 @@ def _set_extent(ax, projection, extent, extrema):
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
         if projection:  # Input ``extent`` into set_extent().
-            ax.set_extent((xmin, xmax, ymin, ymax))
+            ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
         else:  # Input ``extent`` into set_ylim, set_xlim.
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
@@ -2343,7 +2343,7 @@ def _set_extent(ax, projection, extent, extrema):
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
         if projection:  # Input ``extrema`` into set_extent.
-            ax.set_extent((xmin, xmax, ymin, ymax), crs=projection)
+            ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
         else:  # Input ``extrema`` into set_ylim, set_xlim.
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
