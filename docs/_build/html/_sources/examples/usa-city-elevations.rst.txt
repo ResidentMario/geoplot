@@ -9,4 +9,3 @@ Pointplot scale functions
 **Python source code:** :download:`[download source: usa-city-elevations]<usa-city-elevations.py>`
 
 .. literalinclude:: usa-city-elevations.py
-    :lines: 2-

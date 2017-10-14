@@ -9,4 +9,3 @@ Sankey with custom paths
 **Python source code:** :download:`[download source: dc-street-network]<dc-street-network.py>`
 
 .. literalinclude:: dc-street-network.py
-    :lines: 2-

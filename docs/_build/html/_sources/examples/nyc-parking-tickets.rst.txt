@@ -9,4 +9,3 @@ Choropleth subplots
 **Python source code:** :download:`[download source: nyc-parking-tickets.py]<nyc-parking-tickets.py>`
 
 .. literalinclude:: nyc-parking-tickets.py
-    :lines: 2-

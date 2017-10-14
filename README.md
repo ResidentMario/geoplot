@@ -4,12 +4,12 @@
 (https://pypi.python.org/pypi/geoplot/)-->
 
 <div class="row">
-<a href=http://www.residentmar.io/geoplot/examples/nyc-collision-factors.html>
+<a href=https://residentmario.github.io/geoplot/examples/nyc-collision-factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
  height="150" width="150">
 </a>
 
-<a href=http://www.residentmar.io/geoplot/examples/los-angeles-flights.html>
+<a href=https://residentmario.github.io/geoplot/examples/los-angeles-flights.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png"
  height="150" width="150">
 </a>
@@ -21,17 +21,17 @@ height="150" width="150">
 </a>
 -->
 
-<a href=http://www.residentmar.io/geoplot/examples/usa-city-elevations.html>
+<a href=https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
  height="150">
 </a>
 
-<a href=http://www.residentmar.io/geoplot/examples/nyc-parking-tickets.html>
+<a href=https://residentmario.github.io/geoplot/examples/nyc-parking-tickets.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png"
  height="150" width="150">
 </a>
 
-<a href=http://www.residentmar.io/geoplot/examples/dc-street-network.html>
+<a href=https://residentmario.github.io/geoplot/examples/dc-street-network.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png"
 height="150" width="150">
 </a>

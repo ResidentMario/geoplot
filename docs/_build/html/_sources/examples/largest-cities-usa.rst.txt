@@ -9,4 +9,3 @@ Double visual variable pointplot
 **Python source code:** :download:`[download source: largest-cities-usa.py]<largest-cities-usa.py>`
 
 .. literalinclude:: largest-cities-usa.py
-    :lines: 2-

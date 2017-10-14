@@ -144,9 +144,9 @@ Aggplot
 
     .. _boston_airbnb_aggplot: ./examples/boston-airbnb-aggplot.html
 
-    |aggplot_collisions_1|_
+    |aggplot_collisions|_
 
-    .. |aggplot_collisions_1| image:: ./examples/aggplot-collisions-1.png
+    .. |aggplot_collisions| image:: ./examples/aggplot-collisions.png
         :width: 500px
 
-    .. _aggplot_collisions_1: ./examples/aggplot-collisions-1.html
+    .. _aggplot_collisions: ./examples/aggplot-collisions.html
