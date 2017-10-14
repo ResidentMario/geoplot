@@ -13,15 +13,11 @@ import matplotlib.pyplot as plt
 
 poly_kwargs = {'linewidth': 0.5, 'edgecolor': 'gray', 'zorder': -1}
 point_kwargs = {'linewidth': 0.5, 'edgecolor': 'black', 'alpha': 1}
-legend_kwargs = {'bbox_to_anchor': (1.2, 0.9), 'frameon': False}
+legend_kwargs = {'bbox_to_anchor': (0.9, 0.9), 'frameon': False}
 
 ax = gplt.polyplot(continental_usa,
                    projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5),
                    **poly_kwargs)
-
-# Unfortunately the plot comes out with a bit of Florida clipped off, which we have to correct by hand. The exact
-# values needed were found by using ax.get_ylim() and then poking around a bit.
-ax.set_ylim((-1597757.3894385984, 1457718.4893930717))
 
 gplt.pointplot(continental_cities, projection=gcrs.AlbersEqualArea(), ax=ax,
                scale='POP_2010', limits=(1, 80),
