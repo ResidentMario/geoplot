@@ -2478,7 +2478,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     if not categorical:
         binning = __pysal_choro(hue, scheme, k=k)
         values = binning.yb
-        binedges = [binning.yb.min()] + binning.bins.tolist()
+        binedges = [binning.y.min()] + binning.bins.tolist()
         categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
                       for i in range(len(binedges) - 1)]
     else:
