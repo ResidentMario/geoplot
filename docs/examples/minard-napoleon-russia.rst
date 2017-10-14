@@ -14,4 +14,3 @@ back <https://en.wikipedia.org/wiki/Charles_Joseph_Minard#Work>`_. Compare with 
 **Python source code:** :download:`[download source: minard-napoloen-russia.py]<minard-napoloen-russia.py>`
 
 .. literalinclude:: minard-napoloen-russia.py
-    :lines: 2-

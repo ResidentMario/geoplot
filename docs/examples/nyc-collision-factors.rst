@@ -9,4 +9,3 @@ Clipped heatmaps
 **Python source code:** :download:`[download source: nyc-collision-factors.py]<nyc-collision-factors.py>`
 
 .. literalinclude:: nyc-collision-factors.py
-    :lines: 2-

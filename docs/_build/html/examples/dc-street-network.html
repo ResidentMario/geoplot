@@ -130,7 +130,8 @@
 <h1>Sankey with custom paths<a class="headerlink" href="#sankey-with-custom-paths" title="Permalink to this headline">¶</a></h1>
 <img alt="../_images/dc-street-network.png" src="../_images/dc-street-network.png" />
 <p><strong>Python source code:</strong> <a class="reference download internal" href="../_downloads/dc-street-network.py" download=""><code class="xref download docutils literal"><span class="pre">[download</span> <span class="pre">source:</span> <span class="pre">dc-street-network]</span></code></a></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Load the data.</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">from</span> <span class="nn">quilt.data.ResidentMario</span> <span class="k">import</span> <span class="n">geoplot_data</span>
 
 <span class="n">dc</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">geoplot_data</span><span class="o">.</span><span class="n">dc_roads</span><span class="p">())</span>

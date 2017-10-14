@@ -1,12 +1,11 @@
-.. -aggplot-collisions-1:
+.. -aggplot-collisions:
 
 
 Aggplot types
 =============
 
-.. image::  aggplot-collisions-1.png
+.. image::  aggplot-collisions.png
 
 **Python source code:** :download:`[download source: aggplot-collisions-1]<aggplot-collisions-1.py>`
 
-.. literalinclude:: aggplot-collisions-1.py
-    :lines: 2-
+.. literalinclude:: aggplot-collisions.py

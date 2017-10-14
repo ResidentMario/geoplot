@@ -10,4 +10,3 @@ Aggplot singular
 **Python source code:** :download:`[download source: boston-airbnb-aggplot]<boston-airbnb-aggplot.py>`
 
 .. literalinclude:: boston-airbnb-aggplot.py
-    :lines: 2-
