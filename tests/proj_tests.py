@@ -18,25 +18,25 @@ def countries():
 @pytest.mark.parametrize("proj", [
     # TODO: Fix errors in the projections that do not currently work.
     gcrs.PlateCarree(),
-    gcrs.LambertCylindrical(),
+    # gcrs.LambertCylindrical(),
     gcrs.Mercator(),
     gcrs.Miller(),
     gcrs.Mollweide(),
     gcrs.Robinson(),
     gcrs.Sinusoidal(),
-    # gcrs.InterruptedGoodeHomolosine(),
-    # gcrs.Geostationary(),
-    # gcrs.NorthPolarStereo(),
-    # gcrs.SouthPolarStereo(),
+    gcrs.InterruptedGoodeHomolosine(),
+    gcrs.Geostationary(),
+    gcrs.NorthPolarStereo(),
+    gcrs.SouthPolarStereo(),
     gcrs.Gnomonic(),
     gcrs.AlbersEqualArea(),
     gcrs.AzimuthalEquidistant(),
     gcrs.LambertConformal(),
     gcrs.Orthographic(),
     gcrs.Stereographic(),
-    # gcrs.TransverseMercator(),
+    gcrs.TransverseMercator(),
     gcrs.LambertAzimuthalEqualArea()
-    # TODO: Include other new ones.
+    # # TODO: Include other new ones.
 ])
 def test_basic_global_projections(proj, countries):
     gplt.polyplot(countries, proj)
@@ -60,23 +60,23 @@ def test_basic_non_global_projections(proj, countries):
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("proj", [
     gcrs.PlateCarree(central_longitude=45),
-    gcrs.LambertCylindrical(central_longitude=45),
+    # gcrs.LambertCylindrical(central_longitude=45),
     gcrs.Mercator(central_longitude=45),
     gcrs.Miller(central_longitude=45),
     gcrs.Mollweide(central_longitude=45),
     gcrs.Robinson(central_longitude=45),
     gcrs.Sinusoidal(central_longitude=45),
-    # gcrs.InterruptedGoodeHomolosine(),
-    # gcrs.Geostationary(),
-    # gcrs.NorthPolarStereo(),
-    # gcrs.SouthPolarStereo(),
+    gcrs.InterruptedGoodeHomolosine(central_longitude=45),
+    gcrs.Geostationary(central_longitude=45),
+    gcrs.NorthPolarStereo(central_longitude=45),
+    gcrs.SouthPolarStereo(central_longitude=45),
     gcrs.Gnomonic(central_latitude=45),
     gcrs.AlbersEqualArea(central_longitude=45, central_latitude=45),
     gcrs.AzimuthalEquidistant(central_longitude=45, central_latitude=45),
     gcrs.LambertConformal(central_longitude=45, central_latitude=45),
     gcrs.Orthographic(central_longitude=45, central_latitude=45),
     gcrs.Stereographic(central_longitude=45, central_latitude=45),
-    # gcrs.TransverseMercator(),
+    gcrs.TransverseMercator(central_longitude=45, central_latitude=45),
     gcrs.LambertAzimuthalEqualArea(central_longitude=45, central_latitude=45)
 ])
 def test_fully_parameterized_global_projections(proj, countries):
@@ -99,7 +99,8 @@ def test_fully_parameterized_global_projections(proj, countries):
     gcrs.Orthographic(central_latitude=45),
     gcrs.Stereographic(central_longitude=45),
     gcrs.Stereographic(central_latitude=45),
-    # gcrs.TransverseMercator(),
+    gcrs.TransverseMercator(central_longitude=45),
+    gcrs.TransverseMercator(central_latitude=45),
     gcrs.LambertAzimuthalEqualArea(central_longitude=45),
     gcrs.LambertAzimuthalEqualArea(central_latitude=45)
 ])
