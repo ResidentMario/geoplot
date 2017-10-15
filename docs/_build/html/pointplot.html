@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>geoplot.pointplot &#8212; geoplot 0.0.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          geoplot</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.5</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">geoplot.pointplot</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/pointplot.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="geoplot-pointplot">
+<h1>geoplot.pointplot<a class="headerlink" href="#geoplot-pointplot" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="geoplot.pointplot">
+<code class="descclassname">geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A geospatial scatter plot. The simplest useful plot type available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
+<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) &#8211; The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
+left unspecified or set to None this variable is ignored.</li>
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
+many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
+<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
+ignored.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
+specified.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;bottoms out&#8221; the colormap. Data column entries whose value is below this level will be
+colored the same threshold value. Defaults to the minimum value in the dataset.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; The value that &#8220;tops out&#8221; the colormap. Data column entries whose value is above this level will be
+colored the same threshold value. Defaults to the maximum value in the dataset.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) &#8211; A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
+applied.</li>
+<li><strong>limits</strong> (<em></em><em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) &#8211; The minimum and maximum limits against which the shape will be scaled. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is not specified.</li>
+<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) &#8211; The function used to scale point sizes. This should be a factory function of two
+variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+applied to the rest of the data. Defaults to a linear scale. A demo is available in the <a class="reference external" href="examples/usa-city-elevations.html">example
+gallery</a>.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will not work if neither <code class="docutils literal"><span class="pre">hue</span></code> nor
+<code class="docutils literal"><span class="pre">scale</span></code> is unspecified.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Equal intervals will be used for the &#8220;points&#8221; in the legend by default. However, particularly if your scale
+is non-linear, oftentimes this isn&#8217;t what you want. If this variable is provided as well, the values
+included in the input will be used by the legend instead.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
+<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) &#8211; The name of the visual variable for which a legend will be displayed. Does nothing if <code class="docutils literal"><span class="pre">legend</span></code> is False
+or multiple variables aren&#8217;t used simultaneously.</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
+that input will be used instead.</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">AxesSubplot or GeoAxesSubplot instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The <code class="docutils literal"><span class="pre">pointplot</span></code> is a simple <a class="reference external" href="https://en.wikipedia.org/wiki/Scatter_plot">geospatial scatter plot</a>,
+with each point corresponding with one observation in your dataset. The expected input is a <code class="docutils literal"><span class="pre">geopandas</span></code>
+<code class="docutils literal"><span class="pre">GeoDataFrame</span></code> with geometries consisting of <code class="docutils literal"><span class="pre">shapely.geometry.Point</span></code> entities. The simplest possible plot
+can be made by specifying the input data (and, optionally, a <a class="reference external" href="./tutorial/projections.html">projection</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-initial.png" src="_images/pointplot-initial.png" />
+<p>The <code class="docutils literal"><span class="pre">hue</span></code> parameter accepts a data column and applies a colormap to the output.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-hue.png" src="_images/pointplot-hue.png" />
+<p>The <code class="docutils literal"><span class="pre">legend</span></code> parameter toggles a legend.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-legend.png" src="_images/pointplot-legend.png" />
+<p><code class="docutils literal"><span class="pre">legend_labels</span></code> specifies custom legend labels.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDE&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-legend-labels.png" src="_images/pointplot-legend-labels.png" />
+<p><code class="docutils literal"><span class="pre">pointplot</span></code> will default to binning the observations in the given data column into five ordinal classes
+containing equal numbers of observations - a <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile">quantile</a> scheme. An
+alternative binning scheme can be specified using the <code class="docutils literal"><span class="pre">scheme</span></code> parameter. Valid options are <code class="docutils literal"><span class="pre">Quantile</span></code>,
+<code class="docutils literal"><span class="pre">Equal_interval</span></code> (bins will be of equal sizes but contain different numbers of observations),
+and <code class="docutils literal"><span class="pre">Fisher_jenks</span></code> (an intermediate between the two).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-scheme.png" src="_images/pointplot-scheme.png" />
+<p>If the variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+use the labels in your dataset directly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-categorical.png" src="_images/pointplot-categorical.png" />
+<p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments will be
+passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.legend.Legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">ref</a>). The <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">bbox_to_anchor</span></code>
+parameters are particularly useful for positioning the legend.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span>
+               <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-legend-kwargs.png" src="_images/pointplot-legend-kwargs.png" />
+<p>Additional arguments will be interpreted as keyword arguments to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.scatter</span></code>
+instance (<a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">ref</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-kwargs.png" src="_images/pointplot-kwargs.png" />
+<p>Change the number of bins by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-k.png" src="_images/pointplot-k.png" />
+<p>Adjust the <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to any
+colormap recognizable to <code class="docutils literal"><span class="pre">matplotlib</span></code> using the <code class="docutils literal"><span class="pre">cmap</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+       <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+       <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-cmap.png" src="_images/pointplot-cmap.png" />
+<p>To use a continuous colormap, explicitly specify <code class="docutils literal"><span class="pre">k=None</span></code>. Note that if <code class="docutils literal"><span class="pre">legend=True</span></code>,
+a <code class="docutils literal"><span class="pre">matplotlib.colorbar</span></code> legend will be used (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+       <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+       <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+       <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-k-None.png" src="_images/pointplot-k-None.png" />
+<p><code class="docutils literal"><span class="pre">scale</span></code> provides an alternative or additional visual variable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-scale.png" src="_images/pointplot-scale.png" />
+<p>The limits can be adjusted to fit your data using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-limits.png" src="_images/pointplot-limits.png" />
+<p>The default scaling function is linear: an observations at the midpoint of two others will be exactly midway
+between them in size. To specify an alternative scaling function, use the <code class="docutils literal"><span class="pre">scale_func</span></code> parameter. This should
+be a factory function of two variables which, when given the maximum and minimum of the dataset,
+returns a scaling function which will be applied to the rest of the data. A demo is available in
+the <a class="reference external" href="examples/usa-city-elevations.html">example gallery</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">scalar</span>
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">,</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-scale-func.png" src="_images/pointplot-scale-func.png" />
+<p><code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> can co-exist.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
+               <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-hue-scale.png" src="_images/pointplot-hue-scale.png" />
+<p>In case more than one visual variable is used, control which one appears in the legend using <code class="docutils literal"><span class="pre">legend_var</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
+               <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+               <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+               <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+               <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pointplot-legend-var.png" src="_images/pointplot-legend-var.png" />
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
