@@ -25,6 +25,9 @@ set up is to run `conda install --file devenv.yml` out of the `envs` directory.
 This should install all necessary dependencies. If it fails, you will need to localize a few yourself. Use the 
 packages listed in `devenv.yml` as a guide.
 
+Once you have the environment localized and activated, run `pip install -e .` out of the `geoplot` repository root 
+folder, and all should be well.
+
 Due to the outstanding issue mentioned in the `README`, `geoplot` does not work on Windows. Sorry.
 
 ## Testing

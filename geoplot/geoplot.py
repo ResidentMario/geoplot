@@ -909,12 +909,6 @@ def aggplot(df, projection=None,
     `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_, using the ``cmap``
     parameter.
 
-    .. code-block:: python
-
-        gplt.aggplot(collisions, nmin=20, nmax=500, projection=gcrs.PlateCarree(), hue='LATDEP', cmap='Blues')
-
-    .. image:: ../figures/aggplot/aggplot-quadtree.png
-
     ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may result in spaces
     without observations, or ones lacking a statistically significant number of observations. This is necessary in
     order to break up "spaces" that the algorithm would otherwise end on. You can control the maximum number of
