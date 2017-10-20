@@ -52,9 +52,14 @@ process: edit and save the notebooks, then run `make html` to finally generate t
 The Gallery images are generated from Python scripts in the `docs/examples` subfolder. All of the examples are 
 self-contained and you should be able to regenerate them by running them at the command line.
 
-### Tutorial
+However, notably, two of the Gallery examples are webmaps. The code for these is hosted inside of separate Gists 
+instead, and click-throughs are directed to [blocks](http://bl.ocks.org/) visualizing the inline JavaScript result.
 
-TODO.
+### Tutorials
+
+The tutorials are written as notebooks in the top-level `notebooks` repository. The documentation does not actually 
+host these directly, linking click-throughs to an [NBViewer](http://nbviewer.jupyter.org/) projection instead. Hence, 
+to update the tutorials you only need up to edit, save, and push to the repository!
 
 ### Everything else
 The remaining pages are all written as `rst` files accessible from the top level of the `docs` folder. For these, 
