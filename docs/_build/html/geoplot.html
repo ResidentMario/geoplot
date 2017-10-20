@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>geoplot package &#8212; geoplot 0.0.5 documentation</title>
+    <title>geoplot package &#8212; geoplot 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.0.5',
+        VERSION:     '0.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -53,7 +53,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.5</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.1</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -140,6 +140,265 @@
 </div>
 <div class="section" id="module-geoplot.crs">
 <span id="geoplot-crs-module"></span><h2>geoplot.crs module<a class="headerlink" href="#module-geoplot.crs" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the <code class="docutils literal"><span class="pre">geoplot</span></code> coordinate reference system classes, wrappers on <code class="docutils literal"><span class="pre">cartopy.crs</span></code> objects meant
+to be used as parameters to the <code class="docutils literal"><span class="pre">projection</span></code> parameter of all front-end <code class="docutils literal"><span class="pre">geoplot</span></code> outputs.</p>
+<p>This was necessary because <code class="docutils literal"><span class="pre">cartopy.crs</span></code> objects do not allow modifications in place. cf.
+<a class="reference external" href="http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473">http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473</a></p>
+<p>For the list of Cartopy CRS objects this module derives from, refer to
+<a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/crs/projections.html">http://scitools.org.uk/cartopy/docs/latest/crs/projections.html</a></p>
+<dl class="class">
+<dt id="geoplot.crs.AlbersEqualArea">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">AlbersEqualArea</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AlbersEqualArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.AlbersEqualArea.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AlbersEqualArea.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.AzimuthalEquidistant">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">AzimuthalEquidistant</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AzimuthalEquidistant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.AzimuthalEquidistant.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AzimuthalEquidistant.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.EuroPP">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">EuroPP</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.EuroPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.EuroPP.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.EuroPP.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Geostationary">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Geostationary</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Geostationary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Geostationary.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Geostationary.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Gnomonic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Gnomonic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Gnomonic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Gnomonic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Gnomonic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.InterruptedGoodeHomolosine">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">InterruptedGoodeHomolosine</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.InterruptedGoodeHomolosine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.InterruptedGoodeHomolosine.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.InterruptedGoodeHomolosine.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertAzimuthalEqualArea">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertAzimuthalEqualArea</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertAzimuthalEqualArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertAzimuthalEqualArea.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertAzimuthalEqualArea.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertConformal">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertConformal</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertConformal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertConformal.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertConformal.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.LambertCylindrical">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">LambertCylindrical</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertCylindrical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.LambertCylindrical.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertCylindrical.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Mercator">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Mercator</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Mercator.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Miller">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Miller</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Miller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Miller.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Miller.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Mollweide">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Mollweide</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mollweide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Mollweide.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mollweide.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.NorthPolarStereo">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">NorthPolarStereo</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.NorthPolarStereo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.NorthPolarStereo.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.NorthPolarStereo.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.OSGB">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">OSGB</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.OSGB.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSGB.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.OSNI">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">OSNI</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSNI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.OSNI.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSNI.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Orthographic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Orthographic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Orthographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Orthographic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Orthographic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.PlateCarree">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">PlateCarree</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.PlateCarree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.PlateCarree.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.PlateCarree.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Robinson">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Robinson</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Robinson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Robinson.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Robinson.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Sinusoidal">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Sinusoidal</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Sinusoidal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Sinusoidal.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Sinusoidal.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.SouthPolarStereo">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">SouthPolarStereo</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.SouthPolarStereo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.SouthPolarStereo.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.SouthPolarStereo.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.Stereographic">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">Stereographic</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Stereographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.Stereographic.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Stereographic.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.TransverseMercator">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">TransverseMercator</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.TransverseMercator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.TransverseMercator.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>centerings</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.TransverseMercator.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="geoplot.crs.UTM">
+<em class="property">class </em><code class="descclassname">geoplot.crs.</code><code class="descname">UTM</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.UTM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="geoplot.crs.UTM.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>df</em>, <em>_</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.UTM.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-geoplot.geoplot">
 <span id="geoplot-geoplot-module"></span><h2>geoplot.geoplot module<a class="headerlink" href="#module-geoplot.geoplot" title="Permalink to this headline">¶</a></h2>
@@ -1321,7 +1580,7 @@ cf. <a class="reference external" href="http://stackoverflow.com/questions/95291
       
     </p>
     <p>
-        &copy; Copyright 2016, Aleksey Bilogur.<br/>
+        &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
     </p>
   </div>
