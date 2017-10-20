@@ -64,3 +64,11 @@ to update the tutorials you only need up to edit, save, and push to the reposito
 ### Everything else
 The remaining pages are all written as `rst` files accessible from the top level of the `docs` folder. For these, 
 just `make html` will suffice.
+
+### Serving 
+
+The documentation is served at [residentmario.github.io](https://residentmario.github.io/geoplot/index.html) via 
+GitHub's site export feature, served out of the `gh-pages` branch. The process for putting up a new version of the 
+docs (once you have built them locally via `make html` and committed to the repository) basically follows the 
+procedure outlined [here](http://www.willmcginnis.com/2016/02/29/automating-documentation-workflow-with-sphinx-and-github-pages/),
+with a couple of small changes in the details: `git rm -rf *`, not `git rm -rf .`, and `_build`, not `build`.
