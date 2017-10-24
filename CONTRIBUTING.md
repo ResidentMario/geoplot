@@ -61,6 +61,27 @@ The tutorials are written as notebooks in the top-level `notebooks` repository. 
 host these directly, linking click-throughs to an [NBViewer](http://nbviewer.jupyter.org/) projection instead. Hence, 
 to update the tutorials you only need up to edit, save, and push to the repository!
 
+### Example data
+
+The tutorial, gallery, and reference images all make use of real-world example data that is packaged as an accessory to 
+this library. This data had a very messy history during the early stages of the project, but was eventually cleaned 
+up and refactored into a set of mostly `geojson` files. This now lives in the complimentary 
+[`geoplot-data`](https://github.com/ResidentMario/geoplot-data) repository.
+
+The data is zipped up and packaged online using [Quilt](https://quiltdata.com/package/ResidentMario/geoplot_data), a
+data-as-a-package management service. You can view the package [on the web](https://quiltdata.com/package/ResidentMario/geoplot_data).
+Data is imported from there throughout the `geoplot` documentation; the shebang looks something like:
+
+```python
+from quilt.data.ResidentMario import geoplot_data
+import geopandas as gpd
+boston_zip_codes = gpd.read_file(geoplot_data.boston_zip_codes())
+```
+
+The example data should need updating only very rarely, and then only to add new data, or *maybe* remove old data. 
+But when it is necessary: submit a pull request to the `geoplot-data` repository. The data package owner 
+(@ResidentMario) can then update the example data to go along with it (using the instructions [here](https://docs.quiltdata.com/)).
+
 ### Everything else
 The remaining pages are all written as `rst` files accessible from the top level of the `docs` folder. For these, 
 just `make html` will suffice.

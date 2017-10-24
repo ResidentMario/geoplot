@@ -3,7 +3,7 @@
 # For more information visit http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html.
 
 
-# Load the data.
+# Load the data (uses the `quilt` package).
 import geopandas as gpd
 from quilt.data.ResidentMario import geoplot_data
 

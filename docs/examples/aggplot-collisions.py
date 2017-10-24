@@ -12,7 +12,7 @@
 # Finally there is the case that we have full geospatial context. In that case pass the geometry to the `geometry`
 # field; `aggplot` will handle aggregating the result and generate a nicely packaged choropleth!
 
-# Load the data.
+# Load the data (uses the `quilt` package).
 from quilt.data.ResidentMario import nyc_collisions
 import shapely
 import geopandas as gpd
