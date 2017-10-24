@@ -3,14 +3,14 @@
 Installation
 ============
 
-Linux and Mac OSX
------------------
+With Conda (Recommended)
+------------------------
 
 If you haven't already, `install conda <http://conda.pydata.org/docs/>`_. Then run
-``conda install geoplot -c conda-forge`` and you're done.
+``conda install geoplot -c conda-forge`` and you're done. This works on all platforms (Linux, Mac OSX, and Windows).
 
-Windows
--------
+Without Conda
+-------------
 
-Unforunately ``geoplot`` is not available on Windows yet due to `an unresolved dependency issue <https://github.com/SciTools/cartopy/issues/805>`_.
-Sorry.
+You can install ``geoplot`` using ``pip install geoplot``. Use caution however, as this probably will not work on
+Windows, and possibly will not work on OSX and Linux.

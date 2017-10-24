@@ -2,7 +2,7 @@
 # determining point size are demonstrated.
 
 
-# Load the data.
+# Load the data (uses the `quilt` package).
 import geopandas as gpd
 from quilt.data.ResidentMario import geoplot_data
 

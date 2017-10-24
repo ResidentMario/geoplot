@@ -1,4 +1,4 @@
-# Load the data.
+# Load the data (uses the `quilt` package).
 from quilt.data.ResidentMario import geoplot_data
 import geopandas as gpd
 
