@@ -1,11 +1,8 @@
 name: geoplot-dev
 dependencies:
   - python>=3.5
-  - numpy
   - pandas
   - jupyter
-  - requests
-  - matplotlib
   - scikit-learn
   - pysal
   - pandoc
@@ -18,5 +15,5 @@ dependencies:
     - pyproj
     - geopandas
     - sphinx-bootstrap-theme
-    - hypothesis
     - quilt
+    - pytest-mpl

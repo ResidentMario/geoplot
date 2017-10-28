@@ -31,9 +31,11 @@ folder, and all should be well.
 ## Testing
 
 `geoplot` tests are located in the `tests` folder. Any PRs you submit should eventually pass all of the tests located
- in this folder, or fail them for very good reasons.
-
-Tests are in a somewhat inconsistent state right now, as they are going through refactoring.
+ in this folder.
+ 
+There are three sets of tests. `input_tests.py` and `kwarg_tests.py` are smoke tests that can be run using 
+`pytest`. The last test-set, `proj_tests.py`, requires the `pytest-mpl` plugin to be run; see the simple instructions
+[here](https://github.com/matplotlib/pytest-mpl#using) to see how to use it.
 
 ## Documentation
 
