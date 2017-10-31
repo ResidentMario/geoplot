@@ -14,6 +14,27 @@ from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
 import descartes
+import contextily as ctx
+from contextily import tile_providers as sources
+
+# Convert all the variables and their values, stored in module tile_providers.py
+# into an easily-accessible dictionary for use in plotting methods with contextily
+#tile_providers = {k: eval("ctx.sources.{}".format(k)) for k in dir(ctx.sources) if k[0]!='_'}
+"""
+tile_providers = {'OSM_A': 'http://a.tile.openstreetmap.org/tileZ/tileX/tileY.png',
+ 'OSM_B': 'http://b.tile.openstreetmap.org/tileZ/tileX/tileY.png',
+ 'OSM_C': 'http://c.tile.openstreetmap.org/tileZ/tileX/tileY.png',
+ 'ST_TERRAIN': 'http://tile.stamen.com/terrain/tileZ/tileX/tileY.png',
+ 'ST_TERRAIN_BACKGROUND': 'http://tile.stamen.com/terrain-background/tileZ/tileX/tileY.png',
+ 'ST_TERRAIN_LABELS': 'http://tile.stamen.com/terrain-labels/tileZ/tileX/tileY.png',
+ 'ST_TERRAIN_LINES': 'http://tile.stamen.com/terrain-lines/tileZ/tileX/tileY.png',
+ 'ST_TONER': 'http://tile.stamen.com/toner/tileZ/tileX/tileY.png',
+ 'ST_TONER_BACKGROUND': 'http://tile.stamen.com/toner-background/tileZ/tileX/tileY.png',
+ 'ST_TONER_HYBRID': 'http://tile.stamen.com/toner-labels/tileZ/tileX/tileY.png',
+ 'ST_TONER_LINES': 'http://tile.stamen.com/toner-lines/tileZ/tileX/tileY.png',
+ 'ST_TONER_LITE': 'http://tile.stamen.com/toner-lite/tileZ/tileX/tileY.png',
+ 'ST_WATERCOLOR': 'http://tile.stamen.com/watercolor/tileZ/tileX/tileY.png'}
+ """
 
 
 def pointplot(df, projection=None,
@@ -62,9 +83,9 @@ def pointplot(df, projection=None,
     limits : (min, max) tuple, optional
         The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
     scale_func : ufunc, optional
-        The function used to scale point sizes. This should be a factory function of two 
-        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
-        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        The function used to scale point sizes. This should be a factory function of two
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example
         gallery <examples/usa-city-elevations.html>`_.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
@@ -413,7 +434,8 @@ def polyplot(df, projection=None,
              extent=None,
              figsize=(8, 6), ax=None,
              edgecolor='black',
-             facecolor='None', **kwargs):
+             facecolor='None', webmap=None,
+             **kwargs):
     """
     Trivially plots whatever geometries are passed to it. Mostly meant to be used in concert with other,
     more interesting plot types.
@@ -436,6 +458,10 @@ def polyplot(df, projection=None,
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
         will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+    webmap: None or str, optional
+        one of the values in the tile_providers dict e.g. 'OSM_A',
+        evaluates to a webmap tile URL. Works only with the goeplot.crs.Mercator() projection.
+        Refer to the contextily/tile_providers.py file.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
@@ -510,6 +536,13 @@ def polyplot(df, projection=None,
     # Set extent.
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     _set_extent(ax, projection, extent, extrema)
+
+    # In case the webmap parameter is supplied
+    if webmap:
+        # Download the tiles using the webmap keyword to get the URL attribute
+        # plot the RGB file in the current GeoAxesSubplot/AxesSubplot object.
+        img, ext = download_tiles(df, url=getattr(sources, webmap))
+        ax.imshow(img, extent=ext, zorder=-1)
 
     # Finally we draw the features.
     if projection:
@@ -1182,9 +1215,9 @@ def cartogram(df, projection=None,
     limits : (min, max) tuple, optional
         The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
     scale_func : ufunc, optional
-        The function used to scale point sizes. This should be a factory function of two 
-        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
-        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        The function used to scale point sizes. This should be a factory function of two
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example
         gallery <examples/usa-city-elevations.html>`_.
     trace : boolean, optional
         Whether or not to include a trace of the polygon's original outline in the plot result.
@@ -1716,9 +1749,9 @@ def sankey(*args, projection=None,
     limits : (min, max) tuple, optional
         The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
     scale_func : ufunc, optional
-        The function used to scale point sizes. This should be a factory function of two 
-        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
-        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
+        The function used to scale point sizes. This should be a factory function of two
+        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
+        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example
         gallery <examples/usa-city-elevations.html>`_.
     legend : boolean, optional
         Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
@@ -2679,3 +2712,27 @@ def _norm_cmap(values, cmap, normalize, cm, vmin=None, vmax=None):
     norm = normalize(vmin=mn, vmax=mx)
     n_cmap = cm.ScalarMappable(norm=norm, cmap=cmap)
     return n_cmap
+
+
+#######################
+# WEB TILE METHODS   #
+#######################
+
+
+def download_tiles(df, url):
+
+    # the df parameter can work with both GeoDataFrame and GeoSeries data
+    # structures, as both share the .total_bounds attribute.
+    # Calculate bbox parameters df.total_bounds
+    w, s, e, n = df.total_bounds
+    # The zoom is calculated automatically given that a high zoom would take
+    # too long to plot and consume much memory (e.g. more tiles to download).
+    zoom = ctx.calculate_zoom(w, s, e, n)
+    # when using the bounds2img method, the ll parameter must be set to True
+    # if the w,s,e,n variables represent latitude/longitude coordinates
+    # (e.g. EPSG:4326)
+    # Look into contextily/tile.py
+    img, ext = ctx.bounds2img(w, s, e, n, zoom, url=url, ll=True)
+    # return a raster ndarray image (RGB values of uint8 type), and
+    # an extent in Spherical Mercator (EPSG: 3857)
+    return img, ext
