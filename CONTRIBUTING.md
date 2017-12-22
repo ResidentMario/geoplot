@@ -72,9 +72,12 @@ The data is zipped up and packaged online using [Quilt](https://quiltdata.com/pa
 data-as-a-package management service. You can view the package [on the web](https://quiltdata.com/package/ResidentMario/geoplot_data).
 
 #### Install the data
+
+To localize the example data, run the following (*after* cloning the repository):
+
 ```sh
 $ pip install quilt
-$ cd geplot # root directory of this repo
+$ cd geoplot # root directory of this repo
 $ quilt install # installs dependencies from quilt.yml
 ```
 
