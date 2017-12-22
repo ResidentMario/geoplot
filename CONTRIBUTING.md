@@ -70,6 +70,15 @@ up and refactored into a set of mostly `geojson` files. This now lives in the co
 
 The data is zipped up and packaged online using [Quilt](https://quiltdata.com/package/ResidentMario/geoplot_data), a
 data-as-a-package management service. You can view the package [on the web](https://quiltdata.com/package/ResidentMario/geoplot_data).
+
+#### Install the data
+```sh
+$ pip install quilt
+$ cd geplot # root directory of this repo
+$ quilt install # installs dependencies from quilt.yml
+```
+
+#### Use the data
 Data is imported from there throughout the `geoplot` documentation; the shebang looks something like:
 
 ```python
