@@ -95,7 +95,7 @@ But when it is necessary: submit a pull request to the `geoplot-data` repository
 The remaining pages are all written as `rst` files accessible from the top level of the `docs` folder. For these, 
 just `make html` will suffice.
 
-### Serving 
+ ### Serving 
 
 The documentation is served at [residentmario.github.io](https://residentmario.github.io/geoplot/index.html) via 
 GitHub's site export feature, served out of the `gh-pages` branch. The process for putting up a new version of the 
