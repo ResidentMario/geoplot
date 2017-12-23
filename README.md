@@ -1,4 +1,4 @@
-## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-beta-yellow.svg) ![https://anaconda.org/conda-forge/geoplot](https://img.shields.io/conda/v/conda-forge/geoplot.svg)
+## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-stable-green.svg) ![https://anaconda.org/conda-forge/geoplot](https://img.shields.io/conda/v/conda-forge/geoplot.svg)
 
 <!-- [![PyPi version](https://img.shields.io/pypi/v/missingno.svg)]
 (https://pypi.python.org/pypi/geoplot/)-->
