@@ -1,20 +1,12 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Non-contiguous cartogram &#8212; geoplot 0.1.1 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -30,7 +22,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,7 +32,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -138,16 +130,6 @@
 
 <span class="n">obesity</span> <span class="o">=</span> <span class="n">geoplot_data</span><span class="o">.</span><span class="n">obesity_by_state</span><span class="p">()</span>
 <span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">geoplot_data</span><span class="o">.</span><span class="n">contiguous_usa</span><span class="p">())</span>
-<span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;Minnesota&#39;</span><span class="p">,</span> <span class="s1">&#39;Montana&#39;</span><span class="p">,</span> <span class="s1">&#39;North Dakota&#39;</span><span class="p">,</span> <span class="s1">&#39;Idaho&#39;</span><span class="p">,</span> <span class="s1">&#39;Washington&#39;</span><span class="p">,</span> <span class="s1">&#39;Arizona&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;California&#39;</span><span class="p">,</span> <span class="s1">&#39;Colorado&#39;</span><span class="p">,</span> <span class="s1">&#39;Nevada&#39;</span><span class="p">,</span> <span class="s1">&#39;New Mexico&#39;</span><span class="p">,</span> <span class="s1">&#39;Oregon&#39;</span><span class="p">,</span> <span class="s1">&#39;Utah&#39;</span><span class="p">,</span> <span class="s1">&#39;Wyoming&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Arkansas&#39;</span><span class="p">,</span> <span class="s1">&#39;Iowa&#39;</span><span class="p">,</span> <span class="s1">&#39;Kansas&#39;</span><span class="p">,</span> <span class="s1">&#39;Missouri&#39;</span><span class="p">,</span> <span class="s1">&#39;Nebraska&#39;</span><span class="p">,</span> <span class="s1">&#39;Oklahoma&#39;</span><span class="p">,</span> <span class="s1">&#39;South Dakota&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Louisiana&#39;</span><span class="p">,</span> <span class="s1">&#39;Texas&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">,</span> <span class="s1">&#39;Massachusetts&#39;</span><span class="p">,</span> <span class="s1">&#39;New Hampshire&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Rhode Island&#39;</span><span class="p">,</span> <span class="s1">&#39;Vermont&#39;</span><span class="p">,</span> <span class="s1">&#39;Alabama&#39;</span><span class="p">,</span> <span class="s1">&#39;Florida&#39;</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">,</span> <span class="s1">&#39;Mississippi&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;South Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Illinois&#39;</span><span class="p">,</span> <span class="s1">&#39;Indiana&#39;</span><span class="p">,</span> <span class="s1">&#39;Kentucky&#39;</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Ohio&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Tennessee&#39;</span><span class="p">,</span> <span class="s1">&#39;Virginia&#39;</span><span class="p">,</span> <span class="s1">&#39;Wisconsin&#39;</span><span class="p">,</span> <span class="s1">&#39;West Virginia&#39;</span><span class="p">,</span> <span class="s1">&#39;Delaware&#39;</span><span class="p">,</span> <span class="s1">&#39;District of Columbia&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Maryland&#39;</span><span class="p">,</span> <span class="s1">&#39;New Jersey&#39;</span><span class="p">,</span> <span class="s1">&#39;New York&#39;</span><span class="p">,</span> <span class="s1">&#39;Pennsylvania&#39;</span><span class="p">,</span> <span class="s1">&#39;Maine&#39;</span><span class="p">,</span> <span class="s1">&#39;Michigan&#39;</span>
-<span class="p">]</span>
 <span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;Obesity Rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
     <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="n">obesity</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;State == @state&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Percent&#39;</span><span class="p">]</span>
 <span class="p">)</span>
@@ -191,7 +173,7 @@
     </p>
     <p>
         &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>
 </footer>

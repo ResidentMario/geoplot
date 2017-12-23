@@ -6,16 +6,6 @@ from quilt.data.ResidentMario import geoplot_data
 
 obesity = geoplot_data.obesity_by_state()
 contiguous_usa = gpd.read_file(geoplot_data.contiguous_usa())
-contiguous_usa['State'] = [
-    'Minnesota', 'Montana', 'North Dakota', 'Idaho', 'Washington', 'Arizona',
-    'California', 'Colorado', 'Nevada', 'New Mexico', 'Oregon', 'Utah', 'Wyoming',
-    'Arkansas', 'Iowa', 'Kansas', 'Missouri', 'Nebraska', 'Oklahoma', 'South Dakota',
-    'Louisiana', 'Texas', 'Connecticut', 'Massachusetts', 'New Hampshire',
-    'Rhode Island', 'Vermont', 'Alabama', 'Florida', 'Georgia', 'Mississippi',
-    'South Carolina', 'Illinois', 'Indiana', 'Kentucky', 'North Carolina', 'Ohio',
-    'Tennessee', 'Virginia', 'Wisconsin', 'West Virginia', 'Delaware', 'District of Columbia',
-    'Maryland', 'New Jersey', 'New York', 'Pennsylvania', 'Maine', 'Michigan'
-]
 contiguous_usa['Obesity Rate'] = contiguous_usa['State'].map(
     lambda state: obesity.query("State == @state").iloc[0]['Percent']
 )
