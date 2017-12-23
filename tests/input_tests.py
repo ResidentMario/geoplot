@@ -64,7 +64,8 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.pointplot(dataframe_gaussian_points, hue=series_hue_values, k=None)
             gplt.pointplot(dataframe_gaussian_points, hue=map_hue_values(), k=None)
             gplt.pointplot(dataframe_gaussian_points, hue='hue_var', k=None)
-        finally: plt.close()
+        finally:
+            plt.close('all')
 
     def test_kdeplot(self):
         try:
@@ -76,7 +77,7 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.kdeplot(dataframe_gaussian_points, hue=map_hue_values)
             gplt.kdeplot(dataframe_gaussian_points, hue='hue_var')
         finally:
-            plt.close()
+            plt.close('all')
 
     def test_cartogram(self):
         try:
@@ -88,15 +89,14 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.cartogram(dataframe_gaussian_polys, hue=map_hue_values(), scale=list_hue_values)
             gplt.cartogram(dataframe_gaussian_polys, hue='hue_var', scale=list_hue_values)
         finally:
-            plt.close()
+            plt.close('all')
 
     def test_polyplot(self):
         try:
             gplt.polyplot(series_gaussian_polys)
             gplt.polyplot(dataframe_gaussian_polys)
-
         finally:
-            plt.close()
+            plt.close('all')
 
     def test_choropleth(self):
         try:
@@ -108,7 +108,7 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.choropleth(dataframe_gaussian_polys, hue=map_hue_values())
             gplt.choropleth(dataframe_gaussian_polys, hue='hue_var')
         finally:
-            plt.close()
+            plt.close('all')
 
     def test_sankey(self):
         try:
@@ -133,7 +133,7 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.sankey(dataframe_gaussian_points, path='paths')
 
         finally:
-            plt.close()
+            plt.close('all')
 
     def test_aggplot(self):
         try:
@@ -166,4 +166,4 @@ class TestDataInputFormats(unittest.TestCase):
                          geometry=aggplot_geometries)  # Map
 
         finally:
-            plt.close()
+            plt.close('all')
