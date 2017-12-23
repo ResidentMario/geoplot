@@ -1,20 +1,12 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>geoplot.aggplot &#8212; geoplot 0.1.1 documentation</title>
-    
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -30,7 +22,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +32,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -137,49 +129,49 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>df</strong> (<em>GeoDataFrame</em>) &#8211; The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) &#8211; A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
+<li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
 e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
 <code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
-<li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) &#8211; The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
+<li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.
 Specifying <code class="docutils literal"><span class="pre">by</span></code> kicks <code class="docutils literal"><span class="pre">aggplot</span></code> into convex hull plotting mode.</li>
-<li><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">geopandas</span></code> object containing geometries. When both <code class="docutils literal"><span class="pre">by</span></code> and <code class="docutils literal"><span class="pre">geometry</span></code> are provided <code class="docutils literal"><span class="pre">aggplot</span></code>
+<li><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">geopandas</span></code> object containing geometries. When both <code class="docutils literal"><span class="pre">by</span></code> and <code class="docutils literal"><span class="pre">geometry</span></code> are provided <code class="docutils literal"><span class="pre">aggplot</span></code>
 plots in geometry plotting mode, matching points in the <code class="docutils literal"><span class="pre">by</span></code> column with the geometries given by their index
 label in the <code class="docutils literal"><span class="pre">geometry</span></code> column, aggregating those, and plotting the results.</li>
-<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; This variable will only be used if the plot is functioning in quadtree mode. It specifies the
+<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – This variable will only be used if the plot is functioning in quadtree mode. It specifies the
 maximum number of observations that will be contained in each quadrangle; any quadrangle containing more
 than <code class="docutils literal"><span class="pre">nmax</span></code> observations will be forcefully partitioned. <code class="docutils literal"><span class="pre">nmax</span></code> may be left unspecified, in which case
 no maximum splitting rule will be used.</li>
-<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; This variable will only be used if the plot is functioning in quadtree mode. It specifies the minimum number
+<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) – This variable will only be used if the plot is functioning in quadtree mode. It specifies the minimum number
 of observations that must be present in each quadtree split for the split to be followed through. For
 example, if we specify a value of 5, partition a quadrangle, and find that it contains a subquadrangle with
 just 4 points inside, this rule will cause the algorithm to return the parent quadrangle instead of its
 children.</li>
-<li><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
+<li><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) – A floor on the number of observations in an aggregation that gets reported. Aggregations containing fewer than
 <code class="docutils literal"><span class="pre">nsig</span></code> points are not aggregated and are instead returned as white patches, indicative of their status as
-&#8220;empty&#8221; spaces. Defaults to 0.</li>
-<li><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) &#8211; The aggregation ufunc that will be applied to the <code class="docutils literal"><span class="pre">numpy</span></code> array of values for the variable of interest of
+“empty” spaces. Defaults to 0.</li>
+<li><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) – The aggregation ufunc that will be applied to the <code class="docutils literal"><span class="pre">numpy</span></code> array of values for the variable of interest of
 observations inside of each quadrangle. Defaults to <code class="docutils literal"><span class="pre">np.mean</span></code>.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) &#8211; The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The string representation for a matplotlib colormap to be applied to this dataset. <code class="docutils literal"><span class="pre">hue</span></code> must be non-empty
 for a colormap to be applied at all, so this parameter is ignored otherwise.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict floor on the value associated with the &#8220;bottom&#8221; of the colormap spectrum. Data column entries whose
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – A strict floor on the value associated with the “bottom” of the colormap spectrum. Data column entries whose
 value is below this level will all be colored by the same threshold value.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; A strict ceiling on the value associated with the &#8220;top&#8221; of the colormap spectrum. Data column entries whose
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – A strict ceiling on the value associated with the “top” of the colormap spectrum. Data column entries whose
 value is above this level will all be colored by the same threshold value.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend in the output plot. This parameter will be ignored if <code class="docutils literal"><span class="pre">hue</span></code> is set to
 None or left unspecified.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</li>
-<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) &#8211; An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the <code class="docutils literal"><span class="pre">matplotlib</span></code> <code class="docutils literal"><span class="pre">ax.colorbar</span></code> method (<a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">ref</a>).</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
 Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; Whether or not to overlay cartopy&#8217;s computed latitude-longitude gridlines.</li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em></em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em></em><em>, </em><em>optional</em>) &#8211; If this parameter is set to None (default) this method will calculate its own cartographic display region. If
-an extrema tuple is passed&#8212;useful if you want to focus on a particular area, for example, or exclude certain
-outliers&#8212;that input will be used instead.</li>
-<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) &#8211; A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
+<li><strong>gridlines</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to overlay cartopy’s computed latitude-longitude gridlines.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – If this parameter is set to None (default) this method will calculate its own cartographic display region. If
+an extrema tuple is passed—useful if you want to focus on a particular area, for example, or exclude certain
+outliers—that input will be used instead.</li>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
 will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
 </li>
 </ul>
 </td>
@@ -195,18 +187,18 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 <p class="rubric">Examples</p>
 <p>This plot type accepts any geometry, including mixtures of polygons and points, averages the value of a certain
 data parameter at their centroids, and plots the result, using a colormap is the visual variable.</p>
-<p>For the purposes of comparison, this library&#8217;s <code class="docutils literal"><span class="pre">choropleth</span></code> function takes some sort of data as input,
+<p>For the purposes of comparison, this library’s <code class="docutils literal"><span class="pre">choropleth</span></code> function takes some sort of data as input,
 polygons as geospatial context, and combines themselves into a colorful map. This is useful if, for example,
 you have data on the amount of crimes committed per neigborhood, and you want to plot that.</p>
-<p>But suppose your original dataset came in terms of individual observations - instead of &#8220;n collisions happened
-in this neighborhood&#8221;, you have &#8220;one collision occured at this specific coordinate at this specific date&#8221;.
+<p>But suppose your original dataset came in terms of individual observations - instead of “n collisions happened
+in this neighborhood”, you have “one collision occured at this specific coordinate at this specific date”.
 This is obviously more useful data - it can be made to do more things - but in order to generate the same map,
 you will first have to do all of the work of geolocating your points to neighborhoods (not trivial),
 then aggregating them (by, in this case, taking a count).</p>
 <p><code class="docutils literal"><span class="pre">aggplot</span></code> handles this work for you. It takes input in the form of observations, and outputs as useful as
-possible a visualization of their &#8220;regional&#8221; statistics. What a &#8220;region&#8221; corresponds to depends on how much
+possible a visualization of their “regional” statistics. What a “region” corresponds to depends on how much
 geospatial information you can provide.</p>
-<p>If you can&#8217;t provide <em>any</em> geospatial context, <code class="docutils literal"><span class="pre">aggplot</span></code> will output what&#8217;s known as a quadtree: it will break
+<p>If you can’t provide <em>any</em> geospatial context, <code class="docutils literal"><span class="pre">aggplot</span></code> will output what’s known as a quadtree: it will break
 your data down into recursive squares, and use them to aggregate the data. This is a very experimental format,
 is very fiddly to make, and has not yet been optimized for speed; but it provides a useful baseline which
 requires no additional work and can be used to expose interesting geospatial correlations right away. And,
@@ -220,18 +212,18 @@ dataset, a data column of interest, and, optionally, a projection.</p>
 </div>
 <img alt="_images/aggplot-initial.png" src="_images/aggplot-initial.png" />
 <p>To get the best output, you often need to tweak the <code class="docutils literal"><span class="pre">nmin</span></code> and <code class="docutils literal"><span class="pre">nmax</span></code> parameters, controlling the minimum and
-maximum number of observations per box, respectively, yourself. In this case we&#8217;ll also choose a different
+maximum number of observations per box, respectively, yourself. In this case we’ll also choose a different
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a>, using the <code class="docutils literal"><span class="pre">cmap</span></code>
 parameter.</p>
 <p><code class="docutils literal"><span class="pre">aggplot</span></code> will satisfy the <code class="docutils literal"><span class="pre">nmax</span></code> parameter before trying to satisfy <code class="docutils literal"><span class="pre">nmin</span></code>, so you may result in spaces
 without observations, or ones lacking a statistically significant number of observations. This is necessary in
-order to break up &#8220;spaces&#8221; that the algorithm would otherwise end on. You can control the maximum number of
+order to break up “spaces” that the algorithm would otherwise end on. You can control the maximum number of
 observations in the blank spaces using the <code class="docutils literal"><span class="pre">nsig</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-quadtree-tuned.png" src="_images/aggplot-quadtree-tuned.png" />
-<p>You&#8217;ll have to play around with these parameters to get the clearest picture.</p>
+<p>You’ll have to play around with these parameters to get the clearest picture.</p>
 <p>Usually, however, observations with a geospatial component will be provided with some form of spatial
 categorization. In the case of our collisions example, this comes in the form of a postal zip code. With the
 simple addition of this data column via the <code class="docutils literal"><span class="pre">by</span></code> parameter, our output changes radically, taking advantage of
@@ -297,7 +289,7 @@ passed using <code class="docutils literal"><span class="pre">legend_kwargs</spa
     </p>
     <p>
         &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>
 </footer>
