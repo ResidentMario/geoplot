@@ -20,7 +20,6 @@
 import os
 import sys
 import sphinx_bootstrap_theme
-import matplotlib
 # Custom styling configuration details:
 # https://ryan-roemer.github.io/sphinx-bootstrap-theme/README.html
 
