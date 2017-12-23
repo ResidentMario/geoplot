@@ -315,7 +315,7 @@ def pointplot(df, projection=None,
         else:
             pass  # Default extent.
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -498,7 +498,7 @@ def polyplot(df, projection=None,
             ax = plt.subplot(111, projection=projection)
 
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -717,7 +717,7 @@ def choropleth(df, projection=None,
         if not ax:
             ax = plt.subplot(111, projection=projection)
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1002,7 +1002,7 @@ def aggplot(df, projection=None,
         if not ax:
             ax = plt.subplot(111, projection=projection)
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1371,7 +1371,7 @@ def cartogram(df, projection=None,
 
         # Clean up patches.
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1619,7 +1619,7 @@ def kdeplot(df, projection=None,
         if not ax:
             ax = plt.subplot(111, projection=projection)
     else:
-        ax = plt.subplot(111)
+        ax = plt.gca()
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
