@@ -2575,14 +2575,14 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
         display_values = np.linspace(np.max(values), np.min(values), num=5)
     display_labels = legend_labels if (legend_labels is not None) else display_values
 
-    # Paint patche s.
+    # Paint patches.
     patches = []
     for value in display_values:
-        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
+        patches.append(mpl.lines.Line2D([0], [0], linestyle='None',
                        marker="o",
                        markersize=(20*scale_func(value))**(1/2),
                        markerfacecolor='None'))
-    if not legend_kwargs: legend_kwargs = dict()
+    if legend_kwargs is None: legend_kwargs = dict()
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
 
 
@@ -2610,7 +2610,7 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     -------
     None.
     """
-    if not legend_kwargs: legend_kwargs = dict()
+    if legend_kwargs is None: legend_kwargs = dict()
     cmap.set_array(values)
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
