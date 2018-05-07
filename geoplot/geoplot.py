@@ -2231,8 +2231,6 @@ def sankey(*args, projection=None,
 
 def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor='black', facecolor='None',
             **kwargs):
-    from scipy.spatial import Voronoi
-
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
 
@@ -2265,21 +2263,8 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
     extrema = xmin, xmax, ymin, ymax
     _set_extent(ax, projection, extent, extrema)
 
-    # Generate the Voronoi regions.
-    points = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
-    vor = Voronoi(points)
-    geoms = []
-    for idx_point, point in enumerate(vor.points):
-        idx_point_region = vor.point_region[idx_point]
-        idxs_vertices = vor.regions[idx_point_region]
-        if len(idxs_vertices) < 3 or np.any(idxs_vertices == -1):
-            pass
-        else:
-            region_vertices = vor.vertices[idxs_vertices]
-            region_poly = shapely.geometry.Polygon(region_vertices)
-            geoms.append(region_poly)
-
     # Finally we draw the features.
+    geoms = _build_voronoi_polygons(df, extrema)
     for geom in geoms:
         feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
         ax.add_patch(feature)
@@ -2731,6 +2716,79 @@ def _get_clip(extent, clip):
     for geom in clip:
         rect = rect.symmetric_difference(geom)
     return rect
+
+
+def _build_voronoi_polygons(df, extrema):
+    """
+    Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi simplexes for the given
+    points in the given space and returns them.
+
+    Voronoi simplexes which are located on the edges of the graph may extend into infinity in some direction. In
+    other words, the set of points nearest the given point does not necessarily have to be a closed polygon. We force
+    these non-hermetic spaces into polygons by windowing them against the edges of the plot.
+
+    Parameters
+    ----------
+    ax : matplotlib.Axes instance
+        The ``matplotlib.Axes`` instance on which a legend is being painted.
+    values : list
+        A list of values being plotted. May be either a list of int types or a list of unique entities in the
+        data column (e.g. as generated via ``numpy.unique(data)``. This parameter is meant to be the same as that
+        returned by the ``_discrete_colorize`` method.
+    cmap : ``matplotlib.cm`` instance
+        The `matplotlib` colormap instance which will be used to colorize the legend entries. This should be the
+        same one used for colorizing the plot's geometries.
+    legend_kwargs : dict
+        Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
+        is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
+        finicky.
+
+    Returns
+    -------
+    None.
+    """
+    from scipy.spatial import Voronoi
+    geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
+    vor = Voronoi(geom)
+
+    # Separate the polygons into ones with and without finite borders.
+    is_finite = []
+    for idx_point, point in enumerate(vor.points):
+        idx_point_region = vor.point_region[idx_point]
+        idxs_vertices = np.array(vor.regions[idx_point_region])
+        finity = True if not np.any(idxs_vertices == -1) else False
+        is_finite.append(finity)
+
+    finite_point_idxs = np.where(np.array(is_finite) == True)[0]
+    infinite_point_idxs = np.where(np.array(is_finite) == False)[0]
+
+    polygons = []
+
+    for idx_point in finite_point_idxs:
+        point = vor.points[idx_point]
+        idx_point_region = vor.point_region[idx_point]
+        idxs_vertices = np.array(vor.regions[idx_point_region])
+        region_vertices = vor.vertices[idxs_vertices]
+        region_poly = shapely.geometry.Polygon(region_vertices)
+        polygons.append(region_poly)
+
+    for idx_point in infinite_point_idxs:
+        point = vor.points[idx_point]
+        idx_point_region = vor.point_region[idx_point]
+        idxs_vertices = np.array(vor.regions[idx_point_region])
+
+        # TODO: implement!
+
+        # # Cut the polygons to fit the window.
+        # xmin, xmax, ymin, ymax = extrema
+        # xdiff, ydiff = (xmax - xmin) * margin / 2, (ymax - ymin) * margin / 2
+        # xmin, xmax = xmin - xdiff, xmax + xdiff
+        # ymin, ymax = ymin - ydiff, ymax + ydiff
+        #
+        # window = shapely.geometry.Polygon([[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]])
+        # polygons = [poly.intersection(window) for poly in polygons]
+
+    return polygons
 
 
 #######################
