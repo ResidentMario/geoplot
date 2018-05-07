@@ -2235,14 +2235,16 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
     fig = _init_figure(ax, figsize)
 
     if projection:
+        # Properly set up the projection.
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry]))
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
         })
 
         # Set up the axis.
         if not ax:
             ax = plt.subplot(111, projection=projection)
+
     else:
         if not ax:
             ax = plt.gca()
@@ -2255,31 +2257,29 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
         return ax
 
     # Set extent.
-    xs, ys = [p.x for p in df.geometry], [p.y for p in df.geometry]
+    xs, ys = [p.x for p in df.geometry.centroid], [p.y for p in df.geometry.centroid]
     extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
-    # mp = shapely.ops.unary_union(df.geometry)
-    # extrema = _get_envelopes_min_maxes(pd.Series(mp.envelope.exterior))
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
     geoms = _build_voronoi_polygons(df, extrema)
-
     if projection:
-        for point, geom in zip(df.geometry, geoms):
+        for geom in geoms:
             # Temporary workaround for not having infinite-bounded simplexes implemented.
             if geom is None:
                 continue
 
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=facecolor, **kwargs)
+            ax.add_feature(features, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
 
-        if clip:
-            # TODO: implement clipping with projections.
-            # clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            pass
+        if clip is not None:
+            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+
 
     else:
-        for point, geom in zip(df.geometry, geoms):
+        for geom in geoms:
             # Temporary workaround for not having infinite-bounded simplexes implemented.
             if geom is None:
                 continue
