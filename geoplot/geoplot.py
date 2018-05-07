@@ -512,7 +512,7 @@ def polyplot(df, projection=None,
         return ax
 
     # Set extent.
-    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    extrema = _get_envelopes_min_maxes(df.geometry.envelope)
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
@@ -2235,16 +2235,14 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
     fig = _init_figure(ax, figsize)
 
     if projection:
-        # Properly set up the projection.
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry]))
         })
 
         # Set up the axis.
         if not ax:
             ax = plt.subplot(111, projection=projection)
-
     else:
         if not ax:
             ax = plt.gca()
@@ -2257,32 +2255,42 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
         return ax
 
     # Set extent.
-    pgeom = np.asarray(df.geometry.map(lambda p: (p.x, p.y)).tolist())
-    xmin, ymin = pgeom.min(axis=0)
-    xmax, ymax = pgeom.max(axis=0)
-    extrema = xmin, xmax, ymin, ymax
+    xs, ys = [p.x for p in df.geometry], [p.y for p in df.geometry]
+    extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    # mp = shapely.ops.unary_union(df.geometry)
+    # extrema = _get_envelopes_min_maxes(pd.Series(mp.envelope.exterior))
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
     geoms = _build_voronoi_polygons(df, extrema)
-    for point, geom in zip(df.geometry, geoms):
-        # Temporary workaround for not having infinite-bounded simplexes implemented.
-        if geom is None:
-            continue
 
-        feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
-        ax.add_patch(feature)
+    if projection:
+        for point, geom in zip(df.geometry, geoms):
+            # Temporary workaround for not having infinite-bounded simplexes implemented.
+            if geom is None:
+                continue
 
-    # Apply clipping.
-    if projection and clip is not None:
-        # TODO: implemented clipping with projections.
-        # clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-        pass
+            features = ShapelyFeature([geom], ccrs.PlateCarree())
+            ax.add_feature(features, facecolor=facecolor, **kwargs)
 
-    elif not projection and clip is not None:
-        clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-        polyplot(gpd.GeoSeries(clip_geom),
-                 facecolor='white', linewidth=0, zorder=100, extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
+        if clip:
+            # TODO: implement clipping with projections.
+            # clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+            pass
+
+    else:
+        for point, geom in zip(df.geometry, geoms):
+            # Temporary workaround for not having infinite-bounded simplexes implemented.
+            if geom is None:
+                continue
+
+            feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+            ax.add_patch(feature)
+
+        if clip is not None:
+            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+            polyplot(gpd.GeoSeries(clip_geom),
+                     facecolor='white', linewidth=0, zorder=100, extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
 
     return ax
 
@@ -2733,7 +2741,7 @@ def _get_clip(extent, clip):
     return rect
 
 
-def _build_voronoi_polygons(df, extrema, clip=None):
+def _build_voronoi_polygons(df, extrema):
     """
     Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi simplexes for the given
     points in the given space and returns them.
