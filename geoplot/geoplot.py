@@ -2229,7 +2229,7 @@ def sankey(*args, projection=None,
     return ax
 
 
-def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor='black', facecolor='None',
+def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor='black', facecolor='None', clip=None,
             **kwargs):
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
@@ -2265,9 +2265,24 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
 
     # Finally we draw the features.
     geoms = _build_voronoi_polygons(df, extrema)
-    for geom in geoms:
+    for point, geom in zip(df.geometry, geoms):
+        # Temporary workaround for not having infinite-bounded simplexes implemented.
+        if geom is None:
+            continue
+
         feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
         ax.add_patch(feature)
+
+    # Apply clipping.
+    if projection and clip is not None:
+        # TODO: implemented clipping with projections.
+        # clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+        pass
+
+    elif not projection and clip is not None:
+        clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+        polyplot(gpd.GeoSeries(clip_geom),
+                 facecolor='white', linewidth=0, zorder=100, extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
 
     return ax
 
@@ -2712,13 +2727,13 @@ def _get_clip(extent, clip):
     # We have to add a little bit of padding to the edges of the box, as otherwise the edges will invert a little,
     # surprisingly.
     rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)])
-    rect = shapely.affinity.scale(rect, xfact=1.05, yfact=1.05)
+    rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
     for geom in clip:
         rect = rect.symmetric_difference(geom)
     return rect
 
 
-def _build_voronoi_polygons(df, extrema):
+def _build_voronoi_polygons(df, extrema, clip=None):
     """
     Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi simplexes for the given
     points in the given space and returns them.
@@ -2729,19 +2744,10 @@ def _build_voronoi_polygons(df, extrema):
 
     Parameters
     ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance on which a legend is being painted.
-    values : list
-        A list of values being plotted. May be either a list of int types or a list of unique entities in the
-        data column (e.g. as generated via ``numpy.unique(data)``. This parameter is meant to be the same as that
-        returned by the ``_discrete_colorize`` method.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the legend entries. This should be the
-        same one used for colorizing the plot's geometries.
-    legend_kwargs : dict
-        Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
-        is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
-        finicky.
+    df : GeoDataFrame instance
+        The `GeoDataFrame` of points being partitioned.
+    extrema : tuple
+        A tuple of the minimum and maximum values in the plot axis.
 
     Returns
     -------
@@ -2751,42 +2757,41 @@ def _build_voronoi_polygons(df, extrema):
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
     vor = Voronoi(geom)
 
-    # Separate the polygons into ones with and without finite borders.
-    is_finite = []
+    polygons = []
+
     for idx_point, point in enumerate(vor.points):
         idx_point_region = vor.point_region[idx_point]
         idxs_vertices = np.array(vor.regions[idx_point_region])
-        finity = True if not np.any(idxs_vertices == -1) else False
-        is_finite.append(finity)
 
-    finite_point_idxs = np.where(np.array(is_finite) == True)[0]
-    infinite_point_idxs = np.where(np.array(is_finite) == False)[0]
+        is_finite = True if not np.any(idxs_vertices == -1) else False
 
-    polygons = []
+        if is_finite:
+            point = vor.points[idx_point]
+            idx_point_region = vor.point_region[idx_point]
+            idxs_vertices = np.array(vor.regions[idx_point_region])
+            region_vertices = vor.vertices[idxs_vertices]
+            region_poly = shapely.geometry.Polygon(region_vertices)
 
-    for idx_point in finite_point_idxs:
-        point = vor.points[idx_point]
-        idx_point_region = vor.point_region[idx_point]
-        idxs_vertices = np.array(vor.regions[idx_point_region])
-        region_vertices = vor.vertices[idxs_vertices]
-        region_poly = shapely.geometry.Polygon(region_vertices)
-        polygons.append(region_poly)
+            polygons.append(region_poly)
 
-    for idx_point in infinite_point_idxs:
-        point = vor.points[idx_point]
-        idx_point_region = vor.point_region[idx_point]
-        idxs_vertices = np.array(vor.regions[idx_point_region])
+        else:
+            point = vor.points[idx_point]
+            idx_point_region = vor.point_region[idx_point]
+            idxs_vertices = np.array(vor.regions[idx_point_region])
 
-        # TODO: implement!
+            # TODO: implement infinite points!
 
-        # # Cut the polygons to fit the window.
-        # xmin, xmax, ymin, ymax = extrema
-        # xdiff, ydiff = (xmax - xmin) * margin / 2, (ymax - ymin) * margin / 2
-        # xmin, xmax = xmin - xdiff, xmax + xdiff
-        # ymin, ymax = ymin - ydiff, ymax + ydiff
-        #
-        # window = shapely.geometry.Polygon([[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]])
-        # polygons = [poly.intersection(window) for poly in polygons]
+            # # Cut the polygons to fit the window.
+            # xmin, xmax, ymin, ymax = extrema
+            # xdiff, ydiff = (xmax - xmin) * margin / 2, (ymax - ymin) * margin / 2
+            # xmin, xmax = xmin - xdiff, xmax + xdiff
+            # ymin, ymax = ymin - ydiff, ymax + ydiff
+            #
+            # window = shapely.geometry.Polygon([[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]])
+            # polygons = [poly.intersection(window) for poly in polygons]
+
+            # Temporary signal value.
+            polygons.append(None)
 
     return polygons
 
