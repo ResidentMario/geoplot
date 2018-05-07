@@ -2229,7 +2229,7 @@ def sankey(*args, projection=None,
     return ax
 
 
-def voronoi(df, projection=None, edgecolor='black', facecolor='None',
+def voronoi(df, projection=None, edgecolor='black',
             clip=None,
             hue=None, scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
             legend=False, legend_kwargs=None, legend_labels=None,
