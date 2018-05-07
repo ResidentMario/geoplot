@@ -1,4 +1,4 @@
-from .geoplot import (pointplot, polyplot, choropleth, aggplot, cartogram, kdeplot, sankey)
+from .geoplot import (pointplot, polyplot, choropleth, aggplot, cartogram, kdeplot, sankey, voronoi)
 from .crs import (PlateCarree, LambertCylindrical, Mercator, Miller, Mollweide, Robinson, Sinusoidal,
                   InterruptedGoodeHomolosine, Geostationary, NorthPolarStereo, SouthPolarStereo, Gnomonic,
                   AlbersEqualArea, AzimuthalEquidistant, LambertConformal, Orthographic, Stereographic,

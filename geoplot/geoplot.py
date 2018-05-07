@@ -2231,6 +2231,8 @@ def sankey(*args, projection=None,
 
 def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor='black', facecolor='None',
             **kwargs):
+    from scipy.spatial import Voronoi
+
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
 
@@ -2257,14 +2259,14 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
         return ax
 
     # Set extent.
-    pgeom = np.asarray(fatal_collisions.geometry.map(lambda p: (p.x, p.y)).tolist())
+    pgeom = np.asarray(df.geometry.map(lambda p: (p.x, p.y)).tolist())
     xmin, ymin = pgeom.min(axis=0)
     xmax, ymax = pgeom.max(axis=0)
     extrema = xmin, xmax, ymin, ymax
     _set_extent(ax, projection, extent, extrema)
 
     # Generate the Voronoi regions.
-    points = np.array(fatal_collisions.geometry.map(lambda p: [p.x, p.y]).tolist())
+    points = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
     vor = Voronoi(points)
     geoms = []
     for idx_point, point in enumerate(vor.points):
@@ -2274,7 +2276,7 @@ def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor
             pass
         else:
             region_vertices = vor.vertices[idxs_vertices]
-            region_poly = Polygon(region_vertices)
+            region_poly = shapely.geometry.Polygon(region_vertices)
             geoms.append(region_poly)
 
     # Finally we draw the features.
