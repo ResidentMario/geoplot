@@ -2228,6 +2228,63 @@ def sankey(*args, projection=None,
                         ax.add_line(line)
     return ax
 
+
+def voronoi(df, projection=None, extent=None, figsize=(8, 6), ax=None, edgecolor='black', facecolor='None',
+            **kwargs):
+    # Initialize the figure.
+    fig = _init_figure(ax, figsize)
+
+    if projection:
+        # Properly set up the projection.
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
+
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+    else:
+        if not ax:
+            ax = plt.gca()
+
+    # Clean up patches.
+    _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
+    # Set extent.
+    pgeom = np.asarray(fatal_collisions.geometry.map(lambda p: (p.x, p.y)).tolist())
+    xmin, ymin = pgeom.min(axis=0)
+    xmax, ymax = pgeom.max(axis=0)
+    extrema = xmin, xmax, ymin, ymax
+    _set_extent(ax, projection, extent, extrema)
+
+    # Generate the Voronoi regions.
+    points = np.array(fatal_collisions.geometry.map(lambda p: [p.x, p.y]).tolist())
+    vor = Voronoi(points)
+    geoms = []
+    for idx_point, point in enumerate(vor.points):
+        idx_point_region = vor.point_region[idx_point]
+        idxs_vertices = vor.regions[idx_point_region]
+        if len(idxs_vertices) < 3 or np.any(idxs_vertices == -1):
+            pass
+        else:
+            region_vertices = vor.vertices[idxs_vertices]
+            region_poly = Polygon(region_vertices)
+            geoms.append(region_poly)
+
+    # Finally we draw the features.
+    for geom in geoms:
+        feature = descartes.PolygonPatch(geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+        ax.add_patch(feature)
+
+    return ax
+
+
 ##################
 # HELPER METHODS #
 ##################
