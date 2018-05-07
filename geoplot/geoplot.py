@@ -512,7 +512,7 @@ def polyplot(df, projection=None,
         return ax
 
     # Set extent.
-    extrema = _get_envelopes_min_maxes(df.geometry.envelope)
+    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
