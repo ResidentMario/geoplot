@@ -2228,6 +2228,174 @@ def sankey(*args, projection=None,
                         ax.add_line(line)
     return ax
 
+
+def voronoi(df, projection=None, edgecolor='black',
+            clip=None,
+            hue=None, scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
+            legend=False, legend_kwargs=None, legend_labels=None,
+            extent=None, figsize=(8, 6), ax=None,
+            **kwargs):
+    """
+    A geospatial Voronoi diagram.
+
+    Parameters
+    ----------
+    df : GeoDataFrame, optional.
+        The data being plotted.
+    projection : geoplot.crs object instance, optional
+        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
+        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
+        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
+    hue : None, Series, GeoSeries, iterable, or str, optional
+        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
+    categorical : boolean, optional
+        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
+        if ``hue`` is set to None or not specified.
+    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
+        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
+        left unspecified or set to None this variable is ignored.
+    k : int or None, optional
+        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
+        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
+        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
+        ignored.
+    cmap : matplotlib color, optional
+        The matplotlib colormap to be applied to this dataset (`ref
+        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
+        specified.
+    vmin : float, optional
+        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
+        colored the same threshold value. Defaults to the minimum value in the dataset.
+    vmax : float, optional
+        The value that "tops out" the colormap. Data column entries whose value is above this level will be
+        colored the same threshold value. Defaults to the maximum value in the dataset.
+    legend : boolean, optional
+        Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
+        ``scale`` is unspecified.
+    legend_labels : list, optional
+        If a legend is specified, this parameter can be used to control what names will be attached to the values.
+    legend_kwargs : dict, optional
+        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
+        <http://matplotlib.org/users/legend_guide.html>`_).
+    extent : None or (minx, maxx, miny, maxy), optional
+        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
+        that input will be used instead.
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        Defaults to (8, 6), the ``matplotlib`` default global.
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
+        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+    kwargs: dict, optional
+        Keyword arguments to be passed to the underlying ``matplotlib.lines.Line2D`` instances (`ref
+        <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_).
+
+    Returns
+    -------
+    AxesSubplot or GeoAxesSubplot instance
+        The axis object with the plot on it.
+    """
+
+    # Initialize the figure.
+    fig = _init_figure(ax, figsize)
+
+    if projection:
+        # Properly set up the projection.
+        projection = projection.load(df, {
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+        })
+
+        # Set up the axis.
+        if not ax:
+            ax = plt.subplot(111, projection=projection)
+
+    else:
+        if not ax:
+            ax = plt.gca()
+
+    # Clean up patches.
+    _lay_out_axes(ax, projection)
+
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
+    # Set extent.
+    xs, ys = [p.x for p in df.geometry.centroid], [p.y for p in df.geometry.centroid]
+    extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    _set_extent(ax, projection, extent, extrema)
+
+    # Validate hue input.
+    hue = _validate_hue(df, hue)
+
+    # Generate the coloring information, if needed. Follows one of two schemes, categorical or continuous,
+    # based on whether or not ``k`` is specified (``hue`` must be specified for either to work).
+    if k is not None:
+        # Categorical colormap code path.
+        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+
+        if hue is not None:
+            cmap, categories, hue_values = _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax)
+            colors = [cmap.to_rgba(v) for v in hue_values]
+
+        else:
+            colors = ['None']*len(df)
+
+    elif k is None and hue is not None:
+        # Continuous colormap code path.
+        hue_values = hue
+        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        colors = [cmap.to_rgba(v) for v in hue_values]
+
+    elif 'facecolor' in kwargs:
+        colors = [kwargs.pop('facecolor')]*len(df)
+    else:
+        colors = ['None']*len(df)
+
+    # Finally we draw the features.
+    geoms = _build_voronoi_polygons(df, extrema)
+    if projection:
+        for color, geom in zip(colors, geoms):
+            # Temporary workaround for not having infinite-bounded simplexes implemented.
+            if geom is None:
+                continue
+
+            features = ShapelyFeature([geom], ccrs.PlateCarree())
+            ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **kwargs)
+
+        if clip is not None:
+            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+
+    else:
+        for color, geom in zip(colors, geoms):
+            # Temporary workaround for not having infinite-bounded simplexes implemented.
+            if geom is None:
+                continue
+
+            feature = descartes.PolygonPatch(geom, facecolor=color, edgecolor=edgecolor, **kwargs)
+            ax.add_patch(feature)
+
+        if clip is not None:
+            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+            ax = polyplot(gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                          extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
+
+    # Add a legend, if appropriate.
+    if legend and k is not None:
+        legend_ax = ax.twinx()
+        legend_ax.axis('off')
+        legend_ax.set_zorder(101)
+        _paint_hue_legend(legend_ax, categories, cmap, legend_labels, legend_kwargs)
+    elif legend and k is None and hue is not None:
+        _paint_colorbar_legend(ax, cmap, legend_labels, legend_kwargs)
+
+    return ax
+
+
 ##################
 # HELPER METHODS #
 ##################
@@ -2668,10 +2836,73 @@ def _get_clip(extent, clip):
     # We have to add a little bit of padding to the edges of the box, as otherwise the edges will invert a little,
     # surprisingly.
     rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)])
-    rect = shapely.affinity.scale(rect, xfact=1.05, yfact=1.05)
+    rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
     for geom in clip:
         rect = rect.symmetric_difference(geom)
     return rect
+
+
+def _build_voronoi_polygons(df, extrema):
+    """
+    Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi simplexes for the given
+    points in the given space and returns them.
+
+    Voronoi simplexes which are located on the edges of the graph may extend into infinity in some direction. In
+    other words, the set of points nearest the given point does not necessarily have to be a closed polygon. We force
+    these non-hermetic spaces into polygons by windowing them against the edges of the plot.
+
+    Parameters
+    ----------
+    df : GeoDataFrame instance
+        The `GeoDataFrame` of points being partitioned.
+    extrema : tuple
+        A tuple of the minimum and maximum values in the plot axis.
+
+    Returns
+    -------
+    None.
+    """
+    from scipy.spatial import Voronoi
+    geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
+    vor = Voronoi(geom)
+
+    polygons = []
+
+    for idx_point, point in enumerate(vor.points):
+        idx_point_region = vor.point_region[idx_point]
+        idxs_vertices = np.array(vor.regions[idx_point_region])
+
+        is_finite = True if not np.any(idxs_vertices == -1) else False
+
+        if is_finite:
+            point = vor.points[idx_point]
+            idx_point_region = vor.point_region[idx_point]
+            idxs_vertices = np.array(vor.regions[idx_point_region])
+            region_vertices = vor.vertices[idxs_vertices]
+            region_poly = shapely.geometry.Polygon(region_vertices)
+
+            polygons.append(region_poly)
+
+        else:
+            point = vor.points[idx_point]
+            idx_point_region = vor.point_region[idx_point]
+            idxs_vertices = np.array(vor.regions[idx_point_region])
+
+            # TODO: implement infinite points!
+
+            # # Cut the polygons to fit the window.
+            # xmin, xmax, ymin, ymax = extrema
+            # xdiff, ydiff = (xmax - xmin) * margin / 2, (ymax - ymin) * margin / 2
+            # xmin, xmax = xmin - xdiff, xmax + xdiff
+            # ymin, ymax = ymin - ydiff, ymax + ydiff
+            #
+            # window = shapely.geometry.Polygon([[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]])
+            # polygons = [poly.intersection(window) for poly in polygons]
+
+            # Temporary signal value.
+            polygons.append(None)
+
+    return polygons
 
 
 #######################
