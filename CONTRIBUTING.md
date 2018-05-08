@@ -20,7 +20,7 @@ git checkout -B new-branch-name
 
 `geoplot` depends on one set of requirements for installation and usage, and another (augmented) set of requirements 
 for development. Both require [`conda`](https://conda.io/) to work. The easiest way to get a development environment 
-set up is to run `conda install --file devenv.yml` out of the `envs` directory.
+set up is to run `conda env create -f devenv.yml` out of the `envs` directory.
 
 This should install all necessary dependencies. If it fails, you will need to localize a few yourself. Use the 
 packages listed in `devenv.yml` as a guide.
