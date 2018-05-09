@@ -2231,7 +2231,7 @@ def sankey(*args, projection=None,
 
 def voronoi(df, projection=None, edgecolor='black',
             clip=None,
-            hue=None, scheme=None, k=5, cmap='Set1', categorical=False, vmin=None, vmax=None,
+            hue=None, scheme=None, k=5, cmap='viridis', categorical=False, vmin=None, vmax=None,
             legend=False, legend_kwargs=None, legend_labels=None,
             extent=None, figsize=(8, 6), ax=None,
             **kwargs):
@@ -2355,13 +2355,9 @@ def voronoi(df, projection=None, edgecolor='black',
         colors = ['None']*len(df)
 
     # Finally we draw the features.
-    geoms = _build_voronoi_polygons(df, extrema)
+    geoms = _build_voronoi_polygons(df)
     if projection:
         for color, geom in zip(colors, geoms):
-            # Temporary workaround for not having infinite-bounded simplexes implemented.
-            if geom is None:
-                continue
-
             features = ShapelyFeature([geom], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **kwargs)
 
@@ -2372,10 +2368,6 @@ def voronoi(df, projection=None, edgecolor='black',
 
     else:
         for color, geom in zip(colors, geoms):
-            # Temporary workaround for not having infinite-bounded simplexes implemented.
-            if geom is None:
-                continue
-
             feature = descartes.PolygonPatch(geom, facecolor=color, edgecolor=edgecolor, **kwargs)
             ax.add_patch(feature)
 
@@ -2388,7 +2380,7 @@ def voronoi(df, projection=None, edgecolor='black',
     if legend and k is not None:
         _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=True)
     elif legend and k is None and hue is not None:
-        _paint_colorbar_legend(ax, cmap, legend_labels, legend_kwargs)
+        _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
     return ax
 
@@ -2845,25 +2837,24 @@ def _get_clip(extent, clip):
     return rect
 
 
-def _build_voronoi_polygons(df, extrema):
+def _build_voronoi_polygons(df):
     """
     Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi simplexes for the given
     points in the given space and returns them.
 
     Voronoi simplexes which are located on the edges of the graph may extend into infinity in some direction. In
     other words, the set of points nearest the given point does not necessarily have to be a closed polygon. We force
-    these non-hermetic spaces into polygons by windowing them against the edges of the plot.
+    these non-hermetic spaces into polygons using a subroutine.
 
     Parameters
     ----------
     df : GeoDataFrame instance
         The `GeoDataFrame` of points being partitioned.
-    extrema : tuple
-        A tuple of the minimum and maximum values in the plot axis.
 
     Returns
     -------
-    None.
+    polygons : list of shapely.geometry.Polygon objects
+        The Voronoi polygon output.
     """
     from scipy.spatial import Voronoi
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
@@ -2878,7 +2869,7 @@ def _build_voronoi_polygons(df, extrema):
         is_finite = True if not np.any(idxs_vertices == -1) else False
 
         if is_finite:
-            point = vor.points[idx_point]
+            # Easy case, the region is closed. Make a polygon out of the Voronoi ridge points.
             idx_point_region = vor.point_region[idx_point]
             idxs_vertices = np.array(vor.regions[idx_point_region])
             region_vertices = vor.vertices[idxs_vertices]
@@ -2887,23 +2878,64 @@ def _build_voronoi_polygons(df, extrema):
             polygons.append(region_poly)
 
         else:
-            point = vor.points[idx_point]
-            idx_point_region = vor.point_region[idx_point]
-            idxs_vertices = np.array(vor.regions[idx_point_region])
+            # Hard case, the region is open. Project new edges out to the margins of the plot.
+            # See `scipy.spatial.voronoi_plot_2d` for the source of this calculation.
+            point_idx_ridges_idx = np.where((vor.ridge_points == idx_point).any(axis=1))[0]
+            ptp_bound = vor.points.ptp(axis=0)
+            center = vor.points.mean(axis=0)
 
-            # TODO: implement infinite points!
+            finite_segments = []
+            infinite_segments = []
 
-            # # Cut the polygons to fit the window.
-            # xmin, xmax, ymin, ymax = extrema
-            # xdiff, ydiff = (xmax - xmin) * margin / 2, (ymax - ymin) * margin / 2
-            # xmin, xmax = xmin - xdiff, xmax + xdiff
-            # ymin, ymax = ymin - ydiff, ymax + ydiff
-            #
-            # window = shapely.geometry.Polygon([[xmin, ymin], [xmin, ymax], [xmax, ymax], [xmax, ymin]])
-            # polygons = [poly.intersection(window) for poly in polygons]
+            pointwise_ridge_points = vor.ridge_points[point_idx_ridges_idx]
+            pointwise_ridge_vertices = np.asarray(vor.ridge_vertices)[point_idx_ridges_idx]
 
-            # Temporary signal value.
-            polygons.append(None)
+            for pointidx, simplex in zip(pointwise_ridge_points, pointwise_ridge_vertices):
+                simplex = np.asarray(simplex)
+
+                if np.all(simplex >= 0):
+                    finite_segments.append(vor.vertices[simplex])
+
+                else:
+                    i = simplex[simplex >= 0][0]  # finite end Voronoi vertex
+
+                    t = vor.points[pointidx[1]] - vor.points[pointidx[0]]  # tangent
+                    t /= np.linalg.norm(t)
+                    n = np.array([-t[1], t[0]])  # normal
+
+                    midpoint = vor.points[pointidx].mean(axis=0)
+                    direction = np.sign(np.dot(midpoint - center, n)) * n
+                    far_point = vor.vertices[i] + direction * ptp_bound.max()
+
+                    infinite_segments.append([vor.vertices[i], far_point])
+
+            ls = np.vstack([np.asarray(infinite_segments), np.asarray(finite_segments)])
+
+            # We have to trivially sort the line segments into polygonal order. The algorithm that follows is
+            # inefficient, being O(n^2), but "good enough" for this use-case.
+            ls_sorted = []
+
+            while len(ls_sorted) < len(ls):
+                l1 = ls[0] if len(ls_sorted) == 0 else ls_sorted[-1]
+                l1 = l1.tolist() if not isinstance(l1, list) else l1
+                matches = []
+
+                for l2 in [l for l in ls if l.tolist() != l1]:
+                    if np.any(l1 == l2):
+                        matches.append(l2)
+                    elif np.any(l1 == l2[::-1]):
+                        l2 = l2[::-1]
+                        matches.append(l2)
+
+                if len(ls_sorted) == 0:
+                    ls_sorted.append(l1)
+
+                ls_sorted.append([m.tolist() for m in matches if m.tolist() not in ls_sorted][0])
+
+            # Build and return the final polygon.
+            polyline = np.vstack(ls_sorted)
+            geom = shapely.geometry.Polygon(polyline).convex_hull
+            polygons.append(geom)
 
     return polygons
 
