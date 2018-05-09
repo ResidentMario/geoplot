@@ -123,73 +123,56 @@
 <dl class="function">
 <dt id="geoplot.cartogram">
 <code class="descclassname">geoplot.</code><code class="descname">cartogram</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>scale=None</em>, <em>limits=(0.2</em>, <em>1)</em>, <em>scale_func=None</em>, <em>trace=True</em>, <em>trace_kwargs=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var='scale'</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>This plot scales the size of polygonal inputs based on the value of a particular data parameter.</p>
+<dd><p>A plot that scales its output to match the input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
-e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
-<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
-<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em>) – A data column whose values will be used to scale the points.</li>
-<li><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – The minimum and maximum limits against which the shape will be scaled. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is not specified.</li>
-<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – The function used to scale point sizes. This should be a factory function of two
-variables, the minimum and maximum values in the dataset, which returns a scaling function which will be
-applied to the rest of the data. Defaults to a linear scale. A demo is available in the <a class="reference external" href="examples/usa-city-elevations.html">example
-gallery</a>.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
+<li><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) – Applies scaling to the output points. Defaults to None (no scaling).</li>
+<li><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – The minimum and maximum scale limits. Ignored if <code class="docutils literal"><span class="pre">scale</span></code> is left specified.</li>
+<li><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – The function used to scale point sizes. Defaults to a linear scale. For more information see <a class="reference external" href="examples/usa-city-elevations.html">the Gallery demo</a>.</li>
 <li><strong>trace</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a trace of the polygon’s original outline in the plot result.</li>
 <li><strong>trace_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – If <code class="docutils literal"><span class="pre">trace</span></code> is set to <code class="docutils literal"><span class="pre">True</span></code>, this parameter can be used to adjust the properties of the trace outline. This
 parameter is ignored if trace is <code class="docutils literal"><span class="pre">False</span></code>.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
-if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) – The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
-left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
-many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
-<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
-ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
-specified.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The value that “bottoms out” the colormap. Data column entries whose value is below this level will be
-colored the same threshold value. Defaults to the minimum value in the dataset.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – The value that “tops out” the colormap. Data column entries whose value is above this level will be
-colored the same threshold value. Defaults to the maximum value in the dataset.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend in the output plot.</li>
-<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – Equal intervals will be used for the “points” in the legend by default. However, particularly if your scale
-is non-linear, oftentimes this isn’t what you want. If this variable is provided as well, the values
-included in the input will be used by the legend instead.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
-<li><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) – The name of the visual variable for which a legend will be displayed. Does nothing if <code class="docutils literal"><span class="pre">legend</span></code> is False
-or multiple variables aren’t used simultaneously.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – Applies a colormap to the output points.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> references a categorical variable, and <code class="docutils literal"><span class="pre">False</span></code> (the default) otherwise. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) – Controls how the colormap bin edges are determined. Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified. Otherwise, if <code class="docutils literal"><span class="pre">categorical</span></code> is False, controls how many colors to
+use (5 is the default). If set to <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a> to be used.
+Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – Values below this level will be colored the same threshold value. Defaults to the dataset minimum. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – Values above this level will be colored the same threshold value. Defaults to the dataset maximum. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend. Ignored if neither a <code class="docutils literal"><span class="pre">hue</span></code> nor a <code class="docutils literal"><span class="pre">scale</span></code> is specified.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>The values to use in the legend. Defaults to equal intervals. For more information see <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html">the Gallery demo</a>.</p>
 </li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
-that input will be used instead.</li>
-<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
-Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
-will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.patches.Polygon</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">ref</a>).</p>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>The names to use in the legend. Defaults to the variable values. For more information see <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html">the Gallery demo</a>.</p>
 </li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to <a class="reference external" href="http://matplotlib.org/users/legend_guide.html">the underlying legend</a>.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – Used to control plot x-axis and y-axis limits manually.</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.</li>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance. Defaults to a new axis.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The axis object with the plot on it.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The plot axis</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">GeoAxesSubplot instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">GeoAxesSubplot</span></code></p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>A cartogram is a plot type which ingests a series of enclosed shapes (<code class="docutils literal"><span class="pre">shapely</span></code> <code class="docutils literal"><span class="pre">Polygon</span></code> or <code class="docutils literal"><span class="pre">MultiPolygon</span></code>
-entities, in the <code class="docutils literal"><span class="pre">geoplot</span></code> example) and spits out a view of these shapes in which area is distorted according
-to the size of some parameter of interest. These are two types of cartograms, contiguous and non-contiguous
-ones; only the former is implemented in <code class="docutils literal"><span class="pre">geoplot</span></code> at the moment.</p>
+<p>A cartogram is a plot type which ingests a series of enclosed <code class="docutils literal"><span class="pre">Polygon</span></code> or <code class="docutils literal"><span class="pre">MultiPolygon</span></code> entities and spits
+out a view of these shapes in which area is distorted according to the size of some parameter of interest.</p>
 <p>A basic cartogram specifies data, a projection, and a <code class="docutils literal"><span class="pre">scale</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
@@ -203,22 +186,15 @@ ones; only the former is implemented in <code class="docutils literal"><span cla
 </pre></div>
 </div>
 <img alt="_images/cartogram-trace-legend.png" src="_images/cartogram-trace-legend.png" />
-<p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments, often
-necessary to properly position the legend, will be passed to the underlying <a href="#id5"><span class="problematic" id="id6">`matplotlib Legend instance
-http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_</span></a>.</p>
+<p>Keyword arguments can be passed to the legend using the <code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. These arguments will be
+passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.legend.Legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">ref</a>). The <code class="docutils literal"><span class="pre">loc</span></code> and <code class="docutils literal"><span class="pre">bbox_to_anchor</span></code>
+parameters are particularly useful for positioning the legend. Other additional arguments will be passed to the
+underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter">scatter plot</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">trace</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <img alt="_images/cartogram-legend-kwargs.png" src="_images/cartogram-legend-kwargs.png" />
-<p>Specify an alternative legend display using the <code class="docutils literal"><span class="pre">legend_values</span></code> and <code class="docutils literal"><span class="pre">legend_labels</span></code> parameters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-       <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mf">2.32779655e-07</span><span class="p">,</span> <span class="mf">6.39683197e-07</span><span class="p">,</span> <span class="mf">1.01364661e-06</span><span class="p">,</span> <span class="mf">1.17380941e-06</span><span class="p">,</span> <span class="mf">2.33642596e-06</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-       <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Manhattan&#39;</span><span class="p">,</span> <span class="s1">&#39;Brooklyn&#39;</span><span class="p">,</span> <span class="s1">&#39;Queens&#39;</span><span class="p">,</span> <span class="s1">&#39;The Bronx&#39;</span><span class="p">,</span> <span class="s1">&#39;Staten Island&#39;</span><span class="p">],</span>
-       <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">})</span>
-</pre></div>
-</div>
-<img alt="_images/cartogram-legend-labels.png" src="_images/cartogram-legend-labels.png" />
 <p>Additional arguments to <code class="docutils literal"><span class="pre">cartogram</span></code> will be interpreted as keyword arguments for the scaled polygons,
 using <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">matplotlib Polygon patch</a> rules.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -232,8 +208,7 @@ using <a class="reference external" href="http://matplotlib.org/api/patches_api.
 </pre></div>
 </div>
 <img alt="_images/cartogram-trace-kwargs.png" src="_images/cartogram-trace-kwargs.png" />
-<p>By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
-0.2 while the largest value is left unchanged. Adjust this using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
+<p>Adjust the level of scaling to apply using the <code class="docutils literal"><span class="pre">limits</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </pre></div>
@@ -244,20 +219,14 @@ between them in size. To specify an alternative scaling function, use the <code 
 be a factory function of two variables which, when given the maximum and minimum of the dataset,
 returns a scaling function which will be applied to the rest of the data. A demo is available in
 the <a class="reference external" href="examples/usa-city-elevations.html">example gallery</a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">0.5</span>
-    <span class="k">return</span> <span class="n">scalar</span>
-
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span> <span class="k">return</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="mi">2</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">trivial_scale</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/cartogram-scale-func.png" src="_images/cartogram-scale-func.png" />
-<p><code class="docutils literal"><span class="pre">cartogram</span></code> also provides the same <code class="docutils literal"><span class="pre">hue</span></code> visual variable parameters provided by e.g. <code class="docutils literal"><span class="pre">pointplot</span></code>. Although
-it’s possible for <code class="docutils literal"><span class="pre">hue</span></code> and <code class="docutils literal"><span class="pre">scale</span></code> to refer to different aspects of the data, it’s strongly recommended
-to use the same data column for both. For more information on <code class="docutils literal"><span class="pre">hue</span></code>-related arguments, refer to e.g. the
-<code class="docutils literal"><span class="pre">pointplot</span></code> <a class="reference external" href="./pointplot.html">documentation</a>.</p>
+<p><code class="docutils literal"><span class="pre">cartogram</span></code> also provides the same <code class="docutils literal"><span class="pre">hue</span></code> visual variable parameters provided by e.g. <code class="docutils literal"><span class="pre">pointplot</span></code>. For more
+information on <code class="docutils literal"><span class="pre">hue</span></code>-related arguments, see the related sections in the <code class="docutils literal"><span class="pre">pointplot</span></code> <a class="reference external" href="./pointplot.html">documentation</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Population Density&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">)</span>
 </pre></div>

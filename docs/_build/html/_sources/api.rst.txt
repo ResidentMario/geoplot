@@ -17,7 +17,4 @@ Spatial plots
     aggplot
     kdeplot
     sankey
-
-Utility functions
------------------
-
+    voronoi

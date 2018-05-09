@@ -131,9 +131,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em><em>, </em><em>optional.</em>) – The data being plotted. This parameter is optional - it is not needed if <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">end</span></code> (and <code class="docutils literal"><span class="pre">hue</span></code>,
 if provided) are iterables.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
-e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
-<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
 <li><strong>start</strong> (<em>str</em><em> or </em><em>iterable</em>) – Linear starting points: either the name of a column in <code class="docutils literal"><span class="pre">df</span></code> or a self-contained iterable. This parameter is
 required.</li>
 <li><strong>end</strong> (<em>str</em><em> or </em><em>iterable</em>) – Linear ending points: either the name of a column in <code class="docutils literal"><span class="pre">df</span></code> or a self-contained iterable. This parameter is
@@ -361,10 +359,7 @@ use the labels in your dataset directly.</p>
 <p>The default scaling function is a linear one. You can change the scaling function to whatever you want by
 specifying a <code class="docutils literal"><span class="pre">scale_func</span></code> input. This should be a factory function of two variables which, when given the
 maximum and minimum of the dataset, returns a scaling function which will be applied to the rest of the data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">scalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">2</span>
-    <span class="k">return</span> <span class="n">scalar</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trivial_scale</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">):</span>  <span class="k">return</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="mi">2</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
                  <span class="n">start</span><span class="o">=</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;to&#39;</span><span class="p">,</span>

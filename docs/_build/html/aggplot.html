@@ -130,9 +130,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. Must be an instance of an object in the <code class="docutils literal"><span class="pre">geoplot.crs</span></code> module,
-e.g. <code class="docutils literal"><span class="pre">geoplot.crs.PlateCarree()</span></code>. This parameter is optional: if left unspecified, a pure unprojected
-<code class="docutils literal"><span class="pre">matplotlib</span></code> object will be returned. For more information refer to the tutorial page on <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">projections</a>.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
 formats. Defaults to None, in which case no colormap will be applied at all.</li>
 <li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – The name of a column within the dataset corresponding with some sort of geometry to aggregate points by.

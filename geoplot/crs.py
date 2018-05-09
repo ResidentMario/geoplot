@@ -1,12 +1,7 @@
 """
 This module defines the ``geoplot`` coordinate reference system classes, wrappers on ``cartopy.crs`` objects meant
-to be used as parameters to the ``projection`` parameter of all front-end ``geoplot`` outputs.
-
-This was necessary because ``cartopy.crs`` objects do not allow modifications in place. cf.
-http://stackoverflow.com/questions/40822241/seemingly-immutable-dict-in-object-instance/40822473
-
-For the list of Cartopy CRS objects this module derives from, refer to
-http://scitools.org.uk/cartopy/docs/latest/crs/projections.html
+to be used as parameters to the ``projection`` parameter of all front-end ``geoplot`` outputs. For the list of
+Cartopy CRS objects this module derives from, refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.
 """
 
 import cartopy.crs as ccrs

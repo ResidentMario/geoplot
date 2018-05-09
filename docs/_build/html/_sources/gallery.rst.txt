@@ -130,6 +130,22 @@ Sankey
     .. _minard_napoleon_russia: http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746
 
 
+.. _gallery-tag-Voronoi:
+
+Voronoi
+-------
+
+.. container:: gallery_images
+
+
+    |nyc_collisions_voronoi|_
+
+    .. |nyc_collisions_voronoi| image:: ./examples/nyc-collisions-voronoi.png
+        :width: 500px
+
+    .. _nyc_collisions_voronoi: ./examples/nyc-collisions-voronoi.html
+
+
 .. _gallery-tag-Aggplot:
 
 Aggplot

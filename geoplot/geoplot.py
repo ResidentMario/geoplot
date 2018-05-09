@@ -24,92 +24,74 @@ def pointplot(df, projection=None,
               legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var=None,
               figsize=(8, 6), extent=None, ax=None, **kwargs):
     """
-    A geospatial scatter plot. The simplest useful plot type available.
+    A geospatial scatter plot.
 
     Parameters
     ----------
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
+        Applies a colormap to the output points.
     categorical : boolean, optional
-        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
-        if ``hue`` is set to None or not specified.
-    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
-        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
-        left unspecified or set to None this variable is ignored.
+        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default) otherwise. Ignored
+        if ``hue`` is left unspecified.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
     k : int or None, optional
-        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
-        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
-        ignored.
+        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls how many colors to
+        use (5 is the default). If set to ``None``, a continuous colormap will be used.
     cmap : matplotlib color, optional
-        The matplotlib colormap to be applied to this dataset (`ref
-        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
-        specified.
+        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to be used.
+        Ignored if ``hue`` is left unspecified.
     vmin : float, optional
-        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
-        colored the same threshold value. Defaults to the minimum value in the dataset.
+        Values below this level will be colored the same threshold value. Defaults to the dataset minimum. Ignored
+        if ``hue`` is left unspecified.
     vmax : float, optional
-        The value that "tops out" the colormap. Data column entries whose value is above this level will be
-        colored the same threshold value. Defaults to the maximum value in the dataset.
+        Values above this level will be colored the same threshold value. Defaults to the dataset maximum. Ignored
+        if ``hue`` is left unspecified.
     scale : str or iterable, optional
-        A data column whose values will be used to scale the points. Defaults to None, in which case no scaling will be
-        applied.
+        Applies scaling to the output points. Defaults to None (no scaling).
     limits : (min, max) tuple, optional
-        The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
+        The minimum and maximum scale limits. Ignored if ``scale`` is left specified.
     scale_func : ufunc, optional
-        The function used to scale point sizes. This should be a factory function of two 
-        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
-        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
-        gallery <examples/usa-city-elevations.html>`_.
+        The function used to scale point sizes. Defaults to a linear scale. For more information see `the Gallery demo
+        <examples/usa-city-elevations.html>`_.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot. This parameter will not work if neither ``hue`` nor
-        ``scale`` is unspecified.
+        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
-        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
-        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
-        included in the input will be used by the legend instead.
+        The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached to the values.
+        The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_var : "hue" or "scale", optional
-        The name of the visual variable for which a legend will be displayed. Does nothing if ``legend`` is False
-        or multiple variables aren't used simultaneously.
+        If both ``hue`` and ``scale`` are specified, which variable to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
-        <http://matplotlib.org/users/legend_guide.html>`_).
+        Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
-        that input will be used instead.
+        Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
-        Defaults to (8, 6), the ``matplotlib`` default global.
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
-        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.scatter`` instance (`ref
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_).
+        Keyword arguments to be passed to the underlying `scatter plot
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
-    AxesSubplot or GeoAxesSubplot instance
-        The axis object with the plot on it.
-
-
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis
 
     Examples
     --------
 
-    The ``pointplot`` is a simple `geospatial scatter plot <https://en.wikipedia.org/wiki/Scatter_plot>`_,
-    with each point corresponding with one observation in your dataset. The expected input is a ``geopandas``
-    ``GeoDataFrame`` with geometries consisting of ``shapely.geometry.Point`` entities. The simplest possible plot
-    can be made by specifying the input data (and, optionally, a `projection <./tutorial/projections.html>`_).
+    The ``pointplot`` is a simple `geospatial scatter plot <https://en.wikipedia.org/wiki/Scatter_plot>`_ representing
+    each observation in your dataset with a single point. The expected input is a ``GeoDataFrame`` containing
+    ``shapely.geometry.Point`` geometries.
 
     .. code-block:: python
 
@@ -120,15 +102,8 @@ def pointplot(df, projection=None,
     .. image:: ../figures/pointplot/pointplot-initial.png
 
 
-    The ``hue`` parameter accepts a data column and applies a colormap to the output.
-
-    .. code-block:: python
-
-        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT')
-
-    .. image:: ../figures/pointplot/pointplot-hue.png
-
-    The ``legend`` parameter toggles a legend.
+    The ``hue`` parameter accepts a data column and applies a colormap to the output. The ``legend`` parameter
+    toggles a legend.
 
     .. code-block:: python
 
@@ -136,20 +111,10 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-legend.png
 
-    ``legend_labels`` specifies custom legend labels.
-
-    .. code-block:: python
-
-        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT',
-                       legend=True, legend_labels=list('ABCDE'))
-
-    .. image:: ../figures/pointplot/pointplot-legend-labels.png
-
-    ``pointplot`` will default to binning the observations in the given data column into five ordinal classes
-    containing equal numbers of observations - a `quantile <https://en.wikipedia.org/wiki/Quantile>`_ scheme. An
-    alternative binning scheme can be specified using the ``scheme`` parameter. Valid options are ``Quantile``,
-    ``Equal_interval`` (bins will be of equal sizes but contain different numbers of observations),
-    and ``Fisher_jenks`` (an intermediate between the two).
+    The ``pointplot`` binning methodology is controlled using by `scheme`` parameter. The default is ``quantile``,
+    which bins observations into classes of different sizes but the same numbers of observations. ``equal_interval``
+    will creates bins that are the same size, but potentially containing different numbers of observations.
+    The more complicated ``fisher_jenks`` scheme is an intermediate between the two.
 
     .. code-block:: python
 
@@ -158,9 +123,8 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scheme.png
 
-    If the variable of interest is already `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, specify ``categorical=True`` to
-    use the labels in your dataset directly.
+    Alternatively, your data may already be `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_. In that case specify ``categorical=True`` instead.
 
     .. code-block:: python
 
@@ -172,17 +136,8 @@ def pointplot(df, projection=None,
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments will be
     passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
     <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and ``bbox_to_anchor``
-    parameters are particularly useful for positioning the legend.
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), hue='BOROUGH',
-                       categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
-
-    .. image:: ../figures/pointplot/pointplot-legend-kwargs.png
-
-    Additional arguments will be interpreted as keyword arguments to the underlying ``matplotlib.pyplot.scatter``
-    instance (`ref <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_).
+    parameters are particularly useful for positioning the legend. Other additional arguments will be passed to the
+    underlying ``matplotlib`` `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     .. code-block:: python
 
@@ -193,7 +148,10 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-kwargs.png
 
-    Change the number of bins by specifying an alternative ``k`` value.
+    Change the number of bins by specifying an alternative ``k`` value. Adjust the `colormap
+    <http://matplotlib.org/examples/color/colormaps_reference.html>`_ using the ``cmap`` parameter. To use a
+    continuous colormap, explicitly specify ``k=None``. Note that if ``legend=True``, a ``matplotlib``
+    `colorbar legend <http://matplotlib.org/api/colorbar_api.html>`_ will be used.
 
     .. code-block:: python
 
@@ -203,31 +161,6 @@ def pointplot(df, projection=None,
                        legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
 
     .. image:: ../figures/pointplot/pointplot-k.png
-
-    Adjust the `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to any
-    colormap recognizable to ``matplotlib`` using the ``cmap`` parameter.
-
-    .. code-block:: python
-
-        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
-               hue='var', cmap='inferno', k=8,
-               edgecolor='white', linewidth=0.5,
-               legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
-
-
-    .. image:: ../figures/pointplot/pointplot-cmap.png
-
-    To use a continuous colormap, explicitly specify ``k=None``. Note that if ``legend=True``,
-    a ``matplotlib.colorbar`` legend will be used (`ref <http://matplotlib.org/api/colorbar_api.html>`_).
-
-    .. code-block:: python
-
-        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
-               hue='var', cmap='inferno', k=None,
-               edgecolor='white', linewidth=0.5,
-               legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
-
-    .. image:: ../figures/pointplot/pointplot-k-None.png
 
     ``scale`` provides an alternative or additional visual variable.
 
@@ -268,19 +201,8 @@ def pointplot(df, projection=None,
 
     .. image:: ../figures/pointplot/pointplot-scale-func.png
 
-    ``hue`` and ``scale`` can co-exist.
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
-                       projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH', categorical=True,
-                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
-                       legend=True, legend_kwargs={'loc': 'upper left'})
-
-    .. image:: ../figures/pointplot/pointplot-hue-scale.png
-
-    In case more than one visual variable is used, control which one appears in the legend using ``legend_var``.
+    ``hue`` and ``scale`` can co-exist. In case more than one visual variable is used, control which one appears in
+    the legend using ``legend_var``.
 
     .. code-block:: python
 
@@ -418,40 +340,38 @@ def polyplot(df, projection=None,
              edgecolor='black',
              facecolor='None', **kwargs):
     """
-    Trivially plots whatever geometries are passed to it. Mostly meant to be used in concert with other,
-    more interesting plot types.
+    A trivial polygonal plot.
 
     Parameters
     ----------
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
-        that input will be used instead.
+        Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
         Defaults to (8, 6), the ``matplotlib`` default global.
+    figsize : tuple, optional
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
-        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+        Keyword arguments to be passed to the underlying `scatter plot
+        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
-    AxesSubplot or GeoAxesSubplot instance
-        The axis object with the plot on it.
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis
 
     Examples
     --------
 
-    A trivial example can be created with just a geometry and, optionally, a projection.
+    The polyplot can be used to draw simple polygons. A trivial example can be created with just a geometry and,
+    optionally, a projection.
 
     .. code-block:: python
 
@@ -475,8 +395,8 @@ def polyplot(df, projection=None,
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
 
-    Additional keyword arguments are passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
-    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+    Additional keyword arguments are passed to the underlying ``matplotlib`` `Polygon patches
+    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     .. code-block:: python
 
@@ -541,66 +461,58 @@ def choropleth(df, projection=None,
                figsize=(8, 6), ax=None,
                **kwargs):
     """
-    A simple aggregation plot based on geometry.
+    An area aggregation plot.
 
     Parameters
     ----------
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
-    hue : None, Series, GeoSeries, iterable, or str
-        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
+    hue : None, Series, GeoSeries, iterable, or str, optional
+        Applies a colormap to the output points.
     categorical : boolean, optional
-        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
-        if ``hue`` is set to None or not specified.
-    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
-        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
-        left unspecified or set to None this variable is ignored.
+        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default) otherwise. Ignored
+        if ``hue`` is left unspecified.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_Jenks"}, optional
+        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
     k : int or None, optional
-        If ``categorical`` is False or left unspecified, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If this variable is set to ``None``, a continuous colormap
-        will be used.
+        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls how many colors to
+        use (5 is the default). If set to ``None``, a continuous colormap will be used.
     cmap : matplotlib color, optional
-        The matplotlib colormap to be applied to this dataset (`ref
-        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). Defaults to ``viridis``.
+        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to be used.
+        Ignored if ``hue`` is left unspecified.
     vmin : float, optional
-        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
-        colored the same threshold value. Defaults to the minimum value in the dataset.
+        Values below this level will be colored the same threshold value. Defaults to the dataset minimum. Ignored
+        if ``hue`` is left unspecified.
     vmax : float, optional
-        The value that "tops out" the colormap. Data column entries whose value is above this level will be
-        colored the same threshold value. Defaults to the maximum value in the dataset.
+        Values above this level will be colored the same threshold value. Defaults to the dataset maximum. Ignored
+        if ``hue`` is left unspecified.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot.
+        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
-        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
-        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
-        included in the input will be used by the legend instead.
+        The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached to the values.
+        The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
-        <http://matplotlib.org/users/legend_guide.html>`_).
+        Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
-        that input will be used instead.
+        Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
-        Defaults to (8, 6), the ``matplotlib`` default global.
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
-        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
-    AxesSubplot or GeoAxesSubplot instance
-        The axis object with the plot on it.
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis
 
     Examples
     --------
@@ -628,15 +540,7 @@ def choropleth(df, projection=None,
 
     If your variable of interest is already `categorical
     <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, you can specify ``categorical=True`` to
-    use the labels in your dataset directly.
-
-    .. code-block:: python
-
-        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName', categorical=True)
-
-    .. image:: ../figures/choropleth/choropleth-categorical.png
-
-    To add a legend, specify ``legend``.
+    use the labels in your dataset directly. To add a legend, specify ``legend``.
 
     .. code-block:: python
 
@@ -645,9 +549,11 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-legend.png
 
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
-    necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_.
+    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments will be
+    passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
+    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and ``bbox_to_anchor``
+    parameters are particularly useful for positioning the legend. Other additional arguments will be passed to the
+    underlying ``matplotlib`` `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     .. code-block:: python
 
@@ -667,17 +573,8 @@ def choropleth(df, projection=None,
     .. image:: ../figures/choropleth/choropleth-kwargs.png
 
     Choropleths default to splitting the data into five buckets with approximately equal numbers of observations in
-    them. Change the number of buckets by specifying ``k``.
-
-    .. code-block:: python
-
-        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
-                legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
-                k=2)
-
-    .. image:: ../figures/choropleth/choropleth-k.png
-
-    To use a continuous colormap, specify ``k=None``. In this case a colorbar legend will be used.
+    them. Change the number of buckets by specifying ``k``. Or, to use a continuous colormap, specify ``k=None``. In
+    this case a colorbar legend will be used.
 
     .. code-block:: python
 
@@ -686,19 +583,10 @@ def choropleth(df, projection=None,
 
     .. image:: ../figures/choropleth/choropleth-k-none.png
 
-    ``legend_labels`` controls the legend labels.
-
-    .. code-block:: python
-
-        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
-                        edgecolor='white', linewidth=0.5,
-                        legend=True, legend_kwargs={'loc': 'upper left'},
-                        legend_labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
-
-    .. image:: ../figures/choropleth/choropleth-legend-labels.png
-
-    Alternatively, change the scheme used to generate the buckets with the ``scheme`` parameter. ``equal_interval``,
-    for example, will generate buckets of equal data distribution size instead.
+    The ``choropleth`` binning methodology is controlled using by `scheme`` parameter. The default is ``quantile``,
+    which bins observations into classes of different sizes but the same numbers of observations. ``equal_interval``
+    will creates bins that are the same size, but potentially containing different numbers of observations.
+    The more complicated ``fisher_jenks`` scheme is an intermediate between the two.
 
     .. code-block:: python
 
@@ -804,9 +692,7 @@ def aggplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The data column whose entries are being discretely colorized. May be passed in any of a number of flexible
@@ -1172,92 +1058,75 @@ def cartogram(df, projection=None,
               figsize=(8, 6), ax=None,
               **kwargs):
     """
-    This plot scales the size of polygonal inputs based on the value of a particular data parameter.
+    A plot that scales its output to match the input.
 
     Parameters
     ----------
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
-    scale : str or iterable
-        A data column whose values will be used to scale the points.
+    scale : str or iterable, optional
+        Applies scaling to the output points. Defaults to None (no scaling).
     limits : (min, max) tuple, optional
-        The minimum and maximum limits against which the shape will be scaled. Ignored if ``scale`` is not specified.
+        The minimum and maximum scale limits. Ignored if ``scale`` is left specified.
     scale_func : ufunc, optional
-        The function used to scale point sizes. This should be a factory function of two 
-        variables, the minimum and maximum values in the dataset, which returns a scaling function which will be 
-        applied to the rest of the data. Defaults to a linear scale. A demo is available in the `example 
-        gallery <examples/usa-city-elevations.html>`_.
+        The function used to scale point sizes. Defaults to a linear scale. For more information see `the Gallery demo
+        <examples/usa-city-elevations.html>`_.
     trace : boolean, optional
         Whether or not to include a trace of the polygon's original outline in the plot result.
     trace_kwargs : dict, optional
         If ``trace`` is set to ``True``, this parameter can be used to adjust the properties of the trace outline. This
         parameter is ignored if trace is ``False``.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.
+        Applies a colormap to the output points.
     categorical : boolean, optional
-        Specify this variable to be ``True`` if ``hue`` points to a categorical variable. Defaults to False. Ignored
-        if ``hue`` is set to None or not specified.
-    scheme : None or {"Quantiles"|"Equal_interval"|"Fisher_Jenks"}, optional
-        The scheme which will be used to determine categorical bins for the ``hue`` choropleth. If ``hue`` is
-        left unspecified or set to None this variable is ignored.
+        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default) otherwise. Ignored
+        if ``hue`` is left unspecified.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_Jenks"}, optional
+        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
     k : int or None, optional
-        If ``hue`` is specified and ``categorical`` is False, this number, set to 5 by default, will determine how
-        many bins will exist in the output visualization. If ``hue`` is specified and this variable is set to
-        ``None``, a continuous colormap will be used. If ``hue`` is left unspecified or set to None this variable is
-        ignored.
+        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls how many colors to
+        use (5 is the default). If set to ``None``, a continuous colormap will be used.
     cmap : matplotlib color, optional
-        The matplotlib colormap to be applied to this dataset (`ref
-        <http://matplotlib.org/examples/color/colormaps_reference.html>`_). This parameter is ignored if ``hue`` is not
-        specified.
+        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to be used.
+        Ignored if ``hue`` is left unspecified.
     vmin : float, optional
-        The value that "bottoms out" the colormap. Data column entries whose value is below this level will be
-        colored the same threshold value. Defaults to the minimum value in the dataset.
+        Values below this level will be colored the same threshold value. Defaults to the dataset minimum. Ignored
+        if ``hue`` is left unspecified.
     vmax : float, optional
-        The value that "tops out" the colormap. Data column entries whose value is above this level will be
-        colored the same threshold value. Defaults to the maximum value in the dataset.
+        Values above this level will be colored the same threshold value. Defaults to the dataset maximum. Ignored
+        if ``hue`` is left unspecified.
     legend : boolean, optional
-        Whether or not to include a legend in the output plot.
+        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
-        Equal intervals will be used for the "points" in the legend by default. However, particularly if your scale
-        is non-linear, oftentimes this isn't what you want. If this variable is provided as well, the values
-        included in the input will be used by the legend instead.
+        The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached to the values.
-    legend_var : "hue" or "scale", optional
-        The name of the visual variable for which a legend will be displayed. Does nothing if ``legend`` is False
-        or multiple variables aren't used simultaneously.
+        The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
+        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.pyplot.legend`` instance (`ref
-        <http://matplotlib.org/users/legend_guide.html>`_).
+        Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
-        If this parameter is unset ``geoplot`` will calculate the plot limits. If an extrema tuple is passed,
-        that input will be used instead.
+        Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
-        Defaults to (8, 6), the ``matplotlib`` default global.
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance onto which this plot
-        will be graphed. If this parameter is left undefined a new axis will be created and used instead.
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` instances (`ref
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_).
+        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
-    GeoAxesSubplot instance
-        The axis object with the plot on it.
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis
 
     Examples
     --------
-    A cartogram is a plot type which ingests a series of enclosed shapes (``shapely`` ``Polygon`` or ``MultiPolygon``
-    entities, in the ``geoplot`` example) and spits out a view of these shapes in which area is distorted according
-    to the size of some parameter of interest. These are two types of cartograms, contiguous and non-contiguous
-    ones; only the former is implemented in ``geoplot`` at the moment.
+    A cartogram is a plot type which ingests a series of enclosed ``Polygon`` or ``MultiPolygon`` entities and spits
+    out a view of these shapes in which area is distorted according to the size of some parameter of interest.
 
     A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
@@ -1278,9 +1147,11 @@ def cartogram(df, projection=None,
 
     .. image:: ../figures/cartogram/cartogram-trace-legend.png
 
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments, often
-    necessary to properly position the legend, will be passed to the underlying `matplotlib Legend instance
-    http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend`_.
+    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These arguments will be
+    passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
+    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and ``bbox_to_anchor``
+    parameters are particularly useful for positioning the legend. Other additional arguments will be passed to the
+    underlying ``matplotlib`` `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     .. code-block:: python
 
@@ -1288,17 +1159,6 @@ def cartogram(df, projection=None,
                        trace=False, legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/cartogram/cartogram-legend-kwargs.png
-
-    Specify an alternative legend display using the ``legend_values`` and ``legend_labels`` parameters.
-
-    .. code-block:: python
-
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(), legend=True,
-               legend_values=[2.32779655e-07, 6.39683197e-07, 1.01364661e-06, 1.17380941e-06, 2.33642596e-06][::-1],
-               legend_labels=['Manhattan', 'Brooklyn', 'Queens', 'The Bronx', 'Staten Island'],
-               legend_kwargs={'loc': 'upper left'})
-
-    .. image:: ../figures/cartogram/cartogram-legend-labels.png
 
     Additional arguments to ``cartogram`` will be interpreted as keyword arguments for the scaled polygons,
     using `matplotlib Polygon patch
@@ -1321,8 +1181,7 @@ def cartogram(df, projection=None,
 
     .. image:: ../figures/cartogram/cartogram-trace-kwargs.png
 
-    By default, the polygons will be scaled according to the data such that the minimum value is scaled by a factor of
-    0.2 while the largest value is left unchanged. Adjust this using the ``limits`` parameter.
+    Adjust the level of scaling to apply using the ``limits`` parameter.
 
     .. code-block:: python
 
@@ -1339,20 +1198,15 @@ def cartogram(df, projection=None,
 
     .. code-block:: python
 
-        def trivial_scale(minval, maxval):
-            def scalar(val):
-                return 0.5
-            return scalar
-
+        def trivial_scale(minval, maxval): return lambda v: 2
         gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
                        limits=(0.5, 1), scale_func=trivial_scale)
 
     .. image:: ../figures/cartogram/cartogram-scale-func.png
 
-    ``cartogram`` also provides the same ``hue`` visual variable parameters provided by e.g. ``pointplot``. Although
-    it's possible for ``hue`` and ``scale`` to refer to different aspects of the data, it's strongly recommended
-    to use the same data column for both. For more information on ``hue``-related arguments, refer to e.g. the
-    ``pointplot`` `documentation <./pointplot.html>`_.
+    ``cartogram`` also provides the same ``hue`` visual variable parameters provided by e.g. ``pointplot``. For more
+    information on ``hue``-related arguments, see the related sections in the ``pointplot`` `documentation
+    <./pointplot.html>`_.
 
     .. code-block:: python
 
@@ -1500,9 +1354,7 @@ def kdeplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     clip : iterable or GeoSeries, optional
         An iterable of geometries that the KDE plot will be clipped to. This is a visual parameter useful for
@@ -1678,9 +1530,7 @@ def sankey(*args, projection=None,
         The data being plotted. This parameter is optional - it is not needed if ``start`` and ``end`` (and ``hue``,
         if provided) are iterables.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     start : str or iterable
         Linear starting points: either the name of a column in ``df`` or a self-contained iterable. This parameter is
@@ -1985,10 +1835,7 @@ def sankey(*args, projection=None,
 
     .. code-block:: python
 
-        def trivial_scale(minval, maxval):
-            def scalar(val):
-                return 2
-            return scalar
+        def trivial_scale(minval, maxval):  return lambda v: 2
 
         ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
@@ -2240,12 +2087,10 @@ def voronoi(df, projection=None, edgecolor='black',
 
     Parameters
     ----------
-    df : GeoDataFrame, optional.
+    df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. Must be an instance of an object in the ``geoplot.crs`` module,
-        e.g. ``geoplot.crs.PlateCarree()``. This parameter is optional: if left unspecified, a pure unprojected
-        ``matplotlib`` object will be returned. For more information refer to the tutorial page on `projections
+        A geographic projection. For more information refer to `the tutorial page on projections
         <http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.

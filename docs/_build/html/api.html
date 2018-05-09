@@ -82,7 +82,6 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">API Reference</a><ul>
 <li><a class="reference internal" href="#spatial-plots">Spatial plots</a></li>
-<li><a class="reference internal" href="#utility-functions">Utility functions</a></li>
 </ul>
 </li>
 </ul>
@@ -146,13 +145,13 @@
 <td>A geospatial scatter plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="polyplot.html#geoplot.polyplot" title="geoplot.polyplot"><code class="xref py py-obj docutils literal"><span class="pre">polyplot</span></code></a>(df[,&nbsp;projection,&nbsp;extent,&nbsp;figsize,&nbsp;…])</td>
-<td>Trivially plots whatever geometries are passed to it.</td>
+<td>A trivial polygonal plot.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="cartogram.html#geoplot.cartogram" title="geoplot.cartogram"><code class="xref py py-obj docutils literal"><span class="pre">cartogram</span></code></a>(df[,&nbsp;projection,&nbsp;scale,&nbsp;limits,&nbsp;…])</td>
-<td>This plot scales the size of polygonal inputs based on the value of a particular data parameter.</td>
+<td>A plot that scales its output to match the input.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="choropleth.html#geoplot.choropleth" title="geoplot.choropleth"><code class="xref py py-obj docutils literal"><span class="pre">choropleth</span></code></a>(df[,&nbsp;projection,&nbsp;hue,&nbsp;scheme,&nbsp;k,&nbsp;…])</td>
-<td>A simple aggregation plot based on geometry.</td>
+<td>An area aggregation plot.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="aggplot.html#geoplot.aggplot" title="geoplot.aggplot"><code class="xref py py-obj docutils literal"><span class="pre">aggplot</span></code></a>(df[,&nbsp;projection,&nbsp;hue,&nbsp;by,&nbsp;geometry,&nbsp;…])</td>
 <td>A minimum-expectations summary plot type which handles mixes of geometry types and missing aggregate geometry data.</td>
@@ -163,11 +162,11 @@
 <tr class="row-odd"><td><a class="reference internal" href="sankey.html#geoplot.sankey" title="geoplot.sankey"><code class="xref py py-obj docutils literal"><span class="pre">sankey</span></code></a>(*args[,&nbsp;projection,&nbsp;start,&nbsp;end,&nbsp;…])</td>
 <td>A geospatial Sankey diagram (flow map).</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="voronoi.html#geoplot.voronoi" title="geoplot.voronoi"><code class="xref py py-obj docutils literal"><span class="pre">voronoi</span></code></a>(df[,&nbsp;projection,&nbsp;edgecolor,&nbsp;clip,&nbsp;…])</td>
+<td>A geospatial Voronoi diagram.</td>
+</tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="utility-functions">
-<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
