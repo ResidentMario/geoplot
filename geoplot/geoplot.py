@@ -2386,10 +2386,7 @@ def voronoi(df, projection=None, edgecolor='black',
 
     # Add a legend, if appropriate.
     if legend and k is not None:
-        legend_ax = ax.twinx()
-        legend_ax.axis('off')
-        legend_ax.set_zorder(101)
-        _paint_hue_legend(legend_ax, categories, cmap, legend_labels, legend_kwargs)
+        _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=True)
     elif legend and k is None and hue is not None:
         _paint_colorbar_legend(ax, cmap, legend_labels, legend_kwargs)
 
@@ -2663,7 +2660,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     return cmap, categories, values
 
 
-def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
+def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=False):
     """
     Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter is passed.
 
@@ -2684,6 +2681,10 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
         Keyword arguments which will be passed to the matplotlib legend instance on initialization. This parameter
         is provided to allow fine-tuning of legend placement at the top level of a plot method, as legends are very
         finicky.
+    figure : boolean
+        By default the legend is added to the axis requesting it. By specifying `figure=True` we may change the target
+        to be the figure instead. This flag is used by the voronoi plot type, which occludes the base axis by adding a
+        clip to it.
 
     Returns
     -------
@@ -2702,10 +2703,12 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs):
     if not legend_kwargs: legend_kwargs = dict()
 
     # If we are given labels use those, if we are not just use the categories.
+    target = ax.figure if figure else ax
+
     if legend_labels:
-        ax.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
+        target.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
     else:
-        ax.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
+        target.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
 
 def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
