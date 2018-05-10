@@ -9,7 +9,7 @@ setup(
     author = 'Aleksey Bilogur',
     author_email = 'aleksey.bilogur@gmail.com',
     url = 'https://github.com/ResidentMario/geoplot',
-    download_url = 'https://github.com/ResidentMario/geoplot/tarball/0.1.2',
+    download_url = 'https://github.com/ResidentMario/geoplot/tarball/0.2.0',
     keywords = ['data', 'data visualization', 'data analysis', 'data science', 'pandas', 'geospatial data',
                 'geospatial analytics'],
     classifiers = [],
