@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>geoplot.choropleth &#8212; geoplot 0.1.1 documentation</title>
+    <title>geoplot.choropleth &#8212; geoplot 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -123,14 +123,14 @@
 <dl class="function">
 <dt id="geoplot.choropleth">
 <code class="descclassname">geoplot.</code><code class="descname">choropleth</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
-<dd><p>An area aggregation plot.</p>
+<dd><p>Area aggregation plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb">the tutorial page on projections</a>.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – Applies a colormap to the output points.</li>
 <li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> references a categorical variable, and <code class="docutils literal"><span class="pre">False</span></code> (the default) otherwise. Ignored
 if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
@@ -164,10 +164,14 @@ if <code class="docutils literal"><span class="pre">hue</span></code> is left un
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>The choropleth is a standard-bearer of the field. To make one yourself, you will need a series of enclosed areas,
-consisting of <code class="docutils literal"><span class="pre">shapely</span></code> <code class="docutils literal"><span class="pre">Polygon</span></code> or <code class="docutils literal"><span class="pre">MultiPolygon</span></code> entities, and a series of data about them that you
-would like to express in color. A basic choropleth requires geometry, a <code class="docutils literal"><span class="pre">hue</span></code> variable, and, optionally,
-a projection.</p>
+<p>A choropleth takes observations that have been aggregated on some meaningful polygonal level (e.g. census tract,
+state, country, or continent) and displays the data to the reader using color. It is a well-known plot type,
+and likeliest the most general-purpose and well-known of the specifically spatial plot types. It is especially
+powerful when combined with meaningful or actionable aggregation areas; if no such aggregations exist,
+or the aggregations you have access to are mostly incidental, its value is more limited.</p>
+<p>The <code class="docutils literal"><span class="pre">choropleth</span></code> requires a series of enclosed areas consisting of <code class="docutils literal"><span class="pre">shapely</span></code> <code class="docutils literal"><span class="pre">Polygon</span></code> or <code class="docutils literal"><span class="pre">MultiPolygon</span></code>
+entities, and a set of data about them that you would like to express in color. A basic choropleth requires
+geometry, a <code class="docutils literal"><span class="pre">hue</span></code> variable, and, optionally, a projection.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">polydata</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;latdep&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -236,7 +240,7 @@ The more complicated <code class="docutils literal"><span class="pre">fisher_jen
       
     </p>
     <p>
-        &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
+        &copy; Copyright 2016-2018, Aleksey Bilogur.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>

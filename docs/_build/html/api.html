@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>API Reference &#8212; geoplot 0.1.1 documentation</title>
+    <title>API Reference &#8212; geoplot 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,7 +47,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -145,25 +145,25 @@
 <td>A geospatial scatter plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="polyplot.html#geoplot.polyplot" title="geoplot.polyplot"><code class="xref py py-obj docutils literal"><span class="pre">polyplot</span></code></a>(df[,&nbsp;projection,&nbsp;extent,&nbsp;figsize,&nbsp;…])</td>
-<td>A trivial polygonal plot.</td>
+<td>Trivial polygonal plot.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="cartogram.html#geoplot.cartogram" title="geoplot.cartogram"><code class="xref py py-obj docutils literal"><span class="pre">cartogram</span></code></a>(df[,&nbsp;projection,&nbsp;scale,&nbsp;limits,&nbsp;…])</td>
-<td>A plot that scales its output to match the input.</td>
+<td>Self-scaling area plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="choropleth.html#geoplot.choropleth" title="geoplot.choropleth"><code class="xref py py-obj docutils literal"><span class="pre">choropleth</span></code></a>(df[,&nbsp;projection,&nbsp;hue,&nbsp;scheme,&nbsp;k,&nbsp;…])</td>
 <td>An area aggregation plot.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="aggplot.html#geoplot.aggplot" title="geoplot.aggplot"><code class="xref py py-obj docutils literal"><span class="pre">aggplot</span></code></a>(df[,&nbsp;projection,&nbsp;hue,&nbsp;by,&nbsp;geometry,&nbsp;…])</td>
-<td>A minimum-expectations summary plot type which handles mixes of geometry types and missing aggregate geometry data.</td>
+<td>Self-aggregating quadtree plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="kdeplot.html#geoplot.kdeplot" title="geoplot.kdeplot"><code class="xref py py-obj docutils literal"><span class="pre">kdeplot</span></code></a>(df[,&nbsp;projection,&nbsp;extent,&nbsp;figsize,&nbsp;…])</td>
-<td>Geographic kernel density estimate plot.</td>
+<td>A spatial kernel density estimate plot.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="sankey.html#geoplot.sankey" title="geoplot.sankey"><code class="xref py py-obj docutils literal"><span class="pre">sankey</span></code></a>(*args[,&nbsp;projection,&nbsp;start,&nbsp;end,&nbsp;…])</td>
-<td>A geospatial Sankey diagram (flow map).</td>
+<td>A spatial Sankey or flow map.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="voronoi.html#geoplot.voronoi" title="geoplot.voronoi"><code class="xref py py-obj docutils literal"><span class="pre">voronoi</span></code></a>(df[,&nbsp;projection,&nbsp;edgecolor,&nbsp;clip,&nbsp;…])</td>
-<td>A geospatial Voronoi diagram.</td>
+<td>Geospatial Voronoi diagram.</td>
 </tr>
 </tbody>
 </table>
@@ -182,7 +182,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
+        &copy; Copyright 2016-2018, Aleksey Bilogur.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>

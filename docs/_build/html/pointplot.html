@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>geoplot.pointplot &#8212; geoplot 0.1.1 documentation</title>
+    <title>geoplot.pointplot &#8212; geoplot 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -123,14 +123,14 @@
 <dl class="function">
 <dt id="geoplot.pointplot">
 <code class="descclassname">geoplot.</code><code class="descname">pointplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>categorical=False</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='Set1'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>scale=None</em>, <em>limits=(0.5</em>, <em>2)</em>, <em>scale_func=None</em>, <em>legend=False</em>, <em>legend_values=None</em>, <em>legend_labels=None</em>, <em>legend_kwargs=None</em>, <em>legend_var=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>extent=None</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
-<dd><p>A geospatial scatter plot.</p>
+<dd><p>Geospatial scatter plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb">the tutorial page on projections</a>.</li>
 <li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – Applies a colormap to the output points.</li>
 <li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> references a categorical variable, and <code class="docutils literal"><span class="pre">False</span></code> (the default) otherwise. Ignored
 if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
@@ -169,9 +169,12 @@ if <code class="docutils literal"><span class="pre">hue</span></code> is left un
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>The <code class="docutils literal"><span class="pre">pointplot</span></code> is a simple <a class="reference external" href="https://en.wikipedia.org/wiki/Scatter_plot">geospatial scatter plot</a> representing
-each observation in your dataset with a single point. The expected input is a <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> containing
-<code class="docutils literal"><span class="pre">shapely.geometry.Point</span></code> geometries.</p>
+<p>The <code class="docutils literal"><span class="pre">pointplot</span></code> is a <a class="reference external" href="https://en.wikipedia.org/wiki/Scatter_plot">geospatial scatter plot</a> representing
+each observation in your dataset with a single point. It is simple and easily interpretable plot that is nearly
+universally understood, making it an ideal choice for showing simple pointwise relationships between
+observations.</p>
+<p>The expected input is a <code class="docutils literal"><span class="pre">GeoDataFrame</span></code> containing geometries of the <code class="docutils literal"><span class="pre">shapely.geometry.Point</span></code> type. A
+bare-bones pointplot goes thusly:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -277,7 +280,7 @@ the legend using <code class="docutils literal"><span class="pre">legend_var</sp
       
     </p>
     <p>
-        &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
+        &copy; Copyright 2016-2018, Aleksey Bilogur.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>

@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>geoplot.voronoi &#8212; geoplot 0.1.1 documentation</title>
+    <title>geoplot.voronoi &#8212; geoplot 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -123,42 +123,35 @@
 <dl class="function">
 <dt id="geoplot.voronoi">
 <code class="descclassname">geoplot.</code><code class="descname">voronoi</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>edgecolor='black'</em>, <em>clip=None</em>, <em>hue=None</em>, <em>scheme=None</em>, <em>k=5</em>, <em>cmap='viridis'</em>, <em>categorical=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=False</em>, <em>legend_kwargs=None</em>, <em>legend_labels=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.voronoi" title="Permalink to this definition">¶</a></dt>
-<dd><p>A geospatial Voronoi diagram.</p>
+<dd><p>Geospatial Voronoi diagram.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/tutorial/projections.html">the tutorial page on projections</a>.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – A data column whose values are to be colorized. Defaults to None, in which case no colormap will be applied.</li>
-<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Specify this variable to be <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> points to a categorical variable. Defaults to False. Ignored
-if <code class="docutils literal"><span class="pre">hue</span></code> is set to None or not specified.</li>
-<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;Quantiles&quot;|&quot;Equal_interval&quot;|&quot;Fisher_Jenks&quot;}</em><em>, </em><em>optional</em>) – The scheme which will be used to determine categorical bins for the <code class="docutils literal"><span class="pre">hue</span></code> choropleth. If <code class="docutils literal"><span class="pre">hue</span></code> is
-left unspecified or set to None this variable is ignored.</li>
-<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal"><span class="pre">hue</span></code> is specified and <code class="docutils literal"><span class="pre">categorical</span></code> is False, this number, set to 5 by default, will determine how
-many bins will exist in the output visualization. If <code class="docutils literal"><span class="pre">hue</span></code> is specified and this variable is set to
-<code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used. If <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified or set to None this variable is
-ignored.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The matplotlib colormap to be applied to this dataset (<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">ref</a>). This parameter is ignored if <code class="docutils literal"><span class="pre">hue</span></code> is not
-specified.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The value that “bottoms out” the colormap. Data column entries whose value is below this level will be
-colored the same threshold value. Defaults to the minimum value in the dataset.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – The value that “tops out” the colormap. Data column entries whose value is above this level will be
-colored the same threshold value. Defaults to the maximum value in the dataset.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend in the output plot. This parameter will not work if neither <code class="docutils literal"><span class="pre">hue</span></code> nor
-<code class="docutils literal"><span class="pre">scale</span></code> is unspecified.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – If a legend is specified, this parameter can be used to control what names will be attached to the values.</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.pyplot.legend</span></code> instance (<a class="reference external" href="http://matplotlib.org/users/legend_guide.html">ref</a>).</p>
+<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb">the tutorial page on projections</a>.</li>
+<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – Applies a colormap to the output points.</li>
+<li><strong>categorical</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Set to <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">hue</span></code> references a categorical variable, and <code class="docutils literal"><span class="pre">False</span></code> (the default) otherwise. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – Controls how the colormap bin edges are determined. Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified. Otherwise, if <code class="docutils literal"><span class="pre">categorical</span></code> is False, controls how many colors to
+use (5 is the default). If set to <code class="docutils literal"><span class="pre">None</span></code>, a continuous colormap will be used.</li>
+<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a> to be used.
+Ignored if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – Values below this level will be colored the same threshold value. Defaults to the dataset minimum. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – Values above this level will be colored the same threshold value. Defaults to the dataset maximum. Ignored
+if <code class="docutils literal"><span class="pre">hue</span></code> is left unspecified.</li>
+<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend. Ignored if neither a <code class="docutils literal"><span class="pre">hue</span></code> nor a <code class="docutils literal"><span class="pre">scale</span></code> is specified.</li>
+<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The values to use in the legend. Defaults to equal intervals. For more information see <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html">the Gallery demo</a>.</li>
+<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>The names to use in the legend. Defaults to the variable values. For more information see <a class="reference external" href="http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html">the Gallery demo</a>.</p>
 </li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – If this parameter is unset <code class="docutils literal"><span class="pre">geoplot</span></code> will calculate the plot limits. If an extrema tuple is passed,
-that input will be used instead.</li>
-<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.
-Defaults to (8, 6), the <code class="docutils literal"><span class="pre">matplotlib</span></code> default global.</li>
-<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance onto which this plot
-will be graphed. If this parameter is left undefined a new axis will be created and used instead.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib.lines.Line2D</span></code> instances (<a class="reference external" href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D">ref</a>).</p>
-</li>
+<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to <a class="reference external" href="http://matplotlib.org/users/legend_guide.html">the underlying legend</a>.</li>
+<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – Used to control plot x-axis and y-axis limits manually.</li>
+<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.</li>
+<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance. Defaults to a new axis.</li>
+<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D">Line2D objects</a>.</li>
 </ul>
 </td>
 </tr>
@@ -170,6 +163,71 @@ will be graphed. If this parameter is left undefined a new axis will be created 
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>The neighborhood closest to a point in space is known as its <a class="reference external" href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi region</a>. Every point in a dataset has a Voronoi region, which may be
+either a closed polygon (for inliers) or open infinite region (for points on the edge of the distribution). A
+Voronoi diagram works by dividing a space filled with points into such regions and plotting the result. Voronoi
+plots allow efficient assessmelt of the <em>density</em> of points in different spaces, and when combined with a
+colormap can be quite informative of overall trends in the dataset.</p>
+<p>The <code class="docutils literal"><span class="pre">geoplot</span></code> <code class="docutils literal"><span class="pre">voronoi</span></code> is a spatially aware application of this technique. It compares well with the more
+well-known <code class="docutils literal"><span class="pre">choropleth</span></code>, which has the advantage of using meaningful regions, but the disadvantage of having
+defined those regions beforehand. <code class="docutils literal"><span class="pre">voronoi</span></code> has fewer requirements and may perform better when the number of
+observations is small. Compare also with the quadtree technique available in <code class="docutils literal"><span class="pre">aggplot</span></code>.</p>
+<p>A basic <code class="docutils literal"><span class="pre">voronoi</span></code> specified data and, optionally, a projection. We overlay geometry to aid interpretability.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-simple.png" src="_images/voronoi-simple.png" />
+<p><code class="docutils literal"><span class="pre">hue</span></code> parameterizes the color, and <code class="docutils literal"><span class="pre">cmap</span></code> controls the colormap.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-cmap.png" src="_images/voronoi-cmap.png" />
+<p>Add a <code class="docutils literal"><span class="pre">clip</span></code> of iterable geometries to trim the <code class="docutils literal"><span class="pre">voronoi</span></code> against local geography.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+                  <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-clip.png" src="_images/voronoi-clip.png" />
+<p><code class="docutils literal"><span class="pre">legend</span></code> adds a a <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend">Legend</a>. This can be tuned even further using the
+<code class="docutils literal"><span class="pre">legend_kwargs</span></code> argument. Other keyword parameters are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+                  <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+                  <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+                  <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                 <span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-kwargs.png" src="_images/voronoi-kwargs.png" />
+<p>Change the number of bins by specifying an alternative <code class="docutils literal"><span class="pre">k</span></code> value. To use a continuous colormap, explicitly
+specify <code class="docutils literal"><span class="pre">k=None</span></code>.  You can change the binning sceme with <code class="docutils literal"><span class="pre">scheme</span></code>. The default is <code class="docutils literal"><span class="pre">quantile</span></code>, which bins
+observations into classes of different sizes but the same numbers of observations. <code class="docutils literal"><span class="pre">equal_interval</span></code> will
+creates bins that are the same size, but potentially containing different numbers of observations. The more
+complicated <code class="docutils literal"><span class="pre">fisher_jenks</span></code> scheme is an intermediate between the two.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+                  <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;fisher_jenks&#39;</span><span class="p">,</span>
+                  <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+                  <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">},</span>
+                  <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                 <span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-scheme.png" src="_images/voronoi-scheme.png" />
+<p>If your variable of interest is already <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/categorical.html">categorical</a>, specify <code class="docutils literal"><span class="pre">categorical=True</span></code> to
+use the labels in your dataset directly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+     <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="bp">True</span>
+     <span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/voronoi-multiparty.png" src="_images/voronoi-multiparty.png" />
 </dd></dl>
 
 </div>
@@ -186,7 +244,7 @@ will be graphed. If this parameter is left undefined a new axis will be created 
       
     </p>
     <p>
-        &copy; Copyright 2016-2017, Aleksey Bilogur.<br/>
+        &copy; Copyright 2016-2018, Aleksey Bilogur.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>
