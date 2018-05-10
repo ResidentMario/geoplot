@@ -63,10 +63,10 @@ def pointplot(df, projection=None,
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_var : "hue" or "scale", optional
         If both ``hue`` and ``scale`` are specified, which variable to use in the legend.
     legend_kwargs : dict, optional
@@ -497,10 +497,10 @@ def choropleth(df, projection=None,
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
@@ -732,10 +732,10 @@ def aggplot(df, projection=None,
         Whether or not to include a legend.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
@@ -1079,10 +1079,10 @@ def cartogram(df, projection=None,
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
@@ -1530,10 +1530,10 @@ def sankey(*args, projection=None,
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_var : "hue" or "scale", optional
         If both ``hue`` and ``scale`` are specified, which variable to use in the legend.
     legend_kwargs : dict, optional
@@ -1955,10 +1955,10 @@ def voronoi(df, projection=None, edgecolor='black',
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is specified.
     legend_values : list, optional
         The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_labels : list, optional
         The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <http://localhost:63342/geoplot/docs/_build/html/examples/nyc-collisions-map.html>`_.
+        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
