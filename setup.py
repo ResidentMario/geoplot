@@ -4,7 +4,7 @@ setup(
     packages = ['geoplot'], # this must be the same as the name above
     install_requires=['matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy'],
     py_modules=['geoplot', 'crs', 'utils', 'quad'],
-    version = '0.1.2',
+    version = '0.2.0',
     description = 'High-level geospatial plotting for Python.',
     author = 'Aleksey Bilogur',
     author_email = 'aleksey.bilogur@gmail.com',
