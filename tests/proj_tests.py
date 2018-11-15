@@ -110,3 +110,33 @@ def test_partially_parameterized_global_projections(proj, countries):
     ax.set_global()
 
     return plt.gcf()
+
+
+@pytest.mark.mpl_image_compare
+@pytest.mark.parametrize("proj", [
+    gcrs.PlateCarree(),
+    gcrs.LambertCylindrical(),
+    gcrs.Mercator(),
+    gcrs.Miller(),
+    gcrs.Mollweide(),
+    gcrs.Robinson(),
+    gcrs.Sinusoidal(),
+    pytest.param(gcrs.InterruptedGoodeHomolosine(), marks=pytest.mark.xfail),
+    pytest.param(gcrs.Geostationary(), marks=pytest.mark.xfail),
+    gcrs.NorthPolarStereo(),
+    gcrs.SouthPolarStereo(),
+    pytest.param(gcrs.Gnomonic(), marks=pytest.mark.xfail),
+    gcrs.AlbersEqualArea(),
+    gcrs.AzimuthalEquidistant(),
+    gcrs.LambertConformal(),
+    pytest.param(gcrs.Orthographic(), marks=pytest.mark.xfail),
+    gcrs.Stereographic(),
+    pytest.param(gcrs.TransverseMercator(), marks=pytest.mark.xfail),
+    gcrs.LambertAzimuthalEqualArea()
+    # # TODO: Include other new ones.
+])
+def test_subplots_global_projections(proj, countries):
+    gplt.polyplot(countries, proj, ax=plt.subplot(2, 1, 1, projection=proj)).set_global()
+    gplt.polyplot(countries, proj, ax=plt.subplot(2, 1, 2, projection=proj)).set_global()
+
+    return plt.gcf()
