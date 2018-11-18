@@ -24,8 +24,8 @@ def countries():
     gcrs.Mollweide(),
     gcrs.Robinson(),
     gcrs.Sinusoidal(),
-    # gcrs.InterruptedGoodeHomolosine(),
-    # gcrs.Geostationary(),
+    pytest.param(gcrs.InterruptedGoodeHomolosine(), marks=pytest.mark.xfail),
+    pytest.param(gcrs.Geostationary(), marks=pytest.mark.xfail),
     gcrs.NorthPolarStereo(),
     gcrs.SouthPolarStereo(),
     gcrs.Gnomonic(),
@@ -34,7 +34,7 @@ def countries():
     gcrs.LambertConformal(),
     gcrs.Orthographic(),
     gcrs.Stereographic(),
-    # gcrs.TransverseMercator(),
+    pytest.param(gcrs.TransverseMercator(), marks=pytest.mark.xfail),
     gcrs.LambertAzimuthalEqualArea()
 ])
 def test_basic_global_projections(proj, countries):
@@ -65,8 +65,8 @@ def test_basic_non_global_projections(proj, countries):
     gcrs.Mollweide(central_longitude=45),
     gcrs.Robinson(central_longitude=45),
     gcrs.Sinusoidal(central_longitude=45),
-    # gcrs.InterruptedGoodeHomolosine(central_longitude=45),
-    # gcrs.Geostationary(central_longitude=45),
+    pytest.param(gcrs.InterruptedGoodeHomolosine(central_longitude=45), marks=pytest.mark.xfail),
+    pytest.param(gcrs.Geostationary(central_longitude=45), marks=pytest.mark.xfail),
     gcrs.NorthPolarStereo(central_longitude=45),
     gcrs.SouthPolarStereo(central_longitude=45),
     gcrs.Gnomonic(central_latitude=45),
@@ -75,7 +75,7 @@ def test_basic_non_global_projections(proj, countries):
     gcrs.LambertConformal(central_longitude=45, central_latitude=45),
     gcrs.Orthographic(central_longitude=45, central_latitude=45),
     gcrs.Stereographic(central_longitude=45, central_latitude=45),
-    # gcrs.TransverseMercator(central_longitude=45, central_latitude=45),
+    pytest.param(gcrs.TransverseMercator(central_longitude=45, central_latitude=45), marks=pytest.mark.xfail),
     gcrs.LambertAzimuthalEqualArea(central_longitude=45, central_latitude=45)
 ])
 def test_fully_parameterized_global_projections(proj, countries):
@@ -98,9 +98,9 @@ def test_fully_parameterized_global_projections(proj, countries):
     gcrs.Orthographic(central_latitude=45),
     gcrs.Stereographic(central_longitude=45),
     gcrs.Stereographic(central_latitude=45),
-    # gcrs.TransverseMercator(central_longitude=45),
-    # gcrs.TransverseMercator(central_latitude=45),
-    # gcrs.LambertAzimuthalEqualArea(central_longitude=45),
+    pytest.param(gcrs.TransverseMercator(central_longitude=45), marks=pytest.mark.xfail),
+    pytest.param(gcrs.TransverseMercator(central_latitude=45), marks=pytest.mark.xfail),
+    pytest.param(gcrs.LambertAzimuthalEqualArea(central_longitude=45), marks=pytest.mark.xfail),
     gcrs.LambertAzimuthalEqualArea(central_latitude=45)
 ])
 def test_partially_parameterized_global_projections(proj, countries):
