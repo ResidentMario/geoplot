@@ -1416,7 +1416,6 @@ def kdeplot(df, projection=None,
 
     """
     import seaborn as sns  # Immediately fail if no seaborn.
-    sns.reset_orig()  # Reset to default style.
 
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
