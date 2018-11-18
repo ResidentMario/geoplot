@@ -8,8 +8,10 @@ dependencies/
 __pycache__/
 source/
 dist/
+bin/
 geoplot.egg-info/
 tests/baseline/
 quilt_packages/
-# Temp files
+.pytest_cache/
+# temp files
 Untitled.ipynb
