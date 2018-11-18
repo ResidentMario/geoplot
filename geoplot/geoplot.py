@@ -15,7 +15,7 @@ import shapely.geometry
 import pandas as pd
 import descartes
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 def pointplot(df, projection=None,
