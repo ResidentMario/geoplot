@@ -8,6 +8,7 @@ dependencies/
 __pycache__/
 source/
 dist/
+build/
 bin/
 geoplot.egg-info/
 tests/baseline/
