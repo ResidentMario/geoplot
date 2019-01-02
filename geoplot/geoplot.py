@@ -3,7 +3,6 @@ This module defines the majority of geoplot functions, including all plot types.
 """
 
 import geopandas as gpd
-from geopandas.plotting import __pysal_choro
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -14,6 +13,12 @@ from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
 import descartes
+
+from distutils.version import LooseVersion
+if LooseVersion(gpd.__version__) >= LooseVersion('0.4.0'):
+    from geopandas.plotting import _mapclassify_choro
+else:
+    from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
 __version__ = "0.2.1"
 
@@ -2385,7 +2390,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
         parameters ingest many argument signatures, not just iterables, they are all preprocessed to standardized
         iterables before this method is called.
     scheme : str
-        The PySAL binning scheme to be used for splitting data values (or rather, the the string representation
+        The mapclassify binning scheme to be used for splitting data values (or rather, the the string representation
         thereof).
     k : int
         The number of bins which will be used. This parameter will be ignored if ``categorical`` is True. The default
@@ -2406,7 +2411,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
         A tuple meant for assignment containing the values for various properties set by this method call.
     """
     if not categorical:
-        binning = __pysal_choro(hue, scheme, k=k)
+        binning = _mapclassify_choro(hue, scheme, k=k)
         values = binning.yb
         binedges = [binning.yb.min()] + binning.bins.tolist()
         categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
@@ -2577,7 +2582,7 @@ def _validate_buckets(categorical, k, scheme):
         by default if it is False and not already given.
 
     scheme : str
-        The PySAL scheme that the variable will be categorized according to (or rather, a string representation
+        The mapclassify scheme that the variable will be categorized according to (or rather, a string representation
         thereof).
 
     Returns
