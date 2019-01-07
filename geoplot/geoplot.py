@@ -20,7 +20,7 @@ if LooseVersion(gpd.__version__) >= LooseVersion('0.4.0'):
 else:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 def pointplot(df, projection=None,
