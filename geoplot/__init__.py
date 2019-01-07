@@ -7,4 +7,3 @@ from .crs import (PlateCarree, LambertCylindrical, Mercator, Miller, Mollweide, 
 from .utils import (gaussian_points, gaussian_polygons, gaussian_multi_polygons, uniform_random_global_points,
                     uniform_random_global_network, classify_clusters)
 from .quad import (QuadTree, subpartition, flatten)
-g
