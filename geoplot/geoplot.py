@@ -1712,12 +1712,13 @@ def sankey(*args, projection=None,
     elif len(args) == 1:
         df = args[0]
     else:
-        df = None  # bind the local name here; initialize in a bit.
+        df = pd.DataFrame()
+        # df = None  # bind the local name here; initialize in a bit.
 
     # Validate the rest of the input.
     if ((start is None) or (end is None)) and not hasattr(path, "__iter__"):
         raise ValueError("The 'start' and 'end' parameters must both be specified.")
-    if (isinstance(start, str) or isinstance(end, str)) and (df is None):
+    if (isinstance(start, str) or isinstance(end, str)) and df.empty:
         raise ValueError("Invalid input.")
     if isinstance(start, str):
         start = df[start]
@@ -1770,7 +1771,7 @@ def sankey(*args, projection=None,
     # 2. (xmin. xmax, ymin. ymax) --- To pass this to the extent settings.
     # 3. n --- To pass this to the color array in case no ``color`` is specified.
     if path_geoms is None and points is not None:
-        if df is None:
+        if df.empty:
             df = gpd.GeoDataFrame(geometry=points)
         xs = np.array([p.x for p in points])
         ys = np.array([p.y for p in points])
