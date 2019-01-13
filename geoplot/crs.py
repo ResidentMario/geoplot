@@ -7,8 +7,9 @@ Cartopy CRS objects this module derives from, refer to http://scitools.org.uk/ca
 import cartopy.crs as ccrs
 import geopandas as gpd
 
-# TODO: RotatedPole
+
 class Base:
+    # TODO: RotatedPole
     """
     Generate instances of ``cartopy.crs``.*name* where *name* matches the instance's class name.
 
@@ -91,6 +92,7 @@ class Base:
         proj = self.load(gpd.GeoDataFrame(), dict())
         return proj._as_mpl_axes()
 
+
 class Filtering(Base):
     """CRS that `load`s with `centering` restricted to keys in `self.filter_`."""
 
@@ -103,64 +105,65 @@ class Filtering(Base):
              if key in self.filter_}
         )
 
+
 class LongitudeCentering(Filtering):
     """Form a CRS that centers by longitude."""
-
     filter_ = {'central_longitude'}
+
 
 class LatitudeCentering(Filtering):
     """For a CRS that centers by latitude."""
-
     filter_ = {'central_latitude'}
 
+
 PlateCarree,\
-LambertCylindrical,\
-Mercator,\
-Miller,\
-Mollweide,\
-Robinson,\
-Sinusoidal,\
-InterruptedGoodeHomolosine,\
-Geostationary,\
-NorthPolarStereo,\
-SouthPolarStereo = tuple(
-    type(name, (LongitudeCentering,), {})
-    for name in ('PlateCarree',
-                 'LambertCylindrical',
-                 'Mercator',
-                 'Miller',
-                 'Mollweide',
-                 'Robinson',
-                 'Sinusoidal',
-                 'InterruptedGoodeHomolosine',
-                 'Geostationary',
-                 'NorthPolarStereo',
-                 'SouthPolarStereo')
+    LambertCylindrical,\
+    Mercator,\
+    Miller,\
+    Mollweide,\
+    Robinson,\
+    Sinusoidal,\
+    InterruptedGoodeHomolosine,\
+    Geostationary,\
+    NorthPolarStereo,\
+    SouthPolarStereo = tuple(
+        type(name, (LongitudeCentering,), {})
+        for name in ('PlateCarree',
+                     'LambertCylindrical',
+                     'Mercator',
+                     'Miller',
+                     'Mollweide',
+                     'Robinson',
+                     'Sinusoidal',
+                     'InterruptedGoodeHomolosine',
+                     'Geostationary',
+                     'NorthPolarStereo',
+                     'SouthPolarStereo')
 )
 
 Gnomonic = type('Gnomonic', (LatitudeCentering,), {})
 
 AlbersEqualArea,\
-AzimuthalEquidistant,\
-LambertConformal,\
-Orthographic,\
-Stereographic,\
-TransverseMercator,\
-LambertAzimuthalEqualArea,\
-UTM,\
-OSGB,\
-EuroPP,\
-OSNI = tuple(
-    type(name, (Base,), {})
-    for name in ('AlbersEqualArea',
-                 'AzimuthalEquidistant',
-                 'LambertConformal',
-                 'Orthographic',
-                 'Stereographic',
-                 'TransverseMercator',
-                 'LambertAzimuthalEqualArea',
-                 'UTM',
-                 'OSGB',
-                 'EuroPP',
-                 'OSNI')
-)
+    AzimuthalEquidistant,\
+    LambertConformal,\
+    Orthographic,\
+    Stereographic,\
+    TransverseMercator,\
+    LambertAzimuthalEqualArea,\
+    UTM,\
+    OSGB,\
+    EuroPP,\
+    OSNI = tuple(
+        type(name, (Base,), {})
+        for name in ('AlbersEqualArea',
+                     'AzimuthalEquidistant',
+                     'LambertConformal',
+                     'Orthographic',
+                     'Stereographic',
+                     'TransverseMercator',
+                     'LambertAzimuthalEqualArea',
+                     'UTM',
+                     'OSGB',
+                     'EuroPP',
+                     'OSNI')
+    )

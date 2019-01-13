@@ -9,7 +9,6 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 from shapely.geometry import Point, LineString
 import numpy as np
-# import pandas as pd
 import geoplot.crs as gcrs
 
 
