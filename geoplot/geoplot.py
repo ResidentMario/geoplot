@@ -2690,6 +2690,7 @@ def _build_voronoi_polygons(df):
 
                     infinite_segments.append(np.asarray([vor.vertices[i], far_point]))
 
+            finite_segments = finite_segments if finite_segments else np.zeros(shape=(0,2,2))
             ls = np.vstack([np.asarray(infinite_segments), np.asarray(finite_segments)])
 
             # We have to trivially sort the line segments into polygonal order. The algorithm that follows is
