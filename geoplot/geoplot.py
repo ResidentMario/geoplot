@@ -2638,11 +2638,11 @@ def _build_voronoi_polygons(df):
 
     polygons = []
 
-    for idx_point, point in enumerate(vor.points):
+    for idx_point, _ in enumerate(vor.points):
         idx_point_region = vor.point_region[idx_point]
         idxs_vertices = np.array(vor.regions[idx_point_region])
 
-        is_finite = True if not np.any(idxs_vertices == -1) else False
+        is_finite = not np.any(idxs_vertices == -1)
 
         if is_finite:
             # Easy case, the region is closed. Make a polygon out of the Voronoi ridge points.
@@ -2657,6 +2657,11 @@ def _build_voronoi_polygons(df):
             # Hard case, the region is open. Project new edges out to the margins of the plot.
             # See `scipy.spatial.voronoi_plot_2d` for the source of this calculation.
             point_idx_ridges_idx = np.where((vor.ridge_points == idx_point).any(axis=1))[0]
+
+            # TODO: why does this happen?
+            if len(point_idx_ridges_idx) == 0:
+                continue
+
             ptp_bound = vor.points.ptp(axis=0)
             center = vor.points.mean(axis=0)
 
@@ -2683,7 +2688,7 @@ def _build_voronoi_polygons(df):
                     direction = np.sign(np.dot(midpoint - center, n)) * n
                     far_point = vor.vertices[i] + direction * ptp_bound.max()
 
-                    infinite_segments.append([vor.vertices[i], far_point])
+                    infinite_segments.append(np.asarray([vor.vertices[i], far_point]))
 
             ls = np.vstack([np.asarray(infinite_segments), np.asarray(finite_segments)])
 
@@ -2693,10 +2698,9 @@ def _build_voronoi_polygons(df):
 
             while len(ls_sorted) < len(ls):
                 l1 = ls[0] if len(ls_sorted) == 0 else ls_sorted[-1]
-                l1 = l1.tolist() if not isinstance(l1, list) else l1
                 matches = []
 
-                for l2 in [l for l in ls if l.tolist() != l1]:
+                for l2 in [l for l in ls if not (l == l1).all()]:
                     if np.any(l1 == l2):
                         matches.append(l2)
                     elif np.any(l1 == l2[::-1]):
@@ -2706,7 +2710,12 @@ def _build_voronoi_polygons(df):
                 if len(ls_sorted) == 0:
                     ls_sorted.append(l1)
 
-                ls_sorted.append([m.tolist() for m in matches if m.tolist() not in ls_sorted][0])
+                for match in matches:
+                    # in list sytax this would be "if match not in ls_sorted"
+                    # in numpy things are more complicated...
+                    if not any((match == ls_sort).all() for ls_sort in ls_sorted):
+                        ls_sorted.append(match)
+                        break
 
             # Build and return the final polygon.
             polyline = np.vstack(ls_sorted)
