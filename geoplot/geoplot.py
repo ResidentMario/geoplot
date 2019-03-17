@@ -15,10 +15,10 @@ import pandas as pd
 import descartes
 
 from distutils.version import LooseVersion
-if LooseVersion(gpd.__version__) >= LooseVersion('0.4.1'):
+try:
     from geopandas.plotting import _mapclassify_choro
-else:
-    from geopandas.plotting import __pysal_choro as _mapclassify_choro
+except ImportError:
+    from geopandas.plottting import __pysal_choro as _mapclassify_choro
 
 __version__ = "0.2.3"
 
