@@ -15,15 +15,21 @@ import pandas as pd
 # Point-type DataFrame input.
 list_gaussian_points = gplt.utils.gaussian_points(n=4)
 series_gaussian_points = gpd.GeoSeries(list_gaussian_points)
-dataframe_gaussian_points = gpd.GeoDataFrame(geometry=series_gaussian_points).assign(hue_var=[1,2,3,4])
+dataframe_gaussian_points = gpd.GeoDataFrame(
+    geometry=series_gaussian_points
+).assign(hue_var=[1,2,3,4])
 
 
 # Polygon-type DataFrame input.
-list_gaussian_polys = gplt.utils.gaussian_polygons(gplt.utils.gaussian_points(n=1000), n=2).append(
-                 gplt.utils.gaussian_multi_polygons(gplt.utils.gaussian_points(n=1000), n=2)
+list_gaussian_polys = gplt.utils.gaussian_polygons(
+    gplt.utils.gaussian_points(n=1000), n=2
+).append(
+    gplt.utils.gaussian_multi_polygons(gplt.utils.gaussian_points(n=1000), n=2)
 )
 series_gaussian_polys = gpd.GeoSeries(list_gaussian_polys)
-dataframe_gaussian_polys = gpd.GeoDataFrame(geometry=series_gaussian_polys).assign(hue_var=[1,2,3,4])
+dataframe_gaussian_polys = gpd.GeoDataFrame(
+    geometry=series_gaussian_polys
+).assign(hue_var=[1,2,3,4])
 
 # Hue input.
 list_hue_values = [1, 2, 3, 4]
@@ -35,21 +41,30 @@ def map_hue_values(): return map(lambda i: list_hue_values[i], list(range(len(li
 # Start and End variables.
 list_start_points = [Point(a + 2, a - 2) for a in range(0, 4)]
 list_end_points = [Point(a - 2, a + 2) for a in range(1, 5)]
-series_start_points, series_end_points = gpd.GeoSeries(list_start_points), gpd.GeoSeries(list_end_points)
-def map_start_points(): return map(lambda i: list_start_points[i], list(range(len(list_start_points))))
-def map_end_points(): return map(lambda i: list_end_points[i], list(range(len(list_end_points))))
-dataframe_gaussian_points = dataframe_gaussian_points.assign(starts=list_start_points, ends=list_end_points)
+series_start_points = gpd.GeoSeries(list_start_points)
+series_end_points = gpd.GeoSeries(list_end_points)
+def map_start_points():
+    return map(lambda i: list_start_points[i], list(range(len(list_start_points))))
+def map_end_points():
+    return map(lambda i: list_end_points[i], list(range(len(list_end_points))))
+dataframe_gaussian_points = dataframe_gaussian_points.assign(
+    starts=list_start_points, ends=list_end_points
+)
 
 
 # (Sankey) paths.
-list_paths = [LineString([[a.x, a.y], [b.x, b.y]]) for a, b in zip(list_start_points, list_end_points)]
+list_paths = [
+    LineString([[a.x, a.y], [b.x, b.y]]) for a, b in zip(list_start_points, list_end_points)
+]
 series_paths = gpd.GeoSeries(list_paths)
 def map_paths(): return map(lambda i: list_paths[i], list(range(len(list_paths))))
 dataframe_gaussian_points = dataframe_gaussian_points.assign(paths=list_paths)
 
 
 # (Aggplot) geometry.
-dataframe_gaussian_points = dataframe_gaussian_points.assign(mock_category=np.random.randint(1, 5))
+dataframe_gaussian_points = dataframe_gaussian_points.assign(
+    mock_category=np.random.randint(1, 5)
+)
 aggplot_geometries = dataframe_gaussian_polys.set_index('hue_var', drop=True)
 
 
@@ -146,13 +161,15 @@ class TestDataInputFormats(unittest.TestCase):
             gplt.aggplot(dataframe_gaussian_points, hue='hue_var')
 
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values, by='mock_category')
+            # series
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values,
-                         by=dataframe_gaussian_points['mock_category'])  # Series
+                         by=dataframe_gaussian_points['mock_category'])
+            # list
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values,
-                         by=list(dataframe_gaussian_points['mock_category']))  # List
+                         by=list(dataframe_gaussian_points['mock_category']))
+            # map
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values,
-                         by=map(lambda v: v, list(dataframe_gaussian_points['mock_category'])))  # Map
-
+                         by=map(lambda v: v, list(dataframe_gaussian_points['mock_category'])))
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values, by='mock_category',
                          geometry=aggplot_geometries)
             gplt.aggplot(dataframe_gaussian_points, hue=list_hue_values,
