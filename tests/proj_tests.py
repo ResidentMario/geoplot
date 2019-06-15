@@ -75,7 +75,10 @@ def test_basic_non_global_projections(proj, countries):
     gcrs.LambertConformal(central_longitude=45, central_latitude=45),
     gcrs.Orthographic(central_longitude=45, central_latitude=45),
     gcrs.Stereographic(central_longitude=45, central_latitude=45),
-    pytest.param(gcrs.TransverseMercator(central_longitude=45, central_latitude=45), marks=pytest.mark.xfail),
+    pytest.param(
+        gcrs.TransverseMercator(central_longitude=45, central_latitude=45),
+        marks=pytest.mark.xfail
+    ),
     gcrs.LambertAzimuthalEqualArea(central_longitude=45, central_latitude=45)
 ])
 def test_fully_parameterized_global_projections(proj, countries):
@@ -107,7 +110,6 @@ def test_partially_parameterized_global_projections(proj, countries):
     gplt.polyplot(countries, proj)
     ax = plt.gca()
     ax.set_global()
-
     return plt.gcf()
 
 
@@ -137,5 +139,4 @@ def test_partially_parameterized_global_projections(proj, countries):
 def test_subplots_global_projections(proj, countries):
     gplt.polyplot(countries, proj, ax=plt.subplot(2, 1, 1, projection=proj)).set_global()
     gplt.polyplot(countries, proj, ax=plt.subplot(2, 1, 2, projection=proj)).set_global()
-
     return plt.gcf()

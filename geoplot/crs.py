@@ -1,7 +1,8 @@
 """
-This module defines the ``geoplot`` coordinate reference system classes, wrappers on ``cartopy.crs`` objects meant
-to be used as parameters to the ``projection`` parameter of all front-end ``geoplot`` outputs. For the list of
-Cartopy CRS objects this module derives from, refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.
+This module defines the ``geoplot`` coordinate reference system classes, wrappers on
+``cartopy.crs`` objects meant to be used as parameters to the ``projection`` parameter of all
+front-end ``geoplot`` outputs. For the list of Cartopy CRS objects this module derives from,
+refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.
 """
 
 import cartopy.crs as ccrs
@@ -15,9 +16,11 @@ class Base:
 
     Methods for Subclasses
     ----------------------
-    `load` : Return a Cartopy CRS initialized with defaults from the `centerings` dictionary, overridden by initialization parameters.
+    `load` : Return a Cartopy CRS initialized with defaults from the `centerings` dictionary,
+    overridden by initialization parameters.
 
-    `_as_mpl_axes` : Return the result of calling cartopy's ``_as_mpl_axes`` for `self.load` called with empty `df` and `centerings`.
+    `_as_mpl_axes` : Return the result of calling cartopy's ``_as_mpl_axes`` for `self.load`
+    called with empty `df` and `centerings`.
     """
     def __init__(self, **kwargs):
         """Save parameters that initialize Cartopy CRSs."""
@@ -25,35 +28,39 @@ class Base:
 
     def load(self, df, centerings):
         """
-        A moderately mind-bendy meta-method which abstracts the internals of individual projections' load procedures.
+        A moderately mind-bendy meta-method which abstracts the internals of individual
+        projections' load procedures.
 
         Parameters
         ----------
         proj : geoplot.crs object instance
             A disguised reference to ``self``.
         df : GeoDataFrame
-            The GeoDataFrame which has been passed as input to the plotter at the top level. This data is needed to
-            calculate reasonable centering variables in cases in which the user does not already provide them; which is,
-            incidentally, the reason behind all of this funny twice-instantiation loading in the first place.
+            The GeoDataFrame which has been passed as input to the plotter at the top level.
+            This data is needed to calculate reasonable centering variables in cases in which the
+            user does not already provide them; which is, incidentally, the reason behind all of
+            this funny twice-instantiation loading in the first place.
         centerings: dct
-            A dictionary containing names and centering methods. Certain projections have certain centering parameters
-            whilst others lack them. For example, the geospatial projection contains both ``central_longitude`` and
-            ``central_latitude`` instance parameter, which together control the center of the plot, while the North Pole
-            Stereo projection has only a ``central_longitude`` instance parameter, implying that latitude is fixed (as
+            A dictionary containing names and centering methods. Certain projections have certain
+            centering parameters whilst others lack them. For example, the geospatial projection
+            contains both ``central_longitude`` and ``central_latitude`` instance parameter, which
+            together control the center of the plot, while the North Pole Stereo projection has
+            only a ``central_longitude`` instance parameter, implying that latitude is fixed (as
             indeed it is, as this projection is centered on the North Pole!).
 
-            A top-level centerings method is provided in each of the ``geoplot`` top-level plot functions; each of the
-            projection wrapper classes defined here in turn selects the functions from this list relevent to this
-            particular instance and passes them to the ``_generic_load`` method here.
+            A top-level centerings method is provided in each of the ``geoplot`` top-level plot
+            functions; each of the projection wrapper classes defined here in turn selects the
+            functions from this list relevent to this particular instance and passes them to
+            the ``_generic_load`` method here.
 
-            We then in turn execute these functions to get defaults for our ``df`` and pass them off to our output
-            ``cartopy.crs`` instance.
+            We then in turn execute these functions to get defaults for our ``df`` and pass them
+            off to our output ``cartopy.crs`` instance.
 
         Returns
         -------
         crs : ``cartopy.crs`` object instance
-            Returns a ``cartopy.crs`` object instance whose appropriate instance variables have been set to reasonable
-            defaults wherever not already provided by the user.
+            Returns a ``cartopy.crs`` object instance whose appropriate instance variables have
+            been set to reasonable defaults wherever not already provided by the user.
         """
         centering_variables = dict()
         if not df.empty and df.geometry.notna().any():
@@ -63,21 +70,24 @@ class Base:
 
     def _as_mpl_axes(self):
         """
-        Another moderately mind-bendy method. When ``matplotlib`` is provided a projection via a ``projection`` keyword
-        argument, it expects to get something with a callable ``as_mpl_axes`` method. The precise details of what this
-        method does, exactly, are not important: it suffices to know that every ``cartopy`` coordinate reference system
-        object has one.
+        Another moderately mind-bendy method. When ``matplotlib`` is provided a projection via a
+        ``projection`` keyword argument, it expects to get something with a callable
+        ``as_mpl_axes`` method. The precise details of what this method does, exactly, are not
+        important: it suffices to know that every ``cartopy`` coordinate reference system object
+        has one.
 
-        When we pass a ``geoplot.crs`` crs object to a ``geoplot`` function, the loading and centering of the data
-        occurs automatically (using the function defined immediately above). Since we control what ``geoplot`` does at
-        execution, we gracefully integrate this two-step procedure into the function body.
+        When we pass a ``geoplot.crs`` crs object to a ``geoplot`` function, the loading and
+        centering of the data occurs automatically (using the function defined immediately above).
+        Since we control what ``geoplot`` does at execution, we gracefully integrate this two-step
+        procedure into the function body.
 
-        But there are also use cases outside of our control in which we are forced to pass a ``geoplot.crs`` object
-        without having first called ``load``: most prominently, when creating a plot containing subplots, the "overall"
-        projection must be pre-loaded. It's possible to get around this by using ``cartopy.crs`` objects instead,
-        but this is inelegant. This method is a better way: when a ``cartopy.crs`` object called by ``matplotlib``,
-        it silently swaps itself out for a vanilla version of its ``cartopy.crs`` mirror, and calls that function's
-        ``_as_mpl_axes`` instead.
+        But there are also use cases outside of our control in which we are forced to pass a
+        ``geoplot.crs`` object without having first called ``load``: most prominently, when
+        creating a plot containing subplots, the "overall" projection must be pre-loaded. It's
+        possible to get around this by using ``cartopy.crs`` objects instead, but this is
+        inelegant. This method is a better way: when a ``cartopy.crs`` object called by
+        ``matplotlib``, it silently swaps itself out for a vanilla version of its ``cartopy.crs``
+        mirror, and calls that function's ``_as_mpl_axes`` instead.
 
         Parameters
         ----------
@@ -86,8 +96,8 @@ class Base:
 
         Returns
         -------
-        Mutates into a ``cartopy.crs`` object and returns the result of executing ``_as_mpl_axes`` on that object instead.
-
+        Mutates into a ``cartopy.crs`` object and returns the result of executing ``_as_mpl_axes``
+        on that object instead.
         """
         proj = self.load(gpd.GeoDataFrame(), dict())
         return proj._as_mpl_axes()

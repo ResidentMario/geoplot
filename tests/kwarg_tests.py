@@ -14,12 +14,14 @@ import geoplot.crs as gcrs
 
 # Point-type DataFrame input.
 list_gaussian_points = gplt.utils.gaussian_points(n=4)
-dataframe_gaussian_points = gpd.GeoDataFrame(geometry=list_gaussian_points).assign(hue_var=[1,2,3,4])
+dataframe_gaussian_points = gpd.GeoDataFrame(
+    geometry=list_gaussian_points
+).assign(hue_var=[1,2,3,4])
 
 
 # Polygon-type DataFrame input.
 list_gaussian_polys = gplt.utils.gaussian_polygons(gplt.utils.gaussian_points(n=1000), n=2).append(
-                 gplt.utils.gaussian_multi_polygons(gplt.utils.gaussian_points(n=1000), n=2)
+    gplt.utils.gaussian_multi_polygons(gplt.utils.gaussian_points(n=1000), n=2)
 )
 dataframe_gaussian_polys = gpd.GeoDataFrame(geometry=list_gaussian_polys).assign(hue_var=[1,2,3,4])
 
@@ -29,7 +31,9 @@ list_start_points = [Point(a + 2, a - 2) for a in range(0, 4)]
 list_end_points = [Point(a - 2, a + 2) for a in range(1, 5)]
 
 # (Sankey) paths.
-list_paths = [LineString([[a.x, a.y], [b.x, b.y]]) for a, b in zip(list_start_points, list_end_points)]
+list_paths = [
+    LineString([[a.x, a.y], [b.x, b.y]]) for a, b in zip(list_start_points, list_end_points)
+]
 
 # (Aggplot) geometry.
 dataframe_gaussian_points = dataframe_gaussian_points.assign(mock_category=np.random.randint(1, 5))
@@ -44,7 +48,8 @@ class TestDataInputFormats(unittest.TestCase):
 
             gplt.pointplot(list_gaussian_points, projection=gcrs.PlateCarree(), s=5)
 
-            gplt.pointplot(list_gaussian_points, projection=gcrs.PlateCarree(), legend_kwargs={'fancybox': False})
+            gplt.pointplot(list_gaussian_points, projection=gcrs.PlateCarree(),
+                           legend_kwargs={'fancybox': False})
         finally: plt.close()
 
     def test_kdeplot(self):
@@ -63,7 +68,8 @@ class TestDataInputFormats(unittest.TestCase):
 
     def test_aggplot(self):
         try:
-            gplt.aggplot(dataframe_gaussian_points, hue='mock_category', projection=gcrs.PlateCarree())
+            gplt.aggplot(dataframe_gaussian_points, hue='mock_category', 
+                         projection=gcrs.PlateCarree())
 
             gplt.aggplot(dataframe_gaussian_points, hue='mock_category', by='mock_category',
                          projection=gcrs.PlateCarree())
@@ -72,7 +78,8 @@ class TestDataInputFormats(unittest.TestCase):
 
     def test_cartogram(self):
         try:
-            gplt.cartogram(dataframe_gaussian_polys, scale='hue_var', projection=gcrs.PlateCarree(), facecolor='white')
+            gplt.cartogram(dataframe_gaussian_polys, scale='hue_var',
+                           projection=gcrs.PlateCarree(), facecolor='white')
 
             gplt.cartogram(dataframe_gaussian_polys, scale='hue_var',
                            projection=gcrs.PlateCarree(), legend_kwargs={'fancybox': False})
@@ -80,10 +87,10 @@ class TestDataInputFormats(unittest.TestCase):
             plt.close()
 
     def test_sankey(self):
-        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), edgecolor='white')
-
-        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), color='white')
-
-        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linewidth=1)
-
-        gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linestyle='--')
+        try:
+            gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), edgecolor='white')
+            gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), color='white')
+            gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linewidth=1)
+            gplt.sankey(path=list_paths, projection=gcrs.PlateCarree(), linestyle='--')
+        finally:
+            plt.close()
