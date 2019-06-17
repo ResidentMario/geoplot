@@ -25,7 +25,7 @@ __version__ = "0.2.4"
 
 def pointplot(
     df, projection=None,
-    hue=None, categorical=False, scheme=None, k=5, cmap='Set1',
+    hue=None, categorical=False, scheme=None, k=5, cmap='viridis',
     scale=None, limits=(0.5, 2), scale_func=None, legend=False, legend_values=None,
     legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
     extent=None, ax=None, **kwargs
@@ -489,7 +489,7 @@ def polyplot(
 
 
 def choropleth(
-    df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', categorical=False,
+    df, projection=None, hue=None, scheme=None, k=5, cmap='viridis', categorical=False,
     legend=False, legend_kwargs=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
