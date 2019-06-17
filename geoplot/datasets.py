@@ -1,0 +1,32 @@
+"""
+Example dataset fetching utility. Used in docs.
+"""
+
+src = 'https://raw.githubusercontent.com/ResidentMario/geoplot-data/master'
+
+
+def get_path(dataset_name):
+    if dataset_name == 'usa_cities':
+        return f'{src}/usa-cities.geojson'
+    elif dataset_name == 'contiguous_usa':
+        return f'{src}/contiguous-usa.geojson'
+    elif dataset_name == 'nyc_collision_factors':
+        return f'{src}/nyc-collision-factors.geojson'
+    elif dataset_name == 'nyc_boroughs':
+        return f'{src}/nyc-boroughs.geojson'
+    elif dataset_name == 'ny_census':
+        return f'{src}/ny-census-partial.geojson'
+    elif dataset_name == 'obesity_by_state':
+        return f'{src}/obesity-by-state.tsv'
+    elif dataset_name == 'nyc_injurious_collisions':
+        return f'{src}/nyc-injurious-collisions.geojson'
+    elif dataset_name == 'la_flights':
+        return f'{src}/la-flights.geojson'
+    elif dataset_name == 'dc_roads':
+        return f'{src}/dc-roads.geojson'
+    elif dataset_name == 'nyc_map_pluto_sample':
+        return f'{src}/nyc_map_pluto_sample.geojson'
+    elif dataset_name == 'nyc_collisions_sample':
+        return f'{src}/nyc-collisions-sample.csv'
+    else:
+        raise NotImplementedError

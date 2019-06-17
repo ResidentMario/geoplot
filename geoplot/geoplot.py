@@ -29,35 +29,35 @@ def pointplot(df, projection=None,
               legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
               extent=None, ax=None, **kwargs):
     """
-    Geospatial scatter plot.
+    A scatter plot, where data value(s) are represented as a coordinate point on a map.
 
     Parameters
     ----------
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        Applies a colormap to the output points.
+        The column in the dataset (or an iterable of some other data) used to color the points.
     categorical : boolean, optional
-        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
-        otherwise. Ignored if ``hue`` is left unspecified.
+        If the ``hue`` variable is categorical, set this value to ``True``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the 
+        `choropleth map classifier <https://pysal.readthedocs.io/en/v1.11.0/library/esda/mapclassify.html>`_
+        to use.
     k : int or None, optional
-        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
-        how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
-        be used.
+        If ``hue`` is specified and ``categorical`` is set to ``False``, set the number of colors
+        to use. Defaults to a continuous colormap.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_
-        to be used. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to
+        use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum. Ignored if ``hue`` is left unspecified.
+        minimum.
     vmax : float, optional
         Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum. Ignored if ``hue`` is left unspecified.
+        maximum.
     scale : str or iterable, optional
         Applies scaling to the output points. Defaults to None (no scaling).
     limits : (min, max) tuple, optional
@@ -80,7 +80,7 @@ def pointplot(df, projection=None,
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+        Control the plot x-axis and y-axis limits manually.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -100,13 +100,12 @@ def pointplot(df, projection=None,
     --------
 
     The ``pointplot`` is a `geospatial scatter plot 
-    <https://en.wikipedia.org/wiki/Scatter_plot>`_ representing each observation in your dataset
+    <https://en.wikipedia.org/wiki/Scatter_plot>`_ that represents each observation in your dataset
     with a single point. It is simple and easily interpretable plot that is nearly universally
     understood, making it an ideal choice for showing simple pointwise relationships between
     observations.
 
-    The expected input is a ``GeoDataFrame`` containing geometries of the 
-    ``shapely.geometry.Point`` type. A bare-bones pointplot goes thusly:
+    ``df`` should be a ``GeoDataFrame`` of ``shapely.geometry.Point`` geometries:
 
     .. code-block:: python
 
@@ -371,7 +370,7 @@ def polyplot(df, projection=None,
              edgecolor='black',
              facecolor='None', **kwargs):
     """
-    Trivial polygonal plot.
+    Polygons on a map.
 
     Parameters
     ----------
@@ -496,7 +495,7 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
                vmin=None, vmax=None, legend=False, legend_kwargs=None, legend_labels=None,
                extent=None, figsize=(8, 6), ax=None, **kwargs):
     """
-    Area aggregation plot.
+    A well-known area plot.
 
     Parameters
     ----------

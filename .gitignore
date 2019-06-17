@@ -2,18 +2,15 @@
 .idea/
 .ipynb_checkpoints/
 .cache/
-tests/.hypothesis/
-dependencies/
 .DS_Store
 *.pyc
 __pycache__/
-source/
-dist/
 build/
+docs/_build/
 bin/
+dist/
 geoplot.egg-info/
 tests/baseline/
 quilt_packages/
 .pytest_cache/
-# temp files
 Untitled.ipynb
