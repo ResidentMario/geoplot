@@ -1,24 +1,19 @@
-
 # This script demonstrates using the cartopy feature interface alongside geoplot.
 # For more information visit http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html.
 
-
-# Load the data (uses the `quilt` package).
 import geopandas as gpd
-from quilt.data.ResidentMario import geoplot_data
+import geoplot as gplt
+import geoplot.crs as gcrs
+import matplotlib.pyplot as plt
+import cartopy
 
-la_flights = gpd.read_file(geoplot_data.la_flights())
+# load the data
+la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
 la_flights = la_flights.assign(
     start=la_flights.geometry.map(lambda mp: mp[0]),
     end=la_flights.geometry.map(lambda mp: mp[1])
 )
 
-
-# Plot the data.
-import geoplot as gplt
-import geoplot.crs as gcrs
-import matplotlib.pyplot as plt
-import cartopy
 
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
     'projection': gcrs.Orthographic(central_latitude=40.7128, central_longitude=-74.0059)
