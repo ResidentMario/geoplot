@@ -28,5 +28,19 @@ def get_path(dataset_name):
         return f'{src}/nyc_map_pluto_sample.geojson'
     elif dataset_name == 'nyc_collisions_sample':
         return f'{src}/nyc-collisions-sample.csv'
+    elif dataset_name == 'boston_zip_codes':
+        return f'{src}/boston-zip-codes.geojson'
+    elif dataset_name == 'boston_airbnb_listings':
+        return f'{src}/boston-airbnb-listings.geojson'
+    elif dataset_name == 'napoleon_troop_movements':
+        return f'{src}/napoleon-troop-movements.geojson'
+    elif dataset_name == 'nyc_fatal_collisions':
+        return f'{src}/nyc-fatal-collisions.geojson'
+    elif dataset_name == 'nyc_injurious_collisions':
+        return f'{src}/nyc-injurious-collisions.geojson'
+    elif dataset_name == 'nyc_police_precincts':
+        return f'{src}/nyc-police-precincts.geojson'
+    elif dataset_name == 'nyc_parking_tickets':
+        return f'{src}/nyc-parking-tickets-sample.geojson'
     else:
         raise NotImplementedError

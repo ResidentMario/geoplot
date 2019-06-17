@@ -159,10 +159,3 @@ Aggplot
         :width: 500px
 
     .. _boston_airbnb_aggplot: ./examples/boston-airbnb-aggplot.html
-
-    |aggplot_collisions|_
-
-    .. |aggplot_collisions| image:: ./examples/aggplot-collisions.png
-        :width: 500px
-
-    .. _aggplot_collisions: ./examples/aggplot-collisions.html

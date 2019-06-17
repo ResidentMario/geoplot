@@ -1,17 +1,14 @@
-# Load the data (uses the `quilt` package).
-from quilt.data.ResidentMario import geoplot_data
 import geopandas as gpd
-
-listings = gpd.read_file(geoplot_data.boston_airbnb_listings())
-
-
-# Plot the data.
 import geoplot as gplt
+import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
 import mplleaflet
 
-# We're building a webmap, so we'll first create an unprojected map.
-ax = gplt.kdeplot(listings)
+# load the data
+boston_airbnb_listings = gpd.read_file(gplt.datasets.get_path('boston_airbnb_listings'))
+
+# we're building a webmap, so we'll first create an unprojected map.
+ax = gplt.kdeplot(boston_airbnb_listings)
 
 # Now we'll output this map to mplleaflet to generate our webmap. In this example we'll actually go one step further,
 # and use a non-default tile layer as well. The default mplleaflet webmap uses the default Leaflet tile service,
@@ -32,6 +29,13 @@ ax = gplt.kdeplot(listings)
 fig = plt.gcf()
 with open("boston-airbnb-kde.html", 'w') as f:
     f.write(
-        mplleaflet.fig_to_html(fig, tiles=('http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png',
-                                       'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'))
+        mplleaflet.fig_to_html(
+            fig,
+            tiles=(
+                'http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png',
+                ('Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">',
+                 'OpenStreetMap Sweden</a> &mdash; Map data &copy; ',
+                 '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>')
+            )
+        )
     )
