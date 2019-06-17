@@ -36,22 +36,21 @@ def pointplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        The projection to use.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     categorical : boolean, optional
         If the ``hue`` variable is categorical, set this value to ``True``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the 
-        `choropleth map classifier <https://pysal.readthedocs.io/en/v1.11.0/library/esda/mapclassify.html>`_
-        to use.
+        If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
-        If ``hue`` is specified and ``categorical`` is set to ``False``, set the number of colors
-        to use. Defaults to a continuous colormap.
+        If ``hue`` is specified, the number of colors to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to
-        use.
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
         minimum.
@@ -59,23 +58,23 @@ def pointplot(df, projection=None,
         Values above this level will be colored the same threshold value. Defaults to the dataset
         maximum.
     scale : str or iterable, optional
-        Applies scaling to the output points. Defaults to None (no scaling).
+        The column in the dataset (or an iterable of some other data) with which to scale output
+        points. For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits. Ignored if ``scale`` is left specified.
+        The minimum and maximum scale limits.
     scale_func : ufunc, optional
-        The function used to scale point sizes. Defaults to a linear scale. For more information
-        see `the Gallery demo <examples/usa-city-elevations.html>`_.
+        The function used to scale point sizes.
     legend : boolean, optional
-        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
-        specified.
+        Whether to include a legend.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_var : "hue" or "scale", optional
-        If both ``hue`` and ``scale`` are specified, which variable to use in the legend.
+        Which variable (``hue`` or ``scale``) to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
@@ -377,8 +376,8 @@ def polyplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     extent : None or (minx, maxx, miny, maxy), optional
         Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
@@ -502,22 +501,24 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        Applies a colormap to the output points.
+        The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     categorical : boolean, optional
         Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
         otherwise. Ignored if ``hue`` is left unspecified.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_Jenks"}, optional
-        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
         Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
         how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
         be used.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_
-        to be used. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
         minimum. Ignored if ``hue`` is left unspecified.
@@ -528,11 +529,11 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
@@ -744,12 +745,15 @@ def aggplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
-    hue : None, Series, GeoSeries, iterable, or str
-        Applies a colormap to the output shapes. Required.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
+    hue : None, Series, GeoSeries, iterable, or str, optional
+        The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to be used.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     by : iterable or str, optional
         If specified, this data grouping will be used to aggregate points into `convex hulls
         <https://en.wikipedia.org/wiki/Convex_hull>`_ or, if ``geometry`` is also specified, into polygons. If left
@@ -774,11 +778,11 @@ def aggplot(df, projection=None,
     legend : boolean, optional
         Whether or not to include a legend.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see `the Gallery demo
-        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information see `the Gallery demo
-        <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
@@ -1083,34 +1087,37 @@ def cartogram(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     scale : str or iterable, optional
-        Applies scaling to the output points. Defaults to None (no scaling).
+        The column in the dataset (or an iterable of some other data) with which to scale output
+        points. For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits. Ignored if ``scale`` is left specified.
+        The minimum and maximum scale limits.
     scale_func : ufunc, optional
-        The function used to scale point sizes. Defaults to a linear scale. For more information
-        see `the Gallery demo <examples/usa-city-elevations.html>`_.
+        The function used to scale point sizes.
     trace : boolean, optional
         Whether or not to include a trace of the polygon's original outline in the plot result.
     trace_kwargs : dict, optional
         If ``trace`` is set to ``True``, this parameter can be used to adjust the properties of the
         trace outline. This parameter is ignored if trace is ``False``.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        Applies a colormap to the output points.
+        The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     categorical : boolean, optional
         Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
         otherwise. Ignored if ``hue`` is left unspecified.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_Jenks"}, optional
-        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
         Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
         how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
         be used.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_
-        to be used. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
         minimum. Ignored if ``hue`` is left unspecified.
@@ -1121,11 +1128,11 @@ def cartogram(df, projection=None,
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
@@ -1385,8 +1392,8 @@ def kdeplot(df, projection=None,
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     clip : None or iterable or GeoSeries, optional
         If specified, the ``kdeplot`` output will be clipped to the boundaries of this geometry.
     extent : None or (minx, maxx, miny, maxy), optional
@@ -1557,8 +1564,8 @@ def sankey(*args, projection=None,
         The data being plotted. This parameter is optional - it is not needed if ``start`` and
         ``end`` (and ``hue``, if provided) are iterables.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     start : str or iterable
         A list of starting points. This parameter is required.
     end : str or iterable
@@ -1571,19 +1578,21 @@ def sankey(*args, projection=None,
         `great circle distance <https://en.wikipedia.org/wiki/Great-circle_distance>`_—the true
         shortest path on the surface of the Earth.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        Applies a colormap to the output points.
+        The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     categorical : boolean, optional
         Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
         otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
         Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
         how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
         be used.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_
-        to be used. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
         minimum. Ignored if ``hue`` is left unspecified.
@@ -1591,23 +1600,24 @@ def sankey(*args, projection=None,
         Values above this level will be colored the same threshold value. Defaults to the dataset
         maximum. Ignored if ``hue`` is left unspecified.
     scale : str or iterable, optional
-        Applies scaling to the output points. Defaults to None (no scaling).
+        The column in the dataset (or an iterable of some other data) with which to scale output
+        points. For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits. Ignored if ``scale`` is left specified.
+        The minimum and maximum scale limits.
     scale_func : ufunc, optional
-        The function used to scale point sizes. Defaults to a linear scale. For more information
-        see `the Gallery demo <examples/usa-city-elevations.html>`_.
+        The function used to scale point sizes.
     legend : boolean, optional
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_var : "hue" or "scale", optional
-        If both ``hue`` and ``scale`` are specified, which variable to use in the legend.
+        Which variable (``hue`` or ``scale``) to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
@@ -2024,22 +2034,24 @@ def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
-        A geographic projection. For more information refer to `the tutorial page on projections
-        <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb>`_.
+        The projection to use. For reference see
+        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
-        Applies a colormap to the output points.
+        The column in the dataset (or an iterable of some other data) used to color the points.
+        For reference see
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     categorical : boolean, optional
         Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
         otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        Controls how the colormap bin edges are determined. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
         Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
         how many colors to use (5 is the default). If set to ``None``, a continuous colormap
         will be used.
     cmap : matplotlib color, optional
-        The `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_
-        to be used. Ignored if ``hue`` is left unspecified.
+        If ``hue`` is specified, the
+        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     vmin : float, optional
         Values below this level will be colored the same threshold value. Defaults to the dataset
         minimum. Ignored if ``hue`` is left unspecified.
@@ -2050,11 +2062,11 @@ def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For more information see
-        `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The values to use in the legend. Defaults to equal intervals. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For more information
-        see `the Gallery demo <https://residentmario.github.io/geoplot/examples/largest-cities-usa.html>`_.
+        The names to use in the legend. Defaults to the variable values. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
