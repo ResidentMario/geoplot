@@ -3,23 +3,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>geoplot.aggplot &#8212; geoplot 0.2.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>geoplot.aggplot &#8212; geoplot 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -31,8 +23,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -45,7 +36,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           geoplot</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.3.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -64,7 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a></li>
 </ul>
 </ul>
 </li>
@@ -122,53 +113,49 @@
 <h1>geoplot.aggplot<a class="headerlink" href="#geoplot-aggplot" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="geoplot.aggplot">
-<code class="descclassname">geoplot.</code><code class="descname">aggplot</code><span class="sig-paren">(</span><em>df</em>, <em>projection=None</em>, <em>hue=None</em>, <em>by=None</em>, <em>geometry=None</em>, <em>nmax=None</em>, <em>nmin=None</em>, <em>nsig=0</em>, <em>agg=&lt;function mean&gt;</em>, <em>cmap='viridis'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>legend=True</em>, <em>legend_kwargs=None</em>, <em>extent=None</em>, <em>figsize=(8</em>, <em>6)</em>, <em>ax=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">aggplot</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">by=None</em>, <em class="sig-param">geometry=None</em>, <em class="sig-param">nmax=None</em>, <em class="sig-param">nmin=None</em>, <em class="sig-param">nsig=0</em>, <em class="sig-param">agg=&lt;function mean&gt;</em>, <em class="sig-param">cmap='viridis'</em>, <em class="sig-param">vmin=None</em>, <em class="sig-param">vmax=None</em>, <em class="sig-param">legend=True</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.aggplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Self-aggregating quadtree plot.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</li>
-<li><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb">the tutorial page on projections</a>.</li>
-<li><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em>) – Applies a colormap to the output shapes. Required.</li>
-<li><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a> to be used.</li>
-<li><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – If specified, this data grouping will be used to aggregate points into <a class="reference external" href="https://en.wikipedia.org/wiki/Convex_hull">convex hulls</a> or, if <code class="docutils literal"><span class="pre">geometry</span></code> is also specified, into polygons. If left
-unspecified the data will be aggregated using a <a class="reference external" href="https://en.wikipedia.org/wiki/Quadtree">quadtree</a>.</li>
-<li><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – A list of polygons to be used for spatial aggregation. Optional. See <code class="docutils literal"><span class="pre">by</span></code>.</li>
-<li><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the maximum number of observations in a quadrangle.
-If left unspecified, there is no maximum size.</li>
-<li><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle.
-If left unspecified, there is no minimum size.</li>
-<li><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle
-deemed significant. Insignificant quadrangles are removed from the plot. Defaults to 0 (empty patches).</li>
-<li><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) – The aggregation func used for the colormap. Defaults to <code class="docutils literal"><span class="pre">np.mean</span></code>.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – Values below this level will be colored the same threshold value. Defaults to the dataset minimum.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – Values above this level will be colored the same threshold value. Defaults to the dataset maximum.</li>
-<li><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend.</li>
-<li><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The values to use in the legend. Defaults to equal intervals. For more information see <a class="reference external" href="https://residentmario.github.io/geoplot/examples/largest-cities-usa.html">the Gallery demo</a>.</li>
-<li><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>The names to use in the legend. Defaults to the variable values. For more information see <a class="reference external" href="https://residentmario.github.io/geoplot/examples/largest-cities-usa.html">the Gallery demo</a>.</p>
-</li>
-<li><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to <a class="reference external" href="http://matplotlib.org/users/legend_guide.html">the underlying legend</a>.</li>
-<li><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – Used to control plot x-axis and y-axis limits manually.</li>
-<li><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.</li>
-<li><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance. Defaults to a new axis.</li>
-<li><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
+<li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – A geographic projection. For more information refer to <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Projections.ipynb">the tutorial page on projections</a>.</p></li>
+<li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em>) – Applies a colormap to the output shapes. Required.</p></li>
+<li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – The <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a> to be used.</p></li>
+<li><p><strong>by</strong> (<em>iterable</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – If specified, this data grouping will be used to aggregate points into <a class="reference external" href="https://en.wikipedia.org/wiki/Convex_hull">convex hulls</a> or, if <code class="docutils literal notranslate"><span class="pre">geometry</span></code> is also specified, into polygons. If left
+unspecified the data will be aggregated using a <a class="reference external" href="https://en.wikipedia.org/wiki/Quadtree">quadtree</a>.</p></li>
+<li><p><strong>geometry</strong> (<em>GeoDataFrame</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – A list of polygons to be used for spatial aggregation. Optional. See <code class="docutils literal notranslate"><span class="pre">by</span></code>.</p></li>
+<li><p><strong>nmax</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the maximum number of observations in a quadrangle.
+If left unspecified, there is no maximum size.</p></li>
+<li><p><strong>nmin</strong> (<em>int</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle.
+If left unspecified, there is no minimum size.</p></li>
+<li><p><strong>nsig</strong> (<em>int</em><em>, </em><em>optional</em>) – Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle
+deemed significant. Insignificant quadrangles are removed from the plot. Defaults to 0 (empty patches).</p></li>
+<li><p><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) – The aggregation func used for the colormap. Defaults to <code class="docutils literal notranslate"><span class="pre">np.mean</span></code>.</p></li>
+<li><p><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – Values below this level will be colored the same threshold value. Defaults to the dataset minimum.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em><em>, </em><em>optional</em>) – Values above this level will be colored the same threshold value. Defaults to the dataset maximum.</p></li>
+<li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a legend.</p></li>
+<li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The values to use in the legend. Defaults to equal intervals. For more information see <a class="reference external" href="https://residentmario.github.io/geoplot/examples/largest-cities-usa.html">the Gallery demo</a>.</p></li>
+<li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – <p>The names to use in the legend. Defaults to the variable values. For more information see <a class="reference external" href="https://residentmario.github.io/geoplot/examples/largest-cities-usa.html">the Gallery demo</a>.</p>
+</p></li>
+<li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to <a class="reference external" href="http://matplotlib.org/users/legend_guide.html">the underlying legend</a>.</p></li>
+<li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>minx</em><em>, </em><em>maxx</em><em>, </em><em>miny</em><em>, </em><em>maxy</em><em>)</em><em>, </em><em>optional</em>) – Used to control plot x-axis and y-axis limits manually.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – An (x, y) tuple passed to <code class="docutils literal notranslate"><span class="pre">matplotlib.figure</span></code> which sets the size, in inches, of the resultant plot.</p></li>
+<li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – A <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code> instance. Defaults to a new axis.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The plot axis</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">AxesSubplot</span></code> or <code class="docutils literal"><span class="pre">GeoAxesSubplot</span></code></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The plot axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">GeoAxesSubplot</span></code></p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <p>This plot type accepts any geometry, including mixtures of polygons and points, averages the value of a certain
 data parameter at their centroids, and plots the result, using a colormap is the visual variable.</p>
-<p>For the purposes of comparison, this library’s <code class="docutils literal"><span class="pre">choropleth</span></code> function takes some sort of data as input,
+<p>For the purposes of comparison, this library’s <code class="docutils literal notranslate"><span class="pre">choropleth</span></code> function takes some sort of data as input,
 polygons as geospatial context, and combines themselves into a colorful map. This is useful if, for example,
 you have data on the amount of crimes committed per neighborhood, and you want to plot that.</p>
 <p>But suppose your original dataset came in terms of individual observations - instead of “n collisions happened
@@ -176,65 +163,65 @@ in this neighborhood”, you have “one collision occured at this specific coor
 This is obviously more useful data - it can be made to do more things - but in order to generate the same map,
 you will first have to do all of the work of geolocating your points to neighborhoods (not trivial),
 then aggregating them (by, in this case, taking a count).</p>
-<p><code class="docutils literal"><span class="pre">aggplot</span></code> handles this work for you. It takes input in the form of observations, and outputs as useful as
+<p><code class="docutils literal notranslate"><span class="pre">aggplot</span></code> handles this work for you. It takes input in the form of observations, and outputs as useful as
 possible a visualization of their “regional” statistics. What a “region” corresponds to depends on how much
 geospatial information you can provide.</p>
-<p>If you can’t provide <em>any</em> geospatial context, <code class="docutils literal"><span class="pre">aggplot</span></code> will output what’s known as a quadtree: it will break
+<p>If you can’t provide <em>any</em> geospatial context, <code class="docutils literal notranslate"><span class="pre">aggplot</span></code> will output what’s known as a quadtree: it will break
 your data down into recursive squares, and use them to aggregate the data. This is a very experimental format,
 is very fiddly to make, and has not yet been optimized for speed; but it provides a useful baseline which
 requires no additional work and can be used to expose interesting geospatial correlations right away. And,
 if you have enough observations, it can be <a class="reference external" href="../figures/aggplot/aggplot-initial.png">a pretty good approximation</a> (collisions in New York City pictured).</p>
-<p>Our first few examples are of just such figures. A simple <code class="docutils literal"><span class="pre">aggplot</span></code> quadtree can be generated with just a
+<p>Our first few examples are of just such figures. A simple <code class="docutils literal notranslate"><span class="pre">aggplot</span></code> quadtree can be generated with just a
 dataset, a data column of interest, and, optionally, a projection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-initial.png" src="_images/aggplot-initial.png" />
-<p>To get the best output, you often need to tweak the <code class="docutils literal"><span class="pre">nmin</span></code> and <code class="docutils literal"><span class="pre">nmax</span></code> parameters, controlling the minimum and
+<p>To get the best output, you often need to tweak the <code class="docutils literal notranslate"><span class="pre">nmin</span></code> and <code class="docutils literal notranslate"><span class="pre">nmax</span></code> parameters, controlling the minimum and
 maximum number of observations per box, respectively, yourself. In this case we’ll also choose a different
-<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a>, using the <code class="docutils literal"><span class="pre">cmap</span></code>
+<a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">matplotlib colormap</a>, using the <code class="docutils literal notranslate"><span class="pre">cmap</span></code>
 parameter.</p>
-<p><code class="docutils literal"><span class="pre">aggplot</span></code> will satisfy the <code class="docutils literal"><span class="pre">nmax</span></code> parameter before trying to satisfy <code class="docutils literal"><span class="pre">nmin</span></code>, so you may result in spaces
+<p><code class="docutils literal notranslate"><span class="pre">aggplot</span></code> will satisfy the <code class="docutils literal notranslate"><span class="pre">nmax</span></code> parameter before trying to satisfy <code class="docutils literal notranslate"><span class="pre">nmin</span></code>, so you may result in spaces
 without observations, or ones lacking a statistically significant number of observations. This is necessary in
 order to break up “spaces” that the algorithm would otherwise end on. You can control the maximum number of
-observations in the blank spaces using the <code class="docutils literal"><span class="pre">nsig</span></code> parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
+observations in the blank spaces using the <code class="docutils literal notranslate"><span class="pre">nsig</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;LATDEP&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-quadtree-tuned.png" src="_images/aggplot-quadtree-tuned.png" />
 <p>You’ll have to play around with these parameters to get the clearest picture.</p>
 <p>Usually, however, observations with a geospatial component will be provided with some form of spatial
 categorization. In the case of our collisions example, this comes in the form of a postal zip code. With the
-simple addition of this data column via the <code class="docutils literal"><span class="pre">by</span></code> parameter, our output changes radically, taking advantage of
+simple addition of this data column via the <code class="docutils literal notranslate"><span class="pre">by</span></code> parameter, our output changes radically, taking advantage of
 the additional context we now have to sort and aggregate our observations by (hopefully) geospatially
 meaningful, if still crude, grouped convex hulls.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-hulls.png" src="_images/aggplot-hulls.png" />
 <p>Finally, suppose you actually know exactly the geometries that you would like to aggregate by. Provide these in
-the form of a <code class="docutils literal"><span class="pre">geopandas</span></code> <code class="docutils literal"><span class="pre">GeoSeries</span></code>, one whose index matches the values in your <code class="docutils literal"><span class="pre">by</span></code> column (so
-<code class="docutils literal"><span class="pre">BROOKLYN</span></code> matches <code class="docutils literal"><span class="pre">BROOKLYN</span></code> for example), to the <code class="docutils literal"><span class="pre">geometry</span></code> parameter. Your output will now be an
+the form of a <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> <code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code>, one whose index matches the values in your <code class="docutils literal notranslate"><span class="pre">by</span></code> column (so
+<code class="docutils literal notranslate"><span class="pre">BROOKLYN</span></code> matches <code class="docutils literal notranslate"><span class="pre">BROOKLYN</span></code> for example), to the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> parameter. Your output will now be an
 ordinary choropleth.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
              <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-by.png" src="_images/aggplot-by.png" />
 <p>Observations will be aggregated by average, by default. In our example case, our plot shows that accidents in
 Manhattan tend to result in significantly fewer injuries than accidents occuring in other boroughs. Specify an
-alternative aggregation using the <code class="docutils literal"><span class="pre">agg</span></code> parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+alternative aggregation using the <code class="docutils literal notranslate"><span class="pre">agg</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
          <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="_images/aggplot-agg.png" src="_images/aggplot-agg.png" />
-<p><code class="docutils literal"><span class="pre">legend</span></code> toggles the legend. Additional keyword arguments for styling the <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">colorbar</a> legend are passed using <code class="docutils literal"><span class="pre">legend_kwargs</span></code>. Other additional keyword
-arguments are passed to the underlying <code class="docutils literal"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon</a> instances.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+<p><code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend. Additional keyword arguments for styling the <a class="reference external" href="http://matplotlib.org/api/colorbar_api.html">colorbar</a> legend are passed using <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code>. Other additional keyword
+arguments are passed to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon</a> instances.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">aggplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
              <span class="n">geometry</span><span class="o">=</span><span class="n">boroughs_2</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
              <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">})</span>
 </pre></div>
@@ -256,8 +243,8 @@ arguments are passed to the underlying <code class="docutils literal"><span clas
       
     </p>
     <p>
-        &copy; Copyright 2016-2018, Aleksey Bilogur.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+        &copy; Copyright 2016-2019, Aleksey Bilogur.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.<br/>
     </p>
   </div>
 </footer>

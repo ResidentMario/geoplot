@@ -67,7 +67,7 @@ or the `API Reference <./api.html>`_ to see how to do it. For help installing, c
    installing
    gallery
    api
-   tutorials
+   guides
 
 .. raw:: html
     </div>
