@@ -23,11 +23,13 @@ except ImportError:
 __version__ = "0.2.4"
 
 
-def pointplot(df, projection=None,
-              hue=None, categorical=False, scheme=None, k=5, cmap='Set1', vmin=None, vmax=None,
-              scale=None, limits=(0.5, 2), scale_func=None, legend=False, legend_values=None,
-              legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
-              extent=None, ax=None, **kwargs):
+def pointplot(
+    df, projection=None,
+    hue=None, categorical=False, scheme=None, k=5, cmap='Set1',
+    scale=None, limits=(0.5, 2), scale_func=None, legend=False, legend_values=None,
+    legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
+    extent=None, ax=None, **kwargs
+):
     """
     A scatter plot, where data value(s) are represented as a coordinate point on a map.
 
@@ -51,12 +53,6 @@ def pointplot(df, projection=None,
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For reference see
@@ -286,7 +282,7 @@ def pointplot(df, projection=None,
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap, vmin, vmax
+                categorical, hue, scheme, k, cmap
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
 
@@ -302,7 +298,7 @@ def pointplot(df, projection=None,
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(hue_values, cmap)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
         # Add a legend, if appropriate.
@@ -363,11 +359,13 @@ def pointplot(df, projection=None,
     return ax
 
 
-def polyplot(df, projection=None,
-             extent=None,
-             figsize=(8, 6), ax=None,
-             edgecolor='black',
-             facecolor='None', **kwargs):
+def polyplot(
+    df, projection=None,
+    extent=None,
+    figsize=(8, 6), ax=None,
+    edgecolor='black',
+    facecolor='None', **kwargs
+):
     """
     Polygons on a map.
 
@@ -490,9 +488,11 @@ def polyplot(df, projection=None,
     return ax
 
 
-def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', categorical=False,
-               vmin=None, vmax=None, legend=False, legend_kwargs=None, legend_labels=None,
-               extent=None, figsize=(8, 6), ax=None, **kwargs):
+def choropleth(
+    df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', categorical=False,
+    legend=False, legend_kwargs=None, legend_labels=None,
+    extent=None, figsize=(8, 6), ax=None, **kwargs
+):
     """
     A well-known area plot.
 
@@ -519,12 +519,6 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum. Ignored if ``hue`` is left unspecified.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum. Ignored if ``hue`` is left unspecified.
     legend : boolean, optional
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
@@ -689,7 +683,7 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap, vmin, vmax
+                categorical, hue, scheme, k, cmap
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
 
@@ -701,7 +695,7 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(hue_values, cmap)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
         # Add a legend, if appropriate.
@@ -726,17 +720,13 @@ def choropleth(df, projection=None, hue=None, scheme=None, k=5, cmap='Set1', cat
     return ax
 
 
-def aggplot(df, projection=None,
-            hue=None,
-            by=None,
-            geometry=None,
-            nmax=None, nmin=None, nsig=0,
-            agg=np.mean,
-            cmap='viridis', vmin=None, vmax=None,
-            legend=True, legend_kwargs=None,
-            extent=None,
-            figsize=(8, 6), ax=None,
-            **kwargs):
+def aggplot(
+    df, projection=None,
+    hue=None, by=None, geometry=None, nmax=None, nmin=None, nsig=0, agg=np.mean,
+    cmap='viridis',
+    legend=True, legend_kwargs=None,
+    extent=None, figsize=(8, 6), ax=None, **kwargs
+):
     """
     Self-aggregating quadtree plot.
 
@@ -771,10 +761,6 @@ def aggplot(df, projection=None,
         deemed significant. Insignificant quadrangles are removed from the plot. Defaults to 0 (empty patches).
     agg : function, optional
         The aggregation func used for the colormap. Defaults to ``np.mean``.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset minimum.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset maximum.
     legend : boolean, optional
         Whether or not to include a legend.
     legend_values : list, optional
@@ -1007,7 +993,7 @@ def aggplot(df, projection=None,
         values = np.array(values)[sorted_indices]
 
         # Generate a colormap.
-        cmap = _continuous_colormap(values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(values, cmap)
         colors = [cmap.to_rgba(value) for value in values]
 
         #  Draw.
@@ -1050,7 +1036,7 @@ def aggplot(df, projection=None,
 
         # Generate colormap.
         values = [agg(p.data[hue_col]) for p in partitions if p.n > nsig]
-        cmap = _continuous_colormap(values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(values, cmap)
 
         for p in partitions:
             xmin, xmax, ymin, ymax = p.bounds
@@ -1074,11 +1060,13 @@ def aggplot(df, projection=None,
     return ax
 
 
-def cartogram(df, projection=None,
-              scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
-              hue=None, categorical=False, scheme=None, k=5, cmap='viridis', vmin=None, vmax=None,
-              legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
-              legend_var="scale", extent=None, figsize=(8, 6), ax=None, **kwargs):
+def cartogram(
+    df, projection=None,
+    scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
+    hue=None, categorical=False, scheme=None, k=5, cmap='viridis',
+    legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
+    legend_var="scale", extent=None, figsize=(8, 6), ax=None, **kwargs
+):
     """
     Self-scaling area plot.
 
@@ -1118,12 +1106,6 @@ def cartogram(df, projection=None,
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum. Ignored if ``hue`` is left unspecified.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum. Ignored if ``hue`` is left unspecified.
     legend : boolean, optional
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
@@ -1312,7 +1294,7 @@ def cartogram(df, projection=None,
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap, vmin, vmax
+                categorical, hue, scheme, k, cmap,
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
 
@@ -1324,7 +1306,7 @@ def cartogram(df, projection=None,
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(hue_values, cmap,)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
         # Add a legend, if appropriate.
@@ -1379,11 +1361,7 @@ def cartogram(df, projection=None,
     return ax
 
 
-def kdeplot(df, projection=None,
-            extent=None,
-            figsize=(8, 6), ax=None,
-            clip=None,
-            **kwargs):
+def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, **kwargs):
     """
     Spatial kernel density estimate plot.
 
@@ -1550,11 +1528,13 @@ def kdeplot(df, projection=None,
     return ax
 
 
-def sankey(*args, projection=None,
-           start=None, end=None, path=None, hue=None, categorical=False, scheme=None, k=5,
-           cmap='viridis', vmin=None, vmax=None, legend=False, legend_kwargs=None,
-           legend_labels=None, legend_values=None, legend_var=None, extent=None, figsize=(8, 6),
-           ax=None, scale=None, limits=(1, 5), scale_func=None, **kwargs):
+def sankey(
+    *args, projection=None,
+    start=None, end=None, path=None, hue=None, categorical=False, scheme=None, k=5,
+    cmap='viridis', legend=False, legend_kwargs=None,
+    legend_labels=None, legend_values=None, legend_var=None, extent=None, figsize=(8, 6),
+    ax=None, scale=None, limits=(1, 5), scale_func=None, **kwargs
+):
     """
     Spatial Sankey or flow map.
 
@@ -1593,12 +1573,6 @@ def sankey(*args, projection=None,
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum. Ignored if ``hue`` is left unspecified.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum. Ignored if ``hue`` is left unspecified.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For reference see
@@ -1919,7 +1893,7 @@ def sankey(*args, projection=None,
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap, vmin, vmax
+                categorical, hue, scheme, k, cmap,
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
 
@@ -1935,7 +1909,7 @@ def sankey(*args, projection=None,
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(hue_values, cmap)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
         # Add a legend, if appropriate.
@@ -2022,10 +1996,12 @@ def sankey(*args, projection=None,
     return ax
 
 
-def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=None, k=5,
-            cmap='viridis', categorical=False, vmin=None, vmax=None, legend=False,
-            legend_kwargs=None, legend_labels=None, extent=None, figsize=(8, 6), ax=None,
-            **kwargs):
+def voronoi(
+    df, projection=None, edgecolor='black', clip=None, hue=None, scheme=None, k=5,
+    cmap='viridis', categorical=False, legend=False,
+    legend_kwargs=None, legend_labels=None, extent=None, figsize=(8, 6), ax=None,
+    **kwargs
+):
     """
     Geospatial Voronoi diagram.
 
@@ -2052,12 +2028,6 @@ def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    vmin : float, optional
-        Values below this level will be colored the same threshold value. Defaults to the dataset
-        minimum. Ignored if ``hue`` is left unspecified.
-    vmax : float, optional
-        Values above this level will be colored the same threshold value. Defaults to the dataset
-        maximum. Ignored if ``hue`` is left unspecified.
     legend : boolean, optional
         Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
         specified.
@@ -2227,7 +2197,7 @@ def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap, vmin, vmax
+                categorical, hue, scheme, k, cmap
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
 
@@ -2237,7 +2207,7 @@ def voronoi(df, projection=None, edgecolor='black', clip=None, hue=None, scheme=
     elif k is None and hue is not None:
         # Continuous colormap code path.
         hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap, vmin, vmax)
+        cmap = _continuous_colormap(hue_values, cmap)
         colors = [cmap.to_rgba(v) for v in hue_values]
 
     elif 'facecolor' in kwargs:
@@ -2462,7 +2432,7 @@ def _validate_hue(df, hue):
         return gpd.GeoSeries(hue)
 
 
-def _continuous_colormap(hue, cmap, vmin, vmax):
+def _continuous_colormap(hue, cmap):
     """
     Creates a continuous colormap.
 
@@ -2474,16 +2444,6 @@ def _continuous_colormap(hue, cmap, vmin, vmax):
         all preprocessed to standardized iterables before this method is called.
     cmap : ``matplotlib.cm`` instance
         The `matplotlib` colormap instance which will be used to colorize the geometries.
-    vmin : float
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data
-        column entries whose value is below this level will all be colored by the same threshold
-        value. The value for this variable is meant to be inherited from the top-level variable of
-        the same name.
-    vmax : float
-        A strict ceiling on the value associated with the "top" of the colormap spectrum. Data
-        column entries whose value is above this level will all be colored by the same threshold
-        value. The value for this variable is meant to be inherited from the top-level variable of
-        the same name.
 
     Returns
     -------
@@ -2491,13 +2451,13 @@ def _continuous_colormap(hue, cmap, vmin, vmax):
         A normalized scalar version of the input ``cmap`` which has been fitted to the data and
         inputs.
     """
-    mn = min(hue) if vmin is None else vmin
-    mx = max(hue) if vmax is None else vmax
+    mn = min(hue)
+    mx = max(hue)
     norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
     return mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
 
 
-def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
+def _discrete_colorize(categorical, hue, scheme, k, cmap):
     """
     Creates a discrete colormap, either using an already-categorical data variable or by bucketing
     a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
@@ -2522,14 +2482,6 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
     cmap : ``matplotlib.cm`` instance
         The `matplotlib` colormap instance which will be used to colorize the geometries. This
         colormap determines the spectrum; our algorithm determines the cuts.
-    vmin : float
-        A strict floor on the value associated with the "bottom" of the colormap spectrum. Data
-        column entries whose value is below this level will all be colored by the same threshold
-        value.
-    vmax : float
-        A strict cealing on the value associated with the "bottom" of the colormap spectrum. Data
-        column entries whose value is above this level will all be colored by the same threshold
-        value.
 
     Returns
     -------
@@ -2552,7 +2504,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap, vmin, vmax):
             )
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
-    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm, vmin=vmin, vmax=vmax)
+    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
     return cmap, categories, values
 
 
@@ -2876,13 +2828,13 @@ def _build_voronoi_polygons(df):
 # COMPATIBILITY SHIMS #
 #######################
 
-def _norm_cmap(values, cmap, normalize, cm, vmin=None, vmax=None):
+def _norm_cmap(values, cmap, normalize, cm):
     """
     Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.
     """
 
-    mn = min(values) if vmin is None else vmin
-    mx = max(values) if vmax is None else vmax
+    mn = min(values)
+    mx = max(values)
     norm = normalize(vmin=mn, vmax=mx)
     n_cmap = cm.ScalarMappable(norm=norm, cmap=cmap)
     return n_cmap
