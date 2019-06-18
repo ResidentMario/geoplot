@@ -228,7 +228,7 @@ def pointplot(
 
     """
     # Initialize the figure, if one hasn't been initialized already.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
@@ -424,7 +424,7 @@ def polyplot(
     .. image:: ../figures/polyplot/polyplot-kwargs.png
     """
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     if projection:
         # Properly set up the projection.
@@ -624,7 +624,7 @@ def choropleth(
     .. image:: ../figures/choropleth/choropleth-scheme.png
     """
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     if projection:
         projection = projection.load(df, {
@@ -874,7 +874,7 @@ def aggplot(
 
     .. image:: ../figures/aggplot/aggplot-legend-kwargs.png
     """
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     # Set up projection.
     if projection:
@@ -1214,7 +1214,7 @@ def cartogram(
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     # Load the projection.
     if projection:
@@ -1437,7 +1437,7 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
     import seaborn as sns  # Immediately fail if no seaborn.
 
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     # Necessary prior.
     xs = np.array([p.x for p in df.geometry])
@@ -1818,7 +1818,7 @@ def sankey(
         n = len(path_geoms)
 
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     # Load the projection.
     if projection:
@@ -2117,7 +2117,7 @@ def voronoi(
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
     # Initialize the figure.
-    fig = _init_figure(ax, figsize)
+    _init_figure(ax, figsize)
 
     if projection:
         # Properly set up the projection.
@@ -2379,7 +2379,7 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure
 
     # Paint patches.
     patches = []
-    for value, cat in enumerate(categories):
+    for value, _ in enumerate(categories):
         patches.append(
             mpl.lines.Line2D(
                 [0], [0], linestyle="none",
