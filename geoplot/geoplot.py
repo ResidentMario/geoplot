@@ -260,15 +260,12 @@ def pointplot(
     if len(df.geometry) == 0:
         return ax
 
-    # Validate hue input.
-    hue = _validate_hue(df, hue)
+    # Parse hue and scale inputs.
+    hue = _to_geoseries(df, hue)
+    scalar_values = _to_geoseries(df, scale)
 
     # Set legend variable.
-    if legend_var is None:
-        if hue is not None:
-            legend_var = "hue"
-        elif scale is not None:
-            legend_var = "scale"
+    legend_var = _set_legend_var(legend_var, hue, scale)
 
     # Generate the coloring information, if needed. Follows one of two schemes, 
     # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
@@ -303,12 +300,7 @@ def pointplot(
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale:
-        if isinstance(scale, str):
-            scalar_values = df[scale]
-        else:
-            scalar_values = scale
-
+    if scale is not None:
         # Compute a scale function.
         dmin, dmax = np.min(scalar_values), np.max(scalar_values)
         if not scale_func:
@@ -661,7 +653,7 @@ def choropleth(
     _set_extent(ax, projection, extent, extrema)
 
     # Format the data to be displayed for input.
-    hue = _validate_hue(df, hue)
+    hue = _to_geoseries(df, hue)
     if hue is None:
         raise ValueError("No 'hue' specified.")
 
@@ -912,7 +904,7 @@ def aggplot(
     # Validate hue.
     if not isinstance(hue, str):
         hue_col = hash(str(hue))
-        df[hue_col] = _validate_hue(df, hue)
+        df[hue_col] = _to_geoseries(df, hue)
     else:
         hue_col = hue
 
@@ -1252,13 +1244,11 @@ def cartogram(
     extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
     _set_extent(ax, projection, extent, extrema)
 
-    # Check that the ``scale`` parameter is filled, and use it to fill a ``values`` name.
+    # Standardize hue and scale input.
+    hue = _to_geoseries(df, hue)
     if not scale:
         raise ValueError("No scale parameter provided.")
-    elif isinstance(scale, str):
-        values = df[scale]
-    else:
-        values = scale
+    values = _to_geoseries(df, scale)
 
     # Compute a scale function.
     dmin, dmax = np.min(values), np.max(values)
@@ -1271,9 +1261,6 @@ def cartogram(
     # Create a legend, if appropriate.
     if legend:
         _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
-
-    # Validate hue input.
-    hue = _validate_hue(df, hue)
 
     # Generate the coloring information, if needed. Follows one of two schemes,
     # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
@@ -1794,11 +1781,7 @@ def sankey(
         points = None
 
     # Set legend variable.
-    if legend_var is None:
-        if scale is not None:
-            legend_var = "scale"
-        elif hue is not None:
-            legend_var = "hue"
+    legend_var = _set_legend_var(legend_var, hue, scale)
 
     # After validating the inputs, we are in one of two modes:
     # (1) Projective mode. In this case ``path_geoms`` is None, while ``points`` contains a
@@ -1874,7 +1857,7 @@ def sankey(
         # Categorical colormap code path.
         categorical, scheme = _validate_buckets(hue, scheme)
 
-        hue = _validate_hue(df, hue)
+        hue = _to_geoseries(df, hue)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1902,11 +1885,8 @@ def sankey(
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale:
-        if isinstance(scale, str):
-            scalar_values = df[scale]
-        else:
-            scalar_values = scale
+    if scale is not None:
+        scalar_values = _to_geoseries(df, scale)
 
         # Compute a scale function.
         dmin, dmax = np.min(scalar_values), np.max(scalar_values)
@@ -2167,7 +2147,7 @@ def voronoi(
     _set_extent(ax, projection, extent, extrema)
 
     # Validate hue input.
-    hue = _validate_hue(df, hue)
+    hue = _to_geoseries(df, hue)
 
     # Generate the coloring information, if needed. Follows one of two schemes,
     # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
@@ -2380,26 +2360,24 @@ def _lay_out_axes(ax, projection):
         plt.gca().axison = False
 
 
-def _validate_hue(df, hue):
+def _set_legend_var(legend_var, hue, scale):
+    """
+    Given ``hue`` and ``scale`` variables with mixed validity, returns the correct 
+    ``legend_var``.
+    """
+    if legend_var is None:
+        if hue is not None:
+            legend_var = "hue"
+        elif scale is not None:
+            legend_var = "scale"
+    return legend_var
+
+
+def _to_geoseries(df, hue):
     """
     The top-level ``hue`` parameter present in most plot types accepts a variety of input types.
     This method condenses this variety into a single preferred format---an iterable---which is
     expected by all submethods working with the data downstream of it.
-
-    Parameters
-    ----------
-    df : GeoDataFrame
-        The full data input, from which standardized ``hue`` information may need to be extracted.
-    hue : Series, GeoSeries, iterable, str
-        The data column whose entries are being discretely colorized, as (loosely) passed by the
-        top-level ``hue`` variable.
-    required : boolean
-        Whether or not this parameter is required for the plot in question.
-
-    Returns
-    -------
-    hue : GeoSeries
-        The ``hue`` parameter input as a GeoSeries.
     """
     if hue is None:
         return None
@@ -2413,21 +2391,6 @@ def _validate_hue(df, hue):
 def _continuous_colormap(hue, cmap):
     """
     Creates a continuous colormap.
-
-    Parameters
-    ----------
-    hue : iterable
-        The data column whose entries are being discretely colorized. Note that although top-level
-        plotter ``hue`` parameters ingest many argument signatures, not just iterables, they are
-        all preprocessed to standardized iterables before this method is called.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the geometries.
-
-    Returns
-    -------
-    cmap : ``mpl.cm.ScalarMappable`` instance
-        A normalized scalar version of the input ``cmap`` which has been fitted to the data and
-        inputs.
     """
     mn = min(hue)
     mx = max(hue)
@@ -2639,7 +2602,7 @@ def _validate_buckets(hue, scheme):
     (categorical, k, scheme) : tuple
         A possibly modified input tuple meant for further processing.
     """
-    categorical = (hue.dtype == np.dtype('object'))
+    categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
 
