@@ -18,7 +18,6 @@ gplt.sankey(
     start='from', end='to',
     scale='survivors', limits=(0.5, 45),
     hue='direction',
-    categorical=True,
     cmap=cm
 )
 fig = plt.gcf()
