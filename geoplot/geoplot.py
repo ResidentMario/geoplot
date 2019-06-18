@@ -703,11 +703,10 @@ def choropleth(
     return ax
 
 
-def aggplot(
+def quadtree(
     df, projection=None,
-    hue=None, by=None, geometry=None, nmax=None, nmin=None, nsig=0, agg=np.mean,
-    cmap='viridis',
-    legend=True, legend_kwargs=None,
+    hue=None, nmax=None, nmin=None, nsig=0, agg=np.mean,
+    cmap='viridis', legend=True, legend_kwargs=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -727,21 +726,13 @@ def aggplot(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
-    by : iterable or str, optional
-        If specified, this data grouping will be used to aggregate points into `convex hulls
-        <https://en.wikipedia.org/wiki/Convex_hull>`_ or, if ``geometry`` is also specified, into polygons. If left
-        unspecified the data will be aggregated using a `quadtree <https://en.wikipedia.org/wiki/Quadtree>`_.
-    geometry : GeoDataFrame or GeoSeries, optional
-        A list of polygons to be used for spatial aggregation. Optional. See ``by``.
     nmax : int or None, optional
-        Ignored if not plotting a quadtree. Otherwise, controls the maximum number of observations in a quadrangle.
-        If left unspecified, there is no maximum size.
+        The maximum number of observations in a quadrangle.
     nmin : int, optional
-        Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle.
-        If left unspecified, there is no minimum size.
+        The minimum number of observations in a quadrangle.
     nsig : int, optional
-        Ignored if not plotting a quadtree. Otherwise, controls the minimum number of observations in a quadrangle
-        deemed significant. Insignificant quadrangles are removed from the plot. Defaults to 0 (empty patches).
+        The minimum number of observations in a quadrangle. Defaults to 0 (only empty patches are
+        removed).
     agg : function, optional
         The aggregation func used for the colormap. Defaults to ``np.mean``.
     legend : boolean, optional
@@ -753,13 +744,16 @@ def aggplot(
         The names to use in the legend. Defaults to the variable values. For reference see 
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to 
+        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (minx, maxx, miny, maxy), optional
         Used to control plot x-axis and y-axis limits manually.
     figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the resultant plot.
+        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
+        resultant plot.
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance. Defaults to a new axis.
+        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
+        Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -771,32 +765,17 @@ def aggplot(
 
     Examples
     --------
-    This plot type accepts any geometry, including mixtures of polygons and points, averages the value of a certain
-    data parameter at their centroids, and plots the result, using a colormap is the visual variable.
+    A quadtree is a tree data structure which splits a space into increasingly small rectangular
+    fractals. This plot takes a sequence of point or polygonal geometries as input and builds a
+    choropleth out of their centroids, where each region is a fractal quadrangle with at least
+    ``nsig`` observations.
 
-    For the purposes of comparison, this library's ``choropleth`` function takes some sort of data as input,
-    polygons as geospatial context, and combines themselves into a colorful map. This is useful if, for example,
-    you have data on the amount of crimes committed per neighborhood, and you want to plot that.
+    A quadtree can replace a more conventional choropleth in certain cases where you lack region
+    information and have a relatively homogeneous point distribution. A sufficiently large number
+    of points `can construct a very detailed view of a space <https://i.imgur.com/n2xlycT.png>`_.
 
-    But suppose your original dataset came in terms of individual observations - instead of "n collisions happened
-    in this neighborhood", you have "one collision occured at this specific coordinate at this specific date".
-    This is obviously more useful data - it can be made to do more things - but in order to generate the same map,
-    you will first have to do all of the work of geolocating your points to neighborhoods (not trivial),
-    then aggregating them (by, in this case, taking a count).
-
-    ``aggplot`` handles this work for you. It takes input in the form of observations, and outputs as useful as
-    possible a visualization of their "regional" statistics. What a "region" corresponds to depends on how much
-    geospatial information you can provide.
-
-    If you can't provide *any* geospatial context, ``aggplot`` will output what's known as a quadtree: it will break
-    your data down into recursive squares, and use them to aggregate the data. This is a very experimental format,
-    is very fiddly to make, and has not yet been optimized for speed; but it provides a useful baseline which
-    requires no additional work and can be used to expose interesting geospatial correlations right away. And,
-    if you have enough observations, it can be `a pretty good approximation
-    <../figures/aggplot/aggplot-initial.png>`_ (collisions in New York City pictured).
-
-    Our first few examples are of just such figures. A simple ``aggplot`` quadtree can be generated with just a
-    dataset, a data column of interest, and, optionally, a projection.
+    A simple ``quadtree`` can be generated with a dataset, a data column of interest, and
+    (optionally) a projection.
 
     .. code-block:: python
 
@@ -806,73 +785,35 @@ def aggplot(
 
     .. image:: ../figures/aggplot/aggplot-initial.png
 
-    To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters, controlling the minimum and
-    maximum number of observations per box, respectively, yourself. In this case we'll also choose a different
-    `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_, using the ``cmap``
-    parameter.
+    To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters,
+    controlling the minimum and maximum number of observations per box, respectively, yourself. In
+    this case we'll also choose a different 
+    `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_, using
+    the ``cmap`` parameter.
 
-    ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may result in spaces
-    without observations, or ones lacking a statistically significant number of observations. This is necessary in
-    order to break up "spaces" that the algorithm would otherwise end on. You can control the maximum number of
-    observations in the blank spaces using the ``nsig`` parameter.
+    ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may
+    result in spaces without observations, or ones lacking a statistically significant number of
+    observations. You can control the maximum number of observations in the blank spaces using the
+    ``nsig`` parameter.
 
     .. code-block:: python
 
-        gplt.aggplot(collisions, nmin=20, nmax=500, nsig=5, projection=gcrs.PlateCarree(), hue='LATDEP', cmap='Reds')
+        gplt.aggplot(
+            collisions, nmin=20, nmax=500, nsig=5, projection=gcrs.PlateCarree(),
+            hue='LATDEP', cmap='Reds'
+        )
 
     .. image:: ../figures/aggplot/aggplot-quadtree-tuned.png
 
     You'll have to play around with these parameters to get the clearest picture.
 
-    Usually, however, observations with a geospatial component will be provided with some form of spatial
-    categorization. In the case of our collisions example, this comes in the form of a postal zip code. With the
-    simple addition of this data column via the ``by`` parameter, our output changes radically, taking advantage of
-    the additional context we now have to sort and aggregate our observations by (hopefully) geospatially
-    meaningful, if still crude, grouped convex hulls.
-
-    .. code-block:: python
-
-
-        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-                     by='BOROUGH')
-
-    .. image:: ../figures/aggplot/aggplot-hulls.png
-
-    Finally, suppose you actually know exactly the geometries that you would like to aggregate by. Provide these in
-    the form of a ``geopandas`` ``GeoSeries``, one whose index matches the values in your ``by`` column (so
-    ``BROOKLYN`` matches ``BROOKLYN`` for example), to the ``geometry`` parameter. Your output will now be an
-    ordinary choropleth.
-
-    .. code-block:: python
-
-        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-                     by='BOROUGH', geometry=boroughs)
-
-    .. image:: ../figures/aggplot/aggplot-by.png
-
-    Observations will be aggregated by average, by default. In our example case, our plot shows that accidents in
-    Manhattan tend to result in significantly fewer injuries than accidents occuring in other boroughs. Specify an
-    alternative aggregation using the ``agg`` parameter.
-
-    .. code-block:: python
-
-        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-                 geometry=boroughs_2, by='BOROUGH', agg=len)
-
-    .. image:: ../figures/aggplot/aggplot-agg.png
+    Observations will be aggregated by average, by default. Specify an alternative aggregation
+    using the ``agg`` parameter.
 
     ``legend`` toggles the legend. Additional keyword arguments for styling the `colorbar
-    <http://matplotlib.org/api/colorbar_api.html>`_ legend are passed using ``legend_kwargs``. Other additional keyword
-    arguments are passed to the underlying ``matplotlib`` `Polygon
+    <http://matplotlib.org/api/colorbar_api.html>`_ legend are passed using ``legend_kwargs``.
+    Other additional keyword arguments are passed to the underlying ``matplotlib`` `Polygon
     <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_ instances.
-
-    .. code-block:: python
-
-        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-                     geometry=boroughs_2, by='BOROUGH', agg=len, linewidth=0,
-                     legend_kwargs={'orientation': 'horizontal'})
-
-    .. image:: ../figures/aggplot/aggplot-legend-kwargs.png
     """
     _init_figure(ax, figsize)
 
@@ -899,142 +840,51 @@ def aggplot(
     # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
     df = gpd.GeoDataFrame(df, geometry=df.geometry)
 
-    # Validate hue.
+    # Type-constrain hue.
     if not isinstance(hue, str):
         hue_col = hash(str(hue))
         df[hue_col] = _to_geoseries(df, hue)
     else:
         hue_col = hue
 
-    if geometry is not None and by is None:
-        raise NotImplementedError("Aggregation by geometry alone is not currently implemented and unlikely to be "
-                                  "implemented in the future - it is likely out-of-scope here due to the algorithmic "
-                                  "complexity involved.")
-        # The user wants us to classify our data geometries by their location within the passed world geometries
-        # ("sectors"), aggregate a statistic based on that, and return a plot. Unfortunately this seems to be too
-        # hard for the moment. Two reasons:
-        # 1. The Shapely API for doing so is just about as consistent as can be, but still a little bit inconsistent.
-        #    In particular, it is not obvious what to do with invalid and self-intersecting geometric components passed
-        #    to the algorithm.
-        # 2. Point-in-polygon and, worse, polygon-in-polygon algorithms are extremely slow, to the point that almost
-        #    any optimizations that the user can make by doing classification "by hand" is worth it.
-        # There should perhaps be a separate library or ``geopandas`` function for doing this.
+    # Set reasonable defaults for the n-params if appropriate.
+    nmax = nmax if nmax else len(df)
+    nmin = nmin if nmin else np.max([1, np.min([20, int(0.05 * len(df))])])
 
-    elif by is not None:
+    # Generate a quadtree.
+    quad = QuadTree(df)
+    bxmin, bxmax, bymin, bymax = quad.bounds
 
-        # Side-convert geometry for ease of use.
-        if geometry is not None:
-            # Downconvert GeoDataFrame to GeoSeries objects.
-            if isinstance(geometry, gpd.GeoDataFrame):
-                geometry = geometry.geometry
+    # Assert that nmin is not smaller than the largest number of co-located observations
+    # (otherwise the algorithm would continue running until the recursion limit).
+    max_coloc = np.max([len(l) for l in quad.agg.values()])
+    if max_coloc > nmin:
+        raise ValueError(
+            "nmin is set to {0}, but there is a coordinate containing {1} observations in the "
+            "dataset.".format(nmin, max_coloc)
+        )
 
-        sectors = []
-        values = []
+    # Run the partitions.
+    partitions = list(quad.partition(nmin, nmax))
 
-        # The groupby operation does not take generators as inputs, so we duck test and convert them to lists.
-        if not isinstance(by, str):
-            try: len(by)
-            except TypeError: by = list(by)
+    # Generate colormap.
+    values = [agg(p.data[hue_col]) for p in partitions if p.n > nsig]
+    cmap = _continuous_colormap(values, cmap)
 
-        for label, p in df.groupby(by):
-            if geometry is not None:
-                try:
-                    sector = geometry.loc[label]
-                except KeyError:
-                    raise KeyError("Data contains a '{0}' label which lacks a corresponding value in the provided "
-                                   "geometry.".format(label))
-            else:
-                xs = [c.x for c in p.geometry]
-                ys = [c.y for c in p.geometry]
-                coords = list(zip(xs, ys))
-                sector = shapely.geometry.MultiPoint(coords).convex_hull
+    for p in partitions:
+        xmin, xmax, ymin, ymax = p.bounds
+        rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
+        color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
+        if projection:
+            feature = ShapelyFeature([rect], ccrs.PlateCarree())
+            ax.add_feature(feature, facecolor=color, **kwargs)
+        else:
+            feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
+            ax.add_patch(feature)
 
-            sectors.append(sector)
-            values.append(agg(p[hue_col]))
-
-        # Because we have to set the extent ourselves, we have to do some bookkeeping to keep track of the
-        # extrema of the hulls we are generating.
-        bxmin = bxmax = bymin = bymax = None
-        if not extent:
-            for sector in sectors:
-                if not isinstance(sector.envelope, shapely.geometry.Point):
-                    hxmin, hxmax, hymin, hymax = _get_envelopes_min_maxes(pd.Series(sector.envelope.exterior))
-                    if not bxmin or hxmin < bxmin:
-                        bxmin = hxmin
-                    if not bxmax or hxmax > bxmax:
-                        bxmax = hxmax
-                    if not bymin or hymin < bymin:
-                        bymin = hymin
-                    if not bymax or hymax > bymax:
-                        bymax = hymax
-
-        # By often creates overlapping polygons, to keep smaller polygons from being hidden by possibly overlapping
-        # larger ones we have to bring the smaller ones in front in the plotting order. This bit of code does that.
-        sorted_indices = np.array(sorted(enumerate(gpd.GeoSeries(sectors).area.values),
-                                         key=lambda tup: tup[1])[::-1])[:, 0].astype(int)
-        sectors = np.array(sectors)[sorted_indices]
-        values = np.array(values)[sorted_indices]
-
-        # Generate a colormap.
-        cmap = _continuous_colormap(values, cmap)
-        colors = [cmap.to_rgba(value) for value in values]
-
-        #  Draw.
-        for sector, color in zip(sectors, colors):
-            if projection:
-                features = ShapelyFeature([sector], ccrs.PlateCarree())
-                ax.add_feature(features, facecolor=color, **kwargs)
-            else:
-                try:  # Duck test for MultiPolygon.
-                    for subgeom in sector:
-                        feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
-                        ax.add_patch(feature)
-                except (TypeError, AssertionError):  # Shapely Polygon.
-                    feature = descartes.PolygonPatch(sector, facecolor=color, **kwargs)
-                    ax.add_patch(feature)
-
-        # Set extent.
-        extrema = (bxmin, bxmax, bymin, bymax)
-        _set_extent(ax, projection, extent, extrema)
-
-    else:
-        # Set reasonable defaults for the n-params if appropriate.
-        nmax = nmax if nmax else len(df)
-        nmin = nmin if nmin else np.max([1, np.min([20, int(0.05 * len(df))])])
-
-        # Generate a quadtree.
-        quad = QuadTree(df)
-        bxmin, bxmax, bymin, bymax = quad.bounds
-
-        # Assert that nmin is not smaller than the largest number of co-located observations (otherwise the algorithm
-        # would continue running until the recursion limit).
-        max_coloc = np.max([len(l) for l in quad.agg.values()])
-        if max_coloc > nmin:
-            raise ValueError("nmin is set to {0}, but there is a coordinate containing {1} observations in the "
-                             "dataset.".format(nmin, max_coloc))
-
-        # Run the partitions.
-        # partitions = quad.partition(nmin, nmax)
-        partitions = list(quad.partition(nmin, nmax))
-
-        # Generate colormap.
-        values = [agg(p.data[hue_col]) for p in partitions if p.n > nsig]
-        cmap = _continuous_colormap(values, cmap)
-
-        for p in partitions:
-            xmin, xmax, ymin, ymax = p.bounds
-            rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-            color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
-            if projection:
-                feature = ShapelyFeature([rect], ccrs.PlateCarree())
-                ax.add_feature(feature, facecolor=color, **kwargs)
-            else:
-                feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
-                ax.add_patch(feature)
-
-        # Set extent.
-        extrema = (bxmin, bxmax, bymin, bymax)
-        _set_extent(ax, projection, extent, extrema)
+    # Set extent.
+    extrema = (bxmin, bxmax, bymin, bymax)
+    _set_extent(ax, projection, extent, extrema)
 
     # Append a legend, if appropriate.
     if legend:

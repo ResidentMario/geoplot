@@ -1,6 +1,6 @@
-geoplot.polyplot
+geoplot.quadtree
 ================
 
 .. currentmodule:: geoplot
 
-.. autofunction:: polyplot
+.. autofunction:: quadtree
