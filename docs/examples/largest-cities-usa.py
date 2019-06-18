@@ -8,7 +8,7 @@ continental_usa_cities = gpd.read_file(gplt.datasets.get_path('usa_cities'))
 continental_usa_cities = continental_usa_cities.query('STATE not in ["AK", "HI", "PR"]')
 contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
 
-poly_kwargs = {'linewidth': 0.5, 'edgecolor': 'gray', 'zorder': -1}
+poly_kwargs = {'linewidth': 0.5, 'edgecolor': 'gray'}
 point_kwargs = {'linewidth': 0.5, 'edgecolor': 'black', 'alpha': 1}
 legend_kwargs = {'bbox_to_anchor': (0.9, 0.9), 'frameon': False}
 
