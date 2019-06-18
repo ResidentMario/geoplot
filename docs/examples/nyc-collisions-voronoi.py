@@ -20,7 +20,7 @@ gplt.voronoi(
     nyc_injurious_collisions.head(1000),
     hue='NUMBER OF PERSONS INJURED', cmap='Reds',
     edgecolor='white', clip=nyc_boroughs.geometry,
-    linewidth=0.5, categorical=True, ax=axarr[1]
+    linewidth=0.5, ax=axarr[1]
 )
 gplt.polyplot(nyc_boroughs, linewidth=1, ax=axarr[1])
 plt.suptitle("Injurious Car Crashes in New York City, 2016", fontsize=20, y=0.95)

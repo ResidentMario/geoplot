@@ -17,7 +17,7 @@ ax2 = plt.subplot(122, projection=proj)
 gplt.polyplot(nyc_boroughs, ax=ax1, projection=proj)
 gplt.pointplot(
     nyc_fatal_collisions, projection=proj,
-    hue='BOROUGH', categorical=True,
+    hue='BOROUGH',
     edgecolor='white', linewidth=0.5, zorder=10,
     scale='NUMBER OF PERSONS KILLED', limits=(2, 8),
     legend=True, legend_var='scale', legend_kwargs={'loc': 'upper left'},
@@ -29,7 +29,7 @@ ax1.set_title("Fatal Crashes in New York City, 2016")
 gplt.polyplot(nyc_boroughs, ax=ax2, projection=proj)
 gplt.pointplot(
     nyc_injurious_collisions, projection=proj,
-    hue='BOROUGH', categorical=True,
+    hue='BOROUGH',
     edgecolor='white', linewidth=0.5, zorder=10,
     scale='NUMBER OF PERSONS INJURED', limits=(1, 10),
     legend=True, legend_var='scale', legend_kwargs={'loc': 'upper left'},

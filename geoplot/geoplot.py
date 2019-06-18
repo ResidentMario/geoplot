@@ -273,7 +273,7 @@ def pointplot(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -665,7 +665,7 @@ def choropleth(
         # Categorical colormap code path.
 
         # Validate buckets.
-        categorical, scheme = _validate_buckets(hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1121,7 +1121,7 @@ def cartogram(
     # specified for either to work).
     if k is not None and hue is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1713,7 +1713,7 @@ def sankey(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, scheme)
 
         hue = _to_geoseries(df, hue)
 
@@ -2012,7 +2012,7 @@ def voronoi(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -2292,11 +2292,13 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
 
-def _validate_buckets(hue, scheme):
+def _validate_buckets(df, hue, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
     already set.
     """
+    if isinstance(hue, str):
+        hue = df[hue]
     categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
