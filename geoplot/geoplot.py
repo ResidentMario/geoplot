@@ -2217,19 +2217,6 @@ def _init_figure(ax, figsize):
     Initializes the ``matplotlib`` ``figure``, one of the first things that every plot must do. No
     figure is initialized (and, consequentially, the ``figsize`` argument is ignored) if a
     pre-existing ``ax`` is passed to the method. This is necessary for ``plt.savefig()`` to work.
-
-    Parameters
-    ----------
-    ax : None or cartopy GeoAxesSubplot instance
-        The current axis, if there is one.
-    figsize : (x_dim, y_dim) tuple
-        The dimension of the resultant plot.
-
-    Returns
-    -------
-    None or matplotlib.Figure instance
-        Returns either nothing or the underlying ``Figure`` instance, depending on whether or not
-        one is initialized.
     """
     if not ax:
         fig = plt.figure(figsize=figsize)
@@ -2239,19 +2226,8 @@ def _init_figure(ax, figsize):
 def _get_envelopes_min_maxes(envelopes):
     """
     Returns the extrema of the inputted polygonal envelopes. Used for setting chart extent where
-    appropriate. Note tha the ``Quadtree.bounds`` object property serves a similar role.
-
-    Parameters
-    ----------
-    envelopes : GeoSeries
-        The envelopes of the given geometries, as would be returned by e.g.
-        ``data.geometry.envelope.exterior``.
-
-    Returns
-    -------
-    (xmin, xmax, ymin, ymax) : tuple
-        The data extrema.
-
+    appropriate. Note tha the ``Quadtree.bounds`` object property serves a similar role. Returns
+    a (xmin, xmax, ymin, ymax) tuple of data extrema.
     """
     xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
                                                           linearring.coords[2][0],
@@ -2276,18 +2252,7 @@ def _get_envelopes_centroid(envelopes):
     """
     Returns the centroid of an inputted geometry column. Not currently in use, as this is now
     handled by this library's CRS wrapper directly. Light wrapper over
-    ``_get_envelopes_min_maxes``.
-
-    Parameters
-    ----------
-    envelopes : GeoSeries
-        The envelopes of the given geometries, as would be returned by e.g.
-        ``data.geometry.envelope``.
-
-    Returns
-    -------
-    (mean_x, mean_y) : tuple
-        The data centroid.
+    ``_get_envelopes_min_maxes``. Returns (mean_x, mean_y), the data centroid.
     """
     xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(envelopes)
     return np.mean(xmin, xmax), np.mean(ymin, ymax)
@@ -2296,24 +2261,6 @@ def _get_envelopes_centroid(envelopes):
 def _set_extent(ax, projection, extent, extrema):
     """
     Sets the plot extent.
-
-    Parameters
-    ----------
-    ax : cartopy.GeoAxesSubplot instance
-        The axis whose boundaries are being tweaked.
-    projection : None or geoplot.crs instance
-        The projection, if one is being used.
-    extent : None or (xmin, xmax, ymin, ymax) tuple
-        A copy of the ``extent`` top-level parameter, if the user choses to specify their own
-        extent. These values will be used if ``extent`` is non-``None``.
-    extrema : None or (xmin, xmax, ymin, ymax) tuple
-        Plot-calculated extrema. These values, which are calculated in the plot above and passed
-        to this function (different plots require different calculations), will be used if a
-        user-provided ``extent`` is not provided.
-
-    Returns
-    -------
-    None
     """
     if extent:
         xmin, xmax, ymin, ymax = extent
@@ -2341,17 +2288,6 @@ def _lay_out_axes(ax, projection):
     ``cartopy`` enables a a transparent background patch and an "outline" patch by default. This
     short method simply hides these extraneous visual features. If the plot is a pure
     ``matplotlib`` one, it does the same thing by removing the axis altogether.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance being manipulated.
-    projection : None or geoplot.crs instance
-        The projection, if one is used.
-
-    Returns
-    -------
-    None
     """
     if projection is not None:
         ax.background_patch.set_visible(False)
@@ -2403,32 +2339,6 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
     Creates a discrete colormap, either using an already-categorical data variable or by bucketing
     a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
     data. If one is not provided we assume that the input data is categorical.
-
-    This code makes extensive use of ``geopandas`` choropleth facilities.
-
-    Parameters
-    ----------
-    categorical : boolean
-        Whether or not the input variable is already categorical.
-    hue : iterable
-        The data column whose entries are being discretely colorized. Note that although top-level
-        plotter ``hue`` parameters ingest many argument signatures, not just iterables, they are
-        all preprocessed to standardized iterables before this method is called.
-    scheme : str
-        The mapclassify binning scheme to be used for splitting data values (or rather, the string
-        representation thereof).
-    k : int
-        The number of bins which will be used. This parameter will be ignored if ``categorical`` is
-        True. The default value should be 5---this should be set before this method is called.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the geometries. This
-        colormap determines the spectrum; our algorithm determines the cuts.
-
-    Returns
-    -------
-    (cmap, categories, values) : tuple
-        A tuple meant for assignment containing the values for various properties set by this
-        method call.
     """
     if not categorical:
         binning = _mapclassify_choro(hue, scheme, k=k)
@@ -2451,35 +2361,7 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
 
 def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=False):
     """
-    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter
-    is passed.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance on which a legend is being painted.
-    categories : list
-        A list of categories being plotted. May be either a list of int types or a list of unique
-        entities in the data column (e.g. as generated via ``numpy.unique(data)``. This parameter
-        is meant to be the same as that returned by the ``_discrete_colorize`` method.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the legend entries. This
-        should be the same one used for colorizing the plot's geometries.
-    legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be
-        attached to the values.
-    legend_kwargs : dict
-        Keyword arguments which will be passed to the matplotlib legend instance on
-        initialization. This parameter is provided to allow fine-tuning of legend placement at the
-        top level of a plot method, as legends are very finicky.
-    figure : boolean
-        By default the legend is added to the axis requesting it. By specifying `figure=True` we
-        may change the target to be the figure instead. This flag is used by the voronoi plot type,
-        which occludes the base axis by adding a clip to it.
-
-    Returns
-    -------
-    None
+    Creates a discerete categorical legend for ``hue`` and attaches it to the axis.
     """
 
     # Paint patches.
@@ -2505,35 +2387,7 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure
 
 def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
     """
-    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter
-    is passed.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance on which a legend is being painted.
-    values : list
-        A list of values being plotted. May be either a list of int types or a list of unique
-        entities in the data column (e.g. as generated via ``numpy.unique(data)``. This parameter
-        is meant to be the same as that returned by the ``_discrete_colorize`` method.
-    legend_values : list, optional
-        If a legend is specified, equal intervals will be used for the "points" in the legend by
-        default. However, particularly if your scale is non-linear, oftentimes this isn't what you
-        want. If this variable is provided as well, the values included in the input will be used
-        by the legend instead.
-    legend_labels : list, optional
-        If a legend is specified, this parameter can be used to control what names will be attached
-        to.
-    scale_func : ufunc
-        The scaling function being used.
-    legend_kwargs : dict
-        Keyword arguments which will be passed to the matplotlib legend instance on initialization.
-        This parameter is provided to allow fine-tuning of legend placement at the top level of a
-        plot method, as legends are very finicky.
-
-    Returns
-    -------
-    None.
+    Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
     """
 
     # Set up the legend values.
@@ -2556,28 +2410,7 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
 
 def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     """
-    Creates a legend and attaches it to the axis. Meant to be used when a ``legend=True`` parameter
-    is passed.
-
-    Parameters
-    ----------
-    ax : matplotlib.Axes instance
-        The ``matplotlib.Axes`` instance on which a legend is being painted.
-    values : list
-        A list of values being plotted. May be either a list of int types or a list of unique
-        entities in the data column (e.g. as generated via ``numpy.unique(data)``. This parameter
-        is meant to be the same as that returned by the ``_discrete_colorize`` method.
-    cmap : ``matplotlib.cm`` instance
-        The `matplotlib` colormap instance which will be used to colorize the legend entries. This
-        should be the same one used for colorizing the plot's geometries.
-    legend_kwargs : dict
-        Keyword arguments which will be passed to the matplotlib legend instance on initialization.
-        This parameter is provided to allow fine-tuning of legend placement at the top level of a
-        plot method, as legends are very finicky.
-
-    Returns
-    -------
-    None.
+    Creates a continuous colorbar legend and attaches it to the axis.
     """
     if legend_kwargs is None: legend_kwargs = dict()
     cmap.set_array(values)
@@ -2588,19 +2421,6 @@ def _validate_buckets(hue, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
     already set.
-
-    Parameters
-    ----------
-    hue : GeoSeries
-        The processed iterable of data passed to the ``hue`` parameter.
-    scheme : str
-        The mapclassify scheme that the variable will be categorized according to (or rather, a
-        string representation thereof).
-
-    Returns
-    -------
-    (categorical, k, scheme) : tuple
-        A possibly modified input tuple meant for further processing.
     """
     categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
     scheme = scheme if scheme else 'Quantiles'
@@ -2629,15 +2449,7 @@ def _build_voronoi_polygons(df):
     direction. In other words, the set of points nearest the given point does not necessarily have
     to be a closed polygon. We force these non-hermetic spaces into polygons using a subroutine.
 
-    Parameters
-    ----------
-    df : GeoDataFrame instance
-        The `GeoDataFrame` of points being partitioned.
-
-    Returns
-    -------
-    polygons : list of shapely.geometry.Polygon objects
-        The Voronoi polygon output.
+    Returns a list of shapely.geometry.Polygon objects, each one a Voronoi polygon.
     """
     from scipy.spatial import Voronoi
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
@@ -2741,7 +2553,6 @@ def _norm_cmap(values, cmap, normalize, cm):
     """
     Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.
     """
-
     mn = min(values)
     mx = max(values)
     norm = normalize(vmin=mn, vmax=mx)
