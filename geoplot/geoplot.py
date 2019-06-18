@@ -14,7 +14,6 @@ import shapely.geometry
 import pandas as pd
 import descartes
 
-from distutils.version import LooseVersion
 try:
     from geopandas.plotting import _mapclassify_choro
 except ImportError:
@@ -25,7 +24,7 @@ __version__ = "0.2.4"
 
 def pointplot(
     df, projection=None,
-    hue=None, categorical=False, scheme=None, k=5, cmap='viridis',
+    hue=None, scheme=None, k=5, cmap='viridis',
     scale=None, limits=(0.5, 2), scale_func=None, legend=False, legend_values=None,
     legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
     extent=None, ax=None, **kwargs
@@ -44,8 +43,6 @@ def pointplot(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For reference see
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    categorical : boolean, optional
-        If the ``hue`` variable is categorical, set this value to ``True``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
@@ -134,13 +131,13 @@ def pointplot(
     .. image:: ../figures/pointplot/pointplot-scheme.png
 
     Alternatively, your data may already be `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_. In that case specify
-    ``categorical=True`` instead.
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_. ``geoplot`` will account for
+    this automatically:
 
     .. code-block:: python
 
         gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), hue='BOROUGH',
-                       legend=True, categorical=True)
+                       legend=True)
 
     .. image:: ../figures/pointplot/pointplot-categorical.png
 
@@ -155,7 +152,7 @@ def pointplot(
 
         gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], 
                        projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH', categorical=True,
+                       hue='BOROUGH',
                        legend=True, legend_kwargs={'loc': 'upper left'},
                        edgecolor='white', linewidth=0.5)
 
@@ -222,7 +219,7 @@ def pointplot(
 
         gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
                        projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH', categorical=True,
+                       hue='BOROUGH',
                        scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
                        legend=True, legend_kwargs={'loc': 'upper left'},
                        legend_var='scale')
@@ -278,7 +275,7 @@ def pointplot(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        categorical, scheme = _validate_buckets(hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -418,7 +415,7 @@ def polyplot(
         ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
         gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], 
                        projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH', categorical=True,
+                       hue='BOROUGH',
                        legend=True, edgecolor='white', linewidth=0.5,
                        legend_kwargs={'loc': 'upper left'},
                        ax=ax)
@@ -489,7 +486,7 @@ def polyplot(
 
 
 def choropleth(
-    df, projection=None, hue=None, scheme=None, k=5, cmap='viridis', categorical=False,
+    df, projection=None, hue=None, scheme=None, k=5, cmap='viridis',
     legend=False, legend_kwargs=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -507,9 +504,6 @@ def choropleth(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For reference see
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    categorical : boolean, optional
-        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
-        otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
@@ -578,15 +572,14 @@ def choropleth(
 
     .. image:: ../figures/choropleth/choropleth-cmap.png
 
-    If your variable of interest is already `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, you can specify 
-    ``categorical=True`` to use the labels in your dataset directly. To add a legend, specify
-    ``legend``.
+    ``geoplot`` will automatically do the right thing if your variable is `categorical
+    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_ instead. To add a legend,
+    specify a ``legend``.
 
     .. code-block:: python
 
         gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
-                        categorical=True, legend=True)
+                        legend=True)
 
     .. image:: ../figures/choropleth/choropleth-legend.png
 
@@ -600,7 +593,7 @@ def choropleth(
     .. code-block:: python
 
         gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
-                        categorical=True, legend=True, legend_kwargs={'loc': 'upper left'})
+                        legend=True, legend_kwargs={'loc': 'upper left'})
 
     .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
 
@@ -611,7 +604,7 @@ def choropleth(
     .. code-block:: python
 
         gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName', 
-                        categorical=True, linewidth=0)
+                        linewidth=0)
 
     .. image:: ../figures/choropleth/choropleth-kwargs.png
 
@@ -679,7 +672,7 @@ def choropleth(
         # Categorical colormap code path.
 
         # Validate buckets.
-        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        categorical, scheme = _validate_buckets(hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1063,7 +1056,7 @@ def aggplot(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
-    hue=None, categorical=False, scheme=None, k=5, cmap='viridis',
+    hue=None, scheme=None, k=5, cmap='viridis',
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
     legend_var="scale", extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1094,9 +1087,6 @@ def cartogram(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For reference see
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    categorical : boolean, optional
-        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
-        otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
@@ -1290,7 +1280,7 @@ def cartogram(
     # specified for either to work).
     if k is not None and hue is not None:
         # Categorical colormap code path.
-        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        categorical, scheme = _validate_buckets(hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1530,7 +1520,7 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
 
 def sankey(
     *args, projection=None,
-    start=None, end=None, path=None, hue=None, categorical=False, scheme=None, k=5,
+    start=None, end=None, path=None, hue=None, scheme=None, k=5,
     cmap='viridis', legend=False, legend_kwargs=None,
     legend_labels=None, legend_values=None, legend_var=None, extent=None, figsize=(8, 6),
     ax=None, scale=None, limits=(1, 5), scale_func=None, **kwargs
@@ -1561,9 +1551,6 @@ def sankey(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For reference see
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    categorical : boolean, optional
-        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
-        otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
@@ -1701,17 +1688,15 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-scheme.png
 
-    If your variable of interest is already `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, specify ``categorical=True``
-    to use the labels in your dataset directly.
+    ``geoplot`` will automatically do the right thing if your variable of interest is already
+    `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_:
 
     .. code-block:: python
 
         ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
                          start='from', end='to',
                          hue='above_meridian', cmap='RdYlBu',
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)},
-                         categorical=True)
+                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)})
         ax.set_global()
         ax.coastlines()
 
@@ -1887,7 +1872,7 @@ def sankey(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        categorical, scheme = _validate_buckets(hue, scheme)
 
         hue = _validate_hue(df, hue)
 
@@ -1998,7 +1983,7 @@ def sankey(
 
 def voronoi(
     df, projection=None, edgecolor='black', clip=None, hue=None, scheme=None, k=5,
-    cmap='viridis', categorical=False, legend=False,
+    cmap='viridis', legend=False,
     legend_kwargs=None, legend_labels=None, extent=None, figsize=(8, 6), ax=None,
     **kwargs
 ):
@@ -2016,9 +2001,6 @@ def voronoi(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For reference see
         `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    categorical : boolean, optional
-        Set to ``True`` if ``hue`` references a categorical variable, and ``False`` (the default)
-        otherwise. Ignored if ``hue`` is left unspecified.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the map classifier to use.
     k : int or None, optional
@@ -2140,16 +2122,15 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-scheme.png
 
-    If your variable of interest is already `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_, specify ``categorical=True``
-    to use the labels in your dataset directly.
+    ``geoplot`` will automatically do the right thing if your variable of interest is already
+    `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_:
 
     .. code-block:: python
 
         ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
                           cmap='Reds',
                           edgecolor='white', clip=boroughs.geometry,
-                          linewidth=0.5, categorical=True)
+                          linewidth=0.5)
         gplt.polyplot(boroughs, linewidth=1, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
@@ -2193,7 +2174,7 @@ def voronoi(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, k, scheme = _validate_buckets(categorical, k, scheme)
+        categorical, scheme = _validate_buckets(hue, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -2392,6 +2373,7 @@ def _lay_out_axes(ax, projection):
     -------
     None
     """
+    # TODO: remove the test code
     if projection is not None:
         try:
             ax.background_patch.set_visible(False)
@@ -2420,8 +2402,8 @@ def _validate_hue(df, hue):
 
     Returns
     -------
-    hue : iterable
-        The ``hue`` parameter input as an iterable.
+    hue : GeoSeries
+        The ``hue`` parameter input as a GeoSeries.
     """
     if hue is None:
         return None
@@ -2643,37 +2625,15 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
 
-def _validate_buckets(categorical, k, scheme):
+def _validate_buckets(hue, scheme):
     """
-    This method validates that the hue parameter is correctly specified. Valid inputs are:
-
-        1. Both k and scheme are specified. In that case the user wants us to handle binning the
-            data into k buckets ourselves, using the stated algorithm. We issue a warning if the
-            specified k is greater than 10.
-        2. k is left unspecified and scheme is specified. In that case the user wants us to handle
-           binning the data
-           into some default (k=5) number of buckets, using the stated algorithm.
-        3. Both k and scheme are left unspecified. In that case the user wants us bucket the data
-           variable using some default algorithm (Quantiles) into some default number of buckets
-           (5).
-        4. k is specified, but scheme is not. We choose to interpret this as meaning that the user
-           wants us to handle bucketing the data into k buckets using the default (Quantiles)
-           bucketing algorithm.
-        5. categorical is True, and both k and scheme are False or left unspecified. In that case
-           we do categorical.
-        Invalid inputs are:
-        6. categorical is True, and one of k or scheme are also specified. In this case we raise a
-           ValueError as this input makes no sense.
+    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
+    already set.
 
     Parameters
     ----------
-    categorical : boolean
-        Whether or not the data values given in ``hue`` are already a categorical variable.
-
-    k : int
-        The number of categories to use. This variable has no effect if ``categorical`` is True,
-        and will be set to 5 by default if it is False and not already given.
-
+    hue : GeoSeries
+        The processed iterable of data passed to the ``hue`` parameter.
     scheme : str
         The mapclassify scheme that the variable will be categorized according to (or rather, a
         string representation thereof).
@@ -2681,21 +2641,11 @@ def _validate_buckets(categorical, k, scheme):
     Returns
     -------
     (categorical, k, scheme) : tuple
-        A possibly modified input tuple meant for reassignment in place.
+        A possibly modified input tuple meant for further processing.
     """
-    if categorical and (k != 5 or scheme):
-        raise ValueError(
-            "Invalid input: categorical cannot be specified as True simultaneously "
-            "with scheme or k parameters"
-        )
-    if k > 10:
-        warnings.warn(
-            "Generating a choropleth using a categorical column with over 10 individual "
-            "categories. This is not recommended!"
-        )
-    if not scheme:
-        scheme = 'Quantiles'  # this trips it correctly later
-    return categorical, k, scheme
+    categorical = (hue.dtype == np.dtype('object'))
+    scheme = scheme if scheme else 'Quantiles'
+    return categorical, scheme
 
 
 def _get_clip(extent, clip):
