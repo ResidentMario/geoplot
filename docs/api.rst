@@ -12,9 +12,9 @@ Spatial plots
 
     pointplot
     polyplot
-    cartogram
     choropleth
-    aggplot
     kdeplot
+    cartogram
     sankey
     voronoi
+    quadtree
