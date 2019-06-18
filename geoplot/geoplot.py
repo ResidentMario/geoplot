@@ -25,9 +25,9 @@ __version__ = "0.2.4"
 def pointplot(
     df, projection=None,
     hue=None, scheme=None, k=5, cmap='viridis',
-    scale=None, limits=(0.5, 2), scale_func=None, legend=False, legend_values=None,
-    legend_labels=None, legend_kwargs=None, legend_var=None, figsize=(8, 6), 
-    extent=None, ax=None, **kwargs
+    scale=None, limits=(0.5, 2), scale_func=None,
+    legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
+    figsize=(8, 6), extent=None, ax=None, **kwargs
 ):
     """
     A scatter plot, where data value(s) are represented as a coordinate point on a map.
@@ -350,10 +350,7 @@ def pointplot(
 
 def polyplot(
     df, projection=None,
-    extent=None,
-    figsize=(8, 6), ax=None,
-    edgecolor='black',
-    facecolor='None', **kwargs
+    extent=None, figsize=(8, 6), edgecolor='black', facecolor='None', ax=None, **kwargs
 ):
     """
     Polygons on a map.
@@ -478,7 +475,8 @@ def polyplot(
 
 
 def choropleth(
-    df, projection=None, hue=None, scheme=None, k=5, cmap='viridis',
+    df, projection=None,
+    hue=None, scheme=None, k=5, cmap='viridis',
     legend=False, legend_kwargs=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1047,10 +1045,11 @@ def aggplot(
 
 def cartogram(
     df, projection=None,
-    scale=None, limits=(0.2, 1), scale_func=None, trace=True, trace_kwargs=None,
+    scale=None, limits=(0.2, 1), scale_func=None,
+    trace=True, trace_kwargs=None,
     hue=None, scheme=None, k=5, cmap='viridis',
-    legend=False, legend_values=None, legend_labels=None, legend_kwargs=None,
-    legend_var="scale", extent=None, figsize=(8, 6), ax=None, **kwargs
+    legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
+    extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
     Self-scaling area plot.
@@ -1507,10 +1506,12 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
 
 def sankey(
     *args, projection=None,
-    start=None, end=None, path=None, hue=None, scheme=None, k=5,
-    cmap='viridis', legend=False, legend_kwargs=None,
-    legend_labels=None, legend_values=None, legend_var=None, extent=None, figsize=(8, 6),
-    ax=None, scale=None, limits=(1, 5), scale_func=None, **kwargs
+    start=None, end=None, path=None,
+    hue=None, scheme=None, k=5, cmap='viridis',
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
+    extent=None, figsize=(8, 6),
+    scale=None, scale_func=None, limits=(1, 5),
+    ax=None, **kwargs
 ):
     """
     Spatial Sankey or flow map.
@@ -1962,10 +1963,10 @@ def sankey(
 
 
 def voronoi(
-    df, projection=None, edgecolor='black', clip=None, hue=None, scheme=None, k=5,
-    cmap='viridis', legend=False,
-    legend_kwargs=None, legend_labels=None, extent=None, figsize=(8, 6), ax=None,
-    **kwargs
+    df, projection=None, clip=None,
+    cmap='viridis', hue=None, scheme=None, k=5,
+    legend=False, legend_kwargs=None, legend_labels=None,
+    extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
     """
     Geospatial Voronoi diagram.
@@ -2115,7 +2116,6 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
-
     # Initialize the figure.
     fig = _init_figure(ax, figsize)
 
@@ -2229,22 +2229,38 @@ def _get_envelopes_min_maxes(envelopes):
     appropriate. Note tha the ``Quadtree.bounds`` object property serves a similar role. Returns
     a (xmin, xmax, ymin, ymax) tuple of data extrema.
     """
-    xmin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][0],
-                                                          linearring.coords[2][0],
-                                                          linearring.coords[3][0],
-                                                          linearring.coords[4][0]])))
-    xmax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][0],
-                                                          linearring.coords[2][0],
-                                                          linearring.coords[3][0],
-                                                          linearring.coords[4][0]])))
-    ymin = np.min(envelopes.map(lambda linearring: np.min([linearring.coords[1][1],
-                                                           linearring.coords[2][1],
-                                                           linearring.coords[3][1],
-                                                           linearring.coords[4][1]])))
-    ymax = np.max(envelopes.map(lambda linearring: np.max([linearring.coords[1][1],
-                                                           linearring.coords[2][1],
-                                                           linearring.coords[3][1],
-                                                           linearring.coords[4][1]])))
+    xmin = np.min(
+        envelopes.map(
+            lambda linearring: np.min([
+                linearring.coords[1][0], linearring.coords[2][0], linearring.coords[3][0],
+                linearring.coords[4][0]
+            ])
+        )
+    )
+    xmax = np.max(
+        envelopes.map(
+            lambda linearring: np.max([
+                linearring.coords[1][0], linearring.coords[2][0], linearring.coords[3][0],
+                linearring.coords[4][0]
+            ])
+        )
+    )
+    ymin = np.min(
+        envelopes.map(
+            lambda linearring: np.min([
+                linearring.coords[1][1], linearring.coords[2][1], linearring.coords[3][1],
+                linearring.coords[4][1]
+            ])
+        )
+    )
+    ymax = np.max(
+        envelopes.map(
+            lambda linearring: np.max([
+                linearring.coords[1][1], linearring.coords[2][1], linearring.coords[3][1],
+                linearring.coords[4][1]
+            ])
+        )
+    )
     return xmin, xmax, ymin, ymax
 
 
@@ -2266,9 +2282,9 @@ def _set_extent(ax, projection, extent, extrema):
         xmin, xmax, ymin, ymax = extent
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
-        if projection:  # Input ``extent`` into set_extent().
+        if projection:  # input ``extent`` into set_extent().
             ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
-        else:  # Input ``extent`` into set_ylim, set_xlim.
+        else:  # input ``extent`` into set_ylim, set_xlim.
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
 
@@ -2276,9 +2292,9 @@ def _set_extent(ax, projection, extent, extrema):
         xmin, xmax, ymin, ymax = extrema
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
-        if projection:  # Input ``extrema`` into set_extent.
+        if projection:  # input ``extrema`` into set_extent.
             ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
-        else:  # Input ``extrema`` into set_ylim, set_xlim.
+        else:  # input ``extrema`` into set_ylim, set_xlim.
             ax.set_xlim((xmin, xmax))
             ax.set_ylim((ymin, ymax))
 
@@ -2344,15 +2360,12 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
         binning = _mapclassify_choro(hue, scheme, k=k)
         values = binning.yb
         binedges = [binning.yb.min()] + binning.bins.tolist()
-        categories = ['{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
-                      for i in range(len(binedges) - 1)]
+        categories = [
+            '{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
+            for i in range(len(binedges) - 1)
+        ]
     else:
         categories = np.unique(hue)
-        if len(categories) > 10:
-            warnings.warn(
-                "Generating a colormap using a categorical column with over 10 individual "
-                "categories. This is not recommended!"
-            )
         value_map = {v: i for i, v in enumerate(categories)}
         values = [value_map[d] for d in hue]
     cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
@@ -2367,14 +2380,14 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure
     # Paint patches.
     patches = []
     for value, cat in enumerate(categories):
-        patches.append(mpl.lines.Line2D([0], [0], linestyle="none",
-                              marker="o",
-                              markersize=10, markerfacecolor=cmap.to_rgba(value)))
-    # I can't initialize legend_kwargs as an empty dict() by default because of Python's argument
-    # mutability quirks. cf. http://docs.python-guide.org/en/latest/writing/gotchas/. Instead my
-    # default argument is None, but that doesn't unpack correctly, necessitating setting and
-    # passing an empty dict here. Awkward...
-    if not legend_kwargs: legend_kwargs = dict()
+        patches.append(
+            mpl.lines.Line2D(
+                [0], [0], linestyle="none",
+                marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value)
+            )
+        )
+    if not legend_kwargs:
+        legend_kwargs = dict()
 
     # If we are given labels use those, if we are not just use the categories.
     target = ax.figure if figure else ax
@@ -2390,21 +2403,25 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
     Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
     """
 
-    # Set up the legend values.
+    # Set up the legend values and kwargs.
     if legend_values is not None:
         display_values = legend_values
     else:
         display_values = np.linspace(np.max(values), np.min(values), num=5)
     display_labels = legend_labels if (legend_labels is not None) else display_values
+    if legend_kwargs is None:
+        legend_kwargs = dict()
 
     # Paint patches.
     patches = []
     for value in display_values:
-        patches.append(mpl.lines.Line2D([0], [0], linestyle='None',
-                       marker="o",
-                       markersize=(20*scale_func(value))**(1/2),
-                       markerfacecolor='None'))
-    if legend_kwargs is None: legend_kwargs = dict()
+        patches.append(
+            mpl.lines.Line2D(
+                [0], [0], linestyle='None',
+                marker="o",
+                markersize=(20*scale_func(value))**(1/2),
+                markerfacecolor='None')
+        )
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
 
 
