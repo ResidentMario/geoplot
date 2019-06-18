@@ -21,28 +21,40 @@ f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
 plt.suptitle('Popular Flights out of Los Angeles, 2016', fontsize=16)
 plt.subplots_adjust(top=0.95)
 
-ax = gplt.sankey(la_flights, start='start', end='end',
-                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][0])
+ax = gplt.sankey(
+    la_flights, start='start', end='end',
+    projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', 
+    ax=axarr[0][0]
+)
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.coastlines()
 
-ax = gplt.sankey(la_flights, start='start', end='end',
-                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][1])
+ax = gplt.sankey(
+    la_flights, start='start', end='end',
+    projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples',
+    ax=axarr[0][1]
+)
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.stock_img()
 
-ax = gplt.sankey(la_flights, start='start', end='end',
-                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][0])
+ax = gplt.sankey(
+    la_flights, start='start', end='end',
+    projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples',
+    ax=axarr[1][0]
+)
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.gridlines()
 ax.coastlines()
 ax.add_feature(cartopy.feature.BORDERS)
 
-ax = gplt.sankey(la_flights, start='start', end='end',
-                 projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][1])
+ax = gplt.sankey(
+    la_flights, start='start', end='end',
+    projection=gcrs.Orthographic(), scale='Passengers', hue='Passengers', cmap='Purples',
+    ax=axarr[1][1]
+)
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.coastlines()

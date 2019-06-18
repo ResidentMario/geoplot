@@ -351,7 +351,8 @@ def pointplot(
 
 def polyplot(
     df, projection=None,
-    extent=None, figsize=(8, 6), edgecolor='black', facecolor='None', ax=None, **kwargs
+    extent=None, figsize=(8, 6), edgecolor='black', facecolor='None', zorder=-1,
+    ax=None, **kwargs
 ):
     """
     Polygons on a map.
@@ -458,18 +459,20 @@ def polyplot(
     if projection:
         for geom in df.geometry:
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
+            ax.add_feature(
+                features, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
+            )
     else:
         for geom in df.geometry:
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
                     feature = descartes.PolygonPatch(
-                        subgeom, facecolor=facecolor, edgecolor=edgecolor, **kwargs
+                        subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
                     )
                     ax.add_patch(feature)
             except (TypeError, AssertionError):  # Shapely Polygon.
                 feature = descartes.PolygonPatch(
-                    geom, facecolor=facecolor, edgecolor=edgecolor, **kwargs
+                    geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
                 )
                 ax.add_patch(feature)
 

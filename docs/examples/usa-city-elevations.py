@@ -17,7 +17,7 @@ proj = gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5)
 f, axarr = plt.subplots(2, 2, figsize=(12, 8), subplot_kw={'projection': proj})
 
 polyplot_kwargs = {
-    'projection': proj, 'facecolor': (0.9, 0.9, 0.9), 'zorder': -100, 'linewidth': 0
+    'projection': proj, 'facecolor': (0.9, 0.9, 0.9), 'linewidth': 0
 }
 pointplot_kwargs = {
     'projection': proj, 'scale': 'ELEV_IN_FT',
