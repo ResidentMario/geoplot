@@ -71,8 +71,9 @@ def pointplot(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Control the plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -362,8 +363,9 @@ def polyplot(
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot. Defaults to (8, 6), the ``matplotlib`` default global.
@@ -515,8 +517,9 @@ def choropleth(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -746,8 +749,9 @@ def quadtree(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -949,8 +953,9 @@ def cartogram(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -1200,8 +1205,9 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     clip : None or iterable or GeoSeries, optional
         If specified, the ``kdeplot`` output will be clipped to the boundaries of this geometry.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -1420,8 +1426,9 @@ def sankey(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
@@ -1853,8 +1860,9 @@ def voronoi(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (minx, maxx, miny, maxy), optional
-        Used to control plot x-axis and y-axis limits manually.
+    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
     figsize : tuple, optional
         An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
         resultant plot.
