@@ -2373,13 +2373,9 @@ def _lay_out_axes(ax, projection):
     -------
     None
     """
-    # TODO: remove the test code
     if projection is not None:
-        try:
-            ax.background_patch.set_visible(False)
-            ax.outline_patch.set_visible(False)
-        except AttributeError:  # Testing...
-            pass
+        ax.background_patch.set_visible(False)
+        ax.outline_patch.set_visible(False)
     else:
         plt.gca().axison = False
 
