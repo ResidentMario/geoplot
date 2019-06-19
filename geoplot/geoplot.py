@@ -30,7 +30,7 @@ def pointplot(
     figsize=(8, 6), extent=None, ax=None, **kwargs
 ):
     """
-    A scatter plot, where data value(s) are represented as a coordinate point on a map.
+    A geospatial scatter plot.
 
     Parameters
     ----------
@@ -41,76 +41,80 @@ def pointplot(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the map classifier to use.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        If ``hue`` is specified, the number of colors to use.
+        If ``hue`` is specified, the number of color categories to split the data into. For a
+        continuous colormap, set this value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
-        points. For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
+        points. For a reference on this and the other scale-related parameters that follow, see
+        `Customizing Plots#Scale <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits.
+        If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
-        The function used to scale point sizes.
+        If ``scale`` is set, the function used to determine the size of each point. For reference
+        see the
+        `Pointplot Scale Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_
+        demo.
     legend : boolean, optional
-        Whether to include a legend.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
     legend_var : "hue" or "scale", optional
-        Which variable (``hue`` or ``scale``) to use in the legend.
+        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying `scatter plot
+        Keyword arguments to be passed to the underlying `matplotlib.pyplot.scatter instance
         <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
 
     The ``pointplot`` is a `geospatial scatter plot 
     <https://en.wikipedia.org/wiki/Scatter_plot>`_ that represents each observation in your dataset
-    with a single point. It is simple and easily interpretable plot that is nearly universally
+    as a single point on a map. It is simple and easily interpretable plot that is universally
     understood, making it an ideal choice for showing simple pointwise relationships between
     observations.
 
-    ``df`` should be a ``GeoDataFrame`` of ``shapely.geometry.Point`` geometries:
+    ``pointplot`` requires, at a minimum, some points for plotting:
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
+        points = gplt.utils.gaussian_points()
         gplt.pointplot(points)
 
     .. image:: ../figures/pointplot/pointplot-initial.png
 
 
-    The ``hue`` parameter accepts a data column and applies a colormap to the output. The
-    ``legend`` parameter toggles a legend.
+    The ``hue`` parameter accepts applies a colormap to a data column. The ``legend`` parameter
+    toggles a legend.
 
     .. code-block:: python
 
@@ -118,115 +122,49 @@ def pointplot(
 
     .. image:: ../figures/pointplot/pointplot-legend.png
 
-    The ``pointplot`` binning methodology is controlled using by `scheme`` parameter. The default
-    is ``quantile``, which bins observations into classes of different sizes but the same numbers
-    of observations. ``equal_interval`` will creates bins that are the same size, but potentially
-    containing different numbers of observations. The more complicated ``fisher_jenks`` scheme is
-    an intermediate between the two.
+    Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
+    ``matplotlib.pyplot.scatter`` instance, which can be used to customize the appearance of the
+    plot. To pass keyword argument to the ``matplotlib.legend.Legend``, use ``legend_kwargs``
+    argument.
 
     .. code-block:: python
 
-        gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT',
-                       legend=True, scheme='equal_interval')
-
-    .. image:: ../figures/pointplot/pointplot-scheme.png
-
-    Alternatively, your data may already be `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_. ``geoplot`` will account for
-    this automatically:
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), hue='BOROUGH',
-                       legend=True)
-
-    .. image:: ../figures/pointplot/pointplot-categorical.png
-
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
-    arguments will be passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and
-    ``bbox_to_anchor`` parameters are particularly useful for positioning the legend. Other
-    additional arguments will be passed to the underlying ``matplotlib``
-    `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], 
-                       projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH',
-                       legend=True, legend_kwargs={'loc': 'upper left'},
-                       edgecolor='white', linewidth=0.5)
+        gplt.pointplot(
+            cities, projection=gcrs.AlbersEqualArea(), 
+            hue='ELEV_IN_FT',
+            legend=True, legend_kwargs={'loc': 'upper left'},
+            edgecolor='lightgray', linewidth=0.5
+        )
 
     .. image:: ../figures/pointplot/pointplot-kwargs.png
 
-    Change the number of bins by specifying an alternative ``k`` value. Adjust the `colormap
-    <http://matplotlib.org/examples/color/colormaps_reference.html>`_ using the ``cmap`` parameter.
-    To use a continuous colormap, explicitly specify ``k=None``. Note that if ``legend=True``, a
-    ``matplotlib`` `colorbar legend <http://matplotlib.org/api/colorbar_api.html>`_ will be used.
+    Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
+    continuous colormap, set ``k=None``.
 
     .. code-block:: python
 
-        gplt.pointplot(data, projection=gcrs.AlbersEqualArea(),
-                       hue='var', k=8,
-                       edgecolor='white', linewidth=0.5,
-                       legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)})
+        gplt.pointplot(
+            cities, projection=gcrs.AlbersEqualArea(),
+            hue='ELEV_IN_FT', k=8, cmap='inferno_r',
+            legend=True
+        )
 
     .. image:: ../figures/pointplot/pointplot-k.png
 
-    ``scale`` provides an alternative or additional visual variable.
+    ``scale`` provides an alternative or additional visual variable. The minimum and maximum size
+    of the points can be adjusted to fit your data using the ``limits`` parameter. It is often
+    benefitial to combine both ``scale`` and ``hue`` in a single plot. In this case, you can use
+    the ``legend_var`` variable to control which visual variable the legend is keyed on.
 
     .. code-block:: python
 
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
-                       scale='NUMBER OF PERSONS INJURED',
-                       legend=True, legend_kwargs={'loc': 'upper left'})
+        gplt.pointplot(
+            cities, projection=gcrs.AlbersEqualArea(), 
+            hue='ELEV_IN_FT', scale='ELEV_IN_FT', limits=(0.1, 3), cmap='inferno_r',
+            legend=True, legend_var='scale'
+        )
 
     .. image:: ../figures/pointplot/pointplot-scale.png
-
-    The limits can be adjusted to fit your data using the ``limits`` parameter.
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
-                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
-                       legend=True, legend_kwargs={'loc': 'upper left'})
-
-    .. image:: ../figures/pointplot/pointplot-limits.png
-
-    The default scaling function is linear: an observations at the midpoint of two others will be
-    exactly midway between them in size. To specify an alternative scaling function, use the
-    ``scale_func`` parameter. This should be a factory function of two variables which, when given
-    the maximum and minimum of the dataset, returns a scaling function which will be applied to
-    the rest of the data. A demo is available in the
-    `example gallery <examples/usa-city-elevations.html>`_.
-
-    .. code-block:: python
-
-        def trivial_scale(minval, maxval):
-            def scalar(val):
-                return 2
-            return scalar
-
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(),
-                       scale='NUMBER OF PERSONS INJURED', scale_func=trivial_scale,
-                       legend=True, legend_kwargs={'loc': 'upper left'})
-
-    .. image:: ../figures/pointplot/pointplot-scale-func.png
-
-    ``hue`` and ``scale`` can co-exist. In case more than one visual variable is used, control
-    which one appears in the legend using ``legend_var``.
-
-    .. code-block:: python
-
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()],
-                       projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH',
-                       scale='NUMBER OF PERSONS INJURED', limits=(0, 10),
-                       legend=True, legend_kwargs={'loc': 'upper left'},
-                       legend_var='scale')
-
-    .. image:: ../figures/pointplot/pointplot-legend-var.png
-
     """
     # Initialize the figure, if one hasn't been initialized already.
     _init_figure(ax, figsize)

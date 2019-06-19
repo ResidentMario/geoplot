@@ -18,8 +18,6 @@ def get_path(dataset_name):
         return f'{src}/ny-census-partial.geojson'
     elif dataset_name == 'obesity_by_state':
         return f'{src}/obesity-by-state.tsv'
-    elif dataset_name == 'nyc_injurious_collisions':
-        return f'{src}/nyc-injurious-collisions.geojson'
     elif dataset_name == 'la_flights':
         return f'{src}/la-flights.geojson'
     elif dataset_name == 'dc_roads':
