@@ -411,22 +411,23 @@ def choropleth(
 
     Parameters
     ----------
+    
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
-    hue : None, Series, GeoSeries, iterable, or str, optional
+    hue : None, Series, GeoSeries, iterable, or str, required
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        If ``hue`` is specified, the number of color categories to split the data into. For a
-        continuous colormap, set this value to ``None``.
+        The number of color categories to split the data into. For a continuous colormap, set this
+        value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the categorical binning scheme to use.
+        The categorical binning scheme to use.
     cmap : matplotlib color, optional
-        If ``hue`` is specified, the
+        The
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other 
@@ -436,8 +437,6 @@ def choropleth(
         The data values to be used in the legend.
     legend_labels : list, optional
         The data labels to be used in the legend.
-    legend_var : "hue" or "scale", optional
-        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
@@ -625,7 +624,7 @@ def quadtree(
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
-    Self-aggregating quadtree plot.
+    A choropleth with point aggregate neighborhoods.
 
     Parameters
     ----------
@@ -636,11 +635,11 @@ def quadtree(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     nmax : int or None, optional
         The maximum number of observations in a quadrangle.
     nmin : int, optional
@@ -651,25 +650,24 @@ def quadtree(
     agg : function, optional
         The aggregation func used for the colormap. Defaults to ``np.mean``.
     legend : boolean, optional
-        Whether or not to include a legend.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -677,7 +675,7 @@ def quadtree(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
@@ -827,53 +825,50 @@ def cartogram(
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
-    scale : str or iterable, optional
+    scale : str or iterable, required
         The column in the dataset (or an iterable of some other data) with which to scale output
-        points. For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
+        points. For a reference on this and the other scale-related parameters that follow, see
+        `Customizing Plots#Scale <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits.
+        If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
-        The function used to scale point sizes.
-    trace : boolean, optional
-        Whether or not to include a trace of the polygon's original outline in the plot result.
-    trace_kwargs : dict, optional
-        If ``trace`` is set to ``True``, this parameter can be used to adjust the properties of the
-        trace outline. This parameter is ignored if trace is ``False``.
+        If ``scale`` is set, the function used to determine the size of each point. For reference
+        see the
+        `Pointplot Scale Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_
+        demo.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the map classifier to use.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
-        how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
-        be used.
+        If ``hue`` is specified, the number of color categories to split the data into. For a
+        continuous colormap, set this value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     legend : boolean, optional
-        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
-        specified.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
+    legend_var : "hue" or "scale", optional
+        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -881,13 +876,12 @@ def cartogram(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
-    A cartogram is a plot type which ingests a series of enclosed ``Polygon`` or ``MultiPolygon``
-    entities and spits out a view of these shapes in which area is distorted according to the size
-    of some parameter of interest.
+    A cartogram distorts (grows or shrinks) polygons on a map according to the magnitude of some
+    input data. They are a less common but more visually "poppy" alternative to a choropleth.
 
     A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
@@ -895,12 +889,13 @@ def cartogram(
 
         import geoplot as gplt
         import geoplot.crs as gcrs
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea())
+        import geopandas as gpd
+        contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
+        gplt.cartogram(contiguous_usa, hue='population')
 
     .. image:: ../figures/cartogram/cartogram-initial.png
 
-    The gray outline can be turned off by specifying ``trace``, and a legend can be added by
-    specifying ``legend``.
+    Toggle the gray outline with ``trace`` and the legend with ``legend``.
 
     .. code-block:: python
 
