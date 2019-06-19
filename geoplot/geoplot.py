@@ -1099,7 +1099,10 @@ def cartogram(
     return ax
 
 
-def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, **kwargs):
+def kdeplot(
+    df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, shade_lowest=False,
+    **kwargs
+):
     """
     A kernel density estimate isochrone plot.
 
@@ -1168,13 +1171,28 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
 
         ax = gplt.kdeplot(
             collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
-            shade=True, shade_lowest=False,
+            shade=True,
             clip=boroughs.geometry
         )
         gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
 
     .. image:: ../figures/kdeplot/kdeplot-clip.png
 
+    Additional keyword arguments that are not part of the ``geoplot`` API are passed to
+    `the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+    One of the most useful of these parameters is ``shade_lowest``, which toggles shading on the
+    lowest (basal) layer of the kernel density estiamte.
+
+    .. code-block:: python
+
+        ax = gplt.kdeplot(
+            collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
+            shade=True, shade_lowest=True,
+            clip=boroughs.geometry
+        )
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
+
+    .. image:: ../figures/kdeplot/kdeplot-shade-lowest.png
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
@@ -1215,13 +1233,13 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
             sns.kdeplot(
                 pd.Series([p.x for p in df.geometry]),
                 pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, **kwargs
+                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
             )
         else:
             sns.kdeplot(
                 pd.Series([p.x for p in df.geometry]),
                 pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, **kwargs
+                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
             )
             clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
             feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
@@ -1241,7 +1259,7 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
             sns.kdeplot(
                 pd.Series([p.x for p in df.geometry]),
                 pd.Series([p.y for p in df.geometry]),
-                ax=ax, **kwargs
+                ax=ax, shade_lowest=shade_lowest, **kwargs
             )
     return ax
 
