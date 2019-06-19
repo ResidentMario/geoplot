@@ -3,9 +3,6 @@
 API Reference
 =============
 
-Spatial plots
--------------
-
 .. currentmodule:: geoplot
 
 .. autosummary::
