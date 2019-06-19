@@ -1271,9 +1271,9 @@ def sankey(
     end : str or iterable
         The name of a column in ``df`` or an iterable of data end points.
     path : geoplot.crs object instance or iterable, optional
-        If passed an iterable, a list of paths to draw (see `the DC Street Network demo
-        <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_) for an
-        example. If passed a projection, the projection used for drawing paths.
+        If passed an iterable, a list of paths to draw (see `the DC Street Network
+        <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_ demo for an
+        example). If passed a projection, the projection to use to draw the paths.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
