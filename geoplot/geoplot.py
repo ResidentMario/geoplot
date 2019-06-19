@@ -107,8 +107,9 @@ def pointplot(
 
         import geoplot as gplt
         import geoplot.crs as gcrs
-        points = gplt.utils.gaussian_points()
-        gplt.pointplot(points)
+        import geopandas as gpd
+        cities = gpd.read_file(gplt.datasets.get_path('usa_cities'))
+        gplt.pointplot(cities)
 
     .. image:: ../figures/pointplot/pointplot-initial.png
 
@@ -211,7 +212,7 @@ def pointplot(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, k, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -293,7 +294,7 @@ def polyplot(
     ax=None, **kwargs
 ):
     """
-    Polygons on a map.
+    A trivial polygonal plot.
 
     Parameters
     ----------
@@ -304,65 +305,47 @@ def polyplot(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot. Defaults to (8, 6), the ``matplotlib`` default global.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        Keyword arguments to be passed to the underlying ``matplotlib.patches.Polygon`` objects
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
 
-    The polyplot can be used to draw simple, unembellished polygons. A trivial example can be
-    created with just a geometry and, optionally, a projection.
+    The polyplot draws polygons on a map.
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
+        import geopandas as gpd
+        boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
         gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
-
 
     .. image:: ../figures/polyplot/polyplot-initial.png
 
-    However, note that ``polyplot`` is mainly intended to be used in concert with other plot types.
+    ``polyplot`` is intended to act as a basemap for other, more interesting plot types.
 
     .. code-block:: python
 
         ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
-        gplt.pointplot(collisions[collisions['BOROUGH'].notnull()], 
-                       projection=gcrs.AlbersEqualArea(),
-                       hue='BOROUGH',
-                       legend=True, edgecolor='white', linewidth=0.5,
-                       legend_kwargs={'loc': 'upper left'},
-                       ax=ax)
-
+        gplt.pointplot(
+            collisions[collisions['BOROUGH'].notnull()], projection=gcrs.AlbersEqualArea(), 
+            hue='BOROUGH', ax=ax, legend=True
+        )
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
-
-    Additional keyword arguments are passed to the underlying ``matplotlib`` `Polygon patches
-    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
-
-    .. code-block:: python
-
-        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(),
-                           linewidth=0, facecolor='lightgray')
-
-
-    .. image:: ../figures/polyplot/polyplot-kwargs.png
     """
     # Initialize the figure.
     _init_figure(ax, figsize)
@@ -424,7 +407,7 @@ def choropleth(
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
-    A well-known area plot.
+    A color-mapped area plot.
 
     Parameters
     ----------
@@ -435,38 +418,37 @@ def choropleth(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the map classifier to use.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
-        how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
-        be used.
+        If ``hue`` is specified, the number of color categories to split the data into. For a
+        continuous colormap, set this value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     legend : boolean, optional
-        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
-        specified.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
+    legend_var : "hue" or "scale", optional
+        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -474,7 +456,7 @@ def choropleth(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
@@ -482,40 +464,30 @@ def choropleth(
     A choropleth takes observations that have been aggregated on some meaningful polygonal level
     (e.g. census tract, state, country, or continent) and displays the data to the reader using
     color. It is a well-known plot type, and likeliest the most general-purpose and well-known of
-    the specifically spatial plot types. It is especially powerful when combined with meaningful
-    or actionable aggregation areas; if no such aggregations exist, or the aggregations you have
-    access to are mostly incidental, its value is more limited.
+    the specifically spatial plot types.
 
-    The ``choropleth`` requires a series of enclosed areas consisting of ``shapely`` ``Polygon``
-    or ``MultiPolygon`` entities, and a set of data about them that you would like to express in
-    color. A basic choropleth requires geometry, a ``hue`` variable, and, optionally, a projection.
+    A basic choropleth requires polygonal geometries and a ``hue`` variable.
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
-        gplt.choropleth(polydata, hue='latdep', projection=gcrs.PlateCarree())
+        import geopandas as gpd
+        boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+        gplt.choropleth(boroughs, hue='Shape_Area')
 
     .. image:: ../figures/choropleth/choropleth-initial.png
 
-    Change the colormap with the ``cmap`` parameter.
+    Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
+    continuous colormap, set ``k=None``. The ``legend`` parameter toggles the legend.
 
     .. code-block:: python
 
-        gplt.choropleth(polydata, hue='latdep', projection=gcrs.PlateCarree(), cmap='Blues')
-
+        gplt.choropleth(
+            contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
+            cmap='Greens', k=None, legend=True
+        )
     .. image:: ../figures/choropleth/choropleth-cmap.png
-
-    ``geoplot`` will automatically do the right thing if your variable is `categorical
-    <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_ instead. To add a legend,
-    specify a ``legend``.
-
-    .. code-block:: python
-
-        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
-                        legend=True)
-
-    .. image:: ../figures/choropleth/choropleth-legend.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
     arguments will be passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
@@ -606,7 +578,7 @@ def choropleth(
         # Categorical colormap code path.
 
         # Validate buckets.
-        categorical, scheme = _validate_buckets(df, hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, k, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1062,7 +1034,7 @@ def cartogram(
     # specified for either to work).
     if k is not None and hue is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, k, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -1654,7 +1626,7 @@ def sankey(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, k, scheme)
 
         hue = _to_geoseries(df, hue)
 
@@ -1953,7 +1925,7 @@ def voronoi(
     # specified for either to work).
     if k is not None:
         # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, scheme)
+        categorical, scheme = _validate_buckets(df, hue, k, scheme)
 
         if hue is not None:
             cmap, categories, hue_values = _discrete_colorize(
@@ -2233,14 +2205,19 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
 
-def _validate_buckets(df, hue, scheme):
+def _validate_buckets(df, hue, k, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
     already set.
     """
     if isinstance(hue, str):
         hue = df[hue]
-    categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
+    # if the data is non-categorical, but there are fewer to equal numbers of bins and
+    # observations, treat it as categorical, as doing so will make the legend cleaner
+    if k is not None and len(hue) <= k:
+        categorical = True
+    else:
+        categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
 
