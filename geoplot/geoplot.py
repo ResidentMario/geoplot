@@ -816,7 +816,7 @@ def cartogram(
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
-    Self-scaling area plot.
+    A scaling area plot.
 
     Parameters
     ----------
@@ -1101,7 +1101,7 @@ def cartogram(
 
 def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, **kwargs):
     """
-    Spatial kernel density estimate plot.
+    A kernel density estimate isochrone plot.
 
     Parameters
     ----------
@@ -1114,85 +1114,64 @@ def kdeplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None
         If specified, the ``kdeplot`` output will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``seaborn`` `kernel density estimate plot
-        <https://seaborn.pydata.org/generated/seaborn.kdeplot.html>`_.
-
+        Keyword arguments to be passed to 
+        `the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
-    `Kernel density estimate <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ is a
-    flexible unsupervised machine learning technique for non-parametrically estimating the
-    distribution underlying input data. The KDE is a great way of smoothing out random noise and
-    estimating the  true shape of point data distributed in your space, but it needs a moderately
-    large number of observations to be reliable.
+    `Kernel density estimation <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ is a
+    technique that non-parameterically estimates a distribution function for a sample of point
+    observations. KDEs are a popular tool for analyzing data distributions; this plot applies this
+    technique to the geospatial setting.
 
-    The ``geoplot`` ``kdeplot``, actually a thin wrapper on top of the ``seaborn`` ``kdeplot``,
-    is an application of this visualization technique to the geospatial setting.
-
-    A basic ``kdeplot`` specifies (pointwise) data and, optionally, a projection. To make the
-    result more interpretable, I also overlay the underlying borough geometry.
+    A basic ``kdeplot`` takes pointwise data as input. For interpretability, let's also plot the
+    underlying borough geometry.
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea())
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
+        import geoplot as gplt
+        import geoplot.crs as gcrs
+        import geopandas as gpd
+        boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+        collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
+        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+        gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(), ax=ax)
 
-    .. image:: ../figures/kdeplot/kdeplot-overlay.png
+    .. image:: ../figures/kdeplot/kdeplot-initial.png
 
-    Most of the rest of the parameters to ``kdeplot`` are parameters inherited from
-    `the seaborn method by the same name <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_,
-    on which this plot type is based. For example, specifying ``shade=True`` provides a filled
-    KDE instead of a contour one:
+    ``n_levels`` controls the number of isochrones. ``cmap`` control the colormap.
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
-                          shade=True)
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
+        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+        gplt.kdeplot(
+            collisions, projection=gcrs.AlbersEqualArea(), n_levels=20, cmap='Reds', ax=ax
+        )
 
     .. image:: ../figures/kdeplot/kdeplot-shade.png
 
-    Use ``n_levels`` to specify the number of contour levels.
+    ``shade`` toggles shaded isochrones. Use ``clip`` to constrain the plot to the surrounding
+    geometry.
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
-                          n_levels=30)
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
-
-    .. image:: ../figures/kdeplot/kdeplot-n-levels.png
-
-    Or specify ``cmap`` to change the colormap.
-
-    .. code-block:: python
-
-        ax = gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
-             cmap='Purples')
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax)
-
-    .. image:: ../figures/kdeplot/kdeplot-cmap.png
-
-    Oftentimes given the geometry of the location, a "regular" continuous KDEPlot doesn't make
-    sense. We can specify a ``clip`` of iterable geometries, which will be used to trim the
-    ``kdeplot``. Note that if you have set ``shade=True`` as a parameter you may need to
-    additionally specify ``shade_lowest=False`` to avoid inversion at the edges of the plot.
-
-    .. code-block:: python
-
-        gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(),
-                     shade=True, clip=boroughs)
+        ax = gplt.kdeplot(
+            collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
+            shade=True, shade_lowest=False,
+            clip=boroughs.geometry
+        )
+        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
 
     .. image:: ../figures/kdeplot/kdeplot-clip.png
 
@@ -1277,95 +1256,94 @@ def sankey(
     ax=None, **kwargs
 ):
     """
-    Spatial Sankey or flow map.
+    A spatial Sankey or flow map.
 
     Parameters
     ----------
-    df : GeoDataFrame, optional.
-        The data being plotted. This parameter is optional - it is not needed if ``start`` and
-        ``end`` (and ``hue``, if provided) are iterables.
+    df : GeoDataFrame, optional
+        The data being plotted. ``start`` and ``end`` must be iterable if this field is left
+        unspecified.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     start : str or iterable
-        A list of starting points. This parameter is required.
+        The name of a column in ``df`` or an iterable of data start points.
     end : str or iterable
-        A list of ending points. This parameter is required.
+        The name of a column in ``df`` or an iterable of data end points.
     path : geoplot.crs object instance or iterable, optional
-        Pass an iterable of paths to draw custom paths (see `this example
-        <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_), or a
-        projection to draw the shortest paths in that given projection. The default is
-        ``Geodetic()``, which will connect points using 
-        `great circle distance <https://en.wikipedia.org/wiki/Great-circle_distance>`_—the true
-        shortest path on the surface of the Earth.
+        If passed an iterable, a list of paths to draw (see `the DC Street Network
+        <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_ demo for an
+        example). If passed a projection, the projection to use to draw the paths.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the map classifier to use.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
-        how many colors to use (5 is the default). If set to ``None``, a continuous colormap will
-        be used.
+        If ``hue`` is specified, the number of color categories to split the data into. For a
+        continuous colormap, set this value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
-        points. For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
+        points. For a reference on this and the other scale-related parameters that follow, see
+        `Customizing Plots#Scale <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
     limits : (min, max) tuple, optional
-        The minimum and maximum scale limits.
+        If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
-        The function used to scale point sizes.
+        If ``scale`` is set, the function used to determine the size of each point. For reference
+        see the
+        `Pointplot Scale Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_
+        demo.
     legend : boolean, optional
-        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
-        specified.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
     legend_var : "hue" or "scale", optional
-        Which variable (``hue`` or ``scale``) to use in the legend.
+        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` 
-        `Line2D <https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D>`_
+        Keyword arguments to be passed to 
+        `the underlying matplotlib.lines.Line2D <https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D>`_
         instances.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis
+        The plot axis.
 
     Examples
     --------
-    A `Sankey diagram <https://en.wikipedia.org/wiki/Sankey_diagram>`_ is a simple visualization
-    demonstrating flow through a network. A Sankey diagram is useful when you wish to show the
-    volume of things moving between points or spaces: traffic load a road network, for example, or
-    inter-airport travel volumes. The ``geoplot`` ``sankey`` adds spatial context to this plot type
-    by laying out the points in meaningful locations: airport locations, say, or road
-    intersections.
+    A `Sankey diagram <https://en.wikipedia.org/wiki/Sankey_diagram>`_ visualizes flow through a
+    network. It can be used to show the magnitudes of data moving through a system. This plot
+    brings the Sankey diagram into the geospatial context; useful for analyzing traffic load a road
+    network, for example, or travel volumes between different airports.
 
-    A basic ``sankey`` specifies data, ``start`` points, ``end`` points, and, optionally, a
-    projection. The ``df`` argument is optional; if geometries are provided as independent
-    iterables it is ignored. We overlay world geometry to aid interpretability.
+    A basic ``sankey`` specifies data, ``start`` points, ``end`` points.
 
     .. code-block:: python
+
+        import geoplot as gplt
+        import geoplot.crs as gcrs
+        import geopandas as gpd
+        la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
+        network = gpd.read_file(gplt.datasets.get_path('dc_streets'))
 
         ax = gplt.sankey(la_flights, start='start', end='end', projection=gcrs.PlateCarree())
         ax.set_global(); ax.coastlines()
@@ -1733,7 +1711,7 @@ def voronoi(
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
     """
-    Geospatial Voronoi diagram.
+    A geospatial Voronoi diagram.
 
     Parameters
     ----------
@@ -1744,66 +1722,69 @@ def voronoi(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
-        For reference see
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
-        If ``hue`` is specified, the map classifier to use.
+        For a reference on this and the other hue-related parameters that follow, see
+        `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
     k : int or None, optional
-        Ignored if ``hue`` is left unspecified. Otherwise, if ``categorical`` is False, controls
-        how many colors to use (5 is the default). If set to ``None``, a continuous colormap
-        will be used.
+        If ``hue`` is specified, the number of color categories to split the data into. For a
+        continuous colormap, set this value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        If ``hue`` is specified, the categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    scale : str or iterable, optional
+        The column in the dataset (or an iterable of some other data) with which to scale output
+        points. For a reference on this and the other scale-related parameters that follow, see
+        `Customizing Plots#Scale <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale>`_.
+    limits : (min, max) tuple, optional
+        If ``scale`` is set, the minimum and maximum size of the points.
+    scale_func : ufunc, optional
+        If ``scale`` is set, the function used to determine the size of each point. For reference
+        see the
+        `Pointplot Scale Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_
+        demo.
     legend : boolean, optional
-        Whether or not to include a legend. Ignored if neither a ``hue`` nor a ``scale`` is
-        specified.
+        Whether or not to include a map legend. For a reference on this and the other 
+        legend-related parameters that follow, see
+        `Customizing Plots#Legend <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
     legend_values : list, optional
-        The values to use in the legend. Defaults to equal intervals. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data values to be used in the legend.
     legend_labels : list, optional
-        The names to use in the legend. Defaults to the variable values. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend>`_.
+        The data labels to be used in the legend.
+    legend_var : "hue" or "scale", optional
+        Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
-        `the underlying legend <http://matplotlib.org/users/legend_guide.html>`_.
+        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
-    figsize : tuple, optional
-        An (x, y) tuple passed to ``matplotlib.figure`` which sets the size, in inches, of the
-        resultant plot.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
-        A ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot`` instance.
-        Defaults to a new axis.
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying ``matplotlib`` `Line2D objects
         <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
 
     Returns
     -------
-    AxesSubplot or GeoAxesSubplot instance
-        The axis object with the plot on it.
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis.
 
     Examples
     --------
 
-    The neighborhood closest to a point in space is known as its `Voronoi region
-    <https://en.wikipedia.org/wiki/Voronoi_diagram>`_. Every point in a dataset has a Voronoi
-    region, which may be either a closed polygon (for inliers) or open infinite region (for points
-    on the edge of the distribution). A Voronoi diagram works by dividing a space filled with
-    points into such regions and plotting the result. Voronoi plots allow efficient assessment of
-    the *density* of points in different spaces, and when combined with a colormap can be quite
-    informative of overall trends in the dataset.
+    The `Voronoi region <https://en.wikipedia.org/wiki/Voronoi_diagram>`_ of an point is the set
+    of points which is closer to that point than to any other observation in a dataset. A Voronoi
+    diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
+    plots them. 
+    
+    Voronoi plots are efficient for judging point density and, combined with colormap, can be used
+    to infer regional trends in a set of data.
 
-    The ``geoplot`` ``voronoi`` is a spatially aware application of this technique. It compares
-    well with the more well-known ``choropleth``, which has the advantage of using meaningful
-    regions, but the disadvantage of having defined those regions beforehand. ``voronoi`` has
-    fewer requirements and may perform better when the number of observations is small. Compare
-    also with the quadtree technique available in ``aggplot``.
-
-    A basic ``voronoi`` specified data and, optionally, a projection. We overlay geometry to aid
-    interpretability.
+    A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
 
     .. code-block:: python
 
