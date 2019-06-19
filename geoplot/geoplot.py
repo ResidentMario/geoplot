@@ -77,7 +77,7 @@ def pointplot(
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -305,7 +305,7 @@ def polyplot(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -443,7 +443,7 @@ def choropleth(
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
-        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb>`_.
+        `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -487,57 +487,56 @@ def choropleth(
             contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
             cmap='Greens', k=None, legend=True
         )
+
     .. image:: ../figures/choropleth/choropleth-cmap.png
 
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
-    arguments will be passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and
-    ``bbox_to_anchor`` parameters are particularly useful for positioning the legend. Other
-    additional arguments will be passed to the underlying ``matplotlib``
-    `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+    Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
+    ``matplotlib.patches.Polygon`` objects; this can be used to control plot aesthetics. To pass
+    keyword argument to the ``matplotlib.legend.Legend``, use the ``legend_kwargs`` argument.
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName',
-                        legend=True, legend_kwargs={'loc': 'upper left'})
+        gplt.choropleth(
+            contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
+            edgecolor='white', linewidth=1,
+            cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'}
+        )
 
     .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
 
-    Additional arguments not in the method signature will be passed as keyword parameters to the
-    underlying 
-    `matplotlib Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+    Plots with a categorical colormap can use the ``scheme`` parameter to control how the data gets
+    sorted into the ``k`` bins. The default ``quantile`` sorts into an equal number of observations
+    per bin, whereas ``equal_interval`` creates bins equal in size. The more complicated
+    ``fisher_jenks`` scheme is an intermediate between the two.
 
     .. code-block:: python
 
-        gplt.choropleth(boroughs, projection=gcrs.AlbersEqualArea(), hue='BoroName', 
-                        linewidth=0)
-
-    .. image:: ../figures/choropleth/choropleth-kwargs.png
-
-    Choropleths default to splitting the data into five buckets with approximately equal numbers
-    of observations in them. Change the number of buckets by specifying ``k``. Or, to use a
-    continuous colormap, specify ``k=None``. In this case a colorbar legend will be used.
-
-    .. code-block:: python
-
-        gplt.choropleth(polydata, hue='latdep', cmap='Blues', k=None, legend=True,
-                        projection=gcrs.PlateCarree())
-
-    .. image:: ../figures/choropleth/choropleth-k-none.png
-
-    The ``choropleth`` binning methodology is controlled using by `scheme`` parameter. The default
-    is ``quantile``, which bins observations into classes of different sizes but the same numbers
-    of observations. ``equal_interval`` will creates bins that are the same size, but potentially
-    containing different numbers of observations. The more complicated ``fisher_jenks`` scheme is
-    an intermediate between the two.
-
-    .. code-block:: python
-
-        gplt.choropleth(census_tracts, hue='mock_data', projection=gcrs.AlbersEqualArea(),
-                legend=True, edgecolor='white', linewidth=0.5, legend_kwargs={'loc': 'upper left'},
-                scheme='equal_interval')
+        gplt.choropleth(
+            contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
+            edgecolor='white', linewidth=1,
+            cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'},
+            scheme='fisher_jenks'
+        )
 
     .. image:: ../figures/choropleth/choropleth-scheme.png
+
+    Use ``legend_labels`` and ``legend_values`` to customize the labels and values that appear
+    in the legend.
+
+    .. code-block:: python
+
+        gplt.choropleth(
+            contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
+            edgecolor='white', linewidth=1,
+            cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'},
+            scheme='fisher_jenks',
+            legend_labels=[
+                '<3 million', '3-6.7 million', '6.7-12.8 million',
+                '12.8-25 million', '25-37 million'
+            ]
+        )
+
+    .. image:: ../figures/choropleth/choropleth-labels.png
     """
     # Initialize the figure.
     _init_figure(ax, figsize)
