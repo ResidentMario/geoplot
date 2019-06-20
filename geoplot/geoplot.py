@@ -619,8 +619,9 @@ def choropleth(
 
 def quadtree(
     df, projection=None,
-    hue=None, nmax=None, nmin=None, nsig=0, agg=np.mean,
-    cmap='viridis', legend=True, legend_kwargs=None,
+    hue=None, cmap='viridis',
+    nmax=None, nmin=None, nsig=0, agg=np.mean,
+    legend=False, legend_kwargs=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -688,16 +689,17 @@ def quadtree(
     information and have a relatively homogeneous point distribution. A sufficiently large number
     of points `can construct a very detailed view of a space <https://i.imgur.com/n2xlycT.png>`_.
 
-    A simple ``quadtree`` can be generated with a dataset, a data column of interest, and
-    (optionally) a projection.
+    A simple ``quadtree`` specifies a dataset and a minimum number of observations per bin,
+    ``nmin``.
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
-        gplt.aggplot(collisions, projection=gcrs.PlateCarree(), hue='LATDEP')
+        collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
+        gplt.quadtree(collisions, nmin=1)
 
-    .. image:: ../figures/aggplot/aggplot-initial.png
+    .. image:: ../figures/quadtree/quadtree-initial.png
 
     To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters,
     controlling the minimum and maximum number of observations per box, respectively, yourself. In
@@ -753,55 +755,52 @@ def quadtree(
 
     # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
     df = gpd.GeoDataFrame(df, geometry=df.geometry)
-
-    # Type-constrain hue.
-    if not isinstance(hue, str):
-        hue_col = hash(str(hue))
-        df[hue_col] = _to_geoseries(df, hue)
-    else:
-        hue_col = hue
+    hue = _to_geoseries(df, hue)
+    if hue is not None:
+        df = df.assign(hue_col=hue)
 
     # Set reasonable defaults for the n-params if appropriate.
     nmax = nmax if nmax else len(df)
-    nmin = nmin if nmin else np.max([1, np.min([20, int(0.05 * len(df))])])
+    nmin = nmin if nmin else np.max([1, np.round(len(df) / 100)]).astype(int)
+
+    # Jitter the points. Otherwise if there are n points sharing the same coordinate, but
+    # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly on
+    # 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the vast
+    # majority of geospatial applications. If the meaningful precision of your dataset exceeds 1cm,
+    # jitter the points yourself.
+    df = df.assign(geometry=_jitter_points(df.geometry))
 
     # Generate a quadtree.
     quad = QuadTree(df)
     bxmin, bxmax, bymin, bymax = quad.bounds
-
-    # Assert that nmin is not smaller than the largest number of co-located observations
-    # (otherwise the algorithm would continue running until the recursion limit).
-    max_coloc = np.max([len(l) for l in quad.agg.values()])
-    if max_coloc > nmin:
-        raise ValueError(
-            "nmin is set to {0}, but there is a coordinate containing {1} observations in the "
-            "dataset.".format(nmin, max_coloc)
-        )
-
-    # Run the partitions.
     partitions = list(quad.partition(nmin, nmax))
 
-    # Generate colormap.
-    values = [agg(p.data[hue_col]) for p in partitions if p.n > nsig]
-    cmap = _continuous_colormap(values, cmap)
+    # Set color information, if necessary
+    if hue is not None:
+        values = [agg(p.data.hue_col) for p in partitions if p.n > nsig]
+        cmap = _continuous_colormap(values, cmap)
 
     for p in partitions:
         xmin, xmax, ymin, ymax = p.bounds
         rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-        color = cmap.to_rgba(agg(p.data[hue_col])) if p.n > nsig else "white"
+
+        if hue is not None:
+            facecolor = cmap.to_rgba(agg(p.data.hue_col)) if p.n > nsig else "None"
+        else:
+            facecolor = "None"
         if projection:
             feature = ShapelyFeature([rect], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=color, **kwargs)
+            ax.add_feature(feature, facecolor=facecolor, **kwargs)
+
         else:
-            feature = descartes.PolygonPatch(rect, facecolor=color, **kwargs)
+            feature = descartes.PolygonPatch(rect, facecolor=facecolor, **kwargs)
             ax.add_patch(feature)
 
     # Set extent.
     extrema = (bxmin, bxmax, bymin, bymax)
     _set_extent(ax, projection, extent, extrema)
 
-    # Append a legend, if appropriate.
-    if legend:
+    if hue is not None and legend:
         _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
 
     return ax
@@ -2300,6 +2299,61 @@ def _build_voronoi_polygons(df):
             polygons.append(geom)
 
     return polygons
+
+
+def _jitter_points(geoms):
+    working_df = gpd.GeoDataFrame().assign(
+        _x=geoms.x,
+        _y=geoms.y,
+        geometry=geoms
+    )
+    group = working_df.groupby(['_x', '_y'])
+    group_sizes = group.size()
+
+    if not (group_sizes > 1).any():
+        return geoms
+
+    else:
+        jitter_indices = []
+
+        group_indices = group.indices
+        group_keys_of_interest = group_sizes[group_sizes > 1].index
+        for group_key_of_interest in group_keys_of_interest:
+            jitter_indices += group_indices[group_key_of_interest].tolist()
+
+        _x_jitter = (
+            pd.Series([0] * len(working_df)) +
+            pd.Series(
+                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
+                index=jitter_indices
+            )
+        )
+        _x_jitter = _x_jitter.fillna(0)
+
+        _y_jitter = (
+            pd.Series([0] * len(working_df)) +
+            pd.Series(
+                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
+                index=jitter_indices
+            )
+        )
+        _y_jitter = _y_jitter.fillna(0)
+
+        out = gpd.GeoSeries([
+            shapely.geometry.Point(x, y) for x, y in
+            zip(working_df._x + _x_jitter, working_df._y + _y_jitter)
+        ])
+
+        # guarantee that no two points have the exact same coordinates
+        regroup_sizes = (
+            gpd.GeoDataFrame()
+            .assign(_x=out.x, _y=out.y)
+            .groupby(['_x', '_y'])
+            .size()
+        )
+        assert not (regroup_sizes > 1).any()
+
+        return out
 
 
 #######################
