@@ -1289,9 +1289,11 @@ def sankey(
     end : str or iterable
         The name of a column in ``df`` or an iterable of data end points.
     path : geoplot.crs object instance or iterable, optional
-        If passed an iterable, a list of paths to draw (see `the DC Street Network
+        The geometries to be used drawing the paths. See `the DC Street Network
         <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_ demo for an
-        example). If passed a projection, the projection to use to draw the paths.
+        example. If this parameter is left out, the shortest-path
+        `great circle route <https://en.wikipedia.org/wiki/Great_circle>`_ between ``start`` and
+        ``end`` will be used.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
@@ -1361,46 +1363,42 @@ def sankey(
         import geoplot.crs as gcrs
         import geopandas as gpd
         la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
-        network = gpd.read_file(gplt.datasets.get_path('dc_streets'))
+        world = gpd.read_file(gplt.datasets.get_path('world'))
 
-        ax = gplt.sankey(la_flights, start='start', end='end', projection=gcrs.PlateCarree())
-        ax.set_global(); ax.coastlines()
+        ax = gplt.sankey(
+            la_flights, start='start', end='end', projection=gcrs.Orthographic()
+        )
+        gplt.polyplot(
+            world, ax=ax, facecolor='lightgray', edgecolor='white',
+            projection=gcrs.Orthographic()
+        )
+        ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-geospatial-context.png
 
-    The lines appear curved because they are 
-    `great circle <https://en.wikipedia.org/wiki/Great-circle_distance>`_ paths, which are the
-    shortest routes between points on a sphere.
+    Paths are `great circle <https://en.wikipedia.org/wiki/Great-circle_distance>`_ paths by
+    default. If your data has custom paths, you can use plot those instead via ``path``.
 
     .. code-block:: python
 
-        ax = gplt.sankey(la_flights, start='start', end='end', projection=gcrs.Orthographic())
-        ax.set_global(); ax.coastlines(); ax.outline_patch.set_visible(True)
-
-    .. image:: ../figures/sankey/sankey-greatest-circle-distance.png
-
-    To plot using a different distance metric pass a ``cartopy`` ``crs`` object (*not* a 
-    ``geoplot`` one) to the ``path`` parameter.
-
-    .. code-block:: python
-
-        import cartopy.crs as ccrs
-        ax = gplt.sankey(la_flights, start='start', end='end', projection=gcrs.PlateCarree(),
-                         path=ccrs.PlateCarree())
-        ax.set_global(); ax.coastlines()
-
-    .. image:: ../figures/sankey/sankey-path-projection.png
-
-    If your data has custom paths, you can use those instead, via the ``path`` parameter.
-
-    .. code-block:: python
-
-        gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(), scale='aadt')
-
+        dc = gpd.read_file(gplt.datasets.get_path('dc_roads'))
+        gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea())
 
     .. image:: ../figures/sankey/sankey-path.png
 
-    ``hue`` parameterizes the color, and ``cmap`` controls the colormap. ``legend`` adds a legend.
+    ``scale`` adds volumetric scaling to the plot. To control the minimum and maximum line width,
+    use ``limits``. ``hue`` adds color-coding. Use ``cmap`` to control the colormap used.
+    ``legend`` toggles a legend.
+
+    .. code-block:: python
+
+        gplt.sankey(
+            dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(),
+            scale='aadt', hue='aadt', cmap='Purples', legend=True
+        )
+
+    .. image:: ../figures/sankey/sankey-cmap.png
+
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
     arguments will be passed to the underlying ``matplotlib`` `Legend
     <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_. The ``loc`` and
@@ -1418,11 +1416,7 @@ def sankey(
     .. image:: ../figures/sankey/sankey-legend-kwargs.png
 
     Change the number of bins by specifying an alternative ``k`` value. To use a continuous
-    colormap, explicitly specify ``k=None``. You can change the binning sceme with ``scheme``.
-    The default is ``quantile``, which bins observations into classes of different sizes but the
-    same numbers of observations. ``equal_interval`` will creates bins that are the same size, but
-    potentially containing different numbers of observations. The more complicated ``fisher_jenks``
-    scheme is an intermediate between the two.
+    colormap, explicitly specify ``k=None``.
 
     .. code-block:: python
 
@@ -1435,20 +1429,6 @@ def sankey(
         ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-scheme.png
-
-    ``geoplot`` will automatically do the right thing if your variable of interest is already
-    `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_:
-
-    .. code-block:: python
-
-        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
-                         start='from', end='to',
-                         hue='above_meridian', cmap='RdYlBu',
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.2, 1.0)})
-        ax.set_global()
-        ax.coastlines()
-
-    .. image:: ../figures/sankey/sankey-categorical.png
 
     ``scale`` can be used to enable ``linewidth`` as a visual variable. Adjust the upper and lower
     bound with the ``limits`` parameter.
@@ -1464,25 +1444,6 @@ def sankey(
         ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-scale.png
-
-    The default scaling function is linear: an observations at the midpoint of two others will be
-    exactly midway between them in size. To specify an alternative scaling function, use the
-    ``scale_func`` parameter. This should be a factory function of two variables which, when given
-    the maximum and minimum of the dataset, returns a scaling function which will be applied to the
-    rest of the data. A demo is available in the 
-    `example gallery <examples/usa-city-elevations.html>`_.
-
-    .. code-block:: python
-
-        def trivial_scale(minval, maxval): return lambda v: 1
-        ax = gplt.sankey(la_flights, projection=gcrs.PlateCarree(),
-                         extent=(-125.0011, -66.9326, 24.9493, 49.5904),
-                         start='start', end='end',
-                         scale='Passengers', scale_func=trivial_scale,
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)})
-        ax.coastlines()
-
-    .. image:: ../figures/sankey/sankey-scale-func.png
 
     ``hue`` and ``scale`` can co-exist. In case more than one visual variable is used, control
     which one appears in the legend using ``legend_var``.
@@ -1534,8 +1495,8 @@ def sankey(
         path_geoms = df[path]
     elif hasattr(path, "__iter__"):  # Path is an iterable.
         path_geoms = gpd.GeoSeries(path)
-    else:  # Path is a cartopy.crs object.
-        path_geoms = None
+    else:
+        raise ValueError("'path' parameter must be a str or iterable.")
     if start is not None and end is not None:
         points = pd.concat([start, end])
     else:
@@ -2205,12 +2166,14 @@ def _validate_buckets(df, hue, k, scheme):
     """
     if isinstance(hue, str):
         hue = df[hue]
+    if hue is None:
+        categorical = False
     # if the data is non-categorical, but there are fewer to equal numbers of bins and
     # observations, treat it as categorical, as doing so will make the legend cleaner
-    if k is not None and len(hue) <= k:
+    elif k is not None and len(hue) <= k:
         categorical = True
     else:
-        categorical = (hue.dtype == np.dtype('object')) if hue is not None else False
+        categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
 
