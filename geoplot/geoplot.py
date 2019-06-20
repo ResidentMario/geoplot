@@ -1114,7 +1114,7 @@ def kdeplot(
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     clip : None or iterable or GeoSeries, optional
-        If specified, the ``kdeplot`` output will be clipped to the boundaries of this geometry.
+        If specified, isochrones will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1172,7 +1172,7 @@ def kdeplot(
         ax = gplt.kdeplot(
             collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
             shade=True,
-            clip=boroughs.geometry
+            clip=boroughs
         )
         gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
 
@@ -1188,7 +1188,7 @@ def kdeplot(
         ax = gplt.kdeplot(
             collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
             shade=True, shade_lowest=True,
-            clip=boroughs.geometry
+            clip=boroughs
         )
         gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
 
@@ -1227,6 +1227,9 @@ def kdeplot(
     # Set extent.
     extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
     _set_extent(ax, projection, extent, extrema)
+
+    # Parse clip input.
+    clip = _to_geoseries(df, clip)
 
     if projection:
         if clip is None:
@@ -1699,6 +1702,8 @@ def voronoi(
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
+    clip : None or iterable or GeoSeries, optional
+        If specified, the output will be clipped to the boundaries of this geometry.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
@@ -1787,7 +1792,7 @@ def voronoi(
     .. code-block:: python
 
         ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-                          cmap='Reds', clip=boroughs.geometry)
+                          cmap='Reds', clip=boroughs)
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-clip.png
@@ -1802,7 +1807,7 @@ def voronoi(
 
         ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
                           cmap='Reds',
-                          clip=boroughs.geometry,
+                          clip=boroughs,
                           legend=True, legend_kwargs={'loc': 'upper left'},
                           linewidth=0.5, edgecolor='white')
         gplt.polyplot(boroughs, ax=ax)
@@ -1820,7 +1825,7 @@ def voronoi(
 
         ax = gplt.voronoi(injurious_collisions.head(1000),
                           hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=5, scheme='fisher_jenks',
-                          clip=boroughs.geometry,
+                          clip=boroughs,
                           legend=True, legend_kwargs={'loc': 'upper left'},
                           linewidth=0.5, edgecolor='white',
                          )
@@ -1835,7 +1840,7 @@ def voronoi(
 
         ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
                           cmap='Reds',
-                          edgecolor='white', clip=boroughs.geometry,
+                          edgecolor='white', clip=boroughs,
                           linewidth=0.5)
         gplt.polyplot(boroughs, linewidth=1, ax=ax)
 
@@ -2050,19 +2055,20 @@ def _set_legend_var(legend_var, hue, scale):
     return legend_var
 
 
-def _to_geoseries(df, hue):
+def _to_geoseries(df, var):
     """
-    The top-level ``hue`` parameter present in most plot types accepts a variety of input types.
-    This method condenses this variety into a single preferred format---an iterable---which is
-    expected by all submethods working with the data downstream of it.
+    Some top-level parameters present in most plot types accept a variety of iterables as input
+    types. This method condenses this variety into a single preferred format - a GeoSeries.
     """
-    if hue is None:
+    if var is None:
         return None
-    elif isinstance(hue, str):
-        hue = df[hue]
-        return hue
+    elif isinstance(var, str):
+        var = df[var]
+        return var
+    elif isinstance(var, gpd.GeoDataFrame):
+        return var.geometry
     else:
-        return gpd.GeoSeries(hue)
+        return gpd.GeoSeries(var)
 
 
 def _continuous_colormap(hue, cmap):
