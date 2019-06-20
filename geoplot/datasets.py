@@ -40,5 +40,7 @@ def get_path(dataset_name):
         return f'{src}/nyc-police-precincts.geojson'
     elif dataset_name == 'nyc_parking_tickets':
         return f'{src}/nyc-parking-tickets-sample.geojson'
+    elif dataset_name == 'world':
+        return f'{src}/world.geojson'
     else:
         raise NotImplementedError
