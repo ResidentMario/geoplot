@@ -687,12 +687,12 @@ def quadtree(
     choropleth out of their centroids, where each region is a fractal quadrangle with at least
     ``nsig`` observations.
 
-    A quadtree can replace a more conventional choropleth in certain cases where you lack region
-    information and have a relatively homogeneous point distribution. A sufficiently large number
-    of points `can construct a very detailed view of a space <https://i.imgur.com/n2xlycT.png>`_.
+    A quadtree demonstrates density quite effectively. It's more flexible than a conventional
+    choropleth, and given a sufficiently large number of points `can construct a very detailed
+    view of a space <https://i.imgur.com/n2xlycT.png>`_.
 
-    A simple ``quadtree`` specifies a dataset and a minimum number of observations per bin,
-    ``nmin``.
+    A simple ``quadtree`` specifies a dataset. It's recommended to also set a maximum number of
+    observations per bin, ``nmax``.
 
     .. code-block:: python
 
@@ -701,38 +701,69 @@ def quadtree(
         collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
         gplt.quadtree(collisions, nmin=1)
 
-    .. image:: ../figures/aggplot/aggplot-initial.png
+    .. image:: ../figures/quadtree/quadtree-initial.png
 
-    To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters,
-    controlling the minimum and maximum number of observations per box, respectively, yourself. In
-    this case we'll also choose a different 
-    `matplotlib colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_, using
-    the ``cmap`` parameter.
-
-    ``aggplot`` will satisfy the ``nmax`` parameter before trying to satisfy ``nmin``, so you may
-    result in spaces without observations, or ones lacking a statistically significant number of
-    observations. You can control the maximum number of observations in the blank spaces using the
-    ``nsig`` parameter.
+    Use ``clip`` to clip the result to surrounding geometry. Keyword arguments that are not part
+    of the ``geoplot`` API are passed to the underlying ``matplotlib.pyplot.scatter`` instance,
+    which can be used to customize the appearance of the plot.
 
     .. code-block:: python
 
-        gplt.aggplot(
-            collisions, nmin=20, nmax=500, nsig=5, projection=gcrs.PlateCarree(),
-            hue='LATDEP', cmap='Reds'
+        gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            facecolor='lightgray', edgecolor='white'
+        )
+    
+    .. image:: ../figures/quadtree/quadtree-clip.png
+
+    Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
+    used. ``legend`` toggles the legend. This type of plot is an effective gauge of distribution:
+    the more random the plot output, the the more decorrelated the variable.
+
+    .. code-block:: python
+
+        gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
+            edgecolor='white', legend=True
         )
 
-    .. image:: ../figures/aggplot/aggplot-quadtree-tuned.png
-
-    You'll have to play around with these parameters to get the clearest picture.
+    .. image:: ../figures/quadtree/quadtree-hue.png
 
     Observations will be aggregated by average, by default. Specify an alternative aggregation
-    using the ``agg`` parameter.
+    function using the ``agg`` parameter.
 
-    ``legend`` toggles the legend. Additional keyword arguments for styling the `colorbar
-    <http://matplotlib.org/api/colorbar_api.html>`_ legend are passed using ``legend_kwargs``.
-    Other additional keyword arguments are passed to the underlying ``matplotlib`` `Polygon
-    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_ instances.
+    .. code-block:: python
+
+        gplt.quadtree(
+            collisions, nmax=1, agg=np.max,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
+            edgecolor='white', legend=True
+        )
+
+    .. image:: ../figures/quadtree/quadtree-agg.png
+
+    A basic quadtree plot can be used as an alternative to ``polyplot`` as the base layer of your
+    map.
+
+    .. code-block:: python
+
+        ax = gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            facecolor='lightgray', edgecolor='white', zorder=0
+        )
+        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), s=1, ax=ax)
+
+    .. image:: ../figures/quadtree/quadtree-basemap.png
     """
+    # TODO: allow multindices in quadtree input
+    if isinstance(df.index, pd.MultiIndex):
+        raise NotImplementedError
+
     _init_figure(ax, figsize)
 
     # Set up projection.

@@ -8,6 +8,7 @@ The routines here are used by the ``geoplot.quadtree`` plot type.
 """
 
 from collections import Iterable
+import geopandas as gpd
 
 
 class QuadTree:
@@ -49,18 +50,18 @@ class QuadTree:
         if bounds:
             self.bounds = minx, maxx, miny, maxy = bounds
             gdf = gdf[
-                gdf.geometry.centroid.map(lambda b: (minx < b.x < maxx) & (miny < b.y < maxy))
+                gdf.geometry.map(lambda b: (minx < b.x < maxx) & (miny < b.y < maxy))
             ]
         else:
             b = gdf.geometry.bounds
             minx, miny = b[['minx', 'miny']].min().values
             maxx, maxy = b[['maxx', 'maxy']].max().values
             self.bounds = (minx, maxx, miny, maxy)
-        gdf = gdf[[not c.is_empty for c in gdf.geometry.centroid]]
+        gdf = gdf[[not p.is_empty for p in gdf.geometry]]
         if len(gdf) > 0:
-            centroids = gdf.geometry.centroid
-            xs, ys = [c.x for c in centroids], [c.y for c in centroids]
-            geo = gdf.assign(x=xs, y=ys, centroid=centroids).reset_index()
+            points = gdf.geometry
+            xs, ys = [p.x for p in points], [p.y for p in points]
+            geo = gpd.GeoDataFrame(index=gdf.index).assign(x=xs, y=ys).reset_index()
             groups = geo.groupby(['x', 'y'])
             self.agg = dict()
             self.n = 0
