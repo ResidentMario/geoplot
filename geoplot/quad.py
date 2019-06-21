@@ -4,8 +4,7 @@ This module implements a naive equal-split four-way quadtree algorithm
 to use for splitting and aggregating rectangular geometries up to a certain guaranteed minimum
 instance threshold.
 
-The routines here are used by the ``geoplot.aggplot`` plot type, and only when no user geometry
-input is provided.
+The routines here are used by the ``geoplot.quadtree`` plot type.
 """
 
 from collections import Iterable

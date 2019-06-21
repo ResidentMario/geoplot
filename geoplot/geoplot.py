@@ -618,7 +618,7 @@ def choropleth(
 
 
 def quadtree(
-    df, projection=None,
+    df, projection=None, clip=None,
     hue=None, cmap='viridis',
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None,
@@ -634,6 +634,8 @@ def quadtree(
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
+    clip : None or iterable or GeoSeries, optional
+        If specified, quadrangles will be clipped to the boundaries of this geometry.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
@@ -699,7 +701,7 @@ def quadtree(
         collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
         gplt.quadtree(collisions, nmin=1)
 
-    .. image:: ../figures/quadtree/quadtree-initial.png
+    .. image:: ../figures/aggplot/aggplot-initial.png
 
     To get the best output, you often need to tweak the ``nmin`` and ``nmax`` parameters,
     controlling the minimum and maximum number of observations per box, respectively, yourself. In
@@ -779,6 +781,8 @@ def quadtree(
     if hue is not None:
         values = [agg(p.data.hue_col) for p in partitions if p.n > nsig]
         cmap = _continuous_colormap(values, cmap)
+    edgecolor = kwargs.pop('edgecolor', 'black')
+    flat_facecolor = kwargs.pop('facecolor', 'None')  # only used if hue is None
 
     for p in partitions:
         xmin, xmax, ymin, ymax = p.bounds
@@ -787,13 +791,15 @@ def quadtree(
         if hue is not None:
             facecolor = cmap.to_rgba(agg(p.data.hue_col)) if p.n > nsig else "None"
         else:
-            facecolor = "None"
+            facecolor = flat_facecolor
         if projection:
             feature = ShapelyFeature([rect], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=facecolor, **kwargs)
+            ax.add_feature(feature, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
 
         else:
-            feature = descartes.PolygonPatch(rect, facecolor=facecolor, **kwargs)
+            feature = descartes.PolygonPatch(
+                rect, facecolor=facecolor, edgecolor=edgecolor, **kwargs
+            )
             ax.add_patch(feature)
 
     # Set extent.
@@ -802,6 +808,20 @@ def quadtree(
 
     if hue is not None and legend:
         _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
+
+    # Clip must be set after extent is set.
+    clip = _to_geoseries(df, clip)
+    if clip is not None:
+        if projection:
+            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
+            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+        else:
+            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+            ax = polyplot(
+                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                extent=ax.get_xlim() + ax.get_ylim(), ax=ax
+            )
 
     return ax
 
@@ -1180,7 +1200,7 @@ def kdeplot(
     Additional keyword arguments that are not part of the ``geoplot`` API are passed to
     `the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
     One of the most useful of these parameters is ``shade_lowest``, which toggles shading on the
-    lowest (basal) layer of the kernel density estiamte.
+    lowest (basal) layer of the kernel density estimate.
 
     .. code-block:: python
 
@@ -1875,8 +1895,9 @@ def voronoi(
     extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
     _set_extent(ax, projection, extent, extrema)
 
-    # Validate hue input.
+    # Parse inputs.
     hue = _to_geoseries(df, hue)
+    clip = _to_geoseries(df, clip)
 
     # Generate the coloring information, if needed. Follows one of two schemes,
     # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
@@ -1924,8 +1945,10 @@ def voronoi(
 
         if clip is not None:
             clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            ax = polyplot(gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                          extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
+            ax = polyplot(
+                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                extent=ax.get_xlim() + ax.get_ylim(), ax=ax
+            )
 
     # Add a legend, if appropriate.
     if legend and k is not None:
