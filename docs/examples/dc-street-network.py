@@ -7,11 +7,8 @@ import matplotlib.pyplot as plt
 dc_roads = gpd.read_file(gplt.datasets.get_path('dc_roads'))
 
 gplt.sankey(
-    dc_roads,
-    path=dc_roads.geometry,
-    projection=gcrs.AlbersEqualArea(),
-    scale='aadt',
-    limits=(0.1, 10)
+    dc_roads, projection=gcrs.AlbersEqualArea(),
+    scale='aadt', limits=(0.1, 10), edgecolor='black'
 )
 
 plt.title("Streets in Washington DC by Average Daily Traffic, 2015")
