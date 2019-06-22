@@ -2061,7 +2061,7 @@ def _set_extent(ax, projection, extent, extrema):
     """
     Sets the plot extent.
     """
-    if extent:
+    if extent is not None:
         xmin, xmax, ymin, ymax = extent
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
