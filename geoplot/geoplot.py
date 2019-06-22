@@ -39,7 +39,7 @@ def pointplot(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
+        Working with Projections_.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
@@ -1617,7 +1617,7 @@ def sankey(
         n = int(len(points) / 2)
     else:  # path_geoms is an iterable
         path_geoms = gpd.GeoSeries(path_geoms)
-        xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(path_geoms.envelope.exterior)
+        xmin, ymin, xmax, ymax = path_geoms.total_bounds
         clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
         n = len(path_geoms)
 
@@ -2048,57 +2048,6 @@ def _init_figure(ax, figsize):
     if not ax:
         fig = plt.figure(figsize=figsize)
         return fig
-
-
-def _get_envelopes_min_maxes(envelopes):
-    """
-    Returns the extrema of the inputted polygonal envelopes. Used for setting chart extent where
-    appropriate. Note tha the ``Quadtree.bounds`` object property serves a similar role. Returns
-    a (xmin, xmax, ymin, ymax) tuple of data extrema.
-    """
-    xmin = np.min(
-        envelopes.map(
-            lambda linearring: np.min([
-                linearring.coords[1][0], linearring.coords[2][0], linearring.coords[3][0],
-                linearring.coords[4][0]
-            ])
-        )
-    )
-    xmax = np.max(
-        envelopes.map(
-            lambda linearring: np.max([
-                linearring.coords[1][0], linearring.coords[2][0], linearring.coords[3][0],
-                linearring.coords[4][0]
-            ])
-        )
-    )
-    ymin = np.min(
-        envelopes.map(
-            lambda linearring: np.min([
-                linearring.coords[1][1], linearring.coords[2][1], linearring.coords[3][1],
-                linearring.coords[4][1]
-            ])
-        )
-    )
-    ymax = np.max(
-        envelopes.map(
-            lambda linearring: np.max([
-                linearring.coords[1][1], linearring.coords[2][1], linearring.coords[3][1],
-                linearring.coords[4][1]
-            ])
-        )
-    )
-    return xmin, xmax, ymin, ymax
-
-
-def _get_envelopes_centroid(envelopes):
-    """
-    Returns the centroid of an inputted geometry column. Not currently in use, as this is now
-    handled by this library's CRS wrapper directly. Light wrapper over
-    ``_get_envelopes_min_maxes``. Returns (mean_x, mean_y), the data centroid.
-    """
-    xmin, xmax, ymin, ymax = _get_envelopes_min_maxes(envelopes)
-    return np.mean(xmin, xmax), np.mean(ymin, ymax)
 
 
 def _set_extent(ax, projection, extent, extrema):
