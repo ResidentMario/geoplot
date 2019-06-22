@@ -28,13 +28,10 @@ class Base:
 
     def load(self, df, centerings):
         """
-        A moderately mind-bendy meta-method which abstracts the internals of individual
-        projections' load procedures.
+        A meta-method which abstracts the internals of individual projections' load procedures.
 
         Parameters
         ----------
-        proj : geoplot.crs object instance
-            A disguised reference to ``self``.
         df : GeoDataFrame
             The GeoDataFrame which has been passed as input to the plotter at the top level.
             This data is needed to calculate reasonable centering variables in cases in which the
@@ -70,11 +67,10 @@ class Base:
 
     def _as_mpl_axes(self):
         """
-        Another moderately mind-bendy method. When ``matplotlib`` is provided a projection via a
-        ``projection`` keyword argument, it expects to get something with a callable
-        ``as_mpl_axes`` method. The precise details of what this method does, exactly, are not
-        important: it suffices to know that every ``cartopy`` coordinate reference system object
-        has one.
+        When ``matplotlib`` is provided a projection via a ``projection`` keyword argument, it
+        expects to get something with a callable ``as_mpl_axes`` method. The precise details of
+        what this method does, exactly, are not important: it suffices to know that every
+        ``cartopy`` coordinate reference system object has one.
 
         When we pass a ``geoplot.crs`` crs object to a ``geoplot`` function, the loading and
         centering of the data occurs automatically (using the function defined immediately above).
@@ -85,7 +81,7 @@ class Base:
         ``geoplot.crs`` object without having first called ``load``: most prominently, when
         creating a plot containing subplots, the "overall" projection must be pre-loaded. It's
         possible to get around this by using ``cartopy.crs`` objects instead, but this is
-        inelegant. This method is a better way: when a ``cartopy.crs`` object called by
+        inelegant. This method is a better way: when a ``geoplot.crs`` object called by
         ``matplotlib``, it silently swaps itself out for a vanilla version of its ``cartopy.crs``
         mirror, and calls that function's ``_as_mpl_axes`` instead.
 

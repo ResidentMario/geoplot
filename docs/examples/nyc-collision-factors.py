@@ -22,7 +22,7 @@ gplt.kdeplot(
     clip=nyc_boroughs.geometry,
     ax=ax1
 )
-gplt.polyplot(nyc_boroughs, projection=proj, ax=ax1)
+gplt.polyplot(nyc_boroughs, ax=ax1)
 plt.title("Failure to Yield Right-of-Way Crashes, 2016")
 
 gplt.kdeplot(
@@ -34,7 +34,7 @@ gplt.kdeplot(
     clip=nyc_boroughs.geometry,
     ax=ax2
 )
-gplt.polyplot(nyc_boroughs, projection=proj, ax=ax2)
+gplt.polyplot(nyc_boroughs, ax=ax2)
 plt.title("Loss of Consciousness Crashes, 2016")
 
 plt.savefig("nyc-collision-factors.png", bbox_inches='tight', pad_inches=0.1)

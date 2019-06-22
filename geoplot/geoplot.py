@@ -8,6 +8,7 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
+from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 from geoplot.quad import QuadTree
 import shapely.geometry
@@ -75,7 +76,7 @@ def pointplot(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -185,13 +186,15 @@ def pointplot(
             ax = plt.subplot(111, projection=projection)
 
         # Set extent.
-        if extent:
+        if extent is not None:
             ax.set_extent(extent)
         else:
             pass  # Default extent.
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -199,6 +202,10 @@ def pointplot(
     # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
+
+    # Set extent.
+    extrema = df.total_bounds
+    _set_extent(ax, projection, extent, extrema)
 
     # Parse hue and scale inputs.
     hue = _to_geoseries(df, hue)
@@ -303,7 +310,7 @@ def polyplot(
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -341,8 +348,7 @@ def polyplot(
 
         ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
         gplt.pointplot(
-            collisions[collisions['BOROUGH'].notnull()], projection=gcrs.AlbersEqualArea(), 
-            hue='BOROUGH', ax=ax, legend=True
+            collisions[collisions['BOROUGH'].notnull()], hue='BOROUGH', ax=ax, legend=True
         )
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
@@ -364,6 +370,8 @@ def polyplot(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -373,7 +381,7 @@ def polyplot(
         return ax
 
     # Set extent.
-    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
@@ -440,7 +448,7 @@ def choropleth(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -552,6 +560,8 @@ def choropleth(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -561,7 +571,7 @@ def choropleth(
         return ax
 
     # Set extent.
-    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Format the data to be displayed for input.
@@ -663,7 +673,7 @@ def quadtree(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -756,7 +766,7 @@ def quadtree(
             projection=gcrs.AlbersEqualArea(), clip=boroughs,
             facecolor='lightgray', edgecolor='white', zorder=0
         )
-        gplt.pointplot(collisions, projection=gcrs.AlbersEqualArea(), s=1, ax=ax)
+        gplt.pointplot(collisions, s=1, ax=ax)
 
     .. image:: ../figures/quadtree/quadtree-basemap.png
     """
@@ -778,6 +788,8 @@ def quadtree(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -834,7 +846,7 @@ def quadtree(
             ax.add_patch(feature)
 
     # Set extent.
-    extrema = (bxmin, bxmax, bymin, bymax)
+    extrema = (bxmin, bymin, bxmax, bymax)
     _set_extent(ax, projection, extent, extrema)
 
     if hue is not None and legend:
@@ -849,9 +861,12 @@ def quadtree(
             ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
         else:
             clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
+            extent = (xmin, ymin, xmax, ymax)
             ax = polyplot(
                 gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=ax.get_xlim() + ax.get_ylim(), ax=ax
+                extent=extent, ax=ax
             )
 
     return ax
@@ -911,7 +926,7 @@ def cartogram(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -963,8 +978,10 @@ def cartogram(
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       trace=False, legend=True, legend_kwargs={'loc': 'upper left'})
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            trace=False, legend=True, legend_kwargs={'loc': 'upper left'}
+        )
 
     .. image:: ../figures/cartogram/cartogram-legend-kwargs.png
 
@@ -974,8 +991,10 @@ def cartogram(
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       edgecolor='darkgreen')
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            edgecolor='darkgreen'
+        )
 
     .. image:: ../figures/cartogram/cartogram-kwargs.png
 
@@ -985,8 +1004,10 @@ def cartogram(
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       trace_kwargs={'edgecolor': 'lightgreen'})
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            trace_kwargs={'edgecolor': 'lightgreen'}
+        )
 
     .. image:: ../figures/cartogram/cartogram-trace-kwargs.png
 
@@ -994,8 +1015,10 @@ def cartogram(
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       limits=(0.5, 1))
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            limits=(0.5, 1)
+        )
 
     .. image:: ../figures/cartogram/cartogram-limits.png
 
@@ -1009,8 +1032,10 @@ def cartogram(
     .. code-block:: python
 
         def trivial_scale(minval, maxval): return lambda v: 2
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       limits=(0.5, 1), scale_func=trivial_scale)
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            limits=(0.5, 1), scale_func=trivial_scale
+        )
 
     .. image:: ../figures/cartogram/cartogram-scale-func.png
 
@@ -1020,8 +1045,10 @@ def cartogram(
 
     .. code-block:: python
 
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       hue='Population Density', k=None, cmap='Blues')
+        gplt.cartogram(
+            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+            hue='Population Density', k=None, cmap='Blues'
+        )
 
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
@@ -1043,6 +1070,8 @@ def cartogram(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1052,7 +1081,7 @@ def cartogram(
         return ax
 
     # Set extent.
-    extrema = _get_envelopes_min_maxes(df.geometry.envelope.exterior)
+    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Standardize hue and scale input.
@@ -1165,7 +1194,7 @@ def kdeplot(
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
     clip : None or iterable or GeoSeries, optional
         If specified, isochrones will be clipped to the boundaries of this geometry.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -1199,7 +1228,7 @@ def kdeplot(
         boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
         collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
         ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
-        gplt.kdeplot(collisions, projection=gcrs.AlbersEqualArea(), ax=ax)
+        gplt.kdeplot(collisions, ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-initial.png
 
@@ -1208,9 +1237,7 @@ def kdeplot(
     .. code-block:: python
 
         ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
-        gplt.kdeplot(
-            collisions, projection=gcrs.AlbersEqualArea(), n_levels=20, cmap='Reds', ax=ax
-        )
+        gplt.kdeplot(collisions, n_levels=20, cmap='Reds', ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-shade.png
 
@@ -1219,12 +1246,8 @@ def kdeplot(
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(
-            collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
-            shade=True,
-            clip=boroughs
-        )
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
+        ax = gplt.polyplot(boroughs, ax=ax, projection=gcrs.AlbersEqualArea())
+        gplt.kdeplot(collisions, cmap='Reds', shade=True, clip=boroughs, ax=ax)
 
     .. image:: ../figures/kdeplot/kdeplot-clip.png
 
@@ -1235,12 +1258,8 @@ def kdeplot(
 
     .. code-block:: python
 
-        ax = gplt.kdeplot(
-            collisions, projection=gcrs.AlbersEqualArea(), cmap='Reds',
-            shade=True, shade_lowest=True,
-            clip=boroughs
-        )
-        gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), ax=ax, zorder=1)
+        ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+        ax = gplt.kdeplot(collisions, cmap='Reds', shade=True, shade_lowest=True, clip=boroughs)
 
     .. image:: ../figures/kdeplot/kdeplot-shade-lowest.png
     """
@@ -1266,6 +1285,8 @@ def kdeplot(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1275,7 +1296,7 @@ def kdeplot(
         return ax
 
     # Set extent.
-    extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
+    extrema = np.min(xs), np.min(ys), np.max(xs), np.max(ys)
     _set_extent(ax, projection, extent, extrema)
 
     # Parse clip input.
@@ -1306,9 +1327,13 @@ def kdeplot(
             )
         else:
             clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            polyplot(gpd.GeoSeries(clip_geom),
-                     facecolor='white', linewidth=0, zorder=100, 
-                     extent=ax.get_xlim() + ax.get_ylim(), ax=ax)
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
+            extent = (xmin, ymin, xmax, ymax)
+            polyplot(
+                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                extent=extent, ax=ax
+            )
             sns.kdeplot(
                 pd.Series([p.x for p in df.geometry]),
                 pd.Series([p.y for p in df.geometry]),
@@ -1383,7 +1408,7 @@ def sankey(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -1421,10 +1446,7 @@ def sankey(
         ax = gplt.sankey(
             la_flights, start='start', end='end', projection=gcrs.Orthographic()
         )
-        gplt.polyplot(
-            world, ax=ax, facecolor='lightgray', edgecolor='white',
-            projection=gcrs.Orthographic()
-        )
+        gplt.polyplot(world, ax=ax, facecolor='lightgray', edgecolor='white')
         ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-geospatial-context.png
@@ -1459,10 +1481,12 @@ def sankey(
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
-                         start='from', end='to',
-                         hue='mock_variable', cmap='RdYlBu',
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)})
+        ax = gplt.sankey(
+            network, projection=gcrs.PlateCarree(),
+            start='from', end='to',
+            hue='mock_variable', cmap='RdYlBu',
+            legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)}
+        )
         ax.set_global()
         ax.coastlines()
 
@@ -1473,11 +1497,13 @@ def sankey(
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
-                         start='from', end='to',
-                         hue='mock_variable', cmap='RdYlBu',
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
-                         k=3, scheme='equal_interval')
+        ax = gplt.sankey(
+            network, projection=gcrs.PlateCarree(),
+            start='from', end='to',
+            hue='mock_variable', cmap='RdYlBu',
+            legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
+            k=3, scheme='equal_interval'
+        )
         ax.set_global()
         ax.coastlines()
 
@@ -1488,12 +1514,14 @@ def sankey(
 
     .. code-block:: python
 
-        ax = gplt.sankey(la_flights, projection=gcrs.PlateCarree(),
-                         extent=(-125.0011, -66.9326, 24.9493, 49.5904),
-                         start='start', end='end',
-                         scale='Passengers',
-                         limits=(0.1, 5),
-                         legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)})
+        ax = gplt.sankey(
+            la_flights, projection=gcrs.PlateCarree(),
+            extent=(-125.0011, -66.9326, 24.9493, 49.5904),
+            start='start', end='end',
+            scale='Passengers',
+            limits=(0.1, 5),
+            legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)}
+        )
         ax.coastlines()
 
     .. image:: ../figures/sankey/sankey-scale.png
@@ -1503,11 +1531,13 @@ def sankey(
 
     .. code-block:: python
 
-        ax = gplt.sankey(network, projection=gcrs.PlateCarree(),
-                 start='from', end='to',
-                 scale='mock_data',
-                 legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
-                 hue='mock_data', legend_var="hue")
+        ax = gplt.sankey(
+            network, projection=gcrs.PlateCarree(),
+            start='from', end='to',
+            scale='mock_data',
+            legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
+            hue='mock_data', legend_var="hue"
+        )
         ax.set_global()
         ax.coastlines()
 
@@ -1607,18 +1637,23 @@ def sankey(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
     # Set extent.
+    if extent is not None:
+        extent_xmin, extent_ymin, extent_xmax, extent_ymax = extent
+        extent = (extent_xmin, extent_xmax, extent_ymin, extent_ymax)
     if projection:
-        if extent:
+        if extent is not None:
             ax.set_extent(extent)
         else:
             ax.set_extent((xmin, xmax, ymin, ymax))
     else:
-        if extent:
+        if extent is not None:
             ax.set_xlim((extent[0], extent[1]))
             ax.set_ylim((extent[2], extent[3]))
         else:
@@ -1790,7 +1825,7 @@ def voronoi(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to 
         `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
-    extent : None or (min_longitude, max_longitude, min_latitude, max_latitude), optional
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
     figsize : (x, y) tuple, optional
@@ -1831,8 +1866,9 @@ def voronoi(
 
     .. code-block:: python
 
-        ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-                          cmap='Reds')
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED', cmap='Reds'
+        )
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-cmap.png
@@ -1841,8 +1877,10 @@ def voronoi(
 
     .. code-block:: python
 
-        ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-                          cmap='Reds', clip=boroughs)
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+            clip=boroughs
+        )
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-clip.png
@@ -1855,11 +1893,12 @@ def voronoi(
 
     .. code-block:: python
 
-        ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-                          cmap='Reds',
-                          clip=boroughs,
-                          legend=True, legend_kwargs={'loc': 'upper left'},
-                          linewidth=0.5, edgecolor='white')
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
+            cmap='Reds', clip=boroughs,
+            legend=True, legend_kwargs={'loc': 'upper left'},
+            linewidth=0.5, edgecolor='white'
+        )
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-kwargs.png
@@ -1873,12 +1912,13 @@ def voronoi(
 
     .. code-block:: python
 
-        ax = gplt.voronoi(injurious_collisions.head(1000),
-                          hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=5, scheme='fisher_jenks',
-                          clip=boroughs,
-                          legend=True, legend_kwargs={'loc': 'upper left'},
-                          linewidth=0.5, edgecolor='white',
-                         )
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000),
+            hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=5, scheme='fisher_jenks',
+            clip=boroughs,
+            legend=True, legend_kwargs={'loc': 'upper left'},
+            linewidth=0.5, edgecolor='white'
+        )
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-scheme.png
@@ -1888,10 +1928,12 @@ def voronoi(
 
     .. code-block:: python
 
-        ax = gplt.voronoi(injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-                          cmap='Reds',
-                          edgecolor='white', clip=boroughs,
-                          linewidth=0.5)
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
+            cmap='Reds',
+            edgecolor='white', clip=boroughs,
+            linewidth=0.5
+        )
         gplt.polyplot(boroughs, linewidth=1, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
@@ -1913,6 +1955,8 @@ def voronoi(
     else:
         if not ax:
             ax = plt.gca()
+        elif isinstance(ax, GeoAxesSubplot):
+            projection = ax.projection
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -2062,7 +2106,7 @@ def _set_extent(ax, projection, extent, extrema):
     Sets the plot extent.
     """
     if extent is not None:
-        xmin, xmax, ymin, ymax = extent
+        xmin, ymin, xmax, ymax = extent
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
         if projection:  # input ``extent`` into set_extent().
@@ -2072,7 +2116,7 @@ def _set_extent(ax, projection, extent, extrema):
             ax.set_ylim((ymin, ymax))
 
     else:
-        xmin, xmax, ymin, ymax = extrema
+        xmin, ymin, xmax, ymax = extrema
         xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
 
         if projection:  # input ``extrema`` into set_extent.
@@ -2238,7 +2282,7 @@ def _validate_buckets(df, hue, k, scheme):
 
 
 def _get_clip(extent, clip):
-    xmin, xmax, ymin, ymax = extent
+    xmin, ymin, xmax, ymax = extent
     # We have to add a little bit of padding to the edges of the box, as otherwise the edges
     # will invert a little, surprisingly.
     rect = shapely.geometry.Polygon(

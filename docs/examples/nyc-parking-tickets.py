@@ -16,12 +16,10 @@ def plot_state_to_ax(state, ax):
     gplt.choropleth(
         tickets.set_index('id').loc[:, [state, 'geometry']],
         hue=state, cmap='Blues',
-        projection=proj,
         linewidth=0.0, ax=ax
     )
     gplt.polyplot(
-        nyc_boroughs, projection=proj,
-        edgecolor='black', linewidth=0.5, ax=ax
+        nyc_boroughs, edgecolor='black', linewidth=0.5, ax=ax
     )
 
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': proj})
