@@ -1343,8 +1343,7 @@ def kdeplot(
 
 
 def sankey(
-    *args, projection=None,
-    start=None, end=None, path=None,
+    df, projection=None,
     hue=None, scheme=None, k=5, cmap='viridis',
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
@@ -1357,21 +1356,10 @@ def sankey(
     Parameters
     ----------
     df : GeoDataFrame, optional
-        The data being plotted. ``start`` and ``end`` must be iterable if this field is left
-        unspecified.
+        The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
         `Working with Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`_.
-    start : str or iterable
-        The name of a column in ``df`` or an iterable of data start points.
-    end : str or iterable
-        The name of a column in ``df`` or an iterable of data end points.
-    path : geoplot.crs object instance or iterable, optional
-        The geometries to be used drawing the paths. See `the DC Street Network
-        <https://residentmario.github.io/geoplot/examples/dc-street-network.html>`_ demo for an
-        example. If this parameter is left out, the shortest-path
-        `great circle route <https://en.wikipedia.org/wiki/Great_circle>`_ between ``start`` and
-        ``end`` will be used.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
@@ -1433,7 +1421,8 @@ def sankey(
     brings the Sankey diagram into the geospatial context; useful for analyzing traffic load a road
     network, for example, or travel volumes between different airports.
 
-    A basic ``sankey`` specifies data, ``start`` points, ``end`` points.
+    A basic ``sankey`` requires a ``GeoDataFrame`` of ``LineString`` or ``MultiPoint`` geometries.
+    For interpretability, these examples also include world geometry.
 
     .. code-block:: python
 
@@ -1443,36 +1432,44 @@ def sankey(
         la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
         world = gpd.read_file(gplt.datasets.get_path('world'))
 
-        ax = gplt.sankey(
-            la_flights, start='start', end='end', projection=gcrs.Orthographic()
-        )
+        ax = gplt.sankey(la_flights, projection=gcrs.Orthographic())
         gplt.polyplot(world, ax=ax, facecolor='lightgray', edgecolor='white')
         ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-geospatial-context.png
 
-    Paths are `great circle <https://en.wikipedia.org/wiki/Great-circle_distance>`_ paths by
-    default. If your data has custom paths, you can use plot those instead via ``path``.
+    ``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap used and k``
+    to control the number of color bins. ``legend`` toggles a legend.
 
     .. code-block:: python
 
-        dc = gpd.read_file(gplt.datasets.get_path('dc_roads'))
-        gplt.sankey(dc, path=dc.geometry, projection=gcrs.AlbersEqualArea())
-
-    .. image:: ../figures/sankey/sankey-path.png
-
-    ``scale`` adds volumetric scaling to the plot. To control the minimum and maximum line width,
-    use ``limits``. ``hue`` adds color-coding. Use ``cmap`` to control the colormap used.
-    ``legend`` toggles a legend.
-
-    .. code-block:: python
-
-        gplt.sankey(
-            dc, path=dc.geometry, projection=gcrs.AlbersEqualArea(),
-            scale='aadt', hue='aadt', cmap='Purples', legend=True
+        ax = gplt.sankey(
+            la_flights, projection=gcrs.Orthographic(),
+            scale='Passengers', hue='Passengers', cmap='Greens', legend=True
         )
+        gplt.polyplot(
+            world, ax=ax, facecolor='lightgray', edgecolor='white'
+        )
+        ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-cmap.png
+
+    ``scale`` adds volumetric scaling to the plot. ``limits`` can be used to control the minimum
+    and maximum line width.
+
+    .. code-block:: python
+
+        ax = gplt.sankey(
+            la_flights, projection=gcrs.Orthographic(),
+            scale='Passengers', limits=(1, 10),
+            hue='Passengers', cmap='Greens', legend=True
+        )
+        gplt.polyplot(
+            world, ax=ax, facecolor='lightgray', edgecolor='white'
+        )
+        ax.set_global(); ax.outline_patch.set_visible(True)
+
+    .. image:: ../figures/sankey/sankey-scale.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
     arguments will be passed to the underlying ``matplotlib`` `Legend
@@ -1482,156 +1479,39 @@ def sankey(
     .. code-block:: python
 
         ax = gplt.sankey(
-            network, projection=gcrs.PlateCarree(),
-            start='from', end='to',
-            hue='mock_variable', cmap='RdYlBu',
-            legend=True, legend_kwargs={'bbox_to_anchor': (1.4, 1.0)}
+            la_flights, projection=gcrs.Orthographic(),
+            scale='Passengers', limits=(1, 10),
+            hue='Passengers', cmap='Greens',
+            legend=True, legend_kwargs={'loc': 'lower left'}
         )
-        ax.set_global()
-        ax.coastlines()
+        gplt.polyplot(
+            world, ax=ax, facecolor='lightgray', edgecolor='white'
+        )
+        ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-legend-kwargs.png
 
-    Change the number of bins by specifying an alternative ``k`` value. To use a continuous
-    colormap, explicitly specify ``k=None``.
+    Sankey plots are an attractive option for network data, such as this dataset of DC roads by
+    traffic volume.
 
-    .. code-block:: python
-
-        ax = gplt.sankey(
-            network, projection=gcrs.PlateCarree(),
-            start='from', end='to',
-            hue='mock_variable', cmap='RdYlBu',
-            legend=True, legend_kwargs={'bbox_to_anchor': (1.25, 1.0)},
-            k=3, scheme='equal_interval'
+    .. code-block:: python 
+        
+        gplt.sankey(
+            dc, scale='aadt', edgecolor='black', limits=(0.1, 10),
+            projection=gcrs.AlbersEqualArea()
         )
-        ax.set_global()
-        ax.coastlines()
 
-    .. image:: ../figures/sankey/sankey-scheme.png
-
-    ``scale`` can be used to enable ``linewidth`` as a visual variable. Adjust the upper and lower
-    bound with the ``limits`` parameter.
-
-    .. code-block:: python
-
-        ax = gplt.sankey(
-            la_flights, projection=gcrs.PlateCarree(),
-            extent=(-125.0011, -66.9326, 24.9493, 49.5904),
-            start='start', end='end',
-            scale='Passengers',
-            limits=(0.1, 5),
-            legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)}
-        )
-        ax.coastlines()
-
-    .. image:: ../figures/sankey/sankey-scale.png
-
-    ``hue`` and ``scale`` can co-exist. In case more than one visual variable is used, control
-    which one appears in the legend using ``legend_var``.
-
-    .. code-block:: python
-
-        ax = gplt.sankey(
-            network, projection=gcrs.PlateCarree(),
-            start='from', end='to',
-            scale='mock_data',
-            legend=True, legend_kwargs={'bbox_to_anchor': (1.1, 1.0)},
-            hue='mock_data', legend_var="hue"
-        )
-        ax.set_global()
-        ax.coastlines()
-
-    .. image:: ../figures/sankey/sankey-legend-var.png
-
+    .. image:: ../figures/sankey/sankey-dc.png
     """
-    # Validate df.
-    if len(args) > 1:
-        raise ValueError("Invalid input.")
-    elif len(args) == 1:
-        df = args[0]
-    else:
-        df = pd.DataFrame()
-        # df = None  # bind the local name here; initialize in a bit.
-
-    # Validate the rest of the input.
-    if ((start is None) or (end is None)) and not hasattr(path, "__iter__"):
-        raise ValueError("The 'start' and 'end' parameters must both be specified.")
-    if (isinstance(start, str) or isinstance(end, str)) and df.empty:
-        raise ValueError("Invalid input.")
-    if isinstance(start, str):
-        start = df[start]
-    elif start is not None:
-        start = gpd.GeoSeries(start)
-    if isinstance(end, str):
-        end = df[end]
-    elif end is not None:
-        end = gpd.GeoSeries(end)
-    if (start is not None) and (end is not None) and hasattr(path, "__iter__"):
-        raise ValueError(
-            "One of 'start' and 'end' OR 'path' must be specified, but they cannot be specified "
-            "simultaneously."
-        )
-    if path is None:  # No path provided.
-        path = ccrs.Geodetic()
-        path_geoms = None
-    elif isinstance(path, str):  # Path is a column in the dataset.
-        path_geoms = df[path]
-    elif hasattr(path, "__iter__"):  # Path is an iterable.
-        path_geoms = gpd.GeoSeries(path)
-    else:
-        raise ValueError("'path' parameter must be a str or iterable.")
-    if start is not None and end is not None:
-        points = pd.concat([start, end])
-    else:
-        points = None
-
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
-
-    # After validating the inputs, we are in one of two modes:
-    # (1) Projective mode. In this case ``path_geoms`` is None, while ``points`` contains a
-    # concatenation of our points (for use in initializing the plot extents). This case occurs
-    # when the user specifies ``start`` and ``end``, and not ``path``. This is "projective mode"
-    # because it means that ``path`` will be a projection---if one is not provided explicitly, the
-    # ``gcrs.Geodetic()`` projection.
-    # (2) Path mode. In this case ``path_geoms`` is an iterable of LineString entities to be
-    # plotted, while ``points`` is None. This occurs when the user specifies ``path``, and not
-    # ``start`` or ``end``. This is path mode because we will need to plot exactly those paths!
-
-    # At this point we'll initialize the rest of the variables we need. The way that we initialize
-    # them is going to depend on which code path we are on. Additionally, we will initialize the
-    # `df` variable with a projection dummy, if it has not been initialized already. This `df`
-    # will only be used for figuring out the extent, and will be discarded afterwards!
-    #
-    # Variables we need to generate at this point, and why we need them:
-    # 1. (clong, clat) --- To pass this to the projection settings.
-    # 2. (xmin. xmax, ymin. ymax) --- To pass this to the extent settings.
-    # 3. n --- To pass this to the color array in case no ``color`` is specified.
-    if path_geoms is None and points is not None:
-        if df.empty:
-            df = gpd.GeoDataFrame(geometry=points)
-        xs = np.array([p.x for p in points])
-        ys = np.array([p.y for p in points])
-        xmin, xmax, ymin, ymax = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
-        clong, clat = np.mean(xs), np.mean(ys)
-        n = int(len(points) / 2)
-    else:  # path_geoms is an iterable
-        path_geoms = gpd.GeoSeries(path_geoms)
-        xmin, ymin, xmax, ymax = path_geoms.total_bounds
-        clong, clat = (xmin + xmax) / 2, (ymin + ymax) / 2
-        n = len(path_geoms)
-
     # Initialize the figure.
     _init_figure(ax, figsize)
 
     # Load the projection.
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: clong,
-            'central_latitude': lambda df: clat
+            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
+            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
         })
-
-        # Set up the axis.
         if not ax:
             ax = plt.subplot(111, projection=projection)
     else:
@@ -1643,22 +1523,35 @@ def sankey(
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
+    # Immediately return if input geometry is empty.
+    if len(df.geometry) == 0:
+        return ax
+
     # Set extent.
-    if extent is not None:
-        extent_xmin, extent_ymin, extent_xmax, extent_ymax = extent
-        extent = (extent_xmin, extent_xmax, extent_ymin, extent_ymax)
-    if projection:
-        if extent is not None:
-            ax.set_extent(extent)
+    extrema = df.total_bounds
+    _set_extent(ax, projection, extent, extrema)
+
+    # Standardize hue input.
+    hue = _to_geoseries(df, hue)
+
+    # Set legend variable.
+    legend_var = _set_legend_var(legend_var, hue, scale)
+
+    def parse_geom(geom):
+        if isinstance(geom, shapely.geometry.LineString):
+            return geom
+        elif isinstance(geom, shapely.geometry.MultiLineString):
+            return geom
+        elif isinstance(geom, shapely.geometry.MultiPoint):
+            return shapely.geometry.LineString(geom)
         else:
-            ax.set_extent((xmin, xmax, ymin, ymax))
-    else:
-        if extent is not None:
-            ax.set_xlim((extent[0], extent[1]))
-            ax.set_ylim((extent[2], extent[3]))
-        else:
-            ax.set_xlim((xmin, xmax))
-            ax.set_ylim((ymin, ymax))
+            raise ValueError(
+                f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
+                f'geometries, but an instance of {type(geom)} was found instead.'
+            )
+
+    path_geoms = df.geometry.map(parse_geom)
+    n = len(path_geoms)
 
     # Generate the coloring information, if needed. Follows one of two schemes,
     # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
@@ -1674,7 +1567,6 @@ def sankey(
                 categorical, hue, scheme, k, cmap,
             )
             colors = [cmap.to_rgba(v) for v in hue_values]
-
             # Add a legend, if appropriate.
             if legend and (legend_var != "scale" or scale is None):
                 _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
@@ -1732,42 +1624,29 @@ def sankey(
         widths = [kwargs['linewidth']]*n; kwargs.pop('linewidth')
 
     if projection:
-        # Duck test plot. The first will work if a valid transformation is passed to ``path``
-        # (e.g. we are in the ``start + ``end`` case), the second will work if ``path`` is an
-        # iterable (e.g. we are in the ``path`` case).
-        try:
-            for origin, destination, color, width in zip(start, end, colors, widths):
-                ax.plot([origin.x, destination.x], [origin.y, destination.y], transform=path,
-                        linestyle=linestyle, linewidth=width, color=color, **kwargs)
-        except TypeError:
-            for line, color, width in zip(path_geoms, colors, widths):
-                feature = ShapelyFeature([line], ccrs.PlateCarree())
-                ax.add_feature(
-                    feature, linestyle=linestyle, linewidth=width, edgecolor=color,
-                    facecolor='None', **kwargs
-                )
+        for line, color, width in zip(path_geoms, colors, widths):
+            feature = ShapelyFeature([line], ccrs.PlateCarree())
+            ax.add_feature(
+                feature, linestyle=linestyle, linewidth=width, edgecolor=color,
+                facecolor='None', **kwargs
+            )
     else:
-        try:
-            for origin, destination, color, width in zip(start, end, colors, widths):
-                ax.plot([origin.x, destination.x], [origin.y, destination.y],
-                        linestyle=linestyle, linewidth=width, color=color, **kwargs)
-        except TypeError:
-            for path, color, width in zip(path_geoms, colors, widths):
-                # We have to implement different methods for dealing with LineString and
-                # MultiLineString objects. This calls for, yep, another duck test.
-                try:  # LineString
-                    line = mpl.lines.Line2D([coord[0] for coord in path.coords],
-                                            [coord[1] for coord in path.coords],
-                                            linestyle=linestyle, linewidth=width, color=color,
-                                            **kwargs)
+        for path, color, width in zip(path_geoms, colors, widths):
+            # We have to implement different methods for dealing with LineString and
+            # MultiLineString objects.
+            try:  # LineString
+                line = mpl.lines.Line2D(
+                    [coord[0] for coord in path.coords], [coord[1] for coord in path.coords],
+                    linestyle=linestyle, linewidth=width, color=color, **kwargs
+                )
+                ax.add_line(line)
+            except NotImplementedError:  # MultiLineString
+                for line in path:
+                    line = mpl.lines.Line2D(
+                        [coord[0] for coord in line.coords], [coord[1] for coord in line.coords],
+                        linestyle=linestyle, linewidth=width, color=color, **kwargs
+                    )
                     ax.add_line(line)
-                except NotImplementedError:  # MultiLineString
-                    for line in path:
-                        line = mpl.lines.Line2D([coord[0] for coord in line.coords],
-                                                [coord[1] for coord in line.coords],
-                                                linestyle=linestyle, linewidth=width, color=color,
-                                                **kwargs)
-                        ax.add_line(line)
     return ax
 
 
