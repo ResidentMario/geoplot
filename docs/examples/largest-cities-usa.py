@@ -16,7 +16,6 @@ proj = gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5)
 ax = gplt.polyplot(contiguous_usa, projection=proj, **poly_kwargs)
 gplt.pointplot(
     continental_usa_cities,
-    projection=proj, 
     scale='POP_2010', limits=(1, 80),
     hue='POP_2010', cmap='Blues',
     legend=True, legend_var='scale',
