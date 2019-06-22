@@ -174,11 +174,12 @@ def pointplot(
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
 
+    extrema = df.total_bounds
     if projection:
         # Properly set up the projection.
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         # Set up the axis.
@@ -204,7 +205,6 @@ def pointplot(
         return ax
 
     # Set extent.
-    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Parse hue and scale inputs.
@@ -356,11 +356,12 @@ def polyplot(
     # Initialize the figure.
     _init_figure(ax, figsize)
 
+    extrema = df.total_bounds
     if projection:
         # Properly set up the projection.
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         # Set up the axis.
@@ -381,7 +382,6 @@ def polyplot(
         return ax
 
     # Set extent.
-    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
@@ -548,10 +548,11 @@ def choropleth(
     # Initialize the figure.
     _init_figure(ax, figsize)
 
+    extrema = df.total_bounds
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         # Set up the axis.
@@ -571,7 +572,6 @@ def choropleth(
         return ax
 
     # Set extent.
-    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Format the data to be displayed for input.
@@ -777,10 +777,11 @@ def quadtree(
     _init_figure(ax, figsize)
 
     # Set up projection.
+    extrema = df.total_bounds
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         if not ax:
@@ -1056,10 +1057,11 @@ def cartogram(
     _init_figure(ax, figsize)
 
     # Load the projection.
+    extrema = df.total_bounds
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         # Set up the axis.
@@ -1081,7 +1083,6 @@ def cartogram(
         return ax
 
     # Set extent.
-    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Standardize hue and scale input.
@@ -1273,10 +1274,11 @@ def kdeplot(
     ys = np.array([p.y for p in df.geometry])
 
     # Load the projection.
+    extrema = df.total_bounds
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(xs),
-            'central_latitude': lambda df: np.mean(ys)
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
 
         # Set up the axis.
@@ -1507,10 +1509,11 @@ def sankey(
     _init_figure(ax, figsize)
 
     # Load the projection.
+    extrema = df.total_bounds
     if projection:
         projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
+            'central_longitude': np.mean(extrema[[0, 2]]),
+            'central_latitude': np.mean(extrema[[1, 3]])
         })
         if not ax:
             ax = plt.subplot(111, projection=projection)
@@ -1528,7 +1531,6 @@ def sankey(
         return ax
 
     # Set extent.
-    extrema = df.total_bounds
     _set_extent(ax, projection, extent, extrema)
 
     # Standardize hue input.

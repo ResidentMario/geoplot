@@ -37,7 +37,7 @@ class Base:
             This data is needed to calculate reasonable centering variables in cases in which the
             user does not already provide them; which is, incidentally, the reason behind all of
             this funny twice-instantiation loading in the first place.
-        centerings: dct
+        centerings: dict
             A dictionary containing names and centering methods. Certain projections have certain
             centering parameters whilst others lack them. For example, the geospatial projection
             contains both ``central_longitude`` and ``central_latitude`` instance parameter, which
@@ -59,11 +59,7 @@ class Base:
             Returns a ``cartopy.crs`` object instance whose appropriate instance variables have
             been set to reasonable defaults wherever not already provided by the user.
         """
-        centering_variables = dict()
-        if not df.empty and df.geometry.notna().any():
-            for key, func in centerings.items():
-                centering_variables[key] = func(df)
-        return getattr(ccrs, self.__class__.__name__)(**{**centering_variables, **self.args})
+        return getattr(ccrs, self.__class__.__name__)(**{**centerings, **self.args})
 
     def _as_mpl_axes(self):
         """
