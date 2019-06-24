@@ -194,8 +194,11 @@ def pointplot(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -371,8 +374,11 @@ def polyplot(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -561,8 +567,12 @@ def choropleth(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -789,8 +799,12 @@ def quadtree(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1068,12 +1082,15 @@ def cartogram(
         if not ax:
             ax = plt.subplot(111, projection=projection)
 
-        # Clean up patches.
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1287,8 +1304,12 @@ def kdeplot(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1520,8 +1541,12 @@ def sankey(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1836,8 +1861,12 @@ def voronoi(
     else:
         if not ax:
             ax = plt.gca()
-        elif isinstance(ax, GeoAxesSubplot):
+
+        if isinstance(ax, GeoAxesSubplot):
             projection = ax.projection
+        else:
+            ax.set_aspect('equal')
+
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
