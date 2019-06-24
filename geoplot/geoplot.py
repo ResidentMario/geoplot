@@ -171,9 +171,6 @@ def pointplot(
     # Initialize the figure, if one hasn't been initialized already.
     _init_figure(ax, figsize)
 
-    xs = np.array([p.x for p in df.geometry])
-    ys = np.array([p.y for p in df.geometry])
-
     extrema = df.total_bounds
     if projection:
         # Properly set up the projection.
@@ -248,6 +245,9 @@ def pointplot(
         # Add a legend, if appropriate.
         if legend and (legend_var != "scale" or scale is None):
             _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+
+    xs = np.array([p.x for p in df.geometry])
+    ys = np.array([p.y for p in df.geometry])
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale is not None:
@@ -805,13 +805,15 @@ def quadtree(
         else:
             ax.set_aspect('equal')
 
-
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
     # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
+
+    # Set extent.
+    _set_extent(ax, projection, extent, extrema)
 
     # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
     df = gpd.GeoDataFrame(df, geometry=df.geometry)
@@ -859,10 +861,6 @@ def quadtree(
                 rect, facecolor=facecolor, edgecolor=edgecolor, **kwargs
             )
             ax.add_patch(feature)
-
-    # Set extent.
-    extrema = (bxmin, bymin, bxmax, bymax)
-    _set_extent(ax, projection, extent, extrema)
 
     if hue is not None and legend:
         _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
@@ -1286,10 +1284,6 @@ def kdeplot(
     # Initialize the figure.
     _init_figure(ax, figsize)
 
-    # Necessary prior.
-    xs = np.array([p.x for p in df.geometry])
-    ys = np.array([p.y for p in df.geometry])
-
     # Load the projection.
     extrema = df.total_bounds
     if projection:
@@ -1310,7 +1304,6 @@ def kdeplot(
         else:
             ax.set_aspect('equal')
 
-
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
@@ -1319,7 +1312,6 @@ def kdeplot(
         return ax
 
     # Set extent.
-    extrema = np.min(xs), np.min(ys), np.max(xs), np.max(ys)
     _set_extent(ax, projection, extent, extrema)
 
     # Parse clip input.
@@ -1546,7 +1538,6 @@ def sankey(
             projection = ax.projection
         else:
             ax.set_aspect('equal')
-
 
     # Clean up patches.
     _lay_out_axes(ax, projection)
@@ -1847,6 +1838,7 @@ def voronoi(
     # Initialize the figure.
     _init_figure(ax, figsize)
 
+    extrema = df.total_bounds
     if projection:
         # Properly set up the projection.
         projection = projection.load(df, {
@@ -1867,7 +1859,6 @@ def voronoi(
         else:
             ax.set_aspect('equal')
 
-
     # Clean up patches.
     _lay_out_axes(ax, projection)
 
@@ -1876,8 +1867,6 @@ def voronoi(
         return ax
 
     # Set extent.
-    xs, ys = [p.x for p in df.geometry.centroid], [p.y for p in df.geometry.centroid]
-    extrema = np.min(xs), np.max(xs), np.min(ys), np.max(ys)
     _set_extent(ax, projection, extent, extrema)
 
     # Parse inputs.
