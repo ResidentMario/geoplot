@@ -59,6 +59,15 @@ class Plot:
 
         if len(df.geometry) != 0:
             xmin, ymin, xmax, ymax = extent if extent is not None else extrema
+
+            if xmin < -180 or xmax > 180 or ymin < -90 or ymax > 90:
+                raise ValueError(
+                    f'geoplot expects input geometries to be in latitude-longitude coordinates, '
+                    f'but the values provided include points whose values exceed the maximum '
+                    f'or minimum possible longitude or latitude values (-180, -90, 180, 90), '
+                    f'indicating that the input data is not in proper latitude-longitude format.'
+                )
+
             xmin, xmax = max(xmin, -180), min(xmax, 180)
             ymin, ymax = max(ymin, -90), min(ymax, 90)
 
