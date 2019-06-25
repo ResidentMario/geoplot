@@ -59,6 +59,15 @@ class Plot:
 
         if len(df.geometry) != 0:
             xmin, ymin, xmax, ymax = extent if extent is not None else extrema
+
+            if xmin < -180 or xmax > 180 or ymin < -90 or ymax > 90:
+                raise ValueError(
+                    f'geoplot expects input geometries to be in latitude-longitude coordinates, '
+                    f'but the values provided include points whose values exceed the maximum '
+                    f'or minimum possible longitude or latitude values (-180, -90, 180, 90), '
+                    f'indicating that the input data is not in proper latitude-longitude format.'
+                )
+
             xmin, xmax = max(xmin, -180), min(xmax, 180)
             ymin, ymax = max(ymin, -90), min(ymax, 90)
 
@@ -96,6 +105,43 @@ class Plot:
 
         self.ax = ax
         self.projection = projection
+
+    def set_hue_values(
+        self, df, hue=None, scheme=None, k=5, cmap='viridis', color_kwarg='color',
+        default_color='steelblue', kwargs=None
+    ):
+        if kwargs is None:
+            kwargs = dict()
+
+        hue = _to_geoseries(df, hue)
+        if hue is None:
+            if color_kwarg in kwargs:
+                self.colors = [kwargs[color_kwarg]] * len(df)
+            else:
+                self.colors = [default_color] * len(df)
+            self.hue = hue
+            return
+        else:
+            self.colors = None  # not needed
+
+        if k is None:
+            cmap = _continuous_colormap(hue, cmap)
+            self.colors = [cmap.to_rgba(v) for v in hue]
+        else:
+            categorical, scheme = _validate_buckets(df, hue, k, scheme)
+            if hue is not None:
+                cmap, categories, hue_values = _discrete_colorize(
+                    categorical, hue, scheme, k, cmap
+                )
+                self.colors = [cmap.to_rgba(v) for v in hue_values]
+
+        self.hue = hue
+        self.scheme = scheme
+        self.k = k
+        self.cmap = cmap
+        self.categorical = categorical
+        self.categories = categories
+        self.hue_values = hue_values
 
 
 def pointplot(
@@ -249,44 +295,22 @@ def pointplot(
     if len(df.geometry) == 0:
         return ax
 
-    # Parse hue and scale inputs.
-    hue = _to_geoseries(df, hue)
-    scalar_values = _to_geoseries(df, scale)
+    plot.set_hue_values(
+        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
+        default_color='steelblue', kwargs=kwargs
+    )
 
     # Set legend variable.
     legend_var = _set_legend_var(legend_var, hue, scale)
 
-    # Generate the coloring information, if needed. Follows one of two schemes, 
-    # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
-    # specified for either to work).
-    if k is not None:
-        # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, k, scheme)
+    # Add a legend, if appropriate.
+    if legend and (legend_var != "scale" or scale is None):
+        if hue is not None and k is not None:
+            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
+        elif hue is not None and k is None:
+            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
 
-        if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap
-            )
-            colors = [cmap.to_rgba(v) for v in hue_values]
-
-            # Add a legend, if appropriate.
-            if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-        else:
-            if 'color' not in kwargs.keys():
-                colors = ['steelblue']*len(df)
-            else:
-                colors = [kwargs['color']]*len(df)
-                kwargs.pop('color')
-    elif k is None and hue is not None:
-        # Continuous colormap code path.
-        hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-        # Add a legend, if appropriate.
-        if legend and (legend_var != "scale" or scale is None):
-            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+    scalar_values = _to_geoseries(df, scale)
 
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
@@ -321,7 +345,7 @@ def pointplot(
         xs = np.array(xs)[sorted_indices]
         ys = np.array(ys)[sorted_indices]
         sizes = np.array(sizes)[sorted_indices]
-        colors = np.array(colors)[sorted_indices]
+        plot.colors = np.array(plot.colors)[sorted_indices]
 
         # Draw a legend, if appropriate.
         if legend and (legend_var == "scale" or hue is None):
@@ -333,9 +357,9 @@ def pointplot(
 
     # Draw.
     if projection:
-        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=colors, s=sizes, **kwargs)
+        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=sizes, **kwargs)
     else:
-        ax.scatter(xs, ys, c=colors, s=sizes, **kwargs)
+        ax.scatter(xs, ys, c=plot.colors, s=sizes, **kwargs)
 
     return ax
 
@@ -573,48 +597,26 @@ def choropleth(
     if len(df.geometry) == 0:
         return ax
 
-    # Format the data to be displayed for input.
-    hue = _to_geoseries(df, hue)
     if hue is None:
         raise ValueError("No 'hue' specified.")
+    plot.set_hue_values(
+        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color', kwargs=kwargs
+    )
 
-    # Generate the coloring information, if needed. Follows one of two schemes, categorical or 
-    # continuous, based on whether or not ``k`` is specified (``hue`` must be specified for either
-    # to work).
-    if k is not None:
-        # Categorical colormap code path.
-
-        # Validate buckets.
-        categorical, scheme = _validate_buckets(df, hue, k, scheme)
-
-        if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap
-            )
-            colors = [cmap.to_rgba(v) for v in hue_values]
-
-            # Add a legend, if appropriate.
-            if legend:
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
+    # Add a legend, if appropriate.
+    if legend:
+        if k is not None:
+            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
         else:
-            colors = ['steelblue']*len(df)
-    elif k is None and hue is not None:
-        # Continuous colormap code path.
-        hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-        # Add a legend, if appropriate.
-        if legend:
-            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
 
     # Draw the features.
     if projection:
-        for color, geom in zip(colors, df.geometry):
+        for color, geom in zip(plot.colors, df.geometry):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, **kwargs)
     else:
-        for color, geom in zip(colors, df.geometry):
+        for color, geom in zip(plot.colors, df.geometry):
             try:  # Duck test for MultiPolygon.
                 for subgeom in geom:
                     feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
@@ -1036,8 +1038,7 @@ def cartogram(
     if len(df.geometry) == 0:
         return ax
 
-    # Standardize hue and scale input.
-    hue = _to_geoseries(df, hue)
+    # Standardize scale input.
     if not scale:
         raise ValueError("No scale parameter provided.")
     values = _to_geoseries(df, scale)
@@ -1050,41 +1051,27 @@ def cartogram(
     else:
         dscale = scale_func(dmin, dmax)
 
+    # Set legend variable.
+    legend_var = _set_legend_var(legend_var, hue, scale)
+
     # Create a legend, if appropriate.
-    if legend:
+    if legend and legend_var == "scale":
         _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
 
-    # Generate the coloring information, if needed. Follows one of two schemes,
-    # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
-    # specified for either to work).
-    if k is not None and hue is not None:
-        # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, k, scheme)
+    plot.set_hue_values(
+        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
+        default_color='None', kwargs=kwargs
+    )
 
-        if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap,
-            )
-            colors = [cmap.to_rgba(v) for v in hue_values]
+    # Add a legend, if appropriate.
+    if legend and legend_var != "scale":
+        if plot.hue is not None and k is not None:
+            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
+        elif plot.hue is not None and k is None:
+            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
 
-            # Add a legend, if appropriate.
-            if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-        else:
-            colors = ['None']*len(df)
-    elif k is None and hue is not None:
-        # Continuous colormap code path.
-        hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap,)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-        # Add a legend, if appropriate.
-        if legend and (legend_var != "scale" or scale is None):
-            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
-    elif 'facecolor' in kwargs:
-        colors = [kwargs.pop('facecolor')]*len(df)
-    else:
-        colors = ['None']*len(df)
+    # Set legend variable.
+    legend_var = _set_legend_var(legend_var, hue, scale)
 
     # Manipulate trace_kwargs.
     if trace:
@@ -1112,7 +1099,7 @@ def cartogram(
                     ax.add_patch(feature)
 
     # Finally, draw the scaled geometries.
-    for value, color, polygon in zip(values, colors, df.geometry):
+    for value, color, polygon in zip(values, plot.colors, df.geometry):
         scale_factor = dscale(value)
         scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
         if projection:
@@ -1457,38 +1444,17 @@ def sankey(
     path_geoms = df.geometry.map(parse_geom)
     n = len(path_geoms)
 
-    # Generate the coloring information, if needed. Follows one of two schemes,
-    # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
-    # specified for either to work).
-    if k is not None:
-        # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, k, scheme)
+    plot.set_hue_values(
+        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
+        default_color='steelblue', kwargs=kwargs
+    )
 
-        hue = _to_geoseries(df, hue)
-
-        if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap,
-            )
-            colors = [cmap.to_rgba(v) for v in hue_values]
-            # Add a legend, if appropriate.
-            if legend and (legend_var != "scale" or scale is None):
-                _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs)
-        else:
-            if 'color' not in kwargs.keys():
-                colors = ['steelblue'] * n
-            else:
-                colors = [kwargs['color']] * n
-                kwargs.pop('color')
-    elif k is None and hue is not None:
-        # Continuous colormap code path.
-        hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-        # Add a legend, if appropriate.
-        if legend and (legend_var != "scale" or scale is None):
-            _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+    # Add a legend, if appropriate.
+    if legend and legend_var != "scale":
+        if plot.hue is not None and k is not None:
+            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
+        elif plot.hue is not None and k is None:
+            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
 
     # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
     if scale is not None:
@@ -1519,23 +1485,19 @@ def sankey(
         linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
     else:
         linestyle = '-'
-    if 'color' in kwargs.keys():
-        colors = [kwargs['color']]*n; kwargs.pop('color')
-    # plt.plot uses 'color', mpl.ax.add_feature uses 'edgecolor'. Support both.
-    elif 'edgecolor' in kwargs.keys():
-        colors = [kwargs['edgecolor']]*n; kwargs.pop('edgecolor')
+
     if 'linewidth' in kwargs.keys():
-        widths = [kwargs['linewidth']]*n; kwargs.pop('linewidth')
+        widths = [kwargs['linewidth']] * n; kwargs.pop('linewidth')
 
     if projection:
-        for line, color, width in zip(path_geoms, colors, widths):
+        for line, color, width in zip(path_geoms, plot.colors, widths):
             feature = ShapelyFeature([line], ccrs.PlateCarree())
             ax.add_feature(
                 feature, linestyle=linestyle, linewidth=width, edgecolor=color,
                 facecolor='None', **kwargs
             )
     else:
-        for path, color, width in zip(path_geoms, colors, widths):
+        for path, color, width in zip(path_geoms, plot.colors, widths):
             # We have to implement different methods for dealing with LineString and
             # MultiLineString objects.
             try:  # LineString
@@ -1732,37 +1694,15 @@ def voronoi(
     hue = _to_geoseries(df, hue)
     clip = _to_geoseries(df, clip)
 
-    # Generate the coloring information, if needed. Follows one of two schemes,
-    # categorical or continuous, based on whether or not ``k`` is specified (``hue`` must be
-    # specified for either to work).
-    if k is not None:
-        # Categorical colormap code path.
-        categorical, scheme = _validate_buckets(df, hue, k, scheme)
-
-        if hue is not None:
-            cmap, categories, hue_values = _discrete_colorize(
-                categorical, hue, scheme, k, cmap
-            )
-            colors = [cmap.to_rgba(v) for v in hue_values]
-
-        else:
-            colors = ['None']*len(df)
-
-    elif k is None and hue is not None:
-        # Continuous colormap code path.
-        hue_values = hue
-        cmap = _continuous_colormap(hue_values, cmap)
-        colors = [cmap.to_rgba(v) for v in hue_values]
-
-    elif 'facecolor' in kwargs:
-        colors = [kwargs.pop('facecolor')]*len(df)
-    else:
-        colors = ['None']*len(df)
+    plot.set_hue_values(
+        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
+        default_color='None', kwargs=kwargs        
+    )
 
     # Finally we draw the features.
     geoms = _build_voronoi_polygons(df)
     if projection:
-        for color, geom in zip(colors, geoms):
+        for color, geom in zip(plot.colors, geoms):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **kwargs)
 
@@ -1772,7 +1712,7 @@ def voronoi(
             ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
 
     else:
-        for color, geom in zip(colors, geoms):
+        for color, geom in zip(plot.colors, geoms):
             feature = descartes.PolygonPatch(geom, facecolor=color, edgecolor=edgecolor, **kwargs)
             ax.add_patch(feature)
 
@@ -1785,9 +1725,11 @@ def voronoi(
 
     # Add a legend, if appropriate.
     if legend and k is not None:
-        _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=True)
+        _paint_hue_legend(
+            ax, plot.categories, plot.cmap, legend_labels, legend_kwargs, figure=True
+        )
     elif legend and k is None and hue is not None:
-        _paint_colorbar_legend(ax, hue_values, cmap, legend_kwargs)
+        _paint_colorbar_legend(ax, plot.hue, plot.cmap, legend_kwargs)
 
     return ax
 
