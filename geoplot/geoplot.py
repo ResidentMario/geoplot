@@ -23,6 +23,61 @@ except ImportError:
 __version__ = "0.2.4"
 
 
+class Plot:
+    def __init__(self, df, figsize=(8, 6), ax=None, extent=None, projection=None):
+        if not ax:
+            plt.figure(figsize=figsize)
+
+        if len(df.geometry) == 0:
+            extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
+        else:
+            extrema = np.array(df.total_bounds)
+
+        extent = _to_geoseries(df, extent)
+        central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
+            else np.mean(extrema[[0, 2]])
+        central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
+            else np.mean(extrema[[1, 3]])
+
+        if projection:
+            projection = projection.load(df, {
+                'central_longitude': central_longitude,
+                'central_latitude': central_latitude
+            })
+
+            if not ax:
+                ax = plt.subplot(111, projection=projection)
+
+        else:
+            if not ax:
+                ax = plt.gca()
+
+            if isinstance(ax, GeoAxesSubplot):
+                projection = ax.projection
+            else:
+                ax.set_aspect('equal')
+
+        if len(df.geometry) != 0:
+            xmin, ymin, xmax, ymax = extent if extent is not None else extrema
+            xmin, xmax = max(xmin, -180), min(xmax, 180)
+            ymin, ymax = max(ymin, -90), min(ymax, 90)
+
+            if projection is not None:
+                try:
+                    ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
+                except ValueError:
+                    pass
+
+                ax.outline_patch.set_visible(False)
+            else:
+                ax.axison = False
+                ax.set_xlim((xmin, xmax))
+                ax.set_ylim((ymin, ymax))
+
+        self.ax = ax
+        self.projection = projection
+
+
 def pointplot(
     df, projection=None,
     hue=None, scheme=None, k=5, cmap='viridis',
@@ -95,7 +150,6 @@ def pointplot(
 
     Examples
     --------
-
     The ``pointplot`` is a `geospatial scatter plot 
     <https://en.wikipedia.org/wiki/Scatter_plot>`_ that represents each observation in your dataset
     as a single point on a map. It is simple and easily interpretable plot that is universally
@@ -168,44 +222,12 @@ def pointplot(
 
     .. image:: ../figures/pointplot/pointplot-scale.png
     """
-    # Initialize the figure, if one hasn't been initialized already.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    extrema = df.total_bounds
-    if projection:
-        # Properly set up the projection.
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-
-        # Set extent.
-        if extent is not None:
-            ax.set_extent(extent)
-        else:
-            pass  # Default extent.
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Parse hue and scale inputs.
     hue = _to_geoseries(df, hue)
@@ -356,39 +378,12 @@ def polyplot(
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    extrema = df.total_bounds
-    if projection:
-        # Properly set up the projection.
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Finally we draw the features.
     if projection:
@@ -551,38 +546,12 @@ def choropleth(
 
     .. image:: ../figures/choropleth/choropleth-labels.png
     """
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    extrema = df.total_bounds
-    if projection:
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Format the data to be displayed for input.
     hue = _to_geoseries(df, hue)
@@ -784,36 +753,12 @@ def quadtree(
     if isinstance(df.index, pd.MultiIndex):
         raise NotImplementedError
 
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    # Set up projection.
-    extrema = df.total_bounds
-    if projection:
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
     df = gpd.GeoDataFrame(df, geometry=df.geometry)
@@ -834,7 +779,6 @@ def quadtree(
 
     # Generate a quadtree.
     quad = QuadTree(df)
-    bxmin, bxmax, bymin, bymax = quad.bounds
     partitions = list(quad.partition(nmin, nmax))
 
     # Set color information, if necessary
@@ -1065,40 +1009,12 @@ def cartogram(
 
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    # Load the projection.
-    extrema = df.total_bounds
-    if projection:
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Standardize hue and scale input.
     hue = _to_geoseries(df, hue)
@@ -1281,38 +1197,12 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    # Load the projection.
-    extrema = df.total_bounds
-    if projection:
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Parse clip input.
     clip = _to_geoseries(df, clip)
@@ -1447,7 +1337,7 @@ def sankey(
         la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
         world = gpd.read_file(gplt.datasets.get_path('world'))
 
-        ax = gplt.sankey(la_flights, projection=gcrs.Orthographic())
+        ax = gplt.sankey(la_flights, projection=gcrs.Mollweide())
         gplt.polyplot(world, ax=ax, facecolor='lightgray', edgecolor='white')
         ax.set_global(); ax.outline_patch.set_visible(True)
 
@@ -1459,7 +1349,7 @@ def sankey(
     .. code-block:: python
 
         ax = gplt.sankey(
-            la_flights, projection=gcrs.Orthographic(),
+            la_flights, projection=gcrs.Mollweide(),
             scale='Passengers', hue='Passengers', cmap='Greens', legend=True
         )
         gplt.polyplot(
@@ -1475,7 +1365,7 @@ def sankey(
     .. code-block:: python
 
         ax = gplt.sankey(
-            la_flights, projection=gcrs.Orthographic(),
+            la_flights, projection=gcrs.Mollweide(),
             scale='Passengers', limits=(1, 10),
             hue='Passengers', cmap='Greens', legend=True
         )
@@ -1494,7 +1384,7 @@ def sankey(
     .. code-block:: python
 
         ax = gplt.sankey(
-            la_flights, projection=gcrs.Orthographic(),
+            la_flights, projection=gcrs.Mollweide(),
             scale='Passengers', limits=(1, 10),
             hue='Passengers', cmap='Greens',
             legend=True, legend_kwargs={'loc': 'lower left'}
@@ -1518,36 +1408,12 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-dc.png
     """
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    # Load the projection.
-    extrema = df.total_bounds
-    if projection:
-        projection = projection.load(df, {
-            'central_longitude': np.mean(extrema[[0, 2]]),
-            'central_latitude': np.mean(extrema[[1, 3]])
-        })
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Standardize hue input.
     hue = _to_geoseries(df, hue)
@@ -1835,39 +1701,12 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
-    # Initialize the figure.
-    _init_figure(ax, figsize)
+    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    ax = plot.ax
+    projection = plot.projection
 
-    extrema = df.total_bounds
-    if projection:
-        # Properly set up the projection.
-        projection = projection.load(df, {
-            'central_longitude': lambda df: np.mean(np.array([p.x for p in df.geometry.centroid])),
-            'central_latitude': lambda df: np.mean(np.array([p.y for p in df.geometry.centroid]))
-        })
-
-        # Set up the axis.
-        if not ax:
-            ax = plt.subplot(111, projection=projection)
-
-    else:
-        if not ax:
-            ax = plt.gca()
-
-        if isinstance(ax, GeoAxesSubplot):
-            projection = ax.projection
-        else:
-            ax.set_aspect('equal')
-
-    # Clean up patches.
-    _lay_out_axes(ax, projection)
-
-    # Immediately return if input geometry is empty.
     if len(df.geometry) == 0:
         return ax
-
-    # Set extent.
-    _set_extent(ax, projection, extent, extrema)
 
     # Parse inputs.
     hue = _to_geoseries(df, hue)
@@ -1947,44 +1786,6 @@ def _init_figure(ax, figsize):
     if not ax:
         fig = plt.figure(figsize=figsize)
         return fig
-
-
-def _set_extent(ax, projection, extent, extrema):
-    """
-    Sets the plot extent.
-    """
-    if extent is not None:
-        xmin, ymin, xmax, ymax = extent
-        xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
-
-        if projection:  # input ``extent`` into set_extent().
-            ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
-        else:  # input ``extent`` into set_ylim, set_xlim.
-            ax.set_xlim((xmin, xmax))
-            ax.set_ylim((ymin, ymax))
-
-    else:
-        xmin, ymin, xmax, ymax = extrema
-        xmin, xmax, ymin, ymax = max(xmin, -180), min(xmax, 180), max(ymin, -90), min(ymax, 90)
-
-        if projection:  # input ``extrema`` into set_extent.
-            ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
-        else:  # input ``extrema`` into set_ylim, set_xlim.
-            ax.set_xlim((xmin, xmax))
-            ax.set_ylim((ymin, ymax))
-
-
-def _lay_out_axes(ax, projection):
-    """
-    ``cartopy`` enables a a transparent background patch and an "outline" patch by default. This
-    short method simply hides these extraneous visual features. If the plot is a pure
-    ``matplotlib`` one, it does the same thing by removing the axis altogether.
-    """
-    if projection is not None:
-        ax.background_patch.set_visible(False)
-        ax.outline_patch.set_visible(False)
-    else:
-        plt.gca().axison = False
 
 
 def _set_legend_var(legend_var, hue, scale):
