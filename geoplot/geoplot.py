@@ -66,6 +66,26 @@ class Plot:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
                 except ValueError:
+                    # This occurs either due to numerical stability errors in cartopy or due
+                    # to the extent exceeding the projection parameters. The latter *ought* to
+                    # only happen when using the Orthographic projection (maybe others?), which
+                    # is on a globe and only shows at most half of the world at a time. So if the
+                    # plot extent exceeds the world half in any dimension the extent-setting
+                    # operation will fail.
+                    #
+                    # The default behavior in cartopy is to use a global exntent with
+                    # central_latitude and central_longitude as its center. This is the behavior
+                    # we will follow in failure cases.
+                    if isinstance(projection, ccrs.Orthographic):
+                        warnings.warn(
+                            'Plot extent lies outside of the Orthographic projection\'s '
+                            'viewport. Defaulting to global extent.'
+                        )
+                    else:
+                        warnings.warn(
+                            'Cound not set plot extent successfully due to numerical instability. '
+                            'Try setting extent manually. Defaulting to a global extent.'
+                        )
                     pass
 
                 ax.outline_patch.set_visible(False)
