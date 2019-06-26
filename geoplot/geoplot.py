@@ -28,7 +28,7 @@ class Plot:
         self, df, figsize=(8, 6), ax=None, extent=None, projection=None,
         has_hue_params=False, color_kwarg=None, default_color=None,
         has_scale_params=False, size_kwarg=None, default_size=None, scale_multiplier=None,
-        has_legend=False,
+        has_legend=False, has_clip=False,
         **kwargs
     ):
         self.df = df
@@ -62,6 +62,9 @@ class Plot:
                 has_hue_params=has_hue_params,
                 has_scale_params=has_scale_params
             )
+
+        if has_clip:
+            pass
 
     def init_axis(self, figsize, ax, extent, projection):
         if not ax:
@@ -248,7 +251,11 @@ class Plot:
             legend_kwargs = dict()
 
         if has_hue_params and has_scale_params:
-            legend_var = _set_legend_var(legend_var, self.hue, self.scale)
+            if legend_var is None:
+                if self.hue is not None:
+                    legend_var = "hue"
+                elif self.scale is not None:
+                    legend_var = "scale"
         elif has_hue_params and not has_scale_params:
             legend_var = 'hue'
         else:  # not has_hue_params and has_scale_params
@@ -266,6 +273,22 @@ class Plot:
                 self.ax, self.scale, legend_values, legend_labels, self.dscale, legend_kwargs
             )
 
+    def paint_clip(self, clip=None):
+        clip = _to_geoseries(self.df, clip)
+        if clip is not None:
+            if self.projection is not None:
+                clip_geom = _get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
+                feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+                self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+            else:
+                clip_geom = _get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
+                xmin, xmax = self.ax.get_xlim()
+                ymin, ymax = self.ax.get_ylim()
+                extent = (xmin, ymin, xmax, ymax)
+                polyplot(
+                    gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                    extent=extent, ax=self.ax
+                )
 
 def pointplot(
     df, projection=None,
@@ -1167,7 +1190,6 @@ def cartogram(
                     feature = descartes.PolygonPatch(polygon, **trace_kwargs)
                     ax.add_patch(feature)
 
-    # TODO: rebalance the scaling ratio
     # Finally, draw the scaled geometries.
     for value, color, polygon in zip(plot.sizes, plot.colors, df.geometry):
         scale_factor = value
@@ -1287,46 +1309,20 @@ def kdeplot(
     if len(df.geometry) == 0:
         return ax
 
-    # Parse clip input.
-    clip = _to_geoseries(df, clip)
+    plot.paint_clip(clip=clip)
 
     if projection:
-        if clip is None:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
-        else:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+        sns.kdeplot(
+            pd.Series([p.x for p in df.geometry]),
+            pd.Series([p.y for p in df.geometry]),
+            transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
+        )
     else:
-        if clip is None:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                ax=ax, **kwargs
-            )
-        else:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            extent = (xmin, ymin, xmax, ymax)
-            polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=extent, ax=ax
-            )
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
+        sns.kdeplot(
+            pd.Series([p.x for p in df.geometry]),
+            pd.Series([p.y for p in df.geometry]),
+            ax=ax, shade_lowest=shade_lowest, **kwargs
+        )
     return ax
 
 
@@ -1745,32 +1741,19 @@ def voronoi(
     if len(df.geometry) == 0:
         return ax
 
-    # Finally we draw the features.
+    plot.paint_clip(clip=clip)
+
     geoms = _build_voronoi_polygons(df)
-    clip = _to_geoseries(df, clip)
     if projection:
         for color, geom in zip(plot.colors, geoms):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **plot.kwargs)
-
-        if clip is not None:
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
-
     else:
         for color, geom in zip(plot.colors, geoms):
             feature = descartes.PolygonPatch(
                 geom, facecolor=color, edgecolor=edgecolor, **plot.kwargs
             )
             ax.add_patch(feature)
-
-        if clip is not None:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            ax = polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=ax.get_xlim() + ax.get_ylim(), ax=ax
-            )
 
     # Add a legend, if appropriate.
     if legend and k is not None:
@@ -1797,19 +1780,6 @@ def _init_figure(ax, figsize):
     if not ax:
         fig = plt.figure(figsize=figsize)
         return fig
-
-
-def _set_legend_var(legend_var, hue, scale):
-    """
-    Given ``hue`` and ``scale`` variables with mixed validity, returns the correct 
-    ``legend_var``.
-    """
-    if legend_var is None:
-        if hue is not None:
-            legend_var = "hue"
-        elif scale is not None:
-            legend_var = "scale"
-    return legend_var
 
 
 def _to_geoseries(df, var):
