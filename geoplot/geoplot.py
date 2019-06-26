@@ -143,6 +143,70 @@ class Plot:
         self.categories = categories
         self.hue_values = hue_values
 
+    def set_scale_values(
+        self, df, scale=None, limits=(0.5, 2), scale_func=None, sort_values=True,
+        size_kwarg=None, default_size=20, scale_multiplier=1, kwargs=None
+    ):
+        if kwargs is None:
+            kwargs = dict()
+        scale = _to_geoseries(df, scale)
+
+        if scale is not None:
+            dmin, dmax = np.min(scale), np.max(scale)
+            if not scale_func:
+                dslope = (limits[1] - limits[0]) / (dmax - dmin)
+                # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
+                # TODO: better explain this error
+                if np.isinf(dslope): 
+                    raise ValueError(
+                        "The data range provided to the 'scale' variable is too small for the "
+                        "default scaling function. Normalize your data or provide a custom "
+                        "'scale_func'."
+                    )
+                dscale = lambda dval: limits[0] + dslope * (dval - dmin)
+            else:
+                dscale = scale_func(dmin, dmax)
+
+            # Apply the scale function.
+            scalar_multiples = np.array([dscale(d) for d in scale])
+            self.sizes = scalar_multiples * scale_multiplier
+
+            # When a scale is applied, large observations will tend to obfuscate small ones.
+            # Plotting in descending size order, so that smmaer values end up on top, helps
+            # clean the plot up a bit.
+            sorted_indices = np.array(
+                sorted(enumerate(self.sizes), key=lambda tup: tup[1])[::-1]
+            )[:,0].astype(int)
+            self.sizes = np.array(self.sizes)[sorted_indices]
+
+            if hasattr(self, 'colors') and self.colors is not None:
+                self.colors = np.array(self.colors)[sorted_indices]
+
+            self.dscale = dscale
+            self.scale = scale
+
+        else:
+            n = len(df)
+            self.sizes = [kwargs.pop(size_kwarg, default_size)] * n
+
+    def paint_legend(
+        self, hue=None, scale=None, legend_var=None, legend_kwargs=None,
+    ):
+        if legend_kwars is None:
+            legend_kwargs = dict()
+
+        legend_var = _set_legend_var(legend_var, hue, scale)
+        if legend and (legend_var != "scale" or scale is None):
+            if hue is not None and k is not None:
+                _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
+            elif hue is not None and k is None:
+                _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
+        elif legend and scale is not None and legend_var == "scale":
+            _paint_carto_legend(
+                ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
+            )
+
+
 
 def pointplot(
     df, projection=None,
@@ -299,68 +363,34 @@ def pointplot(
         df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
         default_color='steelblue', kwargs=kwargs
     )
+    plot.set_scale_values(
+        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
+        size_kwarg='s', default_size=20, scale_multiplier=1, kwargs=kwargs
+    )
+    # TODO: handle popping kwargs better in all plots...
+    kwargs.pop('s')
 
-    # Set legend variable.
+    plot.paint_legend(
+        hue=plot.hue, scale=plot.scale, legend_var=legend_var, legend_kwargs=legend_kwargs
+    )
+
     legend_var = _set_legend_var(legend_var, hue, scale)
-
-    # Add a legend, if appropriate.
     if legend and (legend_var != "scale" or scale is None):
         if hue is not None and k is not None:
             _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
         elif hue is not None and k is None:
             _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-
-    scalar_values = _to_geoseries(df, scale)
+    elif legend and scale is not None and legend_var == "scale":
+        _paint_carto_legend(
+            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
+        )
 
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
-
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale is not None:
-        # Compute a scale function.
-        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
-        if not scale_func:
-            dslope = (limits[1] - limits[0]) / (dmax - dmin)
-            # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
-            # TODO: better explain this error
-            if np.isinf(dslope): 
-                raise ValueError(
-                    "The data range provided to the 'scale' variable is too small for the default "
-                    "scaling function. Normalize your data or provide a custom 'scale_func'."
-                )
-            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-        else:
-            dscale = scale_func(dmin, dmax)
-
-        # Apply the scale function.
-        scalar_multiples = np.array([dscale(d) for d in scalar_values])
-        sizes = scalar_multiples * 20
-
-        # When a scale is applied, large points will tend to obfuscate small ones. Bringing the
-        # smaller points to the front (by plotting them last) is a necessary intermediate step,
-        # which is what this bit of code does.
-        sorted_indices = np.array(
-            sorted(enumerate(sizes), key=lambda tup: tup[1])[::-1]
-        )[:,0].astype(int)
-        xs = np.array(xs)[sorted_indices]
-        ys = np.array(ys)[sorted_indices]
-        sizes = np.array(sizes)[sorted_indices]
-        plot.colors = np.array(plot.colors)[sorted_indices]
-
-        # Draw a legend, if appropriate.
-        if legend and (legend_var == "scale" or hue is None):
-            _paint_carto_legend(
-                ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs
-            )
-    else:
-        sizes = kwargs.pop('s') if 's' in kwargs.keys() else 20
-
-    # Draw.
     if projection:
-        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=sizes, **kwargs)
+        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=plot.sizes, **kwargs)
     else:
-        ax.scatter(xs, ys, c=plot.colors, s=sizes, **kwargs)
-
+        ax.scatter(xs, ys, c=plot.colors, s=plot.sizes, **kwargs)
     return ax
 
 
@@ -1041,37 +1071,26 @@ def cartogram(
     # Standardize scale input.
     if not scale:
         raise ValueError("No scale parameter provided.")
-    values = _to_geoseries(df, scale)
-
-    # Compute a scale function.
-    dmin, dmax = np.min(values), np.max(values)
-    if not scale_func:
-        dslope = (limits[1] - limits[0]) / (dmax - dmin)
-        dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-    else:
-        dscale = scale_func(dmin, dmax)
-
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
-
-    # Create a legend, if appropriate.
-    if legend and legend_var == "scale":
-        _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
 
     plot.set_hue_values(
         df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
         default_color='None', kwargs=kwargs
     )
+    plot.set_scale_values(
+        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
+        size_kwarg=None, default_size=None, scale_multiplier=None, kwargs=kwargs
+    )
 
-    # Add a legend, if appropriate.
-    if legend and legend_var != "scale":
+    legend_var = _set_legend_var(legend_var, hue, scale)
+    if legend and legend_var == "scale":
+        _paint_carto_legend(
+            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
+        )
+    elif legend and legend_var != "scale":
         if plot.hue is not None and k is not None:
             _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
         elif plot.hue is not None and k is None:
             _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
-
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
 
     # Manipulate trace_kwargs.
     if trace:
@@ -1084,7 +1103,7 @@ def cartogram(
 
     # Draw traces first, if appropriate.
     if trace:
-        if projection:
+        if projection is not None:
             for polygon in df.geometry:
                 features = ShapelyFeature([polygon], ccrs.PlateCarree())
                 ax.add_feature(features, **trace_kwargs)
@@ -1099,10 +1118,10 @@ def cartogram(
                     ax.add_patch(feature)
 
     # Finally, draw the scaled geometries.
-    for value, color, polygon in zip(values, plot.colors, df.geometry):
-        scale_factor = dscale(value)
+    for value, color, polygon in zip(plot.scale, plot.colors, df.geometry):
+        scale_factor = plot.dscale(value)
         scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
-        if projection:
+        if projection is not None:
             features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
             ax.add_feature(features, facecolor=color, **kwargs)
         else:
@@ -1442,43 +1461,29 @@ def sankey(
             )
 
     path_geoms = df.geometry.map(parse_geom)
-    n = len(path_geoms)
 
     plot.set_hue_values(
         df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
         default_color='steelblue', kwargs=kwargs
     )
+    plot.set_scale_values(
+        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
+        size_kwarg='linewidth', default_size=1, scale_multiplier=1, kwargs=kwargs
+    )
+    # TODO: actually handle extra kwargs (in obj)
+    kwargs.pop('linewidth', None)
+    kwargs.pop('edgecolor', None)
 
-    # Add a legend, if appropriate.
-    if legend and legend_var != "scale":
-        if plot.hue is not None and k is not None:
+    legend_var = _set_legend_var(legend_var, hue, scale)
+    if legend and (legend_var != "scale" or scale is None):
+        if hue is not None and k is not None:
             _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif plot.hue is not None and k is None:
-            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
-
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale is not None:
-        scalar_values = _to_geoseries(df, scale)
-
-        # Compute a scale function.
-        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
-        if not scale_func:
-            dslope = (limits[1] - limits[0]) / (dmax - dmin)
-            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-        else:
-            dscale = scale_func(dmin, dmax)
-
-        # Apply the scale function.
-        scalar_multiples = np.array([dscale(d) for d in scalar_values])
-        widths = scalar_multiples * 1
-
-        # Draw a legend, if appropriate.
-        if legend and (legend_var == "scale"):
-            _paint_carto_legend(
-                ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs
-            )
-    else:
-        widths = [1] * n  # pyplot default
+        elif hue is not None and k is None:
+            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
+    elif legend and scale is not None and legend_var == "scale":
+        _paint_carto_legend(
+            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
+        )
 
     # Allow overwriting visual arguments.
     if 'linestyle' in kwargs.keys():
@@ -1486,18 +1491,15 @@ def sankey(
     else:
         linestyle = '-'
 
-    if 'linewidth' in kwargs.keys():
-        widths = [kwargs['linewidth']] * n; kwargs.pop('linewidth')
-
     if projection:
-        for line, color, width in zip(path_geoms, plot.colors, widths):
+        for line, color, width in zip(path_geoms, plot.colors, plot.sizes):
             feature = ShapelyFeature([line], ccrs.PlateCarree())
             ax.add_feature(
                 feature, linestyle=linestyle, linewidth=width, edgecolor=color,
                 facecolor='None', **kwargs
             )
     else:
-        for path, color, width in zip(path_geoms, plot.colors, widths):
+        for path, color, width in zip(path_geoms, plot.colors, plot.sizes):
             # We have to implement different methods for dealing with LineString and
             # MultiLineString objects.
             try:  # LineString
