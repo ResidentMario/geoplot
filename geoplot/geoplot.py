@@ -235,7 +235,8 @@ class Plot:
 
         else:
             n = len(self.df)
-            self.sizes = [kwargs.pop(size_kwarg, default_size)] * n
+            size = self.kwargs.pop(size_kwarg, default_size)
+            self.sizes = [size] * n
             self.scale = None
 
     def paint_legend(
