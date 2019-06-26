@@ -24,23 +24,62 @@ __version__ = "0.2.4"
 
 
 class Plot:
-    def __init__(self, df, figsize=(8, 6), ax=None, extent=None, projection=None):
+    def __init__(
+        self, df, figsize=(8, 6), ax=None, extent=None, projection=None,
+        has_hue_params=False, color_kwarg=None, default_color=None,
+        has_scale_params=False, size_kwarg=None, default_size=None, scale_multiplier=None,
+        has_legend=False,
+        **kwargs
+    ):
+        self.df = df
+        self.init_axis(figsize=figsize, ax=ax, extent=extent, projection=projection)
+        self.kwargs = kwargs
+
+        if has_hue_params:
+            self.set_hue_values(
+                hue=self.kwargs.pop('hue', None), scheme=self.kwargs.pop('scheme', None),
+                k = self.kwargs.pop('k', None), cmap=self.kwargs.pop('cmap', None),
+                color_kwarg=color_kwarg, default_color=default_color, kwargs=self.kwargs
+            )
+
+        if has_scale_params:
+            self.set_scale_values(
+                scale=self.kwargs.pop('scale', None),
+                limits=self.kwargs.pop('limits', None),
+                scale_func=self.kwargs.pop('scale_func', None),
+                sort_values=self.kwargs.pop('sort_values', None),
+                size_kwarg=size_kwarg, default_size=default_size,
+                scale_multiplier=scale_multiplier
+            )
+
+        if has_legend:
+            self.paint_legend(
+                legend=self.kwargs.pop('legend', False),
+                legend_var=self.kwargs.pop('legend_var', None),
+                legend_kwargs=self.kwargs.pop('legend_kwargs', None),
+                legend_labels=self.kwargs.pop('legend_labels', None),
+                legend_values=self.kwargs.pop('legend_values', None),
+                has_hue_params=has_hue_params,
+                has_scale_params=has_scale_params
+            )
+
+    def init_axis(self, figsize, ax, extent, projection):
         if not ax:
             plt.figure(figsize=figsize)
 
-        if len(df.geometry) == 0:
+        if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
-            extrema = np.array(df.total_bounds)
+            extrema = np.array(self.df.total_bounds)
 
-        extent = _to_geoseries(df, extent)
+        extent = _to_geoseries(self.df, extent)
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
             else np.mean(extrema[[1, 3]])
 
         if projection:
-            projection = projection.load(df, {
+            projection = projection.load(self.df, {
                 'central_longitude': central_longitude,
                 'central_latitude': central_latitude
             })
@@ -57,7 +96,7 @@ class Plot:
             else:
                 ax.set_aspect('equal')
 
-        if len(df.geometry) != 0:
+        if len(self.df.geometry) != 0:
             xmin, ymin, xmax, ymax = extent if extent is not None else extrema
 
             if xmin < -180 or xmax > 180 or ymin < -90 or ymax > 90:
@@ -107,34 +146,42 @@ class Plot:
         self.projection = projection
 
     def set_hue_values(
-        self, df, hue=None, scheme=None, k=5, cmap='viridis', color_kwarg='color',
+        self, hue=None, scheme=None, k=5, cmap='viridis', color_kwarg='color',
         default_color='steelblue', kwargs=None
     ):
         if kwargs is None:
             kwargs = dict()
+        elif color_kwarg in kwargs and hue is not None:
+            raise ValueError(
+                f'Cannot specify both {color_kwarg} and cmap in the same plot.'
+            )
 
-        hue = _to_geoseries(df, hue)
-        if hue is None:
+        hue = _to_geoseries(self.df, hue)
+        if hue is None:  # no colormap
             if color_kwarg in kwargs:
-                self.colors = [kwargs[color_kwarg]] * len(df)
+                colors = [kwargs[color_kwarg]] * len(self.df)
             else:
-                self.colors = [default_color] * len(df)
-            self.hue = hue
-            return
-        else:
-            self.colors = None  # not needed
-
-        if k is None:
+                colors = [default_color] * len(self.df)
+            categorical = False
+            categories = None
+            hue_values = None
+        elif k is None:  # continuous colormap
             cmap = _continuous_colormap(hue, cmap)
-            self.colors = [cmap.to_rgba(v) for v in hue]
-        else:
-            categorical, scheme = _validate_buckets(df, hue, k, scheme)
+            colors = [cmap.to_rgba(v) for v in hue]
+            categorical = False
+            categories = None
+            hue_values = None
+        else:  # categorical colormap
+            categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
+            categories = None
             if hue is not None:
                 cmap, categories, hue_values = _discrete_colorize(
                     categorical, hue, scheme, k, cmap
                 )
-                self.colors = [cmap.to_rgba(v) for v in hue_values]
+                colors = [cmap.to_rgba(v) for v in hue_values]
 
+        self.kwargs.pop(color_kwarg, None)
+        self.colors = colors
         self.hue = hue
         self.scheme = scheme
         self.k = k
@@ -144,12 +191,12 @@ class Plot:
         self.hue_values = hue_values
 
     def set_scale_values(
-        self, df, scale=None, limits=(0.5, 2), scale_func=None, sort_values=True,
+        self, scale=None, limits=(0.5, 2), scale_func=None, sort_values=True,
         size_kwarg=None, default_size=20, scale_multiplier=1, kwargs=None
     ):
         if kwargs is None:
             kwargs = dict()
-        scale = _to_geoseries(df, scale)
+        scale = _to_geoseries(self.df, scale)
 
         if scale is not None:
             dmin, dmax = np.min(scale), np.max(scale)
@@ -172,12 +219,13 @@ class Plot:
             self.sizes = scalar_multiples * scale_multiplier
 
             # When a scale is applied, large observations will tend to obfuscate small ones.
-            # Plotting in descending size order, so that smmaer values end up on top, helps
+            # Plotting in descending size order, so that smaller values end up on top, helps
             # clean the plot up a bit.
             sorted_indices = np.array(
                 sorted(enumerate(self.sizes), key=lambda tup: tup[1])[::-1]
             )[:,0].astype(int)
             self.sizes = np.array(self.sizes)[sorted_indices]
+            self.df = self.df.iloc[sorted_indices]
 
             if hasattr(self, 'colors') and self.colors is not None:
                 self.colors = np.array(self.colors)[sorted_indices]
@@ -186,26 +234,36 @@ class Plot:
             self.scale = scale
 
         else:
-            n = len(df)
+            n = len(self.df)
             self.sizes = [kwargs.pop(size_kwarg, default_size)] * n
+            self.scale = None
 
     def paint_legend(
-        self, hue=None, scale=None, legend_var=None, legend_kwargs=None,
+        self, legend=False, legend_var=None, legend_kwargs=None, legend_labels=None,
+        legend_values=None,
+        has_hue_params=True, has_scale_params=True
     ):
-        if legend_kwars is None:
+        if legend_kwargs is None:
             legend_kwargs = dict()
 
-        legend_var = _set_legend_var(legend_var, hue, scale)
-        if legend and (legend_var != "scale" or scale is None):
-            if hue is not None and k is not None:
-                _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-            elif hue is not None and k is None:
-                _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-        elif legend and scale is not None and legend_var == "scale":
-            _paint_carto_legend(
-                ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
-            )
+        if has_hue_params and has_scale_params:
+            legend_var = _set_legend_var(legend_var, self.hue, self.scale)
+        elif has_hue_params and not has_scale_params:
+            legend_var = 'hue'
+        else:  # not has_hue_params and has_scale_params
+            legend_var = 'scale'
 
+        if legend and legend_var == 'hue':
+            if self.hue is not None and self.k is not None:
+                _paint_hue_legend(
+                    self.ax, self.categories, self.cmap, legend_labels, legend_kwargs
+                )
+            elif self.hue is not None and self.k is None:
+                _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+        elif legend and legend_var == 'scale':
+            _paint_carto_legend(
+                self.ax, self.scale, legend_values, legend_labels, self.dscale, legend_kwargs
+            )
 
 
 def pointplot(
@@ -352,38 +410,24 @@ def pointplot(
 
     .. image:: ../figures/pointplot/pointplot-scale.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg='color', default_color='steelblue',
+        has_scale_params=True, size_kwarg='s', default_size=20, scale_multiplier=1,
+        has_legend=True,
+        # user parameters
+        hue=hue, scheme=scheme, k=k, cmap=cmap, scale=scale, limits=limits, scale_func=scale_func,
+        legend=legend, legend_var=legend_var, legend_values=legend_values,
+        legend_labels=legend_labels, legend_kwargs=legend_kwargs, **kwargs
+    )
     ax = plot.ax
     projection = plot.projection
+    kwargs = plot.kwargs
+    df = plot.df
 
     if len(df.geometry) == 0:
         return ax
-
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
-        default_color='steelblue', kwargs=kwargs
-    )
-    plot.set_scale_values(
-        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
-        size_kwarg='s', default_size=20, scale_multiplier=1, kwargs=kwargs
-    )
-    # TODO: handle popping kwargs better in all plots...
-    kwargs.pop('s')
-
-    plot.paint_legend(
-        hue=plot.hue, scale=plot.scale, legend_var=legend_var, legend_kwargs=legend_kwargs
-    )
-
-    legend_var = _set_legend_var(legend_var, hue, scale)
-    if legend and (legend_var != "scale" or scale is None):
-        if hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif hue is not None and k is None:
-            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-    elif legend and scale is not None and legend_var == "scale":
-        _paint_carto_legend(
-            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
-        )
 
     xs = np.array([p.x for p in df.geometry])
     ys = np.array([p.y for p in df.geometry])
@@ -452,9 +496,13 @@ def polyplot(
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        has_hue_params=False, has_scale_params=False, has_legend=False
+    )
     ax = plot.ax
     projection = plot.projection
+    df = plot.df
 
     if len(df.geometry) == 0:
         return ax
@@ -486,7 +534,7 @@ def polyplot(
 def choropleth(
     df, projection=None,
     hue=None, scheme=None, k=5, cmap='viridis',
-    legend=False, legend_kwargs=None, legend_labels=None,
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -620,18 +668,26 @@ def choropleth(
 
     .. image:: ../figures/choropleth/choropleth-labels.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    if hue is None:
+        raise ValueError("No 'hue' specified.")
+
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg=None, default_color=None,
+        has_scale_params=False, has_legend=True,
+        # parameters
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs,
+        **kwargs
+    )
     ax = plot.ax
     projection = plot.projection
+    df = plot.df
 
     if len(df.geometry) == 0:
         return ax
-
-    if hue is None:
-        raise ValueError("No 'hue' specified.")
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color', kwargs=kwargs
-    )
 
     # Add a legend, if appropriate.
     if legend:
@@ -1061,36 +1117,29 @@ def cartogram(
 
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
-
-    if len(df.geometry) == 0:
-        return ax
-
-    # Standardize scale input.
     if not scale:
         raise ValueError("No scale parameter provided.")
 
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
-        default_color='None', kwargs=kwargs
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg='facecolor', default_color='None',
+        has_scale_params=True, size_kwarg=None, default_size=None, scale_multiplier=1,
+        has_legend=True,
+        # parameters
+        scale=scale, limits=limits, scale_func=scale_func,
+        trace=trace, trace_kwargs=trace_kwargs,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs, legend_var=legend_var,
+        **kwargs
     )
-    plot.set_scale_values(
-        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
-        size_kwarg=None, default_size=None, scale_multiplier=None, kwargs=kwargs
-    )
+    ax = plot.ax
+    projection = plot.projection
+    df = plot.df
 
-    legend_var = _set_legend_var(legend_var, hue, scale)
-    if legend and legend_var == "scale":
-        _paint_carto_legend(
-            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
-        )
-    elif legend and legend_var != "scale":
-        if plot.hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif plot.hue is not None and k is None:
-            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
+    if len(df.geometry) == 0:
+        return ax
 
     # Manipulate trace_kwargs.
     if trace:
@@ -1117,9 +1166,10 @@ def cartogram(
                     feature = descartes.PolygonPatch(polygon, **trace_kwargs)
                     ax.add_patch(feature)
 
+    # TODO: rebalance the scaling ratio
     # Finally, draw the scaled geometries.
-    for value, color, polygon in zip(plot.scale, plot.colors, df.geometry):
-        scale_factor = plot.dscale(value)
+    for value, color, polygon in zip(plot.sizes, plot.colors, df.geometry):
+        scale_factor = value
         scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
         if projection is not None:
             features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
@@ -1223,7 +1273,13 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg=None, default_color=None,
+        has_scale_params=False,
+        has_legend=False
+    )
     ax = plot.ax
     projection = plot.projection
 
@@ -1434,18 +1490,26 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-dc.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg='edgecolor', default_color='steelblue',
+        has_scale_params=True, size_kwarg='linewidth', default_size=1,
+        scale_multiplier=1, has_legend=True,
+        # parameters
+        scale=scale, limits=limits, scale_func=scale_func,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs, legend_var=legend_var,
+        **kwargs
+    )
+
     ax = plot.ax
     projection = plot.projection
+    df = plot.df
 
     if len(df.geometry) == 0:
         return ax
-
-    # Standardize hue input.
-    hue = _to_geoseries(df, hue)
-
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
 
     def parse_geom(geom):
         if isinstance(geom, shapely.geometry.LineString):
@@ -1459,31 +1523,7 @@ def sankey(
                 f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
                 f'geometries, but an instance of {type(geom)} was found instead.'
             )
-
     path_geoms = df.geometry.map(parse_geom)
-
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
-        default_color='steelblue', kwargs=kwargs
-    )
-    plot.set_scale_values(
-        df, scale=scale, limits=limits, scale_func=scale_func, sort_values=True,
-        size_kwarg='linewidth', default_size=1, scale_multiplier=1, kwargs=kwargs
-    )
-    # TODO: actually handle extra kwargs (in obj)
-    kwargs.pop('linewidth', None)
-    kwargs.pop('edgecolor', None)
-
-    legend_var = _set_legend_var(legend_var, hue, scale)
-    if legend and (legend_var != "scale" or scale is None):
-        if hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif hue is not None and k is None:
-            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-    elif legend and scale is not None and legend_var == "scale":
-        _paint_carto_legend(
-            ax, plot.scale, legend_values, legend_labels, plot.dscale, legend_kwargs
-        )
 
     # Allow overwriting visual arguments.
     if 'linestyle' in kwargs.keys():
@@ -1496,7 +1536,7 @@ def sankey(
             feature = ShapelyFeature([line], ccrs.PlateCarree())
             ax.add_feature(
                 feature, linestyle=linestyle, linewidth=width, edgecolor=color,
-                facecolor='None', **kwargs
+                facecolor='None', **plot.kwargs
             )
     else:
         for path, color, width in zip(path_geoms, plot.colors, plot.sizes):
@@ -1505,14 +1545,14 @@ def sankey(
             try:  # LineString
                 line = mpl.lines.Line2D(
                     [coord[0] for coord in path.coords], [coord[1] for coord in path.coords],
-                    linestyle=linestyle, linewidth=width, color=color, **kwargs
+                    linestyle=linestyle, linewidth=width, color=color, **plot.kwargs
                 )
                 ax.add_line(line)
             except NotImplementedError:  # MultiLineString
                 for line in path:
                     line = mpl.lines.Line2D(
                         [coord[0] for coord in line.coords], [coord[1] for coord in line.coords],
-                        linestyle=linestyle, linewidth=width, color=color, **kwargs
+                        linestyle=linestyle, linewidth=width, color=color, **plot.kwargs
                     )
                     ax.add_line(line)
     return ax
@@ -1521,7 +1561,7 @@ def sankey(
 def voronoi(
     df, projection=None, clip=None,
     cmap='viridis', hue=None, scheme=None, k=5,
-    legend=False, legend_kwargs=None, legend_labels=None,
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=True,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -1685,28 +1725,32 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
+    plot = Plot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # metaparameters
+        has_hue_params=True, color_kwarg='edgecolor', default_color='None',
+        has_scale_params=False, has_legend=True,
+        # parameters
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs,
+        **kwargs
+    )
+
     ax = plot.ax
     projection = plot.projection
+    df = plot.df
 
     if len(df.geometry) == 0:
         return ax
 
-    # Parse inputs.
-    hue = _to_geoseries(df, hue)
-    clip = _to_geoseries(df, clip)
-
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
-        default_color='None', kwargs=kwargs        
-    )
-
     # Finally we draw the features.
     geoms = _build_voronoi_polygons(df)
+    clip = _to_geoseries(df, clip)
     if projection:
         for color, geom in zip(plot.colors, geoms):
             features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **kwargs)
+            ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **plot.kwargs)
 
         if clip is not None:
             clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
@@ -1715,7 +1759,9 @@ def voronoi(
 
     else:
         for color, geom in zip(plot.colors, geoms):
-            feature = descartes.PolygonPatch(geom, facecolor=color, edgecolor=edgecolor, **kwargs)
+            feature = descartes.PolygonPatch(
+                geom, facecolor=color, edgecolor=edgecolor, **plot.kwargs
+            )
             ax.add_patch(feature)
 
         if clip is not None:
