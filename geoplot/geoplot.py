@@ -165,42 +165,49 @@ class ClipMixin:
 
 class Plot:
     def __init__(
-        self, df, figsize=(8, 6), ax=None, extent=None, projection=None, **kwargs
+        self, df, **kwargs
     ):
         self.df = df
-        self.init_axis(figsize=figsize, ax=ax, extent=extent, projection=projection)
+        self.figsize = kwargs.pop('figsize', (8, 6))
+        self.ax = kwargs.pop('ax', None)
+        self.extent = kwargs.pop('extent', None)
+        self.projection = kwargs.pop('projection', None)
+
+        self.init_axis()
         self.kwargs = kwargs
 
-    def init_axis(self, figsize, ax, extent, projection):
-        if not ax:
-            plt.figure(figsize=figsize)
+    def init_axis(self):
+        if not self.ax:
+            plt.figure(figsize=self.figsize)
 
         if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
             extrema = np.array(self.df.total_bounds)
 
-        extent = _to_geoseries(self.df, extent)
+        extent = _to_geoseries(self.df, self.extent)
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
             else np.mean(extrema[[1, 3]])
 
-        if projection:
-            projection = projection.load(self.df, {
+        if self.projection:
+            self.projection = self.projection.load(self.df, {
                 'central_longitude': central_longitude,
                 'central_latitude': central_latitude
             })
 
-            if not ax:
-                ax = plt.subplot(111, projection=projection)
+            if not self.ax:
+                ax = plt.subplot(111, projection=self.projection)
 
         else:
-            if not ax:
+            if self.ax:
+                ax = self.ax
+            else:
                 ax = plt.gca()
 
             if isinstance(ax, GeoAxesSubplot):
-                projection = ax.projection
+                self.projection = ax.projection
             else:
                 ax.set_aspect('equal')
 
@@ -218,7 +225,7 @@ class Plot:
             xmin, xmax = max(xmin, -180), min(xmax, 180)
             ymin, ymax = max(ymin, -90), min(ymax, 90)
 
-            if projection is not None:
+            if self.projection is not None:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
                 except ValueError:
@@ -232,7 +239,7 @@ class Plot:
                     # The default behavior in cartopy is to use a global exntent with
                     # central_latitude and central_longitude as its center. This is the behavior
                     # we will follow in failure cases.
-                    if isinstance(projection, ccrs.Orthographic):
+                    if isinstance(self.projection, ccrs.Orthographic):
                         warnings.warn(
                             'Plot extent lies outside of the Orthographic projection\'s '
                             'viewport. Defaulting to global extent.'
@@ -251,7 +258,6 @@ class Plot:
                 ax.set_ylim((ymin, ymax))
 
         self.ax = ax
-        self.projection = projection
 
 
 def pointplot(
@@ -412,7 +418,7 @@ def pointplot(
 
             xs = np.array([p.x for p in plot.df.geometry])
             ys = np.array([p.y for p in plot.df.geometry])
-            if projection:
+            if self.projection:
                 ax.scatter(
                     xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=plot.sizes,
                     **plot.kwargs
@@ -488,39 +494,46 @@ def polyplot(
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
-    plot = Plot(
-        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        has_hue_params=False, has_scale_params=False, has_legend=False
-    )
-    ax = plot.ax
-    projection = plot.projection
-    df = plot.df
+    class PolyPlot(Plot):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    # Finally we draw the features.
-    if projection:
-        for geom in df.geometry:
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(
-                features, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
-            )
-    else:
-        for geom in df.geometry:
-            try:  # Duck test for MultiPolygon.
-                for subgeom in geom:
-                    feature = descartes.PolygonPatch(
-                        subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
+            # Finally we draw the features.
+            if projection:
+                for geom in self.df.geometry:
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(
+                        features, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                        **kwargs
                     )
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(
-                    geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
-                )
-                ax.add_patch(feature)
+            else:
+                for geom in df.geometry:
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in geom:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                                **kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                            **kwargs
+                        )
+                        ax.add_patch(feature)
 
-    return ax
+            return ax
+
+    plot = PolyPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        edgecolor=edgecolor, facecolor=facecolor, zorder=-1, **kwargs
+    )
+    return plot.draw()
 
 
 def choropleth(
