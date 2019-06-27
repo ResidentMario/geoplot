@@ -63,9 +63,6 @@ class Plot:
                 has_scale_params=has_scale_params
             )
 
-        if has_clip:
-            pass
-
     def init_axis(self, figsize, ax, extent, projection):
         if not ax:
             plt.figure(figsize=figsize)
@@ -941,22 +938,7 @@ def quadtree(
     if hue is not None and legend:
         _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
 
-    # Clip must be set after extent is set.
-    clip = _to_geoseries(df, clip)
-    if clip is not None:
-        if projection:
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
-        else:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            extent = (xmin, ymin, xmax, ymax)
-            ax = polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=extent, ax=ax
-            )
+    plot.paint_clip(clip)
 
     return ax
 
