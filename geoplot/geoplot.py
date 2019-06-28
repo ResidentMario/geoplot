@@ -881,14 +881,15 @@ def quadtree(
     view of a space <https://i.imgur.com/n2xlycT.png>`_.
 
     A simple ``quadtree`` specifies a dataset. It's recommended to also set a maximum number of
-    observations per bin, ``nmax``.
+    observations per bin, ``nmax``. The smaller the ``nmax``, the more detailed the plot (the
+    minimum value is 1).
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
         collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
-        gplt.quadtree(collisions, nmin=1)
+        gplt.quadtree(collisions, nmax=1)
 
     .. image:: ../figures/quadtree/quadtree-initial.png
 
@@ -908,7 +909,7 @@ def quadtree(
 
     Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
     used. ``legend`` toggles the legend. This type of plot is an effective gauge of distribution:
-    the more random the plot output, the the more decorrelated the variable.
+    the more random the plot output, the more geospatially decorrelated the variable.
 
     .. code-block:: python
 
@@ -921,6 +922,24 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-hue.png
 
+    Change the number of bins by specifying an alternative ``k`` value. To use a continuous
+    colormap, explicitly specify ``k=None``.  You can change the binning sceme with ``scheme``.
+    The default is ``quantile``, which bins observations into classes of different sizes but the
+    same numbers of observations. ``equal_interval`` will creates bins that are the same size, but
+    potentially containing different numbers of observations. The more complicated ``fisher_jenks``
+    scheme is an intermediate between the two.
+
+    .. code-block:: python
+
+        gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None,
+            edgecolor='white', legend=True,
+        )
+
+    .. image:: ../figures/quadtree/quadtree-k.png
+
     Observations will be aggregated by average, by default. Specify an alternative aggregation
     function using the ``agg`` parameter.
 
@@ -929,7 +948,7 @@ def quadtree(
         gplt.quadtree(
             collisions, nmax=1, agg=np.max,
             projection=gcrs.AlbersEqualArea(), clip=boroughs,
-            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None
             edgecolor='white', legend=True
         )
 
@@ -982,7 +1001,10 @@ def quadtree(
             return ax
 
     plot = QuadtreePlot(
-        df, projection=projection, clip=clip, hue=hue, cmap=cmap, nmax=nmax, nmin=nmin, nsig=nsig,
+        df, projection=projection,
+        clip=clip,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        nmax=nmax, nmin=nmin, nsig=nsig,
         agg=agg, legend=legend, legend_kwargs=legend_kwargs, extent=extent, figsize=figsize, ax=ax,
         **kwargs
     )
