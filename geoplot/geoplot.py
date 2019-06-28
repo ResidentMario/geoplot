@@ -24,6 +24,9 @@ __version__ = "0.2.4"
 
 
 class HueMixin:
+    """
+    Class container for hue-setter code shared across all plots that support hue.
+    """
     def set_hue_values(self, color_kwarg='color', default_color='steelblue'):
         hue = self.kwargs.pop('hue', None)
         scheme = self.kwargs.pop('scheme', None)
@@ -32,15 +35,13 @@ class HueMixin:
 
         if color_kwarg in self.kwargs and hue is not None:
             raise ValueError(
-                f'Cannot specify both {color_kwarg} and cmap in the same plot.'
+                f'Cannot specify both "{color_kwarg}" and "cmap" in the same plot.'
             )
 
         hue = _to_geoseries(self.df, hue)
         if hue is None:  # no colormap
-            if color_kwarg in self.kwargs:
-                colors = [self.kwargs[color_kwarg]] * len(self.df)
-            else:
-                colors = [default_color] * len(self.df)
+            color = self.kwargs.pop(color_kwarg, default_color)
+            colors = [color] * len(self.df)
             categorical = False
             categories = None
             hue_values = None
@@ -59,7 +60,6 @@ class HueMixin:
                 )
                 colors = [cmap.to_rgba(v) for v in hue_values]
 
-        self.kwargs.pop(color_kwarg, None)
         self.colors = colors
         self.hue = hue
         self.scheme = scheme
@@ -71,6 +71,9 @@ class HueMixin:
 
 
 class ScaleMixin:
+    """
+    Class container for scale-setter code shared across all plots that support scale.
+    """
     def set_scale_values(self, size_kwarg=None, default_size=20, scale_multiplier=1):
         self.limits = self.kwargs.pop('limits', None)
         self.scale_func = self.kwargs.pop('scale_func', None)
@@ -108,6 +111,8 @@ class ScaleMixin:
 
             if hasattr(self, 'colors') and self.colors is not None:
                 self.colors = np.array(self.colors)[sorted_indices]
+            if hasattr(self, 'partitions') and self.partitions is not None:
+                raise NotImplementedError  # quadtree does not support scale param
 
         else:
             size = self.kwargs.pop(size_kwarg, default_size)
@@ -115,6 +120,9 @@ class ScaleMixin:
 
 
 class LegendMixin:
+    """
+    Class container for legend-builder code shared across all plots that support legend.
+    """
     def paint_legend(self, supports_hue=True, supports_scale=False):
         legend = self.kwargs.pop('legend', False)
 
@@ -145,22 +153,90 @@ class LegendMixin:
 
 
 class ClipMixin:
-    def paint_clip(self, clip=None):
+    """
+    Class container for clip-setter code shared across all plots that support clip.
+    """
+    def paint_clip(self):
+        clip = self.kwargs.pop('clip', None)
         clip = _to_geoseries(self.df, clip)
         if clip is not None:
             if self.projection is not None:
                 clip_geom = _get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
                 feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-                self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
+                self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
             else:
                 clip_geom = _get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
                 xmin, xmax = self.ax.get_xlim()
                 ymin, ymax = self.ax.get_ylim()
                 extent = (xmin, ymin, xmax, ymax)
                 polyplot(
-                    gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
+                    gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=2,
                     extent=extent, ax=self.ax
                 )
+
+
+class QuadtreeComputeMixin:
+    """
+    Class container for computing a quadtree.
+    """
+    def compute_quadtree(self):
+        nmin = self.kwargs.pop('nmin', None)
+        nmax = self.kwargs.pop('nmax', None)
+        hue = self.kwargs.get('hue', None)
+
+        df = gpd.GeoDataFrame(self.df, geometry=self.df.geometry)
+        hue = _to_geoseries(df, hue)
+        if hue is not None:
+            # TODO: what happens in the case of a column name collision?
+            df = df.assign(hue_col=hue)
+
+        # set reasonable defaults for the n-params
+        nmax = nmax if nmax else len(df)
+        nmin = nmin if nmin else np.max([1, np.round(len(df) / 100)]).astype(int)
+
+        # Jitter the points. Otherwise if there are n points sharing the same coordinate, but
+        # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly
+        # on 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the
+        # vast majority of geospatial applications. If the meaningful precision of your dataset
+        # exceeds 1cm, jitter the points yourself.
+        df = df.assign(geometry=_jitter_points(df.geometry))
+
+        # Generate a quadtree.
+        quad = QuadTree(df)
+        partitions = quad.partition(nmin, nmax)
+        self.partitions = list(partitions)
+
+
+class QuadtreeHueMixin(HueMixin):
+    """
+    Subclass of HueMixin that provides modified hue-setting code for the quadtree plot.
+    """
+    def set_hue_values(self, color_kwarg, default_color):
+        agg = self.kwargs.pop('agg', np.mean)
+        _df = self.df
+        dvals = []
+
+        # construct a new df of aggregated values for the colormap op, reset afterwards
+        has_hue = 'hue' in self.kwargs and self.kwargs['hue'] is not None
+        for p in self.partitions:
+            if len(p.data) == 0:  # empty
+                dval = agg(pd.Series([0]))
+            elif has_hue:
+                dval = agg(p.data.hue_col)
+            dvals.append(dval)
+
+        if has_hue:
+            self.df = pd.DataFrame({
+                self.kwargs['hue']: dvals
+            })
+        super().set_hue_values(color_kwarg='facecolor', default_color='None')
+        self.df = _df
+
+        # apply the special nsig parameter colormap rule
+        nsig = self.kwargs.pop('nsig', 1)
+        for i, dval in enumerate(dvals):
+            if dval < nsig:
+                self.colors[i] = 'None'
 
 
 class Plot:
@@ -504,7 +580,7 @@ def polyplot(
                 return ax
 
             # Finally we draw the features.
-            if projection:
+            if self.projection:
                 for geom in self.df.geometry:
                     features = ShapelyFeature([geom], ccrs.PlateCarree())
                     ax.add_feature(
@@ -676,47 +752,45 @@ def choropleth(
     if hue is None:
         raise ValueError("No 'hue' specified.")
 
-    plot = Plot(
+    class ChoroplethPlot(Plot, HueMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg=None, default_color=None)
+            self.paint_legend(supports_hue=True, supports_scale=False)
+
+        def draw(self):
+            ax = self.ax
+
+            if len(df.geometry) == 0:
+                return ax
+
+            if self.projection:
+                for color, geom in zip(self.colors, df.geometry):
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, **self.kwargs)
+            else:
+                for color, geom in zip(self.colors, df.geometry):
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in geom:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=color, **self.kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            geom, facecolor=color, **self.kwargs
+                        )
+                        ax.add_patch(feature)
+
+            return ax
+
+    plot = ChoroplethPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # metaparameters
-        has_hue_params=True, color_kwarg=None, default_color=None,
-        has_scale_params=False, has_legend=True,
-        # parameters
         hue=hue, scheme=scheme, k=k, cmap=cmap,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
-        legend_kwargs=legend_kwargs,
-        **kwargs
+        legend_kwargs=legend_kwargs, **kwargs
     )
-    ax = plot.ax
-    projection = plot.projection
-    df = plot.df
-
-    if len(df.geometry) == 0:
-        return ax
-
-    # Add a legend, if appropriate.
-    if legend:
-        if k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        else:
-            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-
-    # Draw the features.
-    if projection:
-        for color, geom in zip(plot.colors, df.geometry):
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, **kwargs)
-    else:
-        for color, geom in zip(plot.colors, df.geometry):
-            try:  # Duck test for MultiPolygon.
-                for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=color, **kwargs)
-                ax.add_patch(feature)
-
-    return ax
+    return plot.draw()
 
 
 def quadtree(
@@ -862,69 +936,44 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-basemap.png
     """
-    # TODO: allow multindices in quadtree input
-    if isinstance(df.index, pd.MultiIndex):
-        raise NotImplementedError
+    class QuadtreePlot(Plot, QuadtreeComputeMixin, QuadtreeHueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.compute_quadtree()
+            self.set_hue_values(color_kwarg='facecolor', default_color='None')
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
 
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    if len(df.geometry) == 0:
-        return ax
+            for p, color in zip(self.partitions, self.colors):
+                xmin, xmax, ymin, ymax = p.bounds
+                rect = shapely.geometry.Polygon(
+                    [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)]
+                )
 
-    # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
-    df = gpd.GeoDataFrame(df, geometry=df.geometry)
-    hue = _to_geoseries(df, hue)
-    if hue is not None:
-        df = df.assign(hue_col=hue)
+                if projection:
+                    feature = ShapelyFeature([rect], ccrs.PlateCarree())
+                    ax.add_feature(
+                        feature, facecolor=color, **self.kwargs
+                    )
+                else:
+                    feature = descartes.PolygonPatch(
+                        rect, facecolor=color, **self.kwargs
+                    )
+                    ax.add_patch(feature)
 
-    # Set reasonable defaults for the n-params if appropriate.
-    nmax = nmax if nmax else len(df)
-    nmin = nmin if nmin else np.max([1, np.round(len(df) / 100)]).astype(int)
+            return ax
 
-    # Jitter the points. Otherwise if there are n points sharing the same coordinate, but
-    # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly on
-    # 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the vast
-    # majority of geospatial applications. If the meaningful precision of your dataset exceeds 1cm,
-    # jitter the points yourself.
-    df = df.assign(geometry=_jitter_points(df.geometry))
-
-    # Generate a quadtree.
-    quad = QuadTree(df)
-    partitions = list(quad.partition(nmin, nmax))
-
-    # Set color information, if necessary
-    if hue is not None:
-        values = [agg(p.data.hue_col) for p in partitions if p.n > nsig]
-        cmap = _continuous_colormap(values, cmap)
-    edgecolor = kwargs.pop('edgecolor', 'black')
-    flat_facecolor = kwargs.pop('facecolor', 'None')  # only used if hue is None
-
-    for p in partitions:
-        xmin, xmax, ymin, ymax = p.bounds
-        rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-
-        if hue is not None:
-            facecolor = cmap.to_rgba(agg(p.data.hue_col)) if p.n > nsig else "None"
-        else:
-            facecolor = flat_facecolor
-        if projection:
-            feature = ShapelyFeature([rect], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
-
-        else:
-            feature = descartes.PolygonPatch(
-                rect, facecolor=facecolor, edgecolor=edgecolor, **kwargs
-            )
-            ax.add_patch(feature)
-
-    if hue is not None and legend:
-        _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
-
-    plot.paint_clip(clip)
-
-    return ax
+    plot = QuadtreePlot(
+        df, projection=projection, clip=clip, hue=hue, cmap=cmap, nmax=nmax, nmin=nmin, nsig=nsig,
+        agg=agg, legend=legend, legend_kwargs=legend_kwargs, extent=extent, figsize=figsize, ax=ax,
+        **kwargs
+    )
+    return plot.draw()
 
 
 def cartogram(
