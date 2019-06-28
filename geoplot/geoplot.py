@@ -27,11 +27,19 @@ class HueMixin:
     """
     Class container for hue-setter code shared across all plots that support hue.
     """
-    def set_hue_values(self, color_kwarg='color', default_color='steelblue'):
+    def set_hue_values(
+        self, color_kwarg='color', default_color='steelblue',
+        supports_continuous=True, supports_categorical=True
+    ):
         hue = self.kwargs.pop('hue', None)
-        scheme = self.kwargs.pop('scheme', None)
-        k = self.kwargs.pop('k', 5)
         cmap = self.kwargs.pop('cmap', 'viridis')
+
+        if supports_categorical:
+            scheme = self.kwargs.pop('scheme', None)
+            k = self.kwargs.pop('k', 5)
+        else:
+            scheme = None
+            k = None
 
         if color_kwarg in self.kwargs and hue is not None:
             raise ValueError(
@@ -1327,34 +1335,39 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    plot = Plot(
-        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # metaparameters
-        has_hue_params=True, color_kwarg=None, default_color=None,
-        has_scale_params=False,
-        has_legend=False
+    class KDEPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg=None, default_color=None, supports_categorical=False)
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
+
+        def draw(self):
+            shade_lowest = self.kwargs.pop('shade_lowest', False)
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
+
+            if self.projection:
+                sns.kdeplot(
+                    pd.Series([p.x for p in self.df.geometry]),
+                    pd.Series([p.y for p in self.df.geometry]),
+                    transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, cmap=self.cmap,
+                    **self.kwargs
+                )
+            else:
+                sns.kdeplot(
+                    pd.Series([p.x for p in self.df.geometry]),
+                    pd.Series([p.y for p in self.df.geometry]),
+                    ax=ax, shade_lowest=shade_lowest, **self.kwargs
+                )
+            return ax
+
+    plot = KDEPlot(
+        df, projection=projection, extent=extent, figsize=figsize, ax=ax, clip=clip,
+        shade_lowest=shade_lowest, **kwargs
     )
-    ax = plot.ax
-    projection = plot.projection
-
-    if len(df.geometry) == 0:
-        return ax
-
-    plot.paint_clip(clip=clip)
-
-    if projection:
-        sns.kdeplot(
-            pd.Series([p.x for p in df.geometry]),
-            pd.Series([p.y for p in df.geometry]),
-            transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
-        )
-    else:
-        sns.kdeplot(
-            pd.Series([p.x for p in df.geometry]),
-            pd.Series([p.y for p in df.geometry]),
-            ax=ax, shade_lowest=shade_lowest, **kwargs
-        )
-    return ax
+    return plot.draw()
 
 
 def sankey(
@@ -1800,17 +1813,6 @@ def voronoi(
 ##################
 # HELPER METHODS #
 ##################
-
-
-def _init_figure(ax, figsize):
-    """
-    Initializes the ``matplotlib`` ``figure``, one of the first things that every plot must do. No
-    figure is initialized (and, consequentially, the ``figsize`` argument is ignored) if a
-    pre-existing ``ax`` is passed to the method. This is necessary for ``plt.savefig()`` to work.
-    """
-    if not ax:
-        fig = plt.figure(figsize=figsize)
-        return fig
 
 
 def _to_geoseries(df, var):
