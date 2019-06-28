@@ -23,41 +23,279 @@ except ImportError:
 __version__ = "0.2.4"
 
 
-class Plot:
-    def __init__(self, df, figsize=(8, 6), ax=None, extent=None, projection=None):
-        if not ax:
-            plt.figure(figsize=figsize)
+class HueMixin:
+    """
+    Class container for hue-setter code shared across all plots that support hue.
+    """
+    def set_hue_values(
+        self, color_kwarg='color', default_color='steelblue',
+        supports_continuous=True, supports_categorical=True
+    ):
+        hue = self.kwargs.pop('hue', None)
+        cmap = self.kwargs.pop('cmap', 'viridis')
 
-        if len(df.geometry) == 0:
+        if supports_categorical:
+            scheme = self.kwargs.pop('scheme', None)
+            k = self.kwargs.pop('k', 5)
+        else:
+            scheme = None
+            k = None
+
+        if color_kwarg in self.kwargs and hue is not None:
+            raise ValueError(
+                f'Cannot specify both "{color_kwarg}" and "cmap" in the same plot.'
+            )
+
+        hue = _to_geoseries(self.df, hue)
+        if hue is None:  # no colormap
+            color = self.kwargs.pop(color_kwarg, default_color)
+            colors = [color] * len(self.df)
+            categorical = False
+            categories = None
+            hue_values = None
+        elif k is None:  # continuous colormap
+            cmap = _continuous_colormap(hue, cmap)
+            colors = [cmap.to_rgba(v) for v in hue]
+            categorical = False
+            categories = None
+            hue_values = None
+        else:  # categorical colormap
+            categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
+            categories = None
+            if hue is not None:
+                cmap, categories, hue_values = _discrete_colorize(
+                    categorical, hue, scheme, k, cmap
+                )
+                colors = [cmap.to_rgba(v) for v in hue_values]
+
+        self.colors = colors
+        self.hue = hue
+        self.scheme = scheme
+        self.k = k
+        self.cmap = cmap
+        self.categorical = categorical
+        self.categories = categories
+        self.hue_values = hue_values
+
+
+class ScaleMixin:
+    """
+    Class container for scale-setter code shared across all plots that support scale.
+    """
+    def set_scale_values(self, size_kwarg=None, default_size=20, scale_multiplier=1):
+        self.limits = self.kwargs.pop('limits', None)
+        self.scale_func = self.kwargs.pop('scale_func', None)
+        self.scale = self.kwargs.pop('scale', None)
+        self.scale = _to_geoseries(self.df, self.scale)
+
+        if self.scale is not None:
+            dmin, dmax = np.min(self.scale), np.max(self.scale)
+            if self.scale_func is None:
+                dslope = (self.limits[1] - self.limits[0]) / (dmax - dmin)
+                # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
+                # TODO: better explain this error
+                if np.isinf(dslope): 
+                    raise ValueError(
+                        "The data range provided to the 'scale' variable is too small for the "
+                        "default scaling function. Normalize your data or provide a custom "
+                        "'scale_func'."
+                    )
+                self.dscale = lambda dval: self.limits[0] + dslope * (dval - dmin)
+            else:
+                self.dscale = self.scale_func(dmin, dmax)
+
+            # Apply the scale function.
+            scalar_multiples = np.array([self.dscale(d) for d in self.scale])
+            self.sizes = scalar_multiples * scale_multiplier
+
+            # When a scale is applied, large observations will tend to obfuscate small ones.
+            # Plotting in descending size order, so that smaller values end up on top, helps
+            # clean the plot up a bit.
+            sorted_indices = np.array(
+                sorted(enumerate(self.sizes), key=lambda tup: tup[1])[::-1]
+            )[:,0].astype(int)
+            self.sizes = np.array(self.sizes)[sorted_indices]
+            self.df = self.df.iloc[sorted_indices]
+
+            if hasattr(self, 'colors') and self.colors is not None:
+                self.colors = np.array(self.colors)[sorted_indices]
+            if hasattr(self, 'partitions') and self.partitions is not None:
+                raise NotImplementedError  # quadtree does not support scale param
+
+        else:
+            size = self.kwargs.pop(size_kwarg, default_size)
+            self.sizes = [size] * len(self.df)
+
+
+class LegendMixin:
+    """
+    Class container for legend-builder code shared across all plots that support legend.
+    """
+    def paint_legend(self, supports_hue=True, supports_scale=False):
+        legend = self.kwargs.pop('legend', False)
+
+        legend_kwargs = self.kwargs.pop('legend_kwargs', dict())
+        legend_labels = self.kwargs.pop('legend_labels', None)
+        legend_values = self.kwargs.pop('legend_values', None)
+
+        if supports_hue and supports_scale:
+            if self.kwargs['legend_var'] is not None:
+                legend_var = self.kwargs['legend_var']
+            else:
+                legend_var = 'hue' if self.hue is not None else 'scale'
+        else:
+            legend_var = 'hue'
+        self.kwargs.pop('legend_var', None)
+
+        if legend and legend_var == 'hue':
+            if self.k is not None:
+                _paint_hue_legend(
+                    self.ax, self.categories, self.cmap, legend_labels, legend_kwargs
+                )
+            else:  # self.k is None
+                _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+        elif legend and legend_var == 'scale':
+            _paint_carto_legend(
+                self.ax, self.scale, legend_values, legend_labels, self.dscale, legend_kwargs
+            )
+
+
+class ClipMixin:
+    """
+    Class container for clip-setter code shared across all plots that support clip.
+    """
+    def paint_clip(self):
+        clip = self.kwargs.pop('clip', None)
+        clip = _to_geoseries(self.df, clip)
+        if clip is not None:
+            if self.projection is not None:
+                clip_geom = _get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
+                feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
+                self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
+            else:
+                clip_geom = _get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
+                xmin, xmax = self.ax.get_xlim()
+                ymin, ymax = self.ax.get_ylim()
+                extent = (xmin, ymin, xmax, ymax)
+                polyplot(
+                    gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=2,
+                    extent=extent, ax=self.ax
+                )
+
+
+class QuadtreeComputeMixin:
+    """
+    Class container for computing a quadtree.
+    """
+    def compute_quadtree(self):
+        nmin = self.kwargs.pop('nmin', None)
+        nmax = self.kwargs.pop('nmax', None)
+        hue = self.kwargs.get('hue', None)
+
+        df = gpd.GeoDataFrame(self.df, geometry=self.df.geometry)
+        hue = _to_geoseries(df, hue)
+        if hue is not None:
+            # TODO: what happens in the case of a column name collision?
+            df = df.assign(hue_col=hue)
+
+        # set reasonable defaults for the n-params
+        nmax = nmax if nmax else len(df)
+        nmin = nmin if nmin else np.max([1, np.round(len(df) / 100)]).astype(int)
+
+        # Jitter the points. Otherwise if there are n points sharing the same coordinate, but
+        # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly
+        # on 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the
+        # vast majority of geospatial applications. If the meaningful precision of your dataset
+        # exceeds 1cm, jitter the points yourself.
+        df = df.assign(geometry=_jitter_points(df.geometry))
+
+        # Generate a quadtree.
+        quad = QuadTree(df)
+        partitions = quad.partition(nmin, nmax)
+        self.partitions = list(partitions)
+
+
+class QuadtreeHueMixin(HueMixin):
+    """
+    Subclass of HueMixin that provides modified hue-setting code for the quadtree plot.
+    """
+    def set_hue_values(self, color_kwarg, default_color):
+        agg = self.kwargs.pop('agg', np.mean)
+        _df = self.df
+        dvals = []
+
+        # construct a new df of aggregated values for the colormap op, reset afterwards
+        has_hue = 'hue' in self.kwargs and self.kwargs['hue'] is not None
+        for p in self.partitions:
+            if len(p.data) == 0:  # empty
+                dval = agg(pd.Series([0]))
+            elif has_hue:
+                dval = agg(p.data.hue_col)
+            dvals.append(dval)
+
+        if has_hue:
+            self.df = pd.DataFrame({
+                self.kwargs['hue']: dvals
+            })
+        super().set_hue_values(color_kwarg='facecolor', default_color='None')
+        self.df = _df
+
+        # apply the special nsig parameter colormap rule
+        nsig = self.kwargs.pop('nsig', 1)
+        for i, dval in enumerate(dvals):
+            if dval < nsig:
+                self.colors[i] = 'None'
+
+
+class Plot:
+    def __init__(
+        self, df, **kwargs
+    ):
+        self.df = df
+        self.figsize = kwargs.pop('figsize', (8, 6))
+        self.ax = kwargs.pop('ax', None)
+        self.extent = kwargs.pop('extent', None)
+        self.projection = kwargs.pop('projection', None)
+
+        self.init_axis()
+        self.kwargs = kwargs
+
+    def init_axis(self):
+        if not self.ax:
+            plt.figure(figsize=self.figsize)
+
+        if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
-            extrema = np.array(df.total_bounds)
+            extrema = np.array(self.df.total_bounds)
 
-        extent = _to_geoseries(df, extent)
+        extent = _to_geoseries(self.df, self.extent)
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
             else np.mean(extrema[[1, 3]])
 
-        if projection:
-            projection = projection.load(df, {
+        if self.projection:
+            self.projection = self.projection.load(self.df, {
                 'central_longitude': central_longitude,
                 'central_latitude': central_latitude
             })
 
-            if not ax:
-                ax = plt.subplot(111, projection=projection)
+            if not self.ax:
+                ax = plt.subplot(111, projection=self.projection)
 
         else:
-            if not ax:
+            if self.ax:
+                ax = self.ax
+            else:
                 ax = plt.gca()
 
             if isinstance(ax, GeoAxesSubplot):
-                projection = ax.projection
+                self.projection = ax.projection
             else:
                 ax.set_aspect('equal')
 
-        if len(df.geometry) != 0:
+        if len(self.df.geometry) != 0:
             xmin, ymin, xmax, ymax = extent if extent is not None else extrema
 
             if xmin < -180 or xmax > 180 or ymin < -90 or ymax > 90:
@@ -71,7 +309,7 @@ class Plot:
             xmin, xmax = max(xmin, -180), min(xmax, 180)
             ymin, ymax = max(ymin, -90), min(ymax, 90)
 
-            if projection is not None:
+            if self.projection is not None:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
                 except ValueError:
@@ -85,7 +323,7 @@ class Plot:
                     # The default behavior in cartopy is to use a global exntent with
                     # central_latitude and central_longitude as its center. This is the behavior
                     # we will follow in failure cases.
-                    if isinstance(projection, ccrs.Orthographic):
+                    if isinstance(self.projection, ccrs.Orthographic):
                         warnings.warn(
                             'Plot extent lies outside of the Orthographic projection\'s '
                             'viewport. Defaulting to global extent.'
@@ -104,44 +342,6 @@ class Plot:
                 ax.set_ylim((ymin, ymax))
 
         self.ax = ax
-        self.projection = projection
-
-    def set_hue_values(
-        self, df, hue=None, scheme=None, k=5, cmap='viridis', color_kwarg='color',
-        default_color='steelblue', kwargs=None
-    ):
-        if kwargs is None:
-            kwargs = dict()
-
-        hue = _to_geoseries(df, hue)
-        if hue is None:
-            if color_kwarg in kwargs:
-                self.colors = [kwargs[color_kwarg]] * len(df)
-            else:
-                self.colors = [default_color] * len(df)
-            self.hue = hue
-            return
-        else:
-            self.colors = None  # not needed
-
-        if k is None:
-            cmap = _continuous_colormap(hue, cmap)
-            self.colors = [cmap.to_rgba(v) for v in hue]
-        else:
-            categorical, scheme = _validate_buckets(df, hue, k, scheme)
-            if hue is not None:
-                cmap, categories, hue_values = _discrete_colorize(
-                    categorical, hue, scheme, k, cmap
-                )
-                self.colors = [cmap.to_rgba(v) for v in hue_values]
-
-        self.hue = hue
-        self.scheme = scheme
-        self.k = k
-        self.cmap = cmap
-        self.categorical = categorical
-        self.categories = categories
-        self.hue_values = hue_values
 
 
 def pointplot(
@@ -288,80 +488,36 @@ def pointplot(
 
     .. image:: ../figures/pointplot/pointplot-scale.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+    class PointPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg='color', default_color='steelblue')
+            self.set_scale_values(size_kwarg='s', default_size=20)
+            self.paint_legend(supports_hue=True, supports_scale=True)
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            ax = plot.ax
+            if len(plot.df.geometry) == 0:
+                return ax
 
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
-        default_color='steelblue', kwargs=kwargs
-    )
-
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
-
-    # Add a legend, if appropriate.
-    if legend and (legend_var != "scale" or scale is None):
-        if hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif hue is not None and k is None:
-            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-
-    scalar_values = _to_geoseries(df, scale)
-
-    xs = np.array([p.x for p in df.geometry])
-    ys = np.array([p.y for p in df.geometry])
-
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale is not None:
-        # Compute a scale function.
-        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
-        if not scale_func:
-            dslope = (limits[1] - limits[0]) / (dmax - dmin)
-            # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
-            # TODO: better explain this error
-            if np.isinf(dslope): 
-                raise ValueError(
-                    "The data range provided to the 'scale' variable is too small for the default "
-                    "scaling function. Normalize your data or provide a custom 'scale_func'."
+            xs = np.array([p.x for p in plot.df.geometry])
+            ys = np.array([p.y for p in plot.df.geometry])
+            if self.projection:
+                ax.scatter(
+                    xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=plot.sizes,
+                    **plot.kwargs
                 )
-            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-        else:
-            dscale = scale_func(dmin, dmax)
+            else:
+                ax.scatter(xs, ys, c=plot.colors, s=plot.sizes, **plot.kwargs)
+            return ax
 
-        # Apply the scale function.
-        scalar_multiples = np.array([dscale(d) for d in scalar_values])
-        sizes = scalar_multiples * 20
-
-        # When a scale is applied, large points will tend to obfuscate small ones. Bringing the
-        # smaller points to the front (by plotting them last) is a necessary intermediate step,
-        # which is what this bit of code does.
-        sorted_indices = np.array(
-            sorted(enumerate(sizes), key=lambda tup: tup[1])[::-1]
-        )[:,0].astype(int)
-        xs = np.array(xs)[sorted_indices]
-        ys = np.array(ys)[sorted_indices]
-        sizes = np.array(sizes)[sorted_indices]
-        plot.colors = np.array(plot.colors)[sorted_indices]
-
-        # Draw a legend, if appropriate.
-        if legend and (legend_var == "scale" or hue is None):
-            _paint_carto_legend(
-                ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs
-            )
-    else:
-        sizes = kwargs.pop('s') if 's' in kwargs.keys() else 20
-
-    # Draw.
-    if projection:
-        ax.scatter(xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=sizes, **kwargs)
-    else:
-        ax.scatter(xs, ys, c=plot.colors, s=sizes, **kwargs)
-
-    return ax
+    plot = PointPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, scale=scale, limits=limits, scale_func=scale_func,
+        legend=legend, legend_var=legend_var, legend_values=legend_values,
+        legend_labels=legend_labels, legend_kwargs=legend_kwargs, **kwargs
+    )
+    return plot.draw()
 
 
 def polyplot(
@@ -422,41 +578,52 @@ def polyplot(
 
     .. image:: ../figures/polyplot/polyplot-stacked.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+    class PolyPlot(Plot):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    # Finally we draw the features.
-    if projection:
-        for geom in df.geometry:
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(
-                features, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
-            )
-    else:
-        for geom in df.geometry:
-            try:  # Duck test for MultiPolygon.
-                for subgeom in geom:
-                    feature = descartes.PolygonPatch(
-                        subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
+            # Finally we draw the features.
+            if self.projection:
+                for geom in self.df.geometry:
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(
+                        features, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                        **kwargs
                     )
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(
-                    geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder, **kwargs
-                )
-                ax.add_patch(feature)
+            else:
+                for geom in df.geometry:
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in geom:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                                **kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
+                            **kwargs
+                        )
+                        ax.add_patch(feature)
 
-    return ax
+            return ax
+
+    plot = PolyPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        edgecolor=edgecolor, facecolor=facecolor, zorder=-1, **kwargs
+    )
+    return plot.draw()
 
 
 def choropleth(
     df, projection=None,
     hue=None, scheme=None, k=5, cmap='viridis',
-    legend=False, legend_kwargs=None, legend_labels=None,
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -590,47 +757,53 @@ def choropleth(
 
     .. image:: ../figures/choropleth/choropleth-labels.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
-
-    if len(df.geometry) == 0:
-        return ax
-
     if hue is None:
         raise ValueError("No 'hue' specified.")
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color', kwargs=kwargs
+
+    class ChoroplethPlot(Plot, HueMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg=None, default_color=None)
+            self.paint_legend(supports_hue=True, supports_scale=False)
+
+        def draw(self):
+            ax = self.ax
+
+            if len(df.geometry) == 0:
+                return ax
+
+            if self.projection:
+                for color, geom in zip(self.colors, df.geometry):
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, **self.kwargs)
+            else:
+                for color, geom in zip(self.colors, df.geometry):
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in geom:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=color, **self.kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            geom, facecolor=color, **self.kwargs
+                        )
+                        ax.add_patch(feature)
+
+            return ax
+
+    plot = ChoroplethPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs, **kwargs
     )
-
-    # Add a legend, if appropriate.
-    if legend:
-        if k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        else:
-            _paint_colorbar_legend(ax, hue, cmap, legend_kwargs)
-
-    # Draw the features.
-    if projection:
-        for color, geom in zip(plot.colors, df.geometry):
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, **kwargs)
-    else:
-        for color, geom in zip(plot.colors, df.geometry):
-            try:  # Duck test for MultiPolygon.
-                for subgeom in geom:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(geom, facecolor=color, **kwargs)
-                ax.add_patch(feature)
-
-    return ax
+    return plot.draw()
 
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap='viridis',
+    hue=None, scheme=None, k=5, cmap='viridis',
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -651,6 +824,11 @@ def quadtree(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    k : int or None, optional
+        The number of color categories to split the data into. For a continuous colormap, set this
+        value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        The categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -703,14 +881,15 @@ def quadtree(
     view of a space <https://i.imgur.com/n2xlycT.png>`_.
 
     A simple ``quadtree`` specifies a dataset. It's recommended to also set a maximum number of
-    observations per bin, ``nmax``.
+    observations per bin, ``nmax``. The smaller the ``nmax``, the more detailed the plot (the
+    minimum value is 1).
 
     .. code-block:: python
 
         import geoplot as gplt
         import geoplot.crs as gcrs
         collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
-        gplt.quadtree(collisions, nmin=1)
+        gplt.quadtree(collisions, nmax=1)
 
     .. image:: ../figures/quadtree/quadtree-initial.png
 
@@ -730,7 +909,7 @@ def quadtree(
 
     Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
     used. ``legend`` toggles the legend. This type of plot is an effective gauge of distribution:
-    the more random the plot output, the the more decorrelated the variable.
+    the more random the plot output, the more geospatially decorrelated the variable.
 
     .. code-block:: python
 
@@ -743,6 +922,24 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-hue.png
 
+    Change the number of bins by specifying an alternative ``k`` value. To use a continuous
+    colormap, explicitly specify ``k=None``.  You can change the binning sceme with ``scheme``.
+    The default is ``quantile``, which bins observations into classes of different sizes but the
+    same numbers of observations. ``equal_interval`` will creates bins that are the same size, but
+    potentially containing different numbers of observations. The more complicated ``fisher_jenks``
+    scheme is an intermediate between the two.
+
+    .. code-block:: python
+
+        gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None,
+            edgecolor='white', legend=True,
+        )
+
+    .. image:: ../figures/quadtree/quadtree-k.png
+
     Observations will be aggregated by average, by default. Specify an alternative aggregation
     function using the ``agg`` parameter.
 
@@ -751,7 +948,7 @@ def quadtree(
         gplt.quadtree(
             collisions, nmax=1, agg=np.max,
             projection=gcrs.AlbersEqualArea(), clip=boroughs,
-            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
+            hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None
             edgecolor='white', legend=True
         )
 
@@ -771,84 +968,47 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-basemap.png
     """
-    # TODO: allow multindices in quadtree input
-    if isinstance(df.index, pd.MultiIndex):
-        raise NotImplementedError
+    class QuadtreePlot(Plot, QuadtreeComputeMixin, QuadtreeHueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.compute_quadtree()
+            self.set_hue_values(color_kwarg='facecolor', default_color='None')
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
 
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    if len(df.geometry) == 0:
-        return ax
+            for p, color in zip(self.partitions, self.colors):
+                xmin, xmax, ymin, ymax = p.bounds
+                rect = shapely.geometry.Polygon(
+                    [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)]
+                )
 
-    # Up-convert input to a GeoDataFrame (necessary for quadtree comprehension).
-    df = gpd.GeoDataFrame(df, geometry=df.geometry)
-    hue = _to_geoseries(df, hue)
-    if hue is not None:
-        df = df.assign(hue_col=hue)
+                if projection:
+                    feature = ShapelyFeature([rect], ccrs.PlateCarree())
+                    ax.add_feature(
+                        feature, facecolor=color, **self.kwargs
+                    )
+                else:
+                    feature = descartes.PolygonPatch(
+                        rect, facecolor=color, **self.kwargs
+                    )
+                    ax.add_patch(feature)
 
-    # Set reasonable defaults for the n-params if appropriate.
-    nmax = nmax if nmax else len(df)
-    nmin = nmin if nmin else np.max([1, np.round(len(df) / 100)]).astype(int)
+            return ax
 
-    # Jitter the points. Otherwise if there are n points sharing the same coordinate, but
-    # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly on
-    # 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the vast
-    # majority of geospatial applications. If the meaningful precision of your dataset exceeds 1cm,
-    # jitter the points yourself.
-    df = df.assign(geometry=_jitter_points(df.geometry))
-
-    # Generate a quadtree.
-    quad = QuadTree(df)
-    partitions = list(quad.partition(nmin, nmax))
-
-    # Set color information, if necessary
-    if hue is not None:
-        values = [agg(p.data.hue_col) for p in partitions if p.n > nsig]
-        cmap = _continuous_colormap(values, cmap)
-    edgecolor = kwargs.pop('edgecolor', 'black')
-    flat_facecolor = kwargs.pop('facecolor', 'None')  # only used if hue is None
-
-    for p in partitions:
-        xmin, xmax, ymin, ymax = p.bounds
-        rect = shapely.geometry.Polygon([(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)])
-
-        if hue is not None:
-            facecolor = cmap.to_rgba(agg(p.data.hue_col)) if p.n > nsig else "None"
-        else:
-            facecolor = flat_facecolor
-        if projection:
-            feature = ShapelyFeature([rect], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=facecolor, edgecolor=edgecolor, **kwargs)
-
-        else:
-            feature = descartes.PolygonPatch(
-                rect, facecolor=facecolor, edgecolor=edgecolor, **kwargs
-            )
-            ax.add_patch(feature)
-
-    if hue is not None and legend:
-        _paint_colorbar_legend(ax, values, cmap, legend_kwargs)
-
-    # Clip must be set after extent is set.
-    clip = _to_geoseries(df, clip)
-    if clip is not None:
-        if projection:
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
-        else:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            extent = (xmin, ymin, xmax, ymax)
-            ax = polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=extent, ax=ax
-            )
-
-    return ax
+    plot = QuadtreePlot(
+        df, projection=projection,
+        clip=clip,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        nmax=nmax, nmin=nmin, nsig=nsig,
+        agg=agg, legend=legend, legend_kwargs=legend_kwargs, extent=extent, figsize=figsize, ax=ax,
+        **kwargs
+    )
+    return plot.draw()
 
 
 def cartogram(
@@ -1031,90 +1191,83 @@ def cartogram(
 
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
-
-    if len(df.geometry) == 0:
-        return ax
-
-    # Standardize scale input.
     if not scale:
         raise ValueError("No scale parameter provided.")
-    values = _to_geoseries(df, scale)
 
-    # Compute a scale function.
-    dmin, dmax = np.min(values), np.max(values)
-    if not scale_func:
-        dslope = (limits[1] - limits[0]) / (dmax - dmin)
-        dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-    else:
-        dscale = scale_func(dmin, dmax)
+    class CartogramPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_scale_values(size_kwarg=None, default_size=None)
+            self.set_hue_values(color_kwarg='facecolor', default_color='steelblue')
+            self.paint_legend(supports_hue=True, supports_scale=True)
 
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    # Create a legend, if appropriate.
-    if legend and legend_var == "scale":
-        _paint_carto_legend(ax, values, legend_values, legend_labels, dscale, legend_kwargs)
+            trace = self.kwargs.pop('trace', None)
+            trace_kwargs = self.kwargs.pop('trace_kwargs', None)
 
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
-        default_color='None', kwargs=kwargs
-    )
+            # Manipulate trace_kwargs.
+            if trace is not None:
+                if trace_kwargs is None:
+                    trace_kwargs = dict()
+                if 'edgecolor' not in trace_kwargs:
+                    trace_kwargs['edgecolor'] = 'lightgray'
+                if 'facecolor' not in trace_kwargs:
+                    trace_kwargs['facecolor'] = 'None'
 
-    # Add a legend, if appropriate.
-    if legend and legend_var != "scale":
-        if plot.hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif plot.hue is not None and k is None:
-            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
+            # Draw traces first, if appropriate.
+            if trace:
+                if self.projection is not None:
+                    for polygon in self.df.geometry:
+                        features = ShapelyFeature([polygon], ccrs.PlateCarree())
+                        ax.add_feature(features, **trace_kwargs)
+                else:
+                    for polygon in self.df.geometry:
+                        try:  # Duck test for MultiPolygon.
+                            for subgeom in polygon:
+                                feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                                ax.add_patch(feature)
+                        except (TypeError, AssertionError):  # Shapely Polygon.
+                            feature = descartes.PolygonPatch(polygon, **trace_kwargs)
+                            ax.add_patch(feature)
 
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
-
-    # Manipulate trace_kwargs.
-    if trace:
-        if trace_kwargs is None:
-            trace_kwargs = dict()
-        if 'edgecolor' not in trace_kwargs.keys():
-            trace_kwargs['edgecolor'] = 'lightgray'
-        if 'facecolor' not in trace_kwargs.keys():
-            trace_kwargs['facecolor'] = 'None'
-
-    # Draw traces first, if appropriate.
-    if trace:
-        if projection:
-            for polygon in df.geometry:
-                features = ShapelyFeature([polygon], ccrs.PlateCarree())
-                ax.add_feature(features, **trace_kwargs)
-        else:
-            for polygon in df.geometry:
-                try:  # Duck test for MultiPolygon.
-                    for subgeom in polygon:
-                        feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+            # Finally, draw the scaled geometries.
+            for value, color, polygon in zip(self.sizes, self.colors, self.df.geometry):
+                scale_factor = value
+                scaled_polygon = shapely.affinity.scale(
+                    polygon, xfact=scale_factor, yfact=scale_factor
+                )
+                if self.projection is not None:
+                    features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, **kwargs)
+                else:
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in scaled_polygon:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=color, **self.kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            scaled_polygon, facecolor=color, **self.kwargs
+                        )
                         ax.add_patch(feature)
-                except (TypeError, AssertionError):  # Shapely Polygon.
-                    feature = descartes.PolygonPatch(polygon, **trace_kwargs)
-                    ax.add_patch(feature)
 
-    # Finally, draw the scaled geometries.
-    for value, color, polygon in zip(values, plot.colors, df.geometry):
-        scale_factor = dscale(value)
-        scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
-        if projection:
-            features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, **kwargs)
-        else:
-            try:  # Duck test for MultiPolygon.
-                for subgeom in scaled_polygon:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(scaled_polygon, facecolor=color, **kwargs)
-                ax.add_patch(feature)
+            return ax
 
-    return ax
+    plot = CartogramPlot(
+        df, projection=projection,
+        scale=scale, limits=limits, scale_func=scale_func,
+        trace=trace, trace_kwargs=trace_kwargs,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs, legend_var=legend_var,
+        **kwargs
+    )
+    return plot.draw()
 
 
 def kdeplot(
@@ -1204,54 +1357,39 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+    class KDEPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg=None, default_color=None, supports_categorical=False)
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            shade_lowest = self.kwargs.pop('shade_lowest', False)
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
 
-    # Parse clip input.
-    clip = _to_geoseries(df, clip)
+            if self.projection:
+                sns.kdeplot(
+                    pd.Series([p.x for p in self.df.geometry]),
+                    pd.Series([p.y for p in self.df.geometry]),
+                    transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, cmap=self.cmap,
+                    **self.kwargs
+                )
+            else:
+                sns.kdeplot(
+                    pd.Series([p.x for p in self.df.geometry]),
+                    pd.Series([p.y for p in self.df.geometry]),
+                    ax=ax, shade_lowest=shade_lowest, **self.kwargs
+                )
+            return ax
 
-    if projection:
-        if clip is None:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
-        else:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
-    else:
-        if clip is None:
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                ax=ax, **kwargs
-            )
-        else:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            extent = (xmin, ymin, xmax, ymax)
-            polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=extent, ax=ax
-            )
-            sns.kdeplot(
-                pd.Series([p.x for p in df.geometry]),
-                pd.Series([p.y for p in df.geometry]),
-                ax=ax, shade_lowest=shade_lowest, **kwargs
-            )
-    return ax
+    plot = KDEPlot(
+        df, projection=projection, extent=extent, figsize=figsize, ax=ax, clip=clip,
+        shade_lowest=shade_lowest, **kwargs
+    )
+    return plot.draw()
 
 
 def sankey(
@@ -1415,111 +1553,83 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-dc.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+    class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg='edgecolor', default_color='steelblue')
+            self.set_scale_values(size_kwarg='linewidth', default_size=1)
+            self.paint_legend(supports_hue=True, supports_scale=True)
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            ax = self.ax
 
-    # Standardize hue input.
-    hue = _to_geoseries(df, hue)
+            if len(df.geometry) == 0:
+                return ax
 
-    # Set legend variable.
-    legend_var = _set_legend_var(legend_var, hue, scale)
-
-    def parse_geom(geom):
-        if isinstance(geom, shapely.geometry.LineString):
-            return geom
-        elif isinstance(geom, shapely.geometry.MultiLineString):
-            return geom
-        elif isinstance(geom, shapely.geometry.MultiPoint):
-            return shapely.geometry.LineString(geom)
-        else:
-            raise ValueError(
-                f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
-                f'geometries, but an instance of {type(geom)} was found instead.'
-            )
-
-    path_geoms = df.geometry.map(parse_geom)
-    n = len(path_geoms)
-
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='color',
-        default_color='steelblue', kwargs=kwargs
-    )
-
-    # Add a legend, if appropriate.
-    if legend and legend_var != "scale":
-        if plot.hue is not None and k is not None:
-            _paint_hue_legend(ax, plot.categories, plot.cmap, legend_labels, legend_kwargs)
-        elif plot.hue is not None and k is None:
-            _paint_colorbar_legend(ax, plot.hue, cmap, legend_kwargs)
-
-    # Check if the ``scale`` parameter is filled, and use it to fill a ``values`` name.
-    if scale is not None:
-        scalar_values = _to_geoseries(df, scale)
-
-        # Compute a scale function.
-        dmin, dmax = np.min(scalar_values), np.max(scalar_values)
-        if not scale_func:
-            dslope = (limits[1] - limits[0]) / (dmax - dmin)
-            dscale = lambda dval: limits[0] + dslope * (dval - dmin)
-        else:
-            dscale = scale_func(dmin, dmax)
-
-        # Apply the scale function.
-        scalar_multiples = np.array([dscale(d) for d in scalar_values])
-        widths = scalar_multiples * 1
-
-        # Draw a legend, if appropriate.
-        if legend and (legend_var == "scale"):
-            _paint_carto_legend(
-                ax, scalar_values, legend_values, legend_labels, dscale, legend_kwargs
-            )
-    else:
-        widths = [1] * n  # pyplot default
-
-    # Allow overwriting visual arguments.
-    if 'linestyle' in kwargs.keys():
-        linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
-    else:
-        linestyle = '-'
-
-    if 'linewidth' in kwargs.keys():
-        widths = [kwargs['linewidth']] * n; kwargs.pop('linewidth')
-
-    if projection:
-        for line, color, width in zip(path_geoms, plot.colors, widths):
-            feature = ShapelyFeature([line], ccrs.PlateCarree())
-            ax.add_feature(
-                feature, linestyle=linestyle, linewidth=width, edgecolor=color,
-                facecolor='None', **kwargs
-            )
-    else:
-        for path, color, width in zip(path_geoms, plot.colors, widths):
-            # We have to implement different methods for dealing with LineString and
-            # MultiLineString objects.
-            try:  # LineString
-                line = mpl.lines.Line2D(
-                    [coord[0] for coord in path.coords], [coord[1] for coord in path.coords],
-                    linestyle=linestyle, linewidth=width, color=color, **kwargs
-                )
-                ax.add_line(line)
-            except NotImplementedError:  # MultiLineString
-                for line in path:
-                    line = mpl.lines.Line2D(
-                        [coord[0] for coord in line.coords], [coord[1] for coord in line.coords],
-                        linestyle=linestyle, linewidth=width, color=color, **kwargs
+            def parse_geom(geom):
+                if isinstance(geom, shapely.geometry.LineString):
+                    return geom
+                elif isinstance(geom, shapely.geometry.MultiLineString):
+                    return geom
+                elif isinstance(geom, shapely.geometry.MultiPoint):
+                    return shapely.geometry.LineString(geom)
+                else:
+                    raise ValueError(
+                        f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
+                        f'geometries, but an instance of {type(geom)} was found instead.'
                     )
-                    ax.add_line(line)
-    return ax
+            path_geoms = self.df.geometry.map(parse_geom)
+
+            if 'linestyle' in self.kwargs and 'linestyle' is not None:
+                linestyle = kwargs.pop('linestyle')
+            else:
+                linestyle = '-'
+
+            if self.projection:
+                for line, color, width in zip(path_geoms, self.colors, self.sizes):
+                    feature = ShapelyFeature([line], ccrs.PlateCarree())
+                    ax.add_feature(
+                        feature, linestyle=linestyle, linewidth=width, edgecolor=color,
+                        facecolor='None', **self.kwargs
+                    )
+            else:
+                for path, color, width in zip(path_geoms, self.colors, self.sizes):
+                    # We have to implement different methods for dealing with LineString and
+                    # MultiLineString objects.
+                    try:  # LineString
+                        line = mpl.lines.Line2D(
+                            [coord[0] for coord in path.coords],
+                            [coord[1] for coord in path.coords],
+                            linestyle=linestyle, linewidth=width, color=color,
+                            **self.kwargs
+                        )
+                        ax.add_line(line)
+                    except NotImplementedError:  # MultiLineString
+                        for line in path:
+                            line = mpl.lines.Line2D(
+                                [coord[0] for coord in line.coords],
+                                [coord[1] for coord in line.coords],
+                                linestyle=linestyle, linewidth=width, color=color,
+                                **self.kwargs
+                            )
+                            ax.add_line(line)
+            return ax
+
+    plot = SankeyPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        scale=scale, limits=limits, scale_func=scale_func,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs, legend_var=legend_var,
+        **kwargs
+    )
+    return plot.draw()
 
 
 def voronoi(
     df, projection=None, clip=None,
     cmap='viridis', hue=None, scheme=None, k=5,
-    legend=False, legend_kwargs=None, legend_labels=None,
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=True,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -1683,84 +1793,47 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
-    plot = Plot(df, figsize=figsize, ax=ax, extent=extent, projection=projection)
-    ax = plot.ax
-    projection = plot.projection
+    class VoronoiPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg='facecolor', default_color='None')
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
 
-    if len(df.geometry) == 0:
-        return ax
+        def draw(self):
+            ax = self.ax
+            if len(df.geometry) == 0:
+                return ax
 
-    # Parse inputs.
-    hue = _to_geoseries(df, hue)
-    clip = _to_geoseries(df, clip)
+            geoms = _build_voronoi_polygons(self.df)
+            if self.projection:
+                for color, geom in zip(self.colors, geoms):
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **self.kwargs)
+            else:
+                for color, geom in zip(plot.colors, geoms):
+                    feature = descartes.PolygonPatch(
+                        geom, facecolor=color, edgecolor=edgecolor, **self.kwargs
+                    )
+                    ax.add_patch(feature)
 
-    plot.set_hue_values(
-        df, hue=hue, scheme=scheme, k=k, cmap=cmap, color_kwarg='facecolor',
-        default_color='None', kwargs=kwargs        
+            return ax
+
+    plot = VoronoiPlot(
+        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
+        # parameters
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs,
+        clip=clip,
+        **kwargs
     )
-
-    # Finally we draw the features.
-    geoms = _build_voronoi_polygons(df)
-    if projection:
-        for color, geom in zip(plot.colors, geoms):
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **kwargs)
-
-        if clip is not None:
-            clip_geom = _get_clip(ax.get_extent(crs=ccrs.PlateCarree()), clip)
-            feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-            ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=100)
-
-    else:
-        for color, geom in zip(plot.colors, geoms):
-            feature = descartes.PolygonPatch(geom, facecolor=color, edgecolor=edgecolor, **kwargs)
-            ax.add_patch(feature)
-
-        if clip is not None:
-            clip_geom = _get_clip(ax.get_xlim() + ax.get_ylim(), clip)
-            ax = polyplot(
-                gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=100,
-                extent=ax.get_xlim() + ax.get_ylim(), ax=ax
-            )
-
-    # Add a legend, if appropriate.
-    if legend and k is not None:
-        _paint_hue_legend(
-            ax, plot.categories, plot.cmap, legend_labels, legend_kwargs, figure=True
-        )
-    elif legend and k is None and hue is not None:
-        _paint_colorbar_legend(ax, plot.hue, plot.cmap, legend_kwargs)
-
-    return ax
+    return plot.draw()
 
 
 ##################
 # HELPER METHODS #
 ##################
-
-
-def _init_figure(ax, figsize):
-    """
-    Initializes the ``matplotlib`` ``figure``, one of the first things that every plot must do. No
-    figure is initialized (and, consequentially, the ``figsize`` argument is ignored) if a
-    pre-existing ``ax`` is passed to the method. This is necessary for ``plt.savefig()`` to work.
-    """
-    if not ax:
-        fig = plt.figure(figsize=figsize)
-        return fig
-
-
-def _set_legend_var(legend_var, hue, scale):
-    """
-    Given ``hue`` and ``scale`` variables with mixed validity, returns the correct 
-    ``legend_var``.
-    """
-    if legend_var is None:
-        if hue is not None:
-            legend_var = "hue"
-        elif scale is not None:
-            legend_var = "scale"
-    return legend_var
 
 
 def _to_geoseries(df, var):
