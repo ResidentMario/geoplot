@@ -1531,72 +1531,77 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-dc.png
     """
-    plot = Plot(
+    class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg='edgecolor', default_color='steelblue')
+            self.set_scale_values(size_kwarg='linewidth', default_size=1)
+            self.paint_legend(supports_hue=True, supports_scale=True)
+
+        def draw(self):
+            ax = self.ax
+
+            if len(df.geometry) == 0:
+                return ax
+
+            def parse_geom(geom):
+                if isinstance(geom, shapely.geometry.LineString):
+                    return geom
+                elif isinstance(geom, shapely.geometry.MultiLineString):
+                    return geom
+                elif isinstance(geom, shapely.geometry.MultiPoint):
+                    return shapely.geometry.LineString(geom)
+                else:
+                    raise ValueError(
+                        f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
+                        f'geometries, but an instance of {type(geom)} was found instead.'
+                    )
+            path_geoms = self.df.geometry.map(parse_geom)
+
+            if 'linestyle' in self.kwargs and 'linestyle' is not None:
+                linestyle = kwargs.pop('linestyle')
+            else:
+                linestyle = '-'
+
+            if self.projection:
+                for line, color, width in zip(path_geoms, self.colors, self.sizes):
+                    feature = ShapelyFeature([line], ccrs.PlateCarree())
+                    ax.add_feature(
+                        feature, linestyle=linestyle, linewidth=width, edgecolor=color,
+                        facecolor='None', **self.kwargs
+                    )
+            else:
+                for path, color, width in zip(path_geoms, self.colors, self.sizes):
+                    # We have to implement different methods for dealing with LineString and
+                    # MultiLineString objects.
+                    try:  # LineString
+                        line = mpl.lines.Line2D(
+                            [coord[0] for coord in path.coords],
+                            [coord[1] for coord in path.coords],
+                            linestyle=linestyle, linewidth=width, color=color,
+                            **self.kwargs
+                        )
+                        ax.add_line(line)
+                    except NotImplementedError:  # MultiLineString
+                        for line in path:
+                            line = mpl.lines.Line2D(
+                                [coord[0] for coord in line.coords],
+                                [coord[1] for coord in line.coords],
+                                linestyle=linestyle, linewidth=width, color=color,
+                                **self.kwargs
+                            )
+                            ax.add_line(line)
+            return ax
+
+    plot = SankeyPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # metaparameters
-        has_hue_params=True, color_kwarg='edgecolor', default_color='steelblue',
-        has_scale_params=True, size_kwarg='linewidth', default_size=1,
-        scale_multiplier=1, has_legend=True,
-        # parameters
         scale=scale, limits=limits, scale_func=scale_func,
         hue=hue, scheme=scheme, k=k, cmap=cmap,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
     )
-
-    ax = plot.ax
-    projection = plot.projection
-    df = plot.df
-
-    if len(df.geometry) == 0:
-        return ax
-
-    def parse_geom(geom):
-        if isinstance(geom, shapely.geometry.LineString):
-            return geom
-        elif isinstance(geom, shapely.geometry.MultiLineString):
-            return geom
-        elif isinstance(geom, shapely.geometry.MultiPoint):
-            return shapely.geometry.LineString(geom)
-        else:
-            raise ValueError(
-                f'df.geometry must contain LineString, MultiLineString, or MultiPoint '
-                f'geometries, but an instance of {type(geom)} was found instead.'
-            )
-    path_geoms = df.geometry.map(parse_geom)
-
-    # Allow overwriting visual arguments.
-    if 'linestyle' in kwargs.keys():
-        linestyle = kwargs['linestyle']; kwargs.pop('linestyle')
-    else:
-        linestyle = '-'
-
-    if projection:
-        for line, color, width in zip(path_geoms, plot.colors, plot.sizes):
-            feature = ShapelyFeature([line], ccrs.PlateCarree())
-            ax.add_feature(
-                feature, linestyle=linestyle, linewidth=width, edgecolor=color,
-                facecolor='None', **plot.kwargs
-            )
-    else:
-        for path, color, width in zip(path_geoms, plot.colors, plot.sizes):
-            # We have to implement different methods for dealing with LineString and
-            # MultiLineString objects.
-            try:  # LineString
-                line = mpl.lines.Line2D(
-                    [coord[0] for coord in path.coords], [coord[1] for coord in path.coords],
-                    linestyle=linestyle, linewidth=width, color=color, **plot.kwargs
-                )
-                ax.add_line(line)
-            except NotImplementedError:  # MultiLineString
-                for line in path:
-                    line = mpl.lines.Line2D(
-                        [coord[0] for coord in line.coords], [coord[1] for coord in line.coords],
-                        linestyle=linestyle, linewidth=width, color=color, **plot.kwargs
-                    )
-                    ax.add_line(line)
-    return ax
+    return plot.draw()
 
 
 def voronoi(
@@ -1766,48 +1771,42 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
-    plot = Plot(
+    class VoronoiPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_hue_values(color_kwarg='facecolor', default_color='None')
+            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.paint_clip()
+
+        def draw(self):
+            ax = self.ax
+            if len(df.geometry) == 0:
+                return ax
+
+            geoms = _build_voronoi_polygons(self.df)
+            if self.projection:
+                for color, geom in zip(self.colors, geoms):
+                    features = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **self.kwargs)
+            else:
+                for color, geom in zip(plot.colors, geoms):
+                    feature = descartes.PolygonPatch(
+                        geom, facecolor=color, edgecolor=edgecolor, **self.kwargs
+                    )
+                    ax.add_patch(feature)
+
+            return ax
+
+    plot = VoronoiPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # metaparameters
-        has_hue_params=True, color_kwarg='edgecolor', default_color='None',
-        has_scale_params=False, has_legend=True,
         # parameters
         hue=hue, scheme=scheme, k=k, cmap=cmap,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
+        clip=clip,
         **kwargs
     )
-
-    ax = plot.ax
-    projection = plot.projection
-    df = plot.df
-
-    if len(df.geometry) == 0:
-        return ax
-
-    plot.paint_clip(clip=clip)
-
-    geoms = _build_voronoi_polygons(df)
-    if projection:
-        for color, geom in zip(plot.colors, geoms):
-            features = ShapelyFeature([geom], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **plot.kwargs)
-    else:
-        for color, geom in zip(plot.colors, geoms):
-            feature = descartes.PolygonPatch(
-                geom, facecolor=color, edgecolor=edgecolor, **plot.kwargs
-            )
-            ax.add_patch(feature)
-
-    # Add a legend, if appropriate.
-    if legend and k is not None:
-        _paint_hue_legend(
-            ax, plot.categories, plot.cmap, legend_labels, legend_kwargs, figure=True
-        )
-    elif legend and k is None and hue is not None:
-        _paint_colorbar_legend(ax, plot.hue, plot.cmap, legend_kwargs)
-
-    return ax
+    return plot.draw()
 
 
 ##################
