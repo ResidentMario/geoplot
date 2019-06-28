@@ -795,7 +795,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap='viridis',
+    hue=None, scheme=None, k=5, cmap='viridis',
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -816,6 +816,11 @@ def quadtree(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    k : int or None, optional
+        The number of color categories to split the data into. For a continuous colormap, set this
+        value to ``None``.
+    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+        The categorical binning scheme to use.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -1159,13 +1164,72 @@ def cartogram(
     if not scale:
         raise ValueError("No scale parameter provided.")
 
-    plot = Plot(
-        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # metaparameters
-        has_hue_params=True, color_kwarg='facecolor', default_color='None',
-        has_scale_params=True, size_kwarg=None, default_size=None, scale_multiplier=1,
-        has_legend=True,
-        # parameters
+    class CartogramPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
+        def __init__(self, df, **kwargs):
+            super().__init__(df, **kwargs)
+            self.set_scale_values(size_kwarg=None, default_size=None)
+            self.set_hue_values(color_kwarg='facecolor', default_color='steelblue')
+            self.paint_legend(supports_hue=True, supports_scale=True)
+
+        def draw(self):
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
+
+            trace = self.kwargs.pop('trace', None)
+            trace_kwargs = self.kwargs.pop('trace_kwargs', None)
+
+            # Manipulate trace_kwargs.
+            if trace is not None:
+                if trace_kwargs is None:
+                    trace_kwargs = dict()
+                if 'edgecolor' not in trace_kwargs:
+                    trace_kwargs['edgecolor'] = 'lightgray'
+                if 'facecolor' not in trace_kwargs:
+                    trace_kwargs['facecolor'] = 'None'
+
+            # Draw traces first, if appropriate.
+            if trace:
+                if self.projection is not None:
+                    for polygon in self.df.geometry:
+                        features = ShapelyFeature([polygon], ccrs.PlateCarree())
+                        ax.add_feature(features, **trace_kwargs)
+                else:
+                    for polygon in self.df.geometry:
+                        try:  # Duck test for MultiPolygon.
+                            for subgeom in polygon:
+                                feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
+                                ax.add_patch(feature)
+                        except (TypeError, AssertionError):  # Shapely Polygon.
+                            feature = descartes.PolygonPatch(polygon, **trace_kwargs)
+                            ax.add_patch(feature)
+
+            # Finally, draw the scaled geometries.
+            for value, color, polygon in zip(self.sizes, self.colors, self.df.geometry):
+                scale_factor = value
+                scaled_polygon = shapely.affinity.scale(
+                    polygon, xfact=scale_factor, yfact=scale_factor
+                )
+                if self.projection is not None:
+                    features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
+                    ax.add_feature(features, facecolor=color, **kwargs)
+                else:
+                    try:  # Duck test for MultiPolygon.
+                        for subgeom in scaled_polygon:
+                            feature = descartes.PolygonPatch(
+                                subgeom, facecolor=color, **self.kwargs
+                            )
+                            ax.add_patch(feature)
+                    except (TypeError, AssertionError):  # Shapely Polygon.
+                        feature = descartes.PolygonPatch(
+                            scaled_polygon, facecolor=color, **self.kwargs
+                        )
+                        ax.add_patch(feature)
+
+            return ax
+
+    plot = CartogramPlot(
+        df, projection=projection,
         scale=scale, limits=limits, scale_func=scale_func,
         trace=trace, trace_kwargs=trace_kwargs,
         hue=hue, scheme=scheme, k=k, cmap=cmap,
@@ -1173,55 +1237,7 @@ def cartogram(
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
     )
-    ax = plot.ax
-    projection = plot.projection
-    df = plot.df
-
-    if len(df.geometry) == 0:
-        return ax
-
-    # Manipulate trace_kwargs.
-    if trace:
-        if trace_kwargs is None:
-            trace_kwargs = dict()
-        if 'edgecolor' not in trace_kwargs.keys():
-            trace_kwargs['edgecolor'] = 'lightgray'
-        if 'facecolor' not in trace_kwargs.keys():
-            trace_kwargs['facecolor'] = 'None'
-
-    # Draw traces first, if appropriate.
-    if trace:
-        if projection is not None:
-            for polygon in df.geometry:
-                features = ShapelyFeature([polygon], ccrs.PlateCarree())
-                ax.add_feature(features, **trace_kwargs)
-        else:
-            for polygon in df.geometry:
-                try:  # Duck test for MultiPolygon.
-                    for subgeom in polygon:
-                        feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
-                        ax.add_patch(feature)
-                except (TypeError, AssertionError):  # Shapely Polygon.
-                    feature = descartes.PolygonPatch(polygon, **trace_kwargs)
-                    ax.add_patch(feature)
-
-    # Finally, draw the scaled geometries.
-    for value, color, polygon in zip(plot.sizes, plot.colors, df.geometry):
-        scale_factor = value
-        scaled_polygon = shapely.affinity.scale(polygon, xfact=scale_factor, yfact=scale_factor)
-        if projection is not None:
-            features = ShapelyFeature([scaled_polygon], ccrs.PlateCarree())
-            ax.add_feature(features, facecolor=color, **kwargs)
-        else:
-            try:  # Duck test for MultiPolygon.
-                for subgeom in scaled_polygon:
-                    feature = descartes.PolygonPatch(subgeom, facecolor=color, **kwargs)
-                    ax.add_patch(feature)
-            except (TypeError, AssertionError):  # Shapely Polygon.
-                feature = descartes.PolygonPatch(scaled_polygon, facecolor=color, **kwargs)
-                ax.add_patch(feature)
-
-    return ax
+    return plot.draw()
 
 
 def kdeplot(
