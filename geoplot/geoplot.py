@@ -54,7 +54,10 @@ class HueMixin:
             categories = None
             hue_values = None
         elif k is None:  # continuous colormap
-            cmap = _continuous_colormap(hue, cmap)
+            mn = min(hue)
+            mx = max(hue)
+            norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
+            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             colors = [cmap.to_rgba(v) for v in hue]
             categorical = False
             categories = None
@@ -63,9 +66,20 @@ class HueMixin:
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
-                cmap, categories, hue_values = _discrete_colorize(
-                    categorical, hue, scheme, k, cmap
-                )
+                if not categorical:
+                    binning = _mapclassify_choro(hue, scheme, k=k)
+                    # hue_values = binning.yb
+                    binedges = [binning.yb.min()] + binning.bins.tolist()
+                    categories = [
+                        '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+                        for i in range(len(binedges) - 1)
+                    ]
+                else:
+                    categories = np.unique(hue)
+                    value_map = {v: i for i, v in enumerate(categories)}
+                    # hue_values = [value_map[d] for d in hue]
+
+                cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
                 colors = [cmap.to_rgba(v) for v in hue_values]
 
         self.colors = colors
@@ -75,7 +89,6 @@ class HueMixin:
         self.cmap = cmap
         self.categorical = categorical
         self.categories = categories
-        self.hue_values = hue_values
         self.color_kwarg = color_kwarg
         self.default_color = default_color
 
@@ -1844,79 +1857,9 @@ def voronoi(
     )
     return plot.draw()
 
-
-##################
-# HELPER METHODS #
-##################
-
-
-def _to_geoseries(df, var):
-    """
-    Some top-level parameters present in most plot types accept a variety of iterables as input
-    types. This method condenses this variety into a single preferred format - a GeoSeries.
-    """
-    if var is None:
-        return None
-    elif isinstance(var, str):
-        var = df[var]
-        return var
-    elif isinstance(var, gpd.GeoDataFrame):
-        return var.geometry
-    else:
-        return gpd.GeoSeries(var)
-
-
-def _continuous_colormap(hue, cmap):
-    """
-    Creates a continuous colormap.
-    """
-    mn = min(hue)
-    mx = max(hue)
-    norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
-    return mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-
-
-def _discrete_colorize(categorical, hue, scheme, k, cmap):
-    """
-    Creates a discrete colormap, either using an already-categorical data variable or by bucketing
-    a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
-    data. If one is not provided we assume that the input data is categorical.
-    """
-    if not categorical:
-        binning = _mapclassify_choro(hue, scheme, k=k)
-        values = binning.yb
-        binedges = [binning.yb.min()] + binning.bins.tolist()
-
-        categories = [
-            '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
-            for i in range(len(binedges) - 1)
-        ]
-    else:
-        categories = np.unique(hue)
-        value_map = {v: i for i, v in enumerate(categories)}
-        values = [value_map[d] for d in hue]
-    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
-    return cmap, categories, values
-
-
-def _validate_buckets(df, hue, k, scheme):
-    """
-    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
-    already set.
-    """
-    if isinstance(hue, str):
-        hue = df[hue]
-    if hue is None:
-        categorical = False
-    # if the data is non-categorical, but there are fewer to equal numbers of bins and
-    # observations, treat it as categorical, as doing so will make the legend cleaner
-    elif k is not None and len(hue) <= k:
-        categorical = True
-    else:
-        categorical = (hue.dtype == np.dtype('object'))
-    scheme = scheme if scheme else 'Quantiles'
-    return categorical, scheme
-
+#########################
+# COMPUTATIONAL METHODS #
+#########################
 
 def _build_voronoi_polygons(df):
     """
@@ -2076,6 +2019,68 @@ def _jitter_points(geoms):
         assert not (regroup_sizes > 1).any()
 
         return out
+
+##################
+# HELPER METHODS #
+##################
+
+
+def _to_geoseries(df, var):
+    """
+    Some top-level parameters present in most plot types accept a variety of iterables as input
+    types. This method condenses this variety into a single preferred format - a GeoSeries.
+    """
+    if var is None:
+        return None
+    elif isinstance(var, str):
+        var = df[var]
+        return var
+    elif isinstance(var, gpd.GeoDataFrame):
+        return var.geometry
+    else:
+        return gpd.GeoSeries(var)
+
+
+def _discrete_colorize(categorical, hue, scheme, k, cmap):
+    """
+    Creates a discrete colormap, either using an already-categorical data variable or by bucketing
+    a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
+    data. If one is not provided we assume that the input data is categorical.
+    """
+    if not categorical:
+        binning = _mapclassify_choro(hue, scheme, k=k)
+        values = binning.yb
+        binedges = [binning.yb.min()] + binning.bins.tolist()
+
+        categories = [
+            '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+            for i in range(len(binedges) - 1)
+        ]
+    else:
+        categories = np.unique(hue)
+        value_map = {v: i for i, v in enumerate(categories)}
+        values = [value_map[d] for d in hue]
+    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
+    return cmap, categories, values
+
+
+def _validate_buckets(df, hue, k, scheme):
+    """
+    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
+    already set.
+    """
+    if isinstance(hue, str):
+        hue = df[hue]
+    if hue is None:
+        categorical = False
+    # if the data is non-categorical, but there are fewer to equal numbers of bins and
+    # observations, treat it as categorical, as doing so will make the legend cleaner
+    elif k is not None and len(hue) <= k:
+        categorical = True
+    else:
+        categorical = (hue.dtype == np.dtype('object'))
+    scheme = scheme if scheme else 'Quantiles'
+    return categorical, scheme
 
 
 #######################
