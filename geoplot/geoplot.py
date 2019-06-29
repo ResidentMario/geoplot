@@ -35,15 +35,15 @@ class HueMixin:
         cmap = self.kwargs.pop('cmap')
 
         if supports_categorical:
-            scheme = self.kwargs.pop('scheme', None)
-            k = self.kwargs.pop('k', 5)
+            scheme = self.kwargs.pop('scheme')
+            k = self.kwargs.pop('k')
         else:
             scheme = None
             k = None
 
         if color_kwarg in self.kwargs and hue is not None:
             raise ValueError(
-                f'Cannot specify both "{color_kwarg}" and "cmap" in the same plot.'
+                f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
             )
 
         hue = _to_geoseries(self.df, hue)
@@ -54,7 +54,10 @@ class HueMixin:
             categories = None
             hue_values = None
         elif k is None:  # continuous colormap
-            cmap = _continuous_colormap(hue, cmap)
+            mn = min(hue)
+            mx = max(hue)
+            norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
+            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             colors = [cmap.to_rgba(v) for v in hue]
             categorical = False
             categories = None
@@ -63,9 +66,20 @@ class HueMixin:
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
-                cmap, categories, hue_values = _discrete_colorize(
-                    categorical, hue, scheme, k, cmap
-                )
+                if not categorical:
+                    binning = _mapclassify_choro(hue, scheme, k=k)
+                    # hue_values = binning.yb
+                    binedges = [binning.yb.min()] + binning.bins.tolist()
+                    categories = [
+                        '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+                        for i in range(len(binedges) - 1)
+                    ]
+                else:
+                    categories = np.unique(hue)
+                    value_map = {v: i for i, v in enumerate(categories)}
+                    # hue_values = [value_map[d] for d in hue]
+
+                cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
                 colors = [cmap.to_rgba(v) for v in hue_values]
 
         self.colors = colors
@@ -75,14 +89,15 @@ class HueMixin:
         self.cmap = cmap
         self.categorical = categorical
         self.categories = categories
-        self.hue_values = hue_values
+        self.color_kwarg = color_kwarg
+        self.default_color = default_color
 
 
 class ScaleMixin:
     """
     Class container for scale-setter code shared across all plots that support scale.
     """
-    def set_scale_values(self, size_kwarg=None, default_size=20, scale_multiplier=1):
+    def set_scale_values(self, size_kwarg=None, default_size=20):
         self.limits = self.kwargs.pop('limits')
         self.scale_func = self.kwargs.pop('scale_func')
         self.scale = self.kwargs.pop('scale')
@@ -105,8 +120,7 @@ class ScaleMixin:
                 self.dscale = self.scale_func(dmin, dmax)
 
             # Apply the scale function.
-            scalar_multiples = np.array([self.dscale(d) for d in self.scale])
-            self.sizes = scalar_multiples * scale_multiplier
+            self.sizes = np.array([self.dscale(d) for d in self.scale])
 
             # When a scale is applied, large observations will tend to obfuscate small ones.
             # Plotting in descending size order, so that smaller values end up on top, helps
@@ -131,17 +145,39 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
+    # TODO: support painting a hue legend and a scale legend simultaneously (e.g. dual legends)
     def paint_legend(self, supports_hue=True, supports_scale=False):
-        legend = self.kwargs.pop('legend', False)
-
-        legend_kwargs = self.kwargs.pop('legend_kwargs')
+        legend = self.kwargs.pop('legend')
         legend_labels = self.kwargs.pop('legend_labels')
         legend_values = self.kwargs.pop('legend_values')
+        legend_kwargs = self.kwargs.pop('legend_kwargs')
+        if legend_kwargs is None:
+            legend_kwargs = dict()
+
+        # Mutate the matplotlib defaults from frameon=False to frameon=True and from
+        # fancybox=False to fancybox=True.
+        addtl_legend_kwargs = dict()
+        addtl_legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
+        addtl_legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
 
         if supports_hue and supports_scale:
             if self.kwargs['legend_var'] is not None:
                 legend_var = self.kwargs['legend_var']
+                if legend_var not in ['scale', 'hue']:
+                    raise ValueError(
+                        f'"legend_var", if specified, must be set to one of "hue" or "scale".'
+                    )
+                elif getattr(self, legend_var) is None:
+                    raise ValueError(
+                        f'"legend_var" is set to "{legend_var!r}", but no "{legend_var!r}" is '
+                        f'specified.'
+                    )
             else:
+                if self.hue is not None and self.scale is not None:
+                    warnings.warn(
+                        f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
+                        f'specified. Defaulting to "legend_var=\'hue\'".'
+                    )
                 legend_var = 'hue' if self.hue is not None else 'scale'
         else:
             legend_var = 'hue'
@@ -149,31 +185,99 @@ class LegendMixin:
 
         if legend and legend_var == 'hue':
             if self.k is not None:
-                _paint_hue_legend(
-                    self.ax, self.categories, self.cmap, legend_labels, legend_kwargs
-                )
+                markeredgecolor = self.kwargs.get('edgecolor', 'None')
+                patches = []
+                for value, _ in enumerate(self.categories):
+                    patches.append(
+                        mpl.lines.Line2D(
+                            [0], [0], linestyle='None',
+                            marker="o", markersize=10, markerfacecolor=self.cmap.to_rgba(value),
+                            markeredgecolor=markeredgecolor
+                        )
+                    )
+                if legend_labels:
+                    self.ax.legend(
+                        patches, legend_labels, numpoints=1,
+                        **legend_kwargs, **addtl_legend_kwargs
+                    )
+                else:
+                    self.ax.legend(
+                        patches, self.categories, numpoints=1,
+                        **legend_kwargs, **addtl_legend_kwargs
+                    )
             else:  # self.k is None
-                _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+                self.cmap.set_array(self.hue)
+                plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
+
         elif legend and legend_var == 'scale':
-            _paint_carto_legend(
-                self.ax, self.scale, legend_values, legend_labels, self.dscale, legend_kwargs
-            )
+            if legend_values is None:
+                # If the user doesn't specify their own legend_values, apply a reasonable
+                # default: a five-point linear array from min to max.
+                legend_values = np.linspace(
+                    np.max(self.scale), np.min(self.scale), num=5, dtype=self.scale.dtype
+                )
+            if legend_labels is None:
+                # If the user doesn't specify their own legend_labels, apply a reasonable
+                # default: the 'g' f-string for the given input value.
+                legend_labels = ['{0:g}'.format(value) for value in legend_values]
+
+            # Use an open-circle design when hue is not None, so as not to confuse viewers with
+            # colors in the scale mapping to values that do not correspond with the plot points.
+            # But if there is no hue, it's better to have the legend markers be as close to the
+            # plot markers as possible.
+            if self.hue is None:
+                markerfacecolors = [self.colors[0]] * len(legend_values)
+            else:
+                markerfacecolors = ['None'] * len(legend_values)
+            markersizes = [self.dscale(d) for d in legend_values]
+            if self.hue is None:
+                markeredgecolor = self.kwargs.get('edgecolor', 'steelblue')
+            else:
+                markeredgecolor = self.kwargs.get('edgecolor', 'black')
+
+            patches = []
+            for markerfacecolor, markersize in zip(
+                markerfacecolors, markersizes
+            ):
+                patches.append(
+                    mpl.lines.Line2D(
+                        [0], [0], linestyle='None',
+                        marker="o",
+                        markersize=markersize,
+                        markeredgecolor=markeredgecolor,
+                        markerfacecolor=markerfacecolor
+                    )
+                )
+            self.ax.legend(patches, legend_labels, numpoints=1, **legend_kwargs)            
 
 
 class ClipMixin:
     """
     Class container for clip-setter code shared across all plots that support clip.
     """
+    @staticmethod
+    def _get_clip(extent, clip):
+        xmin, ymin, xmax, ymax = extent
+        # We have to add a little bit of padding to the edges of the box, as otherwise the edges
+        # will invert a little, surprisingly.
+        rect = shapely.geometry.Polygon(
+            [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]
+        )
+        rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
+        for geom in clip:
+            rect = rect.symmetric_difference(geom)
+        return rect
+
     def paint_clip(self):
         clip = self.kwargs.pop('clip')
         clip = _to_geoseries(self.df, clip)
         if clip is not None:
             if self.projection is not None:
-                clip_geom = _get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
+                clip_geom = self._get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
                 feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
                 self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
             else:
-                clip_geom = _get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
+                clip_geom = self._get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
                 xmin, xmax = self.ax.get_xlim()
                 ymin, ymax = self.ax.get_ylim()
                 extent = (xmin, ymin, xmax, ymax)
@@ -345,7 +449,7 @@ class Plot:
 def pointplot(
     df, projection=None,
     hue=None, cmap='viridis', k=5, scheme=None,
-    scale=None, limits=(0.5, 2), scale_func=None,
+    scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
 ):
@@ -502,7 +606,11 @@ def pointplot(
             ys = np.array([p.y for p in plot.df.geometry])
             if self.projection:
                 ax.scatter(
-                    xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=plot.sizes,
+                    xs, ys, transform=ccrs.PlateCarree(), c=plot.colors,
+                    # the ax.scatter 's' param is an area but the API is unified on width in pixels
+                    # (or "points"), so we have to square the value at draw time to get the correct
+                    # point size.
+                    s=[s**2 for s in plot.sizes],
                     **plot.kwargs
                 )
             else:
@@ -511,9 +619,11 @@ def pointplot(
 
     plot = PointPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, scale=scale, limits=limits, scale_func=scale_func,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        scale=scale, limits=limits, scale_func=scale_func,
         legend=legend, legend_var=legend_var, legend_values=legend_values,
-        legend_labels=legend_labels, legend_kwargs=legend_kwargs, **kwargs
+        legend_labels=legend_labels, legend_kwargs=legend_kwargs,
+        **kwargs
     )
     return plot.draw()
 
@@ -1474,7 +1584,7 @@ def sankey(
     class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
-            self.set_hue_values(color_kwarg='edgecolor', default_color='steelblue')
+            self.set_hue_values(color_kwarg='color', default_color='steelblue')
             self.set_scale_values(size_kwarg='linewidth', default_size=1)
             self.paint_legend(supports_hue=True, supports_scale=True)
 
@@ -1747,154 +1857,9 @@ def voronoi(
     )
     return plot.draw()
 
-
-##################
-# HELPER METHODS #
-##################
-
-
-def _to_geoseries(df, var):
-    """
-    Some top-level parameters present in most plot types accept a variety of iterables as input
-    types. This method condenses this variety into a single preferred format - a GeoSeries.
-    """
-    if var is None:
-        return None
-    elif isinstance(var, str):
-        var = df[var]
-        return var
-    elif isinstance(var, gpd.GeoDataFrame):
-        return var.geometry
-    else:
-        return gpd.GeoSeries(var)
-
-
-def _continuous_colormap(hue, cmap):
-    """
-    Creates a continuous colormap.
-    """
-    mn = min(hue)
-    mx = max(hue)
-    norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
-    return mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-
-
-def _discrete_colorize(categorical, hue, scheme, k, cmap):
-    """
-    Creates a discrete colormap, either using an already-categorical data variable or by bucketing
-    a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
-    data. If one is not provided we assume that the input data is categorical.
-    """
-    if not categorical:
-        binning = _mapclassify_choro(hue, scheme, k=k)
-        values = binning.yb
-        binedges = [binning.yb.min()] + binning.bins.tolist()
-        categories = [
-            '{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
-            for i in range(len(binedges) - 1)
-        ]
-    else:
-        categories = np.unique(hue)
-        value_map = {v: i for i, v in enumerate(categories)}
-        values = [value_map[d] for d in hue]
-    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
-    return cmap, categories, values
-
-
-def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=False):
-    """
-    Creates a discerete categorical legend for ``hue`` and attaches it to the axis.
-    """
-
-    # Paint patches.
-    patches = []
-    for value, _ in enumerate(categories):
-        patches.append(
-            mpl.lines.Line2D(
-                [0], [0], linestyle="none",
-                marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value)
-            )
-        )
-    if not legend_kwargs:
-        legend_kwargs = dict()
-
-    # If we are given labels use those, if we are not just use the categories.
-    target = ax.figure if figure else ax
-
-    if legend_labels:
-        target.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
-    else:
-        target.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
-
-
-def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
-    """
-    Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
-    """
-
-    # Set up the legend values and kwargs.
-    if legend_values is not None:
-        display_values = legend_values
-    else:
-        display_values = np.linspace(np.max(values), np.min(values), num=5)
-    display_labels = legend_labels if (legend_labels is not None) else display_values
-    if legend_kwargs is None:
-        legend_kwargs = dict()
-
-    # Paint patches.
-    patches = []
-    for value in display_values:
-        patches.append(
-            mpl.lines.Line2D(
-                [0], [0], linestyle='None',
-                marker="o",
-                markersize=(20*scale_func(value))**(1/2),
-                markerfacecolor='None')
-        )
-    ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
-
-
-def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
-    """
-    Creates a continuous colorbar legend and attaches it to the axis.
-    """
-    if legend_kwargs is None:
-        legend_kwargs = dict()
-    cmap.set_array(values)
-    plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
-
-
-def _validate_buckets(df, hue, k, scheme):
-    """
-    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
-    already set.
-    """
-    if isinstance(hue, str):
-        hue = df[hue]
-    if hue is None:
-        categorical = False
-    # if the data is non-categorical, but there are fewer to equal numbers of bins and
-    # observations, treat it as categorical, as doing so will make the legend cleaner
-    elif k is not None and len(hue) <= k:
-        categorical = True
-    else:
-        categorical = (hue.dtype == np.dtype('object'))
-    scheme = scheme if scheme else 'Quantiles'
-    return categorical, scheme
-
-
-def _get_clip(extent, clip):
-    xmin, ymin, xmax, ymax = extent
-    # We have to add a little bit of padding to the edges of the box, as otherwise the edges
-    # will invert a little, surprisingly.
-    rect = shapely.geometry.Polygon(
-        [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]
-    )
-    rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
-    for geom in clip:
-        rect = rect.symmetric_difference(geom)
-    return rect
-
+#########################
+# COMPUTATIONAL METHODS #
+#########################
 
 def _build_voronoi_polygons(df):
     """
@@ -2054,6 +2019,68 @@ def _jitter_points(geoms):
         assert not (regroup_sizes > 1).any()
 
         return out
+
+##################
+# HELPER METHODS #
+##################
+
+
+def _to_geoseries(df, var):
+    """
+    Some top-level parameters present in most plot types accept a variety of iterables as input
+    types. This method condenses this variety into a single preferred format - a GeoSeries.
+    """
+    if var is None:
+        return None
+    elif isinstance(var, str):
+        var = df[var]
+        return var
+    elif isinstance(var, gpd.GeoDataFrame):
+        return var.geometry
+    else:
+        return gpd.GeoSeries(var)
+
+
+def _discrete_colorize(categorical, hue, scheme, k, cmap):
+    """
+    Creates a discrete colormap, either using an already-categorical data variable or by bucketing
+    a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
+    data. If one is not provided we assume that the input data is categorical.
+    """
+    if not categorical:
+        binning = _mapclassify_choro(hue, scheme, k=k)
+        values = binning.yb
+        binedges = [binning.yb.min()] + binning.bins.tolist()
+
+        categories = [
+            '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+            for i in range(len(binedges) - 1)
+        ]
+    else:
+        categories = np.unique(hue)
+        value_map = {v: i for i, v in enumerate(categories)}
+        values = [value_map[d] for d in hue]
+    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
+    return cmap, categories, values
+
+
+def _validate_buckets(df, hue, k, scheme):
+    """
+    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
+    already set.
+    """
+    if isinstance(hue, str):
+        hue = df[hue]
+    if hue is None:
+        categorical = False
+    # if the data is non-categorical, but there are fewer to equal numbers of bins and
+    # observations, treat it as categorical, as doing so will make the legend cleaner
+    elif k is not None and len(hue) <= k:
+        categorical = True
+    else:
+        categorical = (hue.dtype == np.dtype('object'))
+    scheme = scheme if scheme else 'Quantiles'
+    return categorical, scheme
 
 
 #######################
