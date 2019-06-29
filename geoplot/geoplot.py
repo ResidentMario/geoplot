@@ -133,47 +133,32 @@ class LegendMixin:
     Class container for legend-builder code shared across all plots that support legend.
     """
     def paint_legend(self, supports_hue=True, supports_scale=False):
-        legend = self.kwargs.pop('legend', False)
-
+        legend = self.kwargs.pop('legend')
         legend_kwargs = self.kwargs.pop('legend_kwargs')
         legend_labels = self.kwargs.pop('legend_labels')
         legend_values = self.kwargs.pop('legend_values')
 
-        if supports_hue and supports_scale:
-            if self.kwargs['legend_var'] is not None:
-                legend_var = self.kwargs['legend_var']
-            else:
-                legend_var = 'hue' if self.hue is not None else 'scale'
-        else:
-            legend_var = 'hue'
+        # TODO: get rid of legend_var
+        # if supports_hue and supports_scale:
+        #     if self.kwargs['legend_var'] is not None:
+        #         legend_var = self.kwargs['legend_var']
+        #     else:
+        #         legend_var = 'hue' if self.hue is not None else 'scale'
+        # else:
+        #     legend_var = 'hue'
         self.kwargs.pop('legend_var')
 
-        if legend and legend_var == 'hue':
-            if self.k is not None:
-                _paint_hue_legend(
-                    self.ax, self.categories, self.cmap,
-                    legend_labels, self.kwargs, self.color_kwarg, legend_kwargs
-                )
-            else:  # self.k is None
-                _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+        # if legend and legend_var == 'hue':
+        #     if self.k is not None:
+        #         _paint_hue_legend(
+        #             self.ax, self.categories, self.cmap,
+        #             legend_labels, self.kwargs, self.color_kwarg, legend_kwargs
+        #         )
+        #     else:  # self.k is None
+        #         _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
 
-        elif legend and legend_var == 'scale':
-            # When hue == None, HueMixIn.set_hue_values sets self.colors, which controls the
-            # facecolor of the plot marker, to an n-length array of the chosen (or default) static
-            # color. We reuse that color value for the legend.
-            #
-            # When hue != None, we apply the same colormap applied to the plot markers to the
-            # legend markers as well.
-            if self.hue is None:
-                markerfacecolor = self.colors[0]
-            else:
-                # TODO: actually apply a colormap
-                markerfacecolor = self.colors[0]
-
-            # TODO: set markeredgecolor (requires knowing the main plot edgecolor param)
-            # Also markeredgewidth?
-            markeredgecolor = 'black'
-
+        # elif legend and legend_var == 'scale':
+        if legend:
             if legend_values is None:
                 # If the user doesn't specify their own legend_values, apply a reasonable
                 # default: a five-point linear array from min to max.
@@ -185,6 +170,28 @@ class LegendMixin:
                 # default: the 'g' f-string for the given input value.
                 legend_labels = ['{0:g}'.format(value) for value in legend_values]
 
+            # When hue == None, HueMixIn.set_hue_values sets self.colors, which controls the
+            # facecolor of the plot marker, to an n-length array of the chosen (or default) static
+            # color. We reuse that color value for the legend.
+            #
+            # When hue != None, we apply the same colormap applied to the plot markers to the
+            # legend markers as well.
+            if self.hue is None:
+                markerfacecolors = [self.colors[0]] * len(legend_values)
+            elif self.hue is not None and self.scale is not None:
+                markerfacecolors = [self.cmap.to_rgba(self.dscale(v)) for v in legend_values]
+            else:
+                markerfacecolors = [self.cmap.to_rgba(v) for v in legend_values]
+
+            if self.hue is None:
+                markersizes = [None] * len(legend_values)
+            else:
+                markersizes = [self.dscale(v) for v in legend_values]
+
+            # TODO: set markeredgecolor (requires knowing the main plot edgecolor param)
+            # Also markeredgewidth?
+            markeredgecolor = 'None'
+
             # Mutate the matplotlib defaults from frameon=False to frameon=True and from
             # fancybox=False to fancybox=True.
             if legend_kwargs is None:
@@ -193,12 +200,14 @@ class LegendMixin:
             legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
 
             patches = []
-            for legend_value in legend_values:
+            for markerfacecolor, markersize in zip(
+                markerfacecolors, markersizes
+            ):
                 patches.append(
                     mpl.lines.Line2D(
                         [0], [0], linestyle='None',
                         marker="o",
-                        markersize=self.dscale(legend_value),
+                        markersize=markersize,
                         markeredgecolor=markeredgecolor,
                         markerfacecolor=markerfacecolor
                     )
@@ -557,9 +566,11 @@ def pointplot(
 
     plot = PointPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, scale=scale, limits=limits, scale_func=scale_func,
+        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        scale=scale, limits=limits, scale_func=scale_func,
         legend=legend, legend_var=legend_var, legend_values=legend_values,
-        legend_labels=legend_labels, legend_kwargs=legend_kwargs, **kwargs
+        legend_labels=legend_labels, legend_kwargs=legend_kwargs,
+        **kwargs
     )
     return plot.draw()
 
@@ -1520,7 +1531,7 @@ def sankey(
     class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
-            self.set_hue_values(color_kwarg='edgecolor', default_color='steelblue')
+            self.set_hue_values(color_kwarg='color', default_color='steelblue')
             self.set_scale_values(size_kwarg='linewidth', default_size=1)
             self.paint_legend(supports_hue=True, supports_scale=True)
 
