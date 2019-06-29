@@ -49,6 +49,7 @@ class HueMixin:
         hue = _to_geoseries(self.df, hue)
         if hue is None:  # no colormap
             color = self.kwargs.pop(color_kwarg, default_color)
+            self.color = color
             colors = [color] * len(self.df)
             categorical = False
             categories = None
@@ -76,6 +77,7 @@ class HueMixin:
         self.categorical = categorical
         self.categories = categories
         self.hue_values = hue_values
+        self.color_kwarg = color_kwarg
 
 
 class ScaleMixin:
@@ -150,13 +152,16 @@ class LegendMixin:
         if legend and legend_var == 'hue':
             if self.k is not None:
                 _paint_hue_legend(
-                    self.ax, self.categories, self.cmap, legend_labels, legend_kwargs
+                    self.ax, self.categories, self.cmap,
+                    legend_labels, self.kwargs, self.color_kwarg, legend_kwargs
                 )
             else:  # self.k is None
                 _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
         elif legend and legend_var == 'scale':
+            color = self.color if hasattr(self, 'color') else None
             _paint_carto_legend(
-                self.ax, self.scale, legend_values, legend_labels, self.dscale, legend_kwargs
+                self.ax, self.scale, legend_values, legend_labels,
+                self.dscale, color, legend_kwargs
             )
 
 
@@ -1804,33 +1809,36 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
     return cmap, categories, values
 
 
-def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure=False):
+def _paint_hue_legend(
+    ax, categories, cmap, legend_labels, kwargs, color_kwarg, legend_kwargs, figure=False
+):
     """
     Creates a discerete categorical legend for ``hue`` and attaches it to the axis.
     """
+    markeredgecolor = kwargs['edgecolor'] if 'edgecolor' in kwargs else 'black'
     patches = []
     for value, _ in enumerate(categories):
         patches.append(
             mpl.lines.Line2D(
                 [0], [0], linestyle="none",
                 marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value),
-                markeredgecolor='black'
+                markeredgecolor=markeredgecolor
             )
         )
     if not legend_kwargs:
         legend_kwargs = dict()
     legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
 
-    # If we are given labels use those, if we are not just use the categories.
     target = ax.figure if figure else ax
-
     if legend_labels:
         target.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
     else:
         target.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
 
-def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, legend_kwargs):
+def _paint_carto_legend(
+    ax, values, legend_values, legend_labels, scale_func, color, legend_kwargs
+):
     """
     Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
     """
@@ -1850,6 +1858,7 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
                 [0], [0], linestyle='None',
                 marker="o",
                 markersize=(20*scale_func(value))**(1/2),
+                markeredgecolor=color,
                 markerfacecolor='None')
         )
     ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
