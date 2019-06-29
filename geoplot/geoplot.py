@@ -1789,8 +1789,11 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
         binning = _mapclassify_choro(hue, scheme, k=k)
         values = binning.yb
         binedges = [binning.yb.min()] + binning.bins.tolist()
+
+        # it's difficult to infer significant figures automatically, but Python has a 'g' fstr
+        # that provides a reasonable default
         categories = [
-            '{0:.2f} - {1:.2f}'.format(binedges[i], binedges[i + 1])
+            '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
             for i in range(len(binedges) - 1)
         ]
     else:
@@ -1805,18 +1808,18 @@ def _paint_hue_legend(ax, categories, cmap, legend_labels, legend_kwargs, figure
     """
     Creates a discerete categorical legend for ``hue`` and attaches it to the axis.
     """
-
-    # Paint patches.
     patches = []
     for value, _ in enumerate(categories):
         patches.append(
             mpl.lines.Line2D(
                 [0], [0], linestyle="none",
-                marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value)
+                marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value),
+                markeredgecolor='black'
             )
         )
     if not legend_kwargs:
         legend_kwargs = dict()
+    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
 
     # If we are given labels use those, if we are not just use the categories.
     target = ax.figure if figure else ax
@@ -1831,8 +1834,6 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
     """
     Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
     """
-
-    # Set up the legend values and kwargs.
     if legend_values is not None:
         display_values = legend_values
     else:
@@ -1840,8 +1841,8 @@ def _paint_carto_legend(ax, values, legend_values, legend_labels, scale_func, le
     display_labels = legend_labels if (legend_labels is not None) else display_values
     if legend_kwargs is None:
         legend_kwargs = dict()
+    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
 
-    # Paint patches.
     patches = []
     for value in display_values:
         patches.append(
@@ -1860,6 +1861,7 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     """
     if legend_kwargs is None:
         legend_kwargs = dict()
+    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
     cmap.set_array(values)
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
