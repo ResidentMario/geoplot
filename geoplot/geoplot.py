@@ -35,21 +35,20 @@ class HueMixin:
         cmap = self.kwargs.pop('cmap')
 
         if supports_categorical:
-            scheme = self.kwargs.pop('scheme', None)
-            k = self.kwargs.pop('k', 5)
+            scheme = self.kwargs.pop('scheme')
+            k = self.kwargs.pop('k')
         else:
             scheme = None
             k = None
 
         if color_kwarg in self.kwargs and hue is not None:
             raise ValueError(
-                f'Cannot specify both "{color_kwarg}" and "cmap" in the same plot.'
+                f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
             )
 
         hue = _to_geoseries(self.df, hue)
         if hue is None:  # no colormap
             color = self.kwargs.pop(color_kwarg, default_color)
-            self.color = color
             colors = [color] * len(self.df)
             categorical = False
             categories = None
@@ -78,13 +77,14 @@ class HueMixin:
         self.categories = categories
         self.hue_values = hue_values
         self.color_kwarg = color_kwarg
+        self.default_color = default_color
 
 
 class ScaleMixin:
     """
     Class container for scale-setter code shared across all plots that support scale.
     """
-    def set_scale_values(self, size_kwarg=None, default_size=20, scale_multiplier=1):
+    def set_scale_values(self, size_kwarg=None, default_size=20):
         self.limits = self.kwargs.pop('limits')
         self.scale_func = self.kwargs.pop('scale_func')
         self.scale = self.kwargs.pop('scale')
@@ -107,8 +107,7 @@ class ScaleMixin:
                 self.dscale = self.scale_func(dmin, dmax)
 
             # Apply the scale function.
-            scalar_multiples = np.array([self.dscale(d) for d in self.scale])
-            self.sizes = scalar_multiples * scale_multiplier
+            self.sizes = np.array([self.dscale(d) for d in self.scale])
 
             # When a scale is applied, large observations will tend to obfuscate small ones.
             # Plotting in descending size order, so that smaller values end up on top, helps
@@ -157,12 +156,54 @@ class LegendMixin:
                 )
             else:  # self.k is None
                 _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+
         elif legend and legend_var == 'scale':
-            color = self.color if hasattr(self, 'color') else None
-            _paint_carto_legend(
-                self.ax, self.scale, legend_values, legend_labels,
-                self.dscale, color, legend_kwargs
-            )
+            # When hue == None, HueMixIn.set_hue_values sets self.colors, which controls the
+            # facecolor of the plot marker, to an n-length array of the chosen (or default) static
+            # color. We reuse that color value for the legend.
+            #
+            # When hue != None, we apply the same colormap applied to the plot markers to the
+            # legend markers as well.
+            if self.hue is None:
+                markerfacecolor = self.colors[0]
+            else:
+                # TODO: actually apply a colormap
+                markerfacecolor = self.colors[0]
+
+            # TODO: set markeredgecolor (requires knowing the main plot edgecolor param)
+            # Also markeredgewidth?
+            markeredgecolor = 'black'
+
+            if legend_values is None:
+                # If the user doesn't specify their own legend_values, apply a reasonable
+                # default: a five-point linear array from min to max.
+                legend_values = np.linspace(
+                    np.max(self.scale), np.min(self.scale), num=5, dtype=self.scale.dtype
+                )
+            if legend_labels is None:
+                # If the user doesn't specify their own legend_labels, apply a reasonable
+                # default: the 'g' f-string for the given input value.
+                legend_labels = ['{0:g}'.format(value) for value in legend_values]
+
+            # Mutate the matplotlib defaults from frameon=False to frameon=True and from
+            # fancybox=False to fancybox=True.
+            if legend_kwargs is None:
+                legend_kwargs = dict()
+            legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
+            legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
+
+            patches = []
+            for legend_value in legend_values:
+                patches.append(
+                    mpl.lines.Line2D(
+                        [0], [0], linestyle='None',
+                        marker="o",
+                        markersize=self.dscale(legend_value),
+                        markeredgecolor=markeredgecolor,
+                        markerfacecolor=markerfacecolor
+                    )
+                )
+            self.ax.legend(patches, legend_labels, numpoints=1, **legend_kwargs)            
 
 
 class ClipMixin:
@@ -350,7 +391,7 @@ class Plot:
 def pointplot(
     df, projection=None,
     hue=None, cmap='viridis', k=5, scheme=None,
-    scale=None, limits=(0.5, 2), scale_func=None,
+    scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
 ):
@@ -1795,8 +1836,6 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
         values = binning.yb
         binedges = [binning.yb.min()] + binning.bins.tolist()
 
-        # it's difficult to infer significant figures automatically, but Python has a 'g' fstr
-        # that provides a reasonable default
         categories = [
             '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
             for i in range(len(binedges) - 1)
@@ -1820,7 +1859,7 @@ def _paint_hue_legend(
     for value, _ in enumerate(categories):
         patches.append(
             mpl.lines.Line2D(
-                [0], [0], linestyle="none",
+                [0], [0], linestyle='None',
                 marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value),
                 markeredgecolor=markeredgecolor
             )
@@ -1835,33 +1874,6 @@ def _paint_hue_legend(
     else:
         target.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
 
-
-def _paint_carto_legend(
-    ax, values, legend_values, legend_labels, scale_func, color, legend_kwargs
-):
-    """
-    Creates a discrete categorical legend for ``scale`` and attaches it to the axis.
-    """
-    if legend_values is not None:
-        display_values = legend_values
-    else:
-        display_values = np.linspace(np.max(values), np.min(values), num=5)
-    display_labels = legend_labels if (legend_labels is not None) else display_values
-    if legend_kwargs is None:
-        legend_kwargs = dict()
-    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
-
-    patches = []
-    for value in display_values:
-        patches.append(
-            mpl.lines.Line2D(
-                [0], [0], linestyle='None',
-                marker="o",
-                markersize=(20*scale_func(value))**(1/2),
-                markeredgecolor=color,
-                markerfacecolor='None')
-        )
-    ax.legend(patches, display_labels, numpoints=1, fancybox=True, **legend_kwargs)
 
 
 def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
