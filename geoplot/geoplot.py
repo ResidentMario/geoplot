@@ -31,8 +31,8 @@ class HueMixin:
         self, color_kwarg='color', default_color='steelblue',
         supports_continuous=True, supports_categorical=True
     ):
-        hue = self.kwargs.pop('hue', None)
-        cmap = self.kwargs.pop('cmap', 'viridis')
+        hue = self.kwargs.pop('hue')
+        cmap = self.kwargs.pop('cmap')
 
         if supports_categorical:
             scheme = self.kwargs.pop('scheme', None)
@@ -83,9 +83,9 @@ class ScaleMixin:
     Class container for scale-setter code shared across all plots that support scale.
     """
     def set_scale_values(self, size_kwarg=None, default_size=20, scale_multiplier=1):
-        self.limits = self.kwargs.pop('limits', None)
-        self.scale_func = self.kwargs.pop('scale_func', None)
-        self.scale = self.kwargs.pop('scale', None)
+        self.limits = self.kwargs.pop('limits')
+        self.scale_func = self.kwargs.pop('scale_func')
+        self.scale = self.kwargs.pop('scale')
         self.scale = _to_geoseries(self.df, self.scale)
 
         if self.scale is not None:
@@ -134,9 +134,9 @@ class LegendMixin:
     def paint_legend(self, supports_hue=True, supports_scale=False):
         legend = self.kwargs.pop('legend', False)
 
-        legend_kwargs = self.kwargs.pop('legend_kwargs', dict())
-        legend_labels = self.kwargs.pop('legend_labels', None)
-        legend_values = self.kwargs.pop('legend_values', None)
+        legend_kwargs = self.kwargs.pop('legend_kwargs')
+        legend_labels = self.kwargs.pop('legend_labels')
+        legend_values = self.kwargs.pop('legend_values')
 
         if supports_hue and supports_scale:
             if self.kwargs['legend_var'] is not None:
@@ -145,7 +145,7 @@ class LegendMixin:
                 legend_var = 'hue' if self.hue is not None else 'scale'
         else:
             legend_var = 'hue'
-        self.kwargs.pop('legend_var', None)
+        self.kwargs.pop('legend_var')
 
         if legend and legend_var == 'hue':
             if self.k is not None:
@@ -165,7 +165,7 @@ class ClipMixin:
     Class container for clip-setter code shared across all plots that support clip.
     """
     def paint_clip(self):
-        clip = self.kwargs.pop('clip', None)
+        clip = self.kwargs.pop('clip')
         clip = _to_geoseries(self.df, clip)
         if clip is not None:
             if self.projection is not None:
@@ -188,8 +188,8 @@ class QuadtreeComputeMixin:
     Class container for computing a quadtree.
     """
     def compute_quadtree(self):
-        nmin = self.kwargs.pop('nmin', None)
-        nmax = self.kwargs.pop('nmax', None)
+        nmin = self.kwargs.pop('nmin')
+        nmax = self.kwargs.pop('nmax')
         hue = self.kwargs.get('hue', None)
 
         df = gpd.GeoDataFrame(self.df, geometry=self.df.geometry)
@@ -220,7 +220,7 @@ class QuadtreeHueMixin(HueMixin):
     Subclass of HueMixin that provides modified hue-setting code for the quadtree plot.
     """
     def set_hue_values(self, color_kwarg, default_color):
-        agg = self.kwargs.pop('agg', np.mean)
+        agg = self.kwargs.pop('agg')
         _df = self.df
         dvals = []
 
@@ -241,21 +241,19 @@ class QuadtreeHueMixin(HueMixin):
         self.df = _df
 
         # apply the special nsig parameter colormap rule
-        nsig = self.kwargs.pop('nsig', 1)
+        nsig = self.kwargs.pop('nsig')
         for i, dval in enumerate(dvals):
             if dval < nsig:
                 self.colors[i] = 'None'
 
 
 class Plot:
-    def __init__(
-        self, df, **kwargs
-    ):
+    def __init__(self, df, **kwargs):
         self.df = df
-        self.figsize = kwargs.pop('figsize', (8, 6))
-        self.ax = kwargs.pop('ax', None)
-        self.extent = kwargs.pop('extent', None)
-        self.projection = kwargs.pop('projection', None)
+        self.figsize = kwargs.pop('figsize')
+        self.ax = kwargs.pop('ax')
+        self.extent = kwargs.pop('extent')
+        self.projection = kwargs.pop('projection')
 
         self.init_axis()
         self.kwargs = kwargs
@@ -346,7 +344,7 @@ class Plot:
 
 def pointplot(
     df, projection=None,
-    hue=None, scheme=None, k=5, cmap='viridis',
+    hue=None, cmap='viridis', k=5, scheme=None,
     scale=None, limits=(0.5, 2), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
@@ -365,14 +363,14 @@ def pointplot(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        If ``hue`` is specified, the
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
@@ -520,11 +518,7 @@ def pointplot(
     return plot.draw()
 
 
-def polyplot(
-    df, projection=None,
-    extent=None, figsize=(8, 6), edgecolor='black', facecolor='None', zorder=-1,
-    ax=None, **kwargs
-):
+def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs):
     """
     A trivial polygonal plot.
 
@@ -587,7 +581,10 @@ def polyplot(
             if len(self.df.geometry) == 0:
                 return ax
 
-            # Finally we draw the features.
+            edgecolor = kwargs.pop('edgecolor', 'black')
+            facecolor = kwargs.pop('facecolor', 'None')
+            zorder = kwargs.pop('zorder', -1)
+
             if self.projection:
                 for geom in self.df.geometry:
                     features = ShapelyFeature([geom], ccrs.PlateCarree())
@@ -613,16 +610,13 @@ def polyplot(
 
             return ax
 
-    plot = PolyPlot(
-        df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        edgecolor=edgecolor, facecolor=facecolor, zorder=-1, **kwargs
-    )
+    plot = PolyPlot(df, figsize=figsize, ax=ax, extent=extent, projection=projection, **kwargs)
     return plot.draw()
 
 
 def choropleth(
     df, projection=None,
-    hue=None, scheme=None, k=5, cmap='viridis',
+    hue=None, cmap='viridis', k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -641,14 +635,14 @@ def choropleth(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        The
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         The number of color categories to split the data into. For a continuous colormap, set this
         value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         The categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        The
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other 
         legend-related parameters that follow, see
@@ -803,7 +797,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, scheme=None, k=5, cmap='viridis',
+    hue=None, cmap='viridis', k=5, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -824,14 +818,14 @@ def quadtree(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        If ``hue`` is specified, the
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         The number of color categories to split the data into. For a continuous colormap, set this
         value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         The categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     nmax : int or None, optional
         The maximum number of observations in a quadrangle.
     nmin : int, optional
@@ -1015,7 +1009,7 @@ def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
     trace=True, trace_kwargs=None,
-    hue=None, scheme=None, k=5, cmap='viridis',
+    hue=None, cmap='viridis', k=5, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1044,14 +1038,14 @@ def cartogram(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        If ``hue`` is specified, the
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other 
         legend-related parameters that follow, see
@@ -1095,34 +1089,23 @@ def cartogram(
         import geoplot.crs as gcrs
         import geopandas as gpd
         contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
-        gplt.cartogram(contiguous_usa, hue='population')
+        gplt.cartogram(contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea())
 
     .. image:: ../figures/cartogram/cartogram-initial.png
 
     Toggle the gray outline with ``trace`` and the legend with ``legend``.
-
-    .. code-block:: python
-
-        gplt.cartogram(boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-                       trace=False, legend=True)
-
-    .. image:: ../figures/cartogram/cartogram-trace-legend.png
-
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
     arguments will be passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_). The ``loc`` and
-    ``bbox_to_anchor`` parameters are particularly useful for positioning the legend. Other
-    additional arguments will be passed to the underlying ``matplotlib``
-    `scatter plot <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_).
 
     .. code-block:: python
 
         gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-            trace=False, legend=True, legend_kwargs={'loc': 'upper left'}
+            contiguous_usa, scale='population', trace=False, projection=gcrs.AlbersEqualArea(),
+            legend=True, legend_kwargs={'loc': 'lower right'}
         )
 
-    .. image:: ../figures/cartogram/cartogram-legend-kwargs.png
+    .. image:: ../figures/cartogram/cartogram-trace-legend.png
 
     Additional arguments to ``cartogram`` will be interpreted as keyword arguments for the scaled
     polygons, using `matplotlib Polygon patch
@@ -1191,7 +1174,7 @@ def cartogram(
 
     .. image:: ../figures/cartogram/cartogram-hue.png
     """
-    if not scale:
+    if scale is None:
         raise ValueError("No scale parameter provided.")
 
     class CartogramPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
@@ -1260,6 +1243,7 @@ def cartogram(
 
     plot = CartogramPlot(
         df, projection=projection,
+        figsize=figsize, ax=ax, extent=extent,
         scale=scale, limits=limits, scale_func=scale_func,
         trace=trace, trace_kwargs=trace_kwargs,
         hue=hue, scheme=scheme, k=k, cmap=cmap,
@@ -1394,7 +1378,7 @@ def kdeplot(
 
 def sankey(
     df, projection=None,
-    hue=None, scheme=None, k=5, cmap='viridis',
+    hue=None, cmap='viridis', k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
     scale=None, scale_func=None, limits=(1, 5),
@@ -1414,14 +1398,14 @@ def sankey(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        If ``hue`` is specified, the
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
@@ -1628,7 +1612,7 @@ def sankey(
 
 def voronoi(
     df, projection=None, clip=None,
-    cmap='viridis', hue=None, scheme=None, k=5,
+    hue=None, cmap='viridis', k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=True,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1648,14 +1632,14 @@ def voronoi(
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
         `Customizing Plots#Hue <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue>`_.
+    cmap : matplotlib color, optional
+        If ``hue`` is specified, the
+        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
-    cmap : matplotlib color, optional
-        If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
@@ -1821,7 +1805,6 @@ def voronoi(
 
     plot = VoronoiPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        # parameters
         hue=hue, scheme=scheme, k=k, cmap=cmap,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
@@ -1941,7 +1924,8 @@ def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
     """
     Creates a continuous colorbar legend and attaches it to the axis.
     """
-    if legend_kwargs is None: legend_kwargs = dict()
+    if legend_kwargs is None:
+        legend_kwargs = dict()
     cmap.set_array(values)
     plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
 
