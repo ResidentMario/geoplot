@@ -132,33 +132,71 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
+    # TODO: support painting a hue legend and a scale legend simultaneously (e.g. dual legends)
     def paint_legend(self, supports_hue=True, supports_scale=False):
         legend = self.kwargs.pop('legend')
-        legend_kwargs = self.kwargs.pop('legend_kwargs')
         legend_labels = self.kwargs.pop('legend_labels')
         legend_values = self.kwargs.pop('legend_values')
+        legend_kwargs = self.kwargs.pop('legend_kwargs')
+        if legend_kwargs is None:
+            legend_kwargs = dict()
 
-        # TODO: get rid of legend_var
-        # if supports_hue and supports_scale:
-        #     if self.kwargs['legend_var'] is not None:
-        #         legend_var = self.kwargs['legend_var']
-        #     else:
-        #         legend_var = 'hue' if self.hue is not None else 'scale'
-        # else:
-        #     legend_var = 'hue'
+        # Mutate the matplotlib defaults from frameon=False to frameon=True and from
+        # fancybox=False to fancybox=True.
+        addtl_legend_kwargs = dict()
+        addtl_legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
+        addtl_legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
+
+        if supports_hue and supports_scale:
+            if self.kwargs['legend_var'] is not None:
+                legend_var = self.kwargs['legend_var']
+                if legend_var not in ['scale', 'hue']:
+                    raise ValueError(
+                        f'"legend_var", if specified, must be set to one of "hue" or "scale".'
+                    )
+                elif getattr(self, legend_var) is None:
+                    raise ValueError(
+                        f'"legend_var" is set to "{legend_var!r}", but no "{legend_var!r}" is '
+                        f'specified.'
+                    )
+            else:
+                if self.hue is not None and self.scale is not None:
+                    warnings.warn(
+                        f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
+                        f'specified. Defaulting to "legend_var=\'hue\'".'
+                    )
+                legend_var = 'hue' if self.hue is not None else 'scale'
+        else:
+            legend_var = 'hue'
         self.kwargs.pop('legend_var')
 
-        # if legend and legend_var == 'hue':
-        #     if self.k is not None:
-        #         _paint_hue_legend(
-        #             self.ax, self.categories, self.cmap,
-        #             legend_labels, self.kwargs, self.color_kwarg, legend_kwargs
-        #         )
-        #     else:  # self.k is None
-        #         _paint_colorbar_legend(self.ax, self.hue, self.cmap, legend_kwargs)
+        if legend and legend_var == 'hue':
+            if self.k is not None:
+                markeredgecolor = self.kwargs.get('edgecolor', 'None')
+                patches = []
+                for value, _ in enumerate(self.categories):
+                    patches.append(
+                        mpl.lines.Line2D(
+                            [0], [0], linestyle='None',
+                            marker="o", markersize=10, markerfacecolor=self.cmap.to_rgba(value),
+                            markeredgecolor=markeredgecolor
+                        )
+                    )
+                if legend_labels:
+                    self.ax.legend(
+                        patches, legend_labels, numpoints=1,
+                        **legend_kwargs, **addtl_legend_kwargs
+                    )
+                else:
+                    self.ax.legend(
+                        patches, self.categories, numpoints=1,
+                        **legend_kwargs, **addtl_legend_kwargs
+                    )
+            else:  # self.k is None
+                self.cmap.set_array(self.hue)
+                plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
 
-        # elif legend and legend_var == 'scale':
-        if legend:
+        elif legend and legend_var == 'scale':
             if legend_values is None:
                 # If the user doesn't specify their own legend_values, apply a reasonable
                 # default: a five-point linear array from min to max.
@@ -170,34 +208,19 @@ class LegendMixin:
                 # default: the 'g' f-string for the given input value.
                 legend_labels = ['{0:g}'.format(value) for value in legend_values]
 
-            # When hue == None, HueMixIn.set_hue_values sets self.colors, which controls the
-            # facecolor of the plot marker, to an n-length array of the chosen (or default) static
-            # color. We reuse that color value for the legend.
-            #
-            # When hue != None, we apply the same colormap applied to the plot markers to the
-            # legend markers as well.
+            # Use an open-circle design when hue is not None, so as not to confuse viewers with
+            # colors in the scale mapping to values that do not correspond with the plot points.
+            # But if there is no hue, it's better to have the legend markers be as close to the
+            # plot markers as possible.
             if self.hue is None:
                 markerfacecolors = [self.colors[0]] * len(legend_values)
-            elif self.hue is not None and self.scale is not None:
-                markerfacecolors = [self.cmap.to_rgba(self.dscale(v)) for v in legend_values]
             else:
-                markerfacecolors = [self.cmap.to_rgba(v) for v in legend_values]
-
+                markerfacecolors = ['None'] * len(legend_values)
+            markersizes = [self.dscale(d) for d in legend_values]
             if self.hue is None:
-                markersizes = [None] * len(legend_values)
+                markeredgecolor = self.kwargs.get('edgecolor', 'steelblue')
             else:
-                markersizes = [self.dscale(v) for v in legend_values]
-
-            # TODO: set markeredgecolor (requires knowing the main plot edgecolor param)
-            # Also markeredgewidth?
-            markeredgecolor = 'None'
-
-            # Mutate the matplotlib defaults from frameon=False to frameon=True and from
-            # fancybox=False to fancybox=True.
-            if legend_kwargs is None:
-                legend_kwargs = dict()
-            legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
-            legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
+                markeredgecolor = self.kwargs.get('edgecolor', 'black')
 
             patches = []
             for markerfacecolor, markersize in zip(
@@ -219,16 +242,29 @@ class ClipMixin:
     """
     Class container for clip-setter code shared across all plots that support clip.
     """
+    @staticmethod
+    def _get_clip(extent, clip):
+        xmin, ymin, xmax, ymax = extent
+        # We have to add a little bit of padding to the edges of the box, as otherwise the edges
+        # will invert a little, surprisingly.
+        rect = shapely.geometry.Polygon(
+            [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]
+        )
+        rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
+        for geom in clip:
+            rect = rect.symmetric_difference(geom)
+        return rect
+
     def paint_clip(self):
         clip = self.kwargs.pop('clip')
         clip = _to_geoseries(self.df, clip)
         if clip is not None:
             if self.projection is not None:
-                clip_geom = _get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
+                clip_geom = self._get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
                 feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
                 self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
             else:
-                clip_geom = _get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
+                clip_geom = self._get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
                 xmin, xmax = self.ax.get_xlim()
                 ymin, ymax = self.ax.get_ylim()
                 extent = (xmin, ymin, xmax, ymax)
@@ -557,7 +593,11 @@ def pointplot(
             ys = np.array([p.y for p in plot.df.geometry])
             if self.projection:
                 ax.scatter(
-                    xs, ys, transform=ccrs.PlateCarree(), c=plot.colors, s=plot.sizes,
+                    xs, ys, transform=ccrs.PlateCarree(), c=plot.colors,
+                    # the ax.scatter 's' param is an area but the API is unified on width in pixels
+                    # (or "points"), so we have to square the value at draw time to get the correct
+                    # point size.
+                    s=[s**2 for s in plot.sizes],
                     **plot.kwargs
                 )
             else:
@@ -1859,45 +1899,6 @@ def _discrete_colorize(categorical, hue, scheme, k, cmap):
     return cmap, categories, values
 
 
-def _paint_hue_legend(
-    ax, categories, cmap, legend_labels, kwargs, color_kwarg, legend_kwargs, figure=False
-):
-    """
-    Creates a discerete categorical legend for ``hue`` and attaches it to the axis.
-    """
-    markeredgecolor = kwargs['edgecolor'] if 'edgecolor' in kwargs else 'black'
-    patches = []
-    for value, _ in enumerate(categories):
-        patches.append(
-            mpl.lines.Line2D(
-                [0], [0], linestyle='None',
-                marker="o", markersize=10, markerfacecolor=cmap.to_rgba(value),
-                markeredgecolor=markeredgecolor
-            )
-        )
-    if not legend_kwargs:
-        legend_kwargs = dict()
-    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
-
-    target = ax.figure if figure else ax
-    if legend_labels:
-        target.legend(patches, legend_labels, numpoints=1, fancybox=True, **legend_kwargs)
-    else:
-        target.legend(patches, categories, numpoints=1, fancybox=True, **legend_kwargs)
-
-
-
-def _paint_colorbar_legend(ax, values, cmap, legend_kwargs):
-    """
-    Creates a continuous colorbar legend and attaches it to the axis.
-    """
-    if legend_kwargs is None:
-        legend_kwargs = dict()
-    legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
-    cmap.set_array(values)
-    plt.gcf().colorbar(cmap, ax=ax, **legend_kwargs)
-
-
 def _validate_buckets(df, hue, k, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
@@ -1915,19 +1916,6 @@ def _validate_buckets(df, hue, k, scheme):
         categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
-
-
-def _get_clip(extent, clip):
-    xmin, ymin, xmax, ymax = extent
-    # We have to add a little bit of padding to the edges of the box, as otherwise the edges
-    # will invert a little, surprisingly.
-    rect = shapely.geometry.Polygon(
-        [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]
-    )
-    rect = shapely.affinity.scale(rect, xfact=1.25, yfact=1.25)
-    for geom in clip:
-        rect = rect.symmetric_difference(geom)
-    return rect
 
 
 def _build_voronoi_polygons(df):
