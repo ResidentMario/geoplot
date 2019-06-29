@@ -1008,7 +1008,6 @@ def quadtree(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
-    trace=True, trace_kwargs=None,
     hue=None, cmap='viridis', k=5, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -1093,86 +1092,51 @@ def cartogram(
 
     .. image:: ../figures/cartogram/cartogram-initial.png
 
-    Toggle the gray outline with ``trace`` and the legend with ``legend``.
-    Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
-    arguments will be passed to the underlying ``matplotlib.legend.Legend`` instance (`ref
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_).
+    Toggle the legend with ``legend``. Keyword arguments can be passed to the legend using the
+    ``legend_kwargs`` argument. These arguments will be passed to the underlying
+    `matplotlib.legend.Legend
+    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_ instance.
 
     .. code-block:: python
 
         gplt.cartogram(
-            contiguous_usa, scale='population', trace=False, projection=gcrs.AlbersEqualArea(),
+            contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
             legend=True, legend_kwargs={'loc': 'lower right'}
         )
 
     .. image:: ../figures/cartogram/cartogram-trace-legend.png
 
-    Additional arguments to ``cartogram`` will be interpreted as keyword arguments for the scaled
-    polygons, using `matplotlib Polygon patch
-    <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_ rules.
+    To add a colormap to the plot, specify ``hue``. Use ``cmap`` to control the colormap used
+    and ``k`` to control the number of color bins. In this plot we also add a backing outline
+    of the original state shapes, for better geospatial context.
 
     .. code-block:: python
 
-        gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-            edgecolor='darkgreen'
+        ax = gplt.cartogram(
+            contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+            legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+            hue='population', cmap='Greens',
         )
+        gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
-    .. image:: ../figures/cartogram/cartogram-kwargs.png
+    .. image:: ../figures/cartogram/cartogram-cmap.png
 
-    Manipulate the outlines use the ``trace_kwargs`` argument, which accepts the same 
-    `matplotlib Polygon patch <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_
-    parameters.
-
-    .. code-block:: python
-
-        gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-            trace_kwargs={'edgecolor': 'lightgreen'}
-        )
-
-    .. image:: ../figures/cartogram/cartogram-trace-kwargs.png
-
-    Adjust the level of scaling to apply using the ``limits`` parameter.
+    Use the ``limits`` parameter to adjust the minimum and maximum scaling factors. You can also
+    pass a custom scaling function to ``scale_func`` to apply a different scale to the plot (the
+    default scaling function is linear); see the `USA City Elevations demo 
+    <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_ for an example.
 
     .. code-block:: python
 
-        gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
+        ax = gplt.cartogram(
+            contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+            legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+            hue='population', cmap='Greens',
             limits=(0.5, 1)
         )
+        gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
     .. image:: ../figures/cartogram/cartogram-limits.png
-
-    The default scaling function is linear: an observations at the midpoint of two others will be
-    exactly midway between them in size. To specify an alternative scaling function, use the
-    ``scale_func`` parameter. This should be a factory function of two variables which, when
-    given the maximum and minimum of the dataset, returns a scaling function which will be applied
-    to the rest of the data. A demo is available in the
-    `example gallery <examples/usa-city-elevations.html>`_.
-
-    .. code-block:: python
-
-        def trivial_scale(minval, maxval): return lambda v: 2
-        gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-            limits=(0.5, 1), scale_func=trivial_scale
-        )
-
-    .. image:: ../figures/cartogram/cartogram-scale-func.png
-
-    ``cartogram`` also provides the same ``hue`` visual variable parameters provided by
-    e.g. ``pointplot``. For more information on ``hue``-related arguments, see the related sections
-    in the ``pointplot`` `documentation <./pointplot.html>`_.
-
-    .. code-block:: python
-
-        gplt.cartogram(
-            boroughs, scale='Population Density', projection=gcrs.AlbersEqualArea(),
-            hue='Population Density', k=None, cmap='Blues'
-        )
-
-    .. image:: ../figures/cartogram/cartogram-hue.png
     """
     if scale is None:
         raise ValueError("No scale parameter provided.")
@@ -1189,35 +1153,6 @@ def cartogram(
             if len(self.df.geometry) == 0:
                 return ax
 
-            trace = self.kwargs.pop('trace', None)
-            trace_kwargs = self.kwargs.pop('trace_kwargs', None)
-
-            # Manipulate trace_kwargs.
-            if trace is not None:
-                if trace_kwargs is None:
-                    trace_kwargs = dict()
-                if 'edgecolor' not in trace_kwargs:
-                    trace_kwargs['edgecolor'] = 'lightgray'
-                if 'facecolor' not in trace_kwargs:
-                    trace_kwargs['facecolor'] = 'None'
-
-            # Draw traces first, if appropriate.
-            if trace:
-                if self.projection is not None:
-                    for polygon in self.df.geometry:
-                        features = ShapelyFeature([polygon], ccrs.PlateCarree())
-                        ax.add_feature(features, **trace_kwargs)
-                else:
-                    for polygon in self.df.geometry:
-                        try:  # Duck test for MultiPolygon.
-                            for subgeom in polygon:
-                                feature = descartes.PolygonPatch(subgeom, **trace_kwargs)
-                                ax.add_patch(feature)
-                        except (TypeError, AssertionError):  # Shapely Polygon.
-                            feature = descartes.PolygonPatch(polygon, **trace_kwargs)
-                            ax.add_patch(feature)
-
-            # Finally, draw the scaled geometries.
             for value, color, polygon in zip(self.sizes, self.colors, self.df.geometry):
                 scale_factor = value
                 scaled_polygon = shapely.affinity.scale(
@@ -1245,7 +1180,6 @@ def cartogram(
         df, projection=projection,
         figsize=figsize, ax=ax, extent=extent,
         scale=scale, limits=limits, scale_func=scale_func,
-        trace=trace, trace_kwargs=trace_kwargs,
         hue=hue, scheme=scheme, k=k, cmap=cmap,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
