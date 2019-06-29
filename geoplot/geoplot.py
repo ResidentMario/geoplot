@@ -10,10 +10,10 @@ from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
-from geoplot.quad import QuadTree
 import shapely.geometry
 import pandas as pd
 import descartes
+from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
 try:
     from geopandas.plotting import _mapclassify_choro
@@ -107,8 +107,7 @@ class ScaleMixin:
             dmin, dmax = np.min(self.scale), np.max(self.scale)
             if self.scale_func is None:
                 dslope = (self.limits[1] - self.limits[0]) / (dmax - dmin)
-                # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity.
-                # TODO: better explain this error
+                # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity
                 if np.isinf(dslope): 
                     raise ValueError(
                         "The data range provided to the 'scale' variable is too small for the "
@@ -311,7 +310,7 @@ class QuadtreeComputeMixin:
         # on 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the
         # vast majority of geospatial applications. If the meaningful precision of your dataset
         # exceeds 1cm, jitter the points yourself.
-        df = df.assign(geometry=_jitter_points(df.geometry))
+        df = df.assign(geometry=jitter_points(df.geometry))
 
         # Generate a quadtree.
         quad = QuadTree(df)
@@ -1833,7 +1832,7 @@ def voronoi(
             if len(df.geometry) == 0:
                 return ax
 
-            geoms = _build_voronoi_polygons(self.df)
+            geoms = build_voronoi_polygons(self.df)
             if self.projection:
                 for color, geom in zip(self.colors, geoms):
                     features = ShapelyFeature([geom], ccrs.PlateCarree())
@@ -1857,173 +1856,10 @@ def voronoi(
     )
     return plot.draw()
 
-#########################
-# COMPUTATIONAL METHODS #
-#########################
-
-def _build_voronoi_polygons(df):
-    """
-    Given a GeoDataFrame of point geometries and pre-computed plot extrema, build Voronoi
-    simplexes for the given points in the given space and returns them.
-
-    Voronoi simplexes which are located on the edges of the graph may extend into infinity in some
-    direction. In other words, the set of points nearest the given point does not necessarily have
-    to be a closed polygon. We force these non-hermetic spaces into polygons using a subroutine.
-
-    Returns a list of shapely.geometry.Polygon objects, each one a Voronoi polygon.
-    """
-    from scipy.spatial import Voronoi
-    geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
-    vor = Voronoi(geom)
-
-    polygons = []
-
-    for idx_point, _ in enumerate(vor.points):
-        idx_point_region = vor.point_region[idx_point]
-        idxs_vertices = np.array(vor.regions[idx_point_region])
-
-        is_finite = not np.any(idxs_vertices == -1)
-
-        if is_finite:
-            # Easy case, the region is closed. Make a polygon out of the Voronoi ridge points.
-            idx_point_region = vor.point_region[idx_point]
-            idxs_vertices = np.array(vor.regions[idx_point_region])
-            region_vertices = vor.vertices[idxs_vertices]
-            region_poly = shapely.geometry.Polygon(region_vertices)
-
-            polygons.append(region_poly)
-
-        else:
-            # Hard case, the region is open. Project new edges out to the margins of the plot.
-            # See `scipy.spatial.voronoi_plot_2d` for the source of this calculation.
-            point_idx_ridges_idx = np.where((vor.ridge_points == idx_point).any(axis=1))[0]
-
-            # TODO: why does this happen?
-            if len(point_idx_ridges_idx) == 0:
-                continue
-
-            ptp_bound = vor.points.ptp(axis=0)
-            center = vor.points.mean(axis=0)
-
-            finite_segments = []
-            infinite_segments = []
-
-            pointwise_ridge_points = vor.ridge_points[point_idx_ridges_idx]
-            pointwise_ridge_vertices = np.asarray(vor.ridge_vertices)[point_idx_ridges_idx]
-
-            for pointidx, simplex in zip(pointwise_ridge_points, pointwise_ridge_vertices):
-                simplex = np.asarray(simplex)
-
-                if np.all(simplex >= 0):
-                    finite_segments.append(vor.vertices[simplex])
-
-                else:
-                    i = simplex[simplex >= 0][0]  # finite end Voronoi vertex
-
-                    t = vor.points[pointidx[1]] - vor.points[pointidx[0]]  # tangent
-                    t /= np.linalg.norm(t)
-                    n = np.array([-t[1], t[0]])  # normal
-
-                    midpoint = vor.points[pointidx].mean(axis=0)
-                    direction = np.sign(np.dot(midpoint - center, n)) * n
-                    far_point = vor.vertices[i] + direction * ptp_bound.max()
-
-                    infinite_segments.append(np.asarray([vor.vertices[i], far_point]))
-
-            finite_segments = finite_segments if finite_segments else np.zeros(shape=(0,2,2))
-            ls = np.vstack([np.asarray(infinite_segments), np.asarray(finite_segments)])
-
-            # We have to trivially sort the line segments into polygonal order. The algorithm that
-            # follows is inefficient, being O(n^2), but "good enough" for this use-case.
-            ls_sorted = []
-
-            while len(ls_sorted) < len(ls):
-                l1 = ls[0] if len(ls_sorted) == 0 else ls_sorted[-1]
-                matches = []
-
-                for l2 in [l for l in ls if not (l == l1).all()]:
-                    if np.any(l1 == l2):
-                        matches.append(l2)
-                    elif np.any(l1 == l2[::-1]):
-                        l2 = l2[::-1]
-                        matches.append(l2)
-
-                if len(ls_sorted) == 0:
-                    ls_sorted.append(l1)
-
-                for match in matches:
-                    # in list sytax this would be "if match not in ls_sorted"
-                    # in numpy things are more complicated...
-                    if not any((match == ls_sort).all() for ls_sort in ls_sorted):
-                        ls_sorted.append(match)
-                        break
-
-            # Build and return the final polygon.
-            polyline = np.vstack(ls_sorted)
-            geom = shapely.geometry.Polygon(polyline).convex_hull
-            polygons.append(geom)
-
-    return polygons
-
-
-def _jitter_points(geoms):
-    working_df = gpd.GeoDataFrame().assign(
-        _x=geoms.x,
-        _y=geoms.y,
-        geometry=geoms
-    )
-    group = working_df.groupby(['_x', '_y'])
-    group_sizes = group.size()
-
-    if not (group_sizes > 1).any():
-        return geoms
-
-    else:
-        jitter_indices = []
-
-        group_indices = group.indices
-        group_keys_of_interest = group_sizes[group_sizes > 1].index
-        for group_key_of_interest in group_keys_of_interest:
-            jitter_indices += group_indices[group_key_of_interest].tolist()
-
-        _x_jitter = (
-            pd.Series([0] * len(working_df)) +
-            pd.Series(
-                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
-                index=jitter_indices
-            )
-        )
-        _x_jitter = _x_jitter.fillna(0)
-
-        _y_jitter = (
-            pd.Series([0] * len(working_df)) +
-            pd.Series(
-                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
-                index=jitter_indices
-            )
-        )
-        _y_jitter = _y_jitter.fillna(0)
-
-        out = gpd.GeoSeries([
-            shapely.geometry.Point(x, y) for x, y in
-            zip(working_df._x + _x_jitter, working_df._y + _y_jitter)
-        ])
-
-        # guarantee that no two points have the exact same coordinates
-        regroup_sizes = (
-            gpd.GeoDataFrame()
-            .assign(_x=out.x, _y=out.y)
-            .groupby(['_x', '_y'])
-            .size()
-        )
-        assert not (regroup_sizes > 1).any()
-
-        return out
 
 ##################
 # HELPER METHODS #
 ##################
-
 
 def _to_geoseries(df, var):
     """
