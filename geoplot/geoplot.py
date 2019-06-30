@@ -52,7 +52,6 @@ class HueMixin:
             colors = [color] * len(self.df)
             categorical = False
             categories = None
-            hue_values = None
         elif k is None:  # continuous colormap
             mn = min(hue)
             mx = max(hue)
@@ -61,14 +60,13 @@ class HueMixin:
             colors = [cmap.to_rgba(v) for v in hue]
             categorical = False
             categories = None
-            hue_values = None
         else:  # categorical colormap
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
                 if not categorical:
                     binning = _mapclassify_choro(hue, scheme, k=k)
-                    # hue_values = binning.yb
+                    values = binning.yb
                     binedges = [binning.yb.min()] + binning.bins.tolist()
                     categories = [
                         '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
@@ -77,10 +75,10 @@ class HueMixin:
                 else:
                     categories = np.unique(hue)
                     value_map = {v: i for i, v in enumerate(categories)}
-                    # hue_values = [value_map[d] for d in hue]
+                    values = [value_map[d] for d in hue]
 
                 cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
-                colors = [cmap.to_rgba(v) for v in hue_values]
+                colors = [cmap.to_rgba(v) for v in values]
 
         self.colors = colors
         self.hue = hue
@@ -153,10 +151,8 @@ class LegendMixin:
         if legend_kwargs is None:
             legend_kwargs = dict()
 
-        # Mutate the matplotlib defaults from frameon=False to frameon=True and from
-        # fancybox=False to fancybox=True.
+        # Mutate matplotlib defaults
         addtl_legend_kwargs = dict()
-        addtl_legend_kwargs['frameon'] = legend_kwargs.pop('frameon', False)
         addtl_legend_kwargs['fancybox'] = legend_kwargs.pop('fancybox', True)
 
         if supports_hue and supports_scale:
@@ -247,7 +243,9 @@ class LegendMixin:
                         markerfacecolor=markerfacecolor
                     )
                 )
-            self.ax.legend(patches, legend_labels, numpoints=1, **legend_kwargs)            
+            self.ax.legend(
+                patches, legend_labels, numpoints=1, **legend_kwargs, **addtl_legend_kwargs
+            )
 
 
 class ClipMixin:
@@ -593,7 +591,7 @@ def pointplot(
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
             self.set_hue_values(color_kwarg='color', default_color='steelblue')
-            self.set_scale_values(size_kwarg='s', default_size=20)
+            self.set_scale_values(size_kwarg='s', default_size=5)
             self.paint_legend(supports_hue=True, supports_scale=True)
 
         def draw(self):
@@ -1875,29 +1873,6 @@ def _to_geoseries(df, var):
         return var.geometry
     else:
         return gpd.GeoSeries(var)
-
-
-def _discrete_colorize(categorical, hue, scheme, k, cmap):
-    """
-    Creates a discrete colormap, either using an already-categorical data variable or by bucketing
-    a non-categorical ordinal one. If a scheme is provided we compute a distribution for the given
-    data. If one is not provided we assume that the input data is categorical.
-    """
-    if not categorical:
-        binning = _mapclassify_choro(hue, scheme, k=k)
-        values = binning.yb
-        binedges = [binning.yb.min()] + binning.bins.tolist()
-
-        categories = [
-            '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
-            for i in range(len(binedges) - 1)
-        ]
-    else:
-        categories = np.unique(hue)
-        value_map = {v: i for i, v in enumerate(categories)}
-        values = [value_map[d] for d in hue]
-    cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
-    return cmap, categories, values
 
 
 def _validate_buckets(df, hue, k, scheme):
