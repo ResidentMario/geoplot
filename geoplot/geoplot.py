@@ -174,9 +174,9 @@ class LegendMixin:
                         f'specified. Defaulting to "legend_var=\'hue\'".'
                     )
                 legend_var = 'hue' if self.hue is not None else 'scale'
+            self.kwargs.pop('legend_var')
         else:
             legend_var = 'hue'
-        self.kwargs.pop('legend_var')
 
         if legend and legend_var == 'hue':
             if self.k is not None:
@@ -366,7 +366,20 @@ class Plot:
         if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
-            extrema = np.array(self.df.total_bounds)
+            xmin, ymin, xmax, ymax = self.df.total_bounds
+            # Plots suffer clipping issues if we use just the geometry extrema due to plot features
+            # that fall outside of the viewport. The most common case is the edges of polygon
+            # patches with non-zero linewidth. We partially ameliorate the problem by increasing
+            # the viewport by 0.5% of the total coordinate area of the plot. Note that the
+            # coordinate area covered will differ from the actual area covered, as distance between
+            # degrees varies depending on where you are on the globe. Since the effect is small we
+            # ignore this problem here, for simplicity's sake.
+            viewport_area = (xmax - xmin) * (ymax - ymin)
+            window_resize_val = 0.00125 * viewport_area
+            extrema = np.array([
+                xmin - window_resize_val, ymin - window_resize_val,
+                xmax + window_resize_val, ymax + window_resize_val
+            ])
 
         extent = _to_geoseries(self.df, self.extent)
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
@@ -380,14 +393,16 @@ class Plot:
                 'central_latitude': central_latitude
             })
 
-            if not self.ax:
+            if self.ax is None:
                 ax = plt.subplot(111, projection=self.projection)
+            else:
+                ax = self.ax
 
         else:
-            if self.ax:
-                ax = self.ax
-            else:
+            if self.ax is None:
                 ax = plt.gca()
+            else:
+                ax = self.ax
 
             if isinstance(ax, GeoAxesSubplot):
                 self.projection = ax.projection
@@ -405,9 +420,6 @@ class Plot:
                     f'indicating that the input data is not in proper latitude-longitude format.'
                 )
 
-            xmin, xmax = max(xmin, -180), min(xmax, 180)
-            ymin, ymax = max(ymin, -90), min(ymax, 90)
-
             if self.projection is not None:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
@@ -419,7 +431,7 @@ class Plot:
                     # plot extent exceeds the world half in any dimension the extent-setting
                     # operation will fail.
                     #
-                    # The default behavior in cartopy is to use a global exntent with
+                    # The default behavior in cartopy is to use a global extent with
                     # central_latitude and central_longitude as its center. This is the behavior
                     # we will follow in failure cases.
                     if isinstance(self.projection, ccrs.Orthographic):

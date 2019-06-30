@@ -9,6 +9,9 @@ The routines here are used by the ``geoplot.quadtree`` plot type.
 
 from collections import Iterable
 import geopandas as gpd
+import numpy as np
+import pandas as pd
+import shapely
 
 
 class QuadTree:
@@ -143,11 +146,11 @@ class QuadTree:
         A (probably nested) list of QuadTree object instances containing a number of points
         respecting the threshold parameter.
         """
-        subtrees = quadtree.split()
-        if quadtree.n > nmax:
+        subtrees = self.split()
+        if self.n > nmax:
             return [q.partition(nmin, nmax) for q in subtrees]
         elif any([t.n < nmin for t in subtrees]):
-            return [quadtree]
+            return [self]
         else:
             return [q.partition(nmin, nmax) for q in subtrees]
 
@@ -160,7 +163,7 @@ class QuadTree:
         """
         for x in items:
             if isinstance(x, Iterable):
-                yield from flatten(x)
+                yield from QuadTree.flatten(x)
             else:
                 yield x
 
