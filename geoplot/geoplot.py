@@ -251,7 +251,29 @@ class LegendMixin:
 class ClipMixin:
     """
     Class container for clip-setter code shared across all plots that support clip.
+
+    Note that there are two different routines for clipping a plot:
+    * Drawing an inverted polyplot as the top layer. Implemented in `paint_clip`. Advantage is
+      that it is fast, disadvantage is that the resulting plot can't be applied to a webmap.
+    * Intersecting each geometry with the unary union of the clip geometries. This is a slower
+      but more broadly compatible process. It's also quite fast if the clip geometry used is
+      relatively simple, but this requires conscious effort the user (we can't simplify
+      automatically unfortunately).
+
+    KDEPlot uses the first method because it relies on `seaborn` underneath, and there is no way
+    to clip an existing axis painter (that I am aware of). All other plots use the second method.
     """
+    def set_clip(self, gdf):
+        clip = self.kwargs.pop('clip')
+        clip = _to_geoseries(gdf, clip)
+
+        if clip is not None:
+            clip_shp = clip.unary_union
+            gdf = gdf.assign(
+                geometry=gdf.geometry.map(lambda geom: clip_shp.intersection(geom))
+            )
+        return gdf
+
     @staticmethod
     def _get_clip(extent, clip):
         xmin, ymin, xmax, ymax = extent
@@ -918,7 +940,7 @@ def quadtree(
     df, projection=None, clip=None,
     hue=None, cmap='viridis', k=5, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
-    legend=False, legend_kwargs=None,
+    legend=False, legend_kwargs=None, legend_values=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -1006,15 +1028,20 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-initial.png
 
-    Use ``clip`` to clip the result to surrounding geometry. Keyword arguments that are not part
-    of the ``geoplot`` API are passed to the underlying ``matplotlib.pyplot.scatter`` instance,
-    which can be used to customize the appearance of the plot.
+    Use ``clip`` to clip the result to surrounding geometry.  Note that if the clip geometry is
+    complicated, this operation will take a long time; consider simplifying complex geometries with
+    ``simplify`` to speed it up.
+
+    Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
+    `matplotlib.pyplot.scatter instance 
+    <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html>`_, which can be used
+    to customize the appearance of the plot.
 
     .. code-block:: python
 
         gplt.quadtree(
             collisions, nmax=1,
-            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs.simplify(0.001),
             facecolor='lightgray', edgecolor='white'
         )
     
@@ -1087,27 +1114,31 @@ def quadtree(
             self.compute_quadtree()
             self.set_hue_values(color_kwarg='facecolor', default_color='None')
             self.paint_legend(supports_hue=True, supports_scale=False)
-            self.paint_clip()
 
         def draw(self):
             ax = self.ax
             if len(self.df.geometry) == 0:
                 return ax
 
-            for p, color in zip(self.partitions, self.colors):
+            geoms = []
+            for p in self.partitions:
                 xmin, xmax, ymin, ymax = p.bounds
                 rect = shapely.geometry.Polygon(
                     [(xmin, ymin), (xmin, ymax), (xmax, ymax), (xmax, ymin)]
                 )
+                geoms.append(rect)
+            geoms = gpd.GeoDataFrame(geometry=geoms)
+            geoms = self.set_clip(geoms)
 
+            for geom, color in zip(geoms.geometry, self.colors):
                 if projection:
-                    feature = ShapelyFeature([rect], ccrs.PlateCarree())
+                    feature = ShapelyFeature([geom], ccrs.PlateCarree())
                     ax.add_feature(
                         feature, facecolor=color, **self.kwargs
                     )
                 else:
                     feature = descartes.PolygonPatch(
-                        rect, facecolor=color, **self.kwargs
+                        geom, facecolor=color, **self.kwargs
                     )
                     ax.add_patch(feature)
 
@@ -1117,8 +1148,10 @@ def quadtree(
         df, projection=projection,
         clip=clip,
         hue=hue, scheme=scheme, k=k, cmap=cmap,
-        nmax=nmax, nmin=nmin, nsig=nsig,
-        agg=agg, legend=legend, legend_kwargs=legend_kwargs, extent=extent, figsize=figsize, ax=ax,
+        nmax=nmax, nmin=nmin, nsig=nsig, agg=agg,
+        legend=legend, legend_values=legend_values, legend_labels=legend_labels,
+        legend_kwargs=legend_kwargs,
+        extent=extent, figsize=figsize, ax=ax,
         **kwargs
     )
     return plot.draw()
@@ -1835,7 +1868,6 @@ def voronoi(
             super().__init__(df, **kwargs)
             self.set_hue_values(color_kwarg='facecolor', default_color='None')
             self.paint_legend(supports_hue=True, supports_scale=False)
-            self.paint_clip()
 
         def draw(self):
             ax = self.ax
@@ -1843,12 +1875,15 @@ def voronoi(
                 return ax
 
             geoms = build_voronoi_polygons(self.df)
+            self.df = self.df.assign(
+                geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms))
+            )
             if self.projection:
-                for color, geom in zip(self.colors, geoms):
+                for color, geom in zip(self.colors, self.df.geometry):
                     features = ShapelyFeature([geom], ccrs.PlateCarree())
                     ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **self.kwargs)
             else:
-                for color, geom in zip(plot.colors, geoms):
+                for color, geom in zip(self.colors, self.df.geometry):
                     feature = descartes.PolygonPatch(
                         geom, facecolor=color, edgecolor=edgecolor, **self.kwargs
                     )
