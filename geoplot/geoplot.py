@@ -1773,10 +1773,13 @@ def voronoi(
     The `Voronoi region <https://en.wikipedia.org/wiki/Voronoi_diagram>`_ of an point is the set
     of points which is closer to that point than to any other observation in a dataset. A Voronoi
     diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
-    plots them. 
-    
+    plots them.
+
     Voronoi plots are efficient for judging point density and, combined with colormap, can be used
     to infer regional trends in a set of data.
+
+    Due to limitations with ``matplotlib``, ``voronoi`` diagrams in ``geoplot`` are limited in size
+    to a few thousand polygons.
 
     A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
 
@@ -1787,44 +1790,51 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-simple.png
 
-    ``hue`` parameterizes the color, and ``cmap`` controls the colormap.
+    Use ``clip`` to clip the result to surrounding geometry. This is recommended in most cases.
+    Note that if the clip geometry is complicated, this operation will take a long time; consider
+    simplifying complex geometries with ``simplify`` to speed it up.
 
     .. code-block:: python
 
         ax = gplt.voronoi(
-            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED', cmap='Reds'
-        )
-        gplt.polyplot(boroughs, ax=ax)
-
-    .. image:: ../figures/voronoi/voronoi-cmap.png
-
-    Add a ``clip`` of iterable geometries to trim the ``voronoi`` against local geography.
-
-    .. code-block:: python
-
-        ax = gplt.voronoi(
-            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED', cmap='Reds',
-            clip=boroughs
+            injurious_collisions.head(100),
+            clip=boroughs.simplify(0.001), projection=gcrs.AlbersEqualArea()
         )
         gplt.polyplot(boroughs, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-clip.png
 
-    ``legend`` adds a a ``matplotlib`` `Legend
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_. This can be tuned
-    even further using the ``legend_kwargs`` argument. Other keyword parameters are passed to the
-    underlying ``matplotlib``
-    `Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+    Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
+    used. ``legend`` toggles the legend.
 
     .. code-block:: python
 
         ax = gplt.voronoi(
-            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-            cmap='Reds', clip=boroughs,
-            legend=True, legend_kwargs={'loc': 'upper left'},
-            linewidth=0.5, edgecolor='white'
+            injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
+            clip=boroughs.simplify(0.001),
+            hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+            legend=True
         )
         gplt.polyplot(boroughs, ax=ax)
+
+    .. image:: ../figures/voronoi/voronoi-cmap.png
+
+    Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
+    ``matplotlib``
+    `Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
+    which can be used to customize the appearance of the plot. To pass keyword argument to the
+    legend, use the ``legend_kwargs`` argument.
+
+    .. code-block:: python
+
+        ax = gplt.voronoi(
+            injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
+            clip=boroughs.simplify(0.001),
+            hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+            legend=True,
+            edgecolor='white', legend_kwargs={'loc': 'upper left'}
+        )
+        gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-kwargs.png
 
@@ -1838,30 +1848,15 @@ def voronoi(
     .. code-block:: python
 
         ax = gplt.voronoi(
-            injurious_collisions.head(1000),
-            hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=5, scheme='fisher_jenks',
-            clip=boroughs,
-            legend=True, legend_kwargs={'loc': 'upper left'},
-            linewidth=0.5, edgecolor='white'
+            injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
+            clip=boroughs.simplify(0.001),
+            hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=None,
+            legend=True,
+            edgecolor='white'
         )
-        gplt.polyplot(boroughs, ax=ax)
+        gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
 
     .. image:: ../figures/voronoi/voronoi-scheme.png
-
-    ``geoplot`` will automatically do the right thing if your variable of interest is already
-    `categorical <http://pandas.pydata.org/pandas-docs/stable/categorical.html>`_:
-
-    .. code-block:: python
-
-        ax = gplt.voronoi(
-            injurious_collisions.head(1000), hue='NUMBER OF PERSONS INJURED',
-            cmap='Reds',
-            edgecolor='white', clip=boroughs,
-            linewidth=0.5
-        )
-        gplt.polyplot(boroughs, linewidth=1, ax=ax)
-
-    .. image:: ../figures/voronoi/voronoi-multiparty.png
     """
     class VoronoiPlot(Plot, HueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
