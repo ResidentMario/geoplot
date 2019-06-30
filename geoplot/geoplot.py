@@ -8,6 +8,7 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
+import geoplot.crs as gcrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
@@ -44,6 +45,10 @@ class HueMixin:
         if color_kwarg in self.kwargs and hue is not None:
             raise ValueError(
                 f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
+            )
+        if (cmap is not None or k is not None or scheme is not None) and hue is None:
+            raise ValueError(
+                f'Cannot specify "cmap", "k", or "scheme" without specifying "hue".'
             )
 
         hue = _to_geoseries(self.df, hue)
@@ -134,6 +139,10 @@ class ScaleMixin:
                 raise NotImplementedError  # quadtree does not support scale param
 
         else:
+            if self.scale_func is not None or self.limits is not None:
+                raise ValueError(
+                    f'Cannot specify "scale_func" or "limits" without specifying "scale".'
+                )
             size = self.kwargs.pop(size_kwarg, default_size)
             self.sizes = [size] * len(self.df)
 
@@ -142,7 +151,6 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
-    # TODO: support painting a hue legend and a scale legend simultaneously (e.g. dual legends)
     def paint_legend(self, supports_hue=True, supports_scale=False):
         legend = self.kwargs.pop('legend')
         legend_labels = self.kwargs.pop('legend_labels')
@@ -150,6 +158,30 @@ class LegendMixin:
         legend_kwargs = self.kwargs.pop('legend_kwargs')
         if legend_kwargs is None:
             legend_kwargs = dict()
+
+        if legend and (
+            (not supports_hue or self.hue is None) and
+            (not supports_scale or self.scale is None)
+        ):
+            raise ValueError(
+                '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
+                'variable.'
+            )
+        if not legend and (
+            legend_labels is not None or legend_values is not None or
+            legend_kwargs is not None
+        ):
+            raise ValueError(
+                'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                'when "legend" is set to False.'
+            )
+        if (
+            legend_labels is not None and legend_values is not None and
+            len(legend_labels) != len(legend_values)
+        ):
+            raise ValueError(
+                'The "legend_labels" and "legend_values" parameters have diferent lengths.'
+            )
 
         # Mutate matplotlib defaults
         addtl_legend_kwargs = dict()
@@ -164,8 +196,8 @@ class LegendMixin:
                     )
                 elif getattr(self, legend_var) is None:
                     raise ValueError(
-                        f'"legend_var" is set to "{legend_var!r}", but no "{legend_var!r}" is '
-                        f'specified.'
+                        f'"legend_var" is set to "{legend_var!r}", but "{legend_var!r}" is '
+                        f'unspecified.'
                     )
             else:
                 if self.hue is not None and self.scale is not None:
