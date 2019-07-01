@@ -77,6 +77,12 @@ class HueMixin:
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
+                # self.categorical is passed to ax.legend in paint_legend when legend_labels is
+                # null and the legend is in hue mode (meaning hue is specified, legend is True, and
+                # either legend_var is set to hue OR hue is the only valid legend variable in the
+                # plot). ax.legend sorts the patch-label tuples by patch value in ascending order
+                # internally. This obviates the need for sorting it ourselves here, but also forces
+                # us to also use ascending (not descending) order on the scale legend also.
                 if not categorical:
                     binning = _mapclassify_choro(hue, scheme, k=k)
                     values = binning.yb
@@ -251,10 +257,21 @@ class LegendMixin:
         elif legend and legend_var == 'scale':
             if legend_values is None:
                 # If the user doesn't specify their own legend_values, apply a reasonable
-                # default: a five-point linear array from min to max.
+                # default: a five-point linear array from max to min. The sort order (max to min,
+                # not min to max) is important because ax.legend, the matplotlib function these
+                # values are ultimately passed to, sorts the patches in ascending value order
+                # internally. Even though we pass no patch ordering information to ax.legend,
+                # it still appears to determine an ordering by inspecting plot artists
+                # automagically. In the case where there is no colormap, however, the patch order
+                # we pass is preserved.
+                #
+                # The TLDR is that it's possible to control scale legend patch order (and make it
+                # ascending or descending) in a non-hue plot, in all other cases legend patch order
+                # is locked to ascending, so for consistency across the API we use ascending order
+                # in this case as well.
                 legend_values = np.linspace(
                     np.max(self.scale), np.min(self.scale), num=5, dtype=self.scale.dtype
-                )
+                )[::-1]
             if legend_labels is None:
                 # If the user doesn't specify their own legend_labels, apply a reasonable
                 # default: the 'g' f-string for the given input value.
@@ -263,7 +280,10 @@ class LegendMixin:
             # Use an open-circle design when hue is not None, so as not to confuse viewers with
             # colors in the scale mapping to values that do not correspond with the plot points.
             # But if there is no hue, it's better to have the legend markers be as close to the
-            # plot markers as possible.
+            # plot markers as possible, so in that case the points are filled-in with the
+            # corresponding plot color value. This is controlled by self.colors and, in the case
+            # where hue is None, will be an n-length list of the same color value or name, so we
+            # can grab that by taking the first element of self.colors.
             if self.hue is None:
                 markerfacecolors = [self.colors[0]] * len(legend_values)
             else:
@@ -437,7 +457,6 @@ class Plot:
         if not self.ax:
             plt.figure(figsize=self.figsize)
 
-        import pdb; pdb.set_trace()
         if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
