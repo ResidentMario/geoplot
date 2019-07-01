@@ -30,10 +30,11 @@ class HueMixin:
     """
     def set_hue_values(
         self, color_kwarg='color', default_color='steelblue',
-        supports_continuous=True, supports_categorical=True
+        supports_continuous=True, supports_categorical=True,
+        verify_input=True
     ):
-        hue = self.kwargs.pop('hue')
-        cmap = self.kwargs.pop('cmap')
+        hue = self.kwargs.pop('hue', None)
+        cmap = self.kwargs.pop('cmap', 'viridis')
 
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
@@ -42,14 +43,21 @@ class HueMixin:
             scheme = None
             k = None
 
-        if color_kwarg in self.kwargs and hue is not None:
-            raise ValueError(
-                f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
-            )
-        if (cmap is not None or k is not None or scheme is not None) and hue is None:
-            raise ValueError(
-                f'Cannot specify "cmap", "k", or "scheme" without specifying "hue".'
-            )
+        # kdeplot is special: it has a 'cmap' parameter but no 'hue' or 'scheme' parameters,
+        # merely passing those parameters to `seaborn.kdeplot`. So for these plots we don't
+        # validate.
+        if verify_input:
+            if color_kwarg in self.kwargs and hue is not None:
+                raise ValueError(
+                    f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
+                )
+            # in theory we should also vet k, but since None is a meaningful value for this
+            # variable it's not possible to know definitively if k was set as a default or by the
+            # user.
+            if (cmap is not None or scheme is not None) and hue is None:
+                raise ValueError(
+                    f'Cannot specify "cmap" or "scheme" without specifying "hue".'
+                )
 
         hue = _to_geoseries(self.df, hue)
         if hue is None:  # no colormap
@@ -139,9 +147,9 @@ class ScaleMixin:
                 raise NotImplementedError  # quadtree does not support scale param
 
         else:
-            if self.scale_func is not None or self.limits is not None:
+            if self.scale_func is not None:
                 raise ValueError(
-                    f'Cannot specify "scale_func" or "limits" without specifying "scale".'
+                    f'Cannot specify "scale_func" without specifying "scale".'
                 )
             size = self.kwargs.pop(size_kwarg, default_size)
             self.sizes = [size] * len(self.df)
@@ -151,37 +159,41 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
-    def paint_legend(self, supports_hue=True, supports_scale=False):
-        legend = self.kwargs.pop('legend')
-        legend_labels = self.kwargs.pop('legend_labels')
-        legend_values = self.kwargs.pop('legend_values')
-        legend_kwargs = self.kwargs.pop('legend_kwargs')
+    def paint_legend(self, supports_hue=True, supports_scale=False, verify_input=True):
+        legend = self.kwargs.pop('legend', None)
+        legend_labels = self.kwargs.pop('legend_labels', None)
+        legend_values = self.kwargs.pop('legend_values', None)
+        legend_kwargs = self.kwargs.pop('legend_kwargs', None)
         if legend_kwargs is None:
             legend_kwargs = dict()
 
-        if legend and (
-            (not supports_hue or self.hue is None) and
-            (not supports_scale or self.scale is None)
-        ):
-            raise ValueError(
-                '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
-                'variable.'
-            )
-        if not legend and (
-            legend_labels is not None or legend_values is not None or
-            legend_kwargs is not None
-        ):
-            raise ValueError(
-                'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
-                'when "legend" is set to False.'
-            )
-        if (
-            legend_labels is not None and legend_values is not None and
-            len(legend_labels) != len(legend_values)
-        ):
-            raise ValueError(
-                'The "legend_labels" and "legend_values" parameters have diferent lengths.'
-            )
+        # kdeplot is special: it has a 'legend' parameter but no other legend-related params,
+        # as the 'legend' param is merely passed down to `seaborn.kdeplot`. So for kdeplot
+        # we do not verify inputs.
+        if verify_input:
+            if legend and (
+                (not supports_hue or self.hue is None) and
+                (not supports_scale or self.scale is None)
+            ):
+                raise ValueError(
+                    '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
+                    'variable.'
+                )
+            if not legend and (
+                legend_labels is not None or legend_values is not None or
+                legend_kwargs != dict()
+            ):
+                raise ValueError(
+                    'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                    'when "legend" is set to False.'
+                )
+            if (
+                legend_labels is not None and legend_values is not None and
+                len(legend_labels) != len(legend_values)
+            ):
+                raise ValueError(
+                    'The "legend_labels" and "legend_values" parameters have diferent lengths.'
+                )
 
         # Mutate matplotlib defaults
         addtl_legend_kwargs = dict()
@@ -431,8 +443,10 @@ class Plot:
             viewport_area = (xmax - xmin) * (ymax - ymin)
             window_resize_val = 0.00125 * viewport_area
             extrema = np.array([
-                xmin - window_resize_val, ymin - window_resize_val,
-                xmax + window_resize_val, ymax + window_resize_val
+                np.max([-180, xmin - window_resize_val]),
+                np.max([-90, ymin - window_resize_val]),
+                np.min([180, xmax + window_resize_val]),
+                np.min([90, ymax + window_resize_val])
             ])
 
         extent = _to_geoseries(self.df, self.extent)
@@ -511,7 +525,7 @@ class Plot:
 
 def pointplot(
     df, projection=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
+    hue=None, cmap=None, k=5, scheme=None,
     scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
@@ -610,9 +624,10 @@ def pointplot(
     .. image:: ../figures/pointplot/pointplot-legend.png
 
     Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
-    ``matplotlib.pyplot.scatter`` instance, which can be used to customize the appearance of the
-    plot. To pass keyword argument to the ``matplotlib.legend.Legend``, use ``legend_kwargs``
-    argument.
+    `matplotlib.pyplot.scatter instance 
+    <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html>`_,
+    which can be used to customize the appearance of the
+    plot. To pass keyword argument to the legend, use the ``legend_kwargs`` argument.
 
     .. code-block:: python
 
@@ -789,7 +804,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
 
 def choropleth(
     df, projection=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
+    hue=None, cmap=None, k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -970,7 +985,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
+    hue=None, cmap=None, k=5, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None, legend_values=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -1064,9 +1079,9 @@ def quadtree(
     complicated, this operation will take a long time; consider simplifying complex geometries with
     ``simplify`` to speed it up.
 
-    Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
-    `matplotlib.pyplot.scatter instance 
-    <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html>`_, which can be used
+    Keyword arguments that are not part of the ``geoplot`` API are passed to the
+    `underlying matplotlib.patches.Patch instances
+    <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.patches.Patch.html>`_, which can be used
     to customize the appearance of the plot.
 
     .. code-block:: python
@@ -1079,9 +1094,29 @@ def quadtree(
     
     .. image:: ../figures/quadtree/quadtree-clip.png
 
+    A basic clipped quadtree plot such as this can be used as an alternative to ``polyplot`` as
+    a basemap.
+
+    .. code-block:: python
+
+        ax = gplt.quadtree(
+            collisions, nmax=1,
+            projection=gcrs.AlbersEqualArea(), clip=boroughs,
+            facecolor='lightgray', edgecolor='white', zorder=0
+        )
+        gplt.pointplot(collisions, s=1, ax=ax)
+
+    .. image:: ../figures/quadtree/quadtree-basemap.png
+
     Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
-    used. ``legend`` toggles the legend. This type of plot is an effective gauge of distribution:
-    the more random the plot output, the more geospatially decorrelated the variable.
+    used. ``legend`` toggles the legend. The individual values of the points included in the
+    partitions are aggregated, and each partition is colormapped based on this aggregate value.
+
+    This type of plot is an effective gauge of distribution: the less random the plot output, the
+    more spatially correlated the variable.
+
+    The default aggregation function is ``np.mean``, but you can configure the aggregation
+    by passing a different function to ``agg``.
 
     .. code-block:: python
 
@@ -1112,8 +1147,7 @@ def quadtree(
 
     .. image:: ../figures/quadtree/quadtree-k.png
 
-    Observations will be aggregated by average, by default. Specify an alternative aggregation
-    function using the ``agg`` parameter.
+    Here is a demo of an alternative aggregation function.
 
     .. code-block:: python
 
@@ -1125,20 +1159,6 @@ def quadtree(
         )
 
     .. image:: ../figures/quadtree/quadtree-agg.png
-
-    A basic quadtree plot can be used as an alternative to ``polyplot`` as the base layer of your
-    map.
-
-    .. code-block:: python
-
-        ax = gplt.quadtree(
-            collisions, nmax=1,
-            projection=gcrs.AlbersEqualArea(), clip=boroughs,
-            facecolor='lightgray', edgecolor='white', zorder=0
-        )
-        gplt.pointplot(collisions, s=1, ax=ax)
-
-    .. image:: ../figures/quadtree/quadtree-basemap.png
     """
     class QuadtreePlot(Plot, QuadtreeComputeMixin, QuadtreeHueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
@@ -1192,7 +1212,7 @@ def quadtree(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
+    hue=None, cmap=None, k=5, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1277,9 +1297,7 @@ def cartogram(
     .. image:: ../figures/cartogram/cartogram-initial.png
 
     Toggle the legend with ``legend``. Keyword arguments can be passed to the legend using the
-    ``legend_kwargs`` argument. These arguments will be passed to the underlying
-    `matplotlib.legend.Legend
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_ instance.
+    ``legend_kwargs`` argument. These arguments will be passed to the underlying legend.
 
     .. code-block:: python
 
@@ -1299,11 +1317,28 @@ def cartogram(
         ax = gplt.cartogram(
             contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
             legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-            hue='population', cmap='Greens',
+            hue='population', cmap='Greens'
         )
         gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
     .. image:: ../figures/cartogram/cartogram-cmap.png
+
+    Use ``legend_labels`` and ``legend_values`` to customize the labels and values that appear
+    in the legend.
+
+    .. code-block:: python
+
+        gplt.cartogram(
+            contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+            legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+            hue='population', cmap='Greens',
+            legend_labels=[
+                '<1.4 million', '1.4-3.2 million', '3.2-5.6 million',
+                '5.6-9 million', '9-37 million'
+            ]
+        )
+
+    .. image:: ../figures/cartogram/cartogram-legend-labels.png
 
     Use the ``limits`` parameter to adjust the minimum and maximum scaling factors. You can also
     pass a custom scaling function to ``scale_func`` to apply a different scale to the plot (the
@@ -1462,8 +1497,10 @@ def kdeplot(
     class KDEPlot(Plot, HueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
-            self.set_hue_values(color_kwarg=None, default_color=None, supports_categorical=False)
-            self.paint_legend(supports_hue=True, supports_scale=False)
+            self.set_hue_values(
+                color_kwarg=None, default_color=None, supports_categorical=False, verify_input=False
+            )
+            self.paint_legend(supports_hue=True, supports_scale=False, verify_input=False)
             self.paint_clip()
 
         def draw(self):
@@ -1489,14 +1526,15 @@ def kdeplot(
 
     plot = KDEPlot(
         df, projection=projection, extent=extent, figsize=figsize, ax=ax, clip=clip,
-        shade_lowest=shade_lowest, **kwargs
+        shade_lowest=shade_lowest,
+        **kwargs
     )
     return plot.draw()
 
 
 def sankey(
     df, projection=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
+    hue=None, cmap=None, k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
     scale=None, scale_func=None, limits=(1, 5),
@@ -1590,7 +1628,7 @@ def sankey(
 
     .. image:: ../figures/sankey/sankey-geospatial-context.png
 
-    ``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap used and k``
+    ``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap used and ``k``
     to control the number of color bins. ``legend`` toggles a legend.
 
     .. code-block:: python
@@ -1624,9 +1662,7 @@ def sankey(
     .. image:: ../figures/sankey/sankey-scale.png
 
     Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
-    arguments will be passed to the underlying ``matplotlib`` `Legend
-    <http://matplotlib.org/api/legend_api.html#matplotlib.legend.Legend>`_. The ``loc`` and
-    ``bbox_to_anchor`` parameters are particularly useful for positioning the legend.
+    arguments will be passed to the underlying legend.
 
     .. code-block:: python
 
@@ -1642,21 +1678,24 @@ def sankey(
         ax.set_global(); ax.outline_patch.set_visible(True)
 
     .. image:: ../figures/sankey/sankey-legend-kwargs.png
-
-    Sankey plots are an attractive option for network data, such as this dataset of DC roads by
-    traffic volume.
-
-    .. code-block:: python 
-        
-        gplt.sankey(
-            dc, scale='aadt', edgecolor='black', limits=(0.1, 10),
-            projection=gcrs.AlbersEqualArea()
-        )
-
-    .. image:: ../figures/sankey/sankey-dc.png
     """
     class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
+            # Most markers use 'color' or 'facecolor' as their color_kwarg, and this parameter
+            # has the same name as a matplotlib feature (for unprojected plots) and as a decartes
+            # feature (for projected plots). With line markers, things are different. The
+            # matplotlib Line2D marker uses 'color' (it also has an 'markeredgecolor', but this
+            # parameter doesn't perform exactly like the 'edgecolor' elsewhere in the API). The
+            # descartes feature uses 'edgecolor'.
+            # 
+            # This complicates keywords in the Sankey API (the only plot type so far that uses a
+            # line marker). For code cleanliness, we choose to support "color" and not
+            # "edgecolor", and to raise if an "edgecolor" is set.
+            if 'edgecolor' in kwargs:
+                raise ValueError(
+                    f'Invalid parameter "edgecolor". To control line color, use "color".'
+                )
+
             super().__init__(df, **kwargs)
             self.set_hue_values(color_kwarg='color', default_color='steelblue')
             self.set_scale_values(size_kwarg='linewidth', default_size=1)
@@ -1730,8 +1769,8 @@ def sankey(
 
 def voronoi(
     df, projection=None, clip=None,
-    hue=None, cmap='viridis', k=5, scheme=None,
-    legend=False, legend_kwargs=None, legend_labels=None, legend_values=True,
+    hue=None, cmap=None, k=5, scheme=None,
+    legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -1836,8 +1875,9 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-clip.png
 
-    Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
-    used. ``legend`` toggles the legend.
+    Use ``hue`` to add color as a visual variable to the plot. Change the colormap using ``cmap``,
+    or the number of color bins using ``k``. To use a continuous colormap, set ``k=None``.
+    ``legend`` toggles the legend.
 
     .. code-block:: python
 
@@ -1870,12 +1910,11 @@ def voronoi(
 
     .. image:: ../figures/voronoi/voronoi-kwargs.png
 
-    Change the number of bins by specifying an alternative ``k`` value. To use a continuous
-    colormap, explicitly specify ``k=None``.  You can change the binning sceme with ``scheme``.
-    The default is ``quantile``, which bins observations into classes of different sizes but the
-    same numbers of observations. ``equal_interval`` will creates bins that are the same size, but
-    potentially containing different numbers of observations. The more complicated ``fisher_jenks``
-    scheme is an intermediate between the two.
+    To use a continuous colormap, explicitly specify ``k=None``.  You can change the binning sceme
+    with ``scheme``. The default is ``quantile``, which bins observations into classes of different
+    sizes but the same numbers of observations. ``equal_interval`` will creates bins that are the
+    same size, but potentially containing different numbers of observations. The more complicated
+    ``fisher_jenks`` scheme is an intermediate between the two.
 
     .. code-block:: python
 
