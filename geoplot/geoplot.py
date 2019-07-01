@@ -8,7 +8,6 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
-import geoplot.crs as gcrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
@@ -241,6 +240,11 @@ class LegendMixin:
                         )
                     )
                 if legend_labels:
+                    if len(patches) != len(legend_labels):
+                        raise ValueError(
+                            f'The list of legend values is length {len(patches)}, but the list of '
+                            f'legend_labels is length {len(legend_labels)}.'
+                        )
                     self.ax.legend(
                         patches, legend_labels, numpoints=1,
                         **legend_kwargs, **addtl_legend_kwargs
@@ -307,6 +311,13 @@ class LegendMixin:
                         markerfacecolor=markerfacecolor
                     )
                 )
+
+            if len(patches) != len(legend_labels):
+                raise ValueError(
+                    f'The list of legend values is length {len(patches)}, but the list of '
+                    f'legend_labels is length {len(legend_labels)}.'
+                )
+
             self.ax.legend(
                 patches, legend_labels, numpoints=1, **legend_kwargs, **addtl_legend_kwargs
             )
