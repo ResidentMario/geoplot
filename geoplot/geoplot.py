@@ -169,8 +169,15 @@ class LegendMixin:
         legend_labels = self.kwargs.pop('legend_labels', None)
         legend_values = self.kwargs.pop('legend_values', None)
         legend_kwargs = self.kwargs.pop('legend_kwargs', None)
+        legend_marker_kwargs = dict()
         if legend_kwargs is None:
             legend_kwargs = dict()
+        else:
+            for kwarg in list(legend_kwargs.keys()):
+                # as a power user feature, certain marker* parameters can be passed along to the
+                # Line2D markers in the patch legend
+                if kwarg[:6] == 'marker':
+                    legend_marker_kwargs[kwarg] = legend_kwargs.pop(kwarg)
 
         # kdeplot is special: it has a 'legend' parameter but no other legend-related params,
         # as the 'legend' param is merely passed down to `seaborn.kdeplot`. So for kdeplot
@@ -229,14 +236,38 @@ class LegendMixin:
 
         if legend and legend_var == 'hue':
             if self.k is not None:
-                markeredgecolor = self.kwargs.get('edgecolor', 'None')
+                # If the user provides a markeredgecolor in legend_kwargs, use that. Otherwise,
+                # if they provide an edgecolor in kwargs, reuse that. Otherwise, default to a
+                # transparent markeredgecolor.
+                if 'markeredgecolor' in legend_marker_kwargs:
+                    markeredgecolor = legend_marker_kwargs.pop('markeredgecolor')
+                elif 'edgecolor' in self.kwargs:
+                    markeredgecolor = self.kwargs.get('edgecolor')
+                else:
+                    markeredgecolor = 'None'
+
+                # If the user provides a markerfacecolor in legend_kwargs, but the legend is in
+                # hue mode, raise an error, as setting this markerfacecolor would invalidate the
+                # utility of the legend.
+                if 'markerfacecolor' in legend_marker_kwargs:
+                    raise ValueError(
+                        f'Cannot set a "markerfacecolor" when the "legend_var" is set to "hue". '
+                        f'Doing so would remove the color reference, rendering the legend '
+                        f'useless. Are you sure you didn\'t mean to set "markeredgecolor" instead?'
+                    )
+
+                marker_kwargs = {
+                    'marker': "o", 'markersize': 10, 'markeredgecolor': markeredgecolor
+                }
+                marker_kwargs.update(legend_marker_kwargs)
+
                 patches = []
                 for value, _ in enumerate(self.categories):
                     patches.append(
                         mpl.lines.Line2D(
                             [0], [0], linestyle='None',
-                            marker="o", markersize=10, markerfacecolor=self.cmap.to_rgba(value),
-                            markeredgecolor=markeredgecolor
+                            markerfacecolor=self.cmap.to_rgba(value),
+                            **marker_kwargs
                         )
                     )
                 if legend_labels:
@@ -255,6 +286,14 @@ class LegendMixin:
                         **legend_kwargs, **addtl_legend_kwargs
                     )
             else:  # self.k is None
+                if len(legend_marker_kwargs) > 0:
+                    raise ValueError(
+                        f'"k" is set to "None", implying a colorbar legend, but "legend_kwargs" '
+                        f'includes marker parameters that can only be applied to a patch legend. '
+                        f'Remove these parameters or convert to a categorical colormap by '
+                        f'specifying a "k" value.'
+                    )
+
                 if legend_labels is not None or legend_values is not None:
                     # TODO: implement this feature
                     raise NotImplementedError(
@@ -289,22 +328,51 @@ class LegendMixin:
                 # default: the 'g' f-string for the given input value.
                 legend_labels = ['{0:g}'.format(value) for value in legend_values]
 
-            # Use an open-circle design when hue is not None, so as not to confuse viewers with
-            # colors in the scale mapping to values that do not correspond with the plot points.
-            # But if there is no hue, it's better to have the legend markers be as close to the
-            # plot markers as possible, so in that case the points are filled-in with the
-            # corresponding plot color value. This is controlled by self.colors and, in the case
-            # where hue is None, will be an n-length list of the same color value or name, so we
-            # can grab that by taking the first element of self.colors.
-            if self.hue is None:
+            # If the user specifies a markerfacecolor explicity via legend_params, use that.
+            #
+            # Otherwise, use an open-circle design when hue is not None, so as not to confuse
+            # viewers with colors in the scale mapping to values that do not correspond with the
+            # plot points. But if there is no hue, it's better to have the legend markers be as
+            # close to the plot markers as possible, so in that case the points are filled-in with
+            # the corresponding plot color value. This is controlled by self.colors and, in the
+            # case where hue is None, will be an n-length list of the same color value or name, so
+            # we can grab that by taking the first element of self.colors.
+            if 'markerfacecolor' in legend_marker_kwargs:
+                markerfacecolors = [legend_marker_kwargs['markerfacecolor']] * len(legend_values)
+                legend_marker_kwargs.pop('markerfacecolor')
+            elif self.hue is None:
                 markerfacecolors = [self.colors[0]] * len(legend_values)
             else:
                 markerfacecolors = ['None'] * len(legend_values)
+
             markersizes = [self.dscale(d) for d in legend_values]
-            if self.hue is None:
-                markeredgecolor = self.kwargs.get('edgecolor', 'steelblue')
+
+            # If the user provides a markeredgecolor in legend_kwargs, use that. Otherwise,
+            # if they provide an edgecolor in kwargs, reuse that. Otherwise, default to a
+            # steelblue or black markeredgecolor, depending on whether hue is defined.
+            if 'markeredgecolor' in legend_marker_kwargs:
+                markeredgecolor = legend_marker_kwargs.pop('markeredgecolor')
+            elif 'edgecolor' in self.kwargs:
+                markeredgecolor = self.kwargs.get('edgecolor')
+            elif self.hue is None:
+                markeredgecolor = 'steelblue'
             else:
-                markeredgecolor = self.kwargs.get('edgecolor', 'black')
+                markeredgecolor = 'black'
+
+            # If the user provides a markersize in legend_kwargs, but the legend is in
+            # scale mode, raise an error, as setting this markersize would invalidate the
+            # utility of the legend.
+            if 'markersize' in legend_marker_kwargs:
+                raise ValueError(
+                    f'Cannot set a "markersize" when the "legend_var" is set to "scale". '
+                    f'Doing so would remove the scale reference, rendering the legend '
+                    f'useless.'
+                )
+
+            marker_kwargs = {
+                'marker': "o", 'markeredgecolor': markeredgecolor
+            }
+            marker_kwargs.update(legend_marker_kwargs)
 
             patches = []
             for markerfacecolor, markersize in zip(
@@ -313,10 +381,9 @@ class LegendMixin:
                 patches.append(
                     mpl.lines.Line2D(
                         [0], [0], linestyle='None',
-                        marker="o",
                         markersize=markersize,
-                        markeredgecolor=markeredgecolor,
-                        markerfacecolor=markerfacecolor
+                        markerfacecolor=markerfacecolor,
+                        **marker_kwargs
                     )
                 )
 
@@ -621,8 +688,7 @@ def pointplot(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -887,8 +953,7 @@ def choropleth(
     legend_labels : list, optional
         The data labels to be used in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1079,8 +1144,7 @@ def quadtree(
     legend_labels : list, optional
         The data labels to be used in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1307,8 +1371,7 @@ def cartogram(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1631,8 +1694,7 @@ def sankey(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1866,8 +1928,7 @@ def voronoi(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
