@@ -388,30 +388,38 @@ class QuadtreeHueMixin(HueMixin):
     """
     def set_hue_values(self, color_kwarg, default_color):
         agg = self.kwargs.pop('agg')
+        nsig = self.kwargs.pop('nsig')
         _df = self.df
         dvals = []
 
-        # construct a new df of aggregated values for the colormap op, reset afterwards
+        # If no hue is set, getting the correct (null) colormap values is as easy as calling
+        # the same set_hue_values used by most other plots.
+        #
+        # If hue *is* set, things are more complicated. The quadtree colormap is applied to a map
+        # over self.partitions, but set_hue_values is called on self.df. So we temporarily swap
+        # self.df out for the map on self.partitions, run set_hue_values, then swap the original
+        # GeoDataFrame back into place. We apply the nsig adjustment afterwards.
         has_hue = 'hue' in self.kwargs and self.kwargs['hue'] is not None
-        for p in self.partitions:
-            if len(p.data) == 0:  # empty
-                dval = agg(pd.Series([0]))
-            elif has_hue:
-                dval = agg(p.data.hue_col)
-            dvals.append(dval)
-
         if has_hue:
+            for p in self.partitions:
+                if len(p.data) == 0:  # empty
+                    dval = agg(pd.Series([0]))
+                elif has_hue:
+                    dval = agg(p.data.hue_col)
+                dvals.append(dval)
+
             self.df = pd.DataFrame({
                 self.kwargs['hue']: dvals
             })
-        super().set_hue_values(color_kwarg='facecolor', default_color='None')
-        self.df = _df
+            super().set_hue_values(color_kwarg='facecolor', default_color='None')
+            self.df = _df
 
-        # apply the special nsig parameter colormap rule
-        nsig = self.kwargs.pop('nsig')
-        for i, dval in enumerate(dvals):
-            if dval < nsig:
-                self.colors[i] = 'None'
+            # apply the special nsig parameter colormap rule
+            for i, dval in enumerate(dvals):
+                if dval < nsig:
+                    self.colors[i] = 'None'
+        else:
+            super().set_hue_values(color_kwarg='facecolor', default_color='None')
 
 
 class Plot:
@@ -429,6 +437,7 @@ class Plot:
         if not self.ax:
             plt.figure(figsize=self.figsize)
 
+        import pdb; pdb.set_trace()
         if len(self.df.geometry) == 0:
             extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
         else:
@@ -436,12 +445,12 @@ class Plot:
             # Plots suffer clipping issues if we use just the geometry extrema due to plot features
             # that fall outside of the viewport. The most common case is the edges of polygon
             # patches with non-zero linewidth. We partially ameliorate the problem by increasing
-            # the viewport by 0.5% of the total coordinate area of the plot. Note that the
+            # the viewport by 1% of the total coordinate area of the plot. Note that the
             # coordinate area covered will differ from the actual area covered, as distance between
             # degrees varies depending on where you are on the globe. Since the effect is small we
             # ignore this problem here, for simplicity's sake.
             viewport_area = (xmax - xmin) * (ymax - ymin)
-            window_resize_val = 0.00125 * viewport_area
+            window_resize_val = 0.0025 * viewport_area
             extrema = np.array([
                 np.max([-180, xmin - window_resize_val]),
                 np.max([-90, ymin - window_resize_val]),
