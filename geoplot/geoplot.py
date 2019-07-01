@@ -255,6 +255,14 @@ class LegendMixin:
                         **legend_kwargs, **addtl_legend_kwargs
                     )
             else:  # self.k is None
+                if legend_labels is not None or legend_values is not None:
+                    # TODO: implement this feature
+                    raise NotImplementedError(
+                        f'"k" is set to "None", implying a colorbar legend, but "legend_labels" '
+                        f'and/or "legend_values" are also specified. These parameters do not '
+                        f'apply in the case of a colorbar legend and should be removed.'
+                    )
+
                 self.cmap.set_array(self.hue)
                 plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
 
