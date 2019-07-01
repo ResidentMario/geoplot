@@ -688,8 +688,7 @@ def pointplot(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -954,8 +953,7 @@ def choropleth(
     legend_labels : list, optional
         The data labels to be used in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1146,8 +1144,7 @@ def quadtree(
     legend_labels : list, optional
         The data labels to be used in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1374,8 +1371,7 @@ def cartogram(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1698,8 +1694,7 @@ def sankey(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
@@ -1933,8 +1928,7 @@ def voronoi(
     legend_var : "hue" or "scale", optional
         Which variable, ``hue`` or ``scale``, to use in the legend.
     legend_kwargs : dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.legend instance <http://matplotlib.org/users/legend_guide.html>`_.
+        Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`_.
