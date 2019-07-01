@@ -1,5 +1,6 @@
 import geopandas as gpd
 import geoplot as gplt
+import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
 
 # load the data
@@ -8,12 +9,15 @@ nyc_injurious_collisions = gpd.read_file(gplt.datasets.get_path('nyc_injurious_c
 
 # A plot type using Voronoi tessellation: https://en.wikipedia.org/wiki/Voronoi_diagram
 
-f, axarr = plt.subplots(1, 2, figsize=(16, 8))
+proj = gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
+f, axarr = plt.subplots(
+    1, 2, figsize=(16, 8), subplot_kw={'projection': proj}
+)
 axarr[0].axis('off')
 axarr[1].axis('off')
 gplt.voronoi(
     nyc_injurious_collisions.head(1000),
-    edgecolor='lightsteelblue', linewidth=0.5, ax=axarr[0]
+    edgecolor='lightsteelblue', linewidth=0.5, ax=axarr[0],
 )
 gplt.polyplot(nyc_boroughs, linewidth=0.5, ax=axarr[0])
 gplt.voronoi(
