@@ -146,16 +146,19 @@ Voronoi
     .. _nyc_collisions_voronoi: ./examples/nyc-collisions-voronoi.html
 
 
-.. _gallery-tag-Aggplot:
+.. _gallery-tag-Quadtree:
 
-Aggplot
--------
+Quadtree
+--------
 
 .. container:: gallery_images
 
-    |boston_airbnb_aggplot|_
 
-    .. |boston_airbnb_aggplot| image:: ./examples/boston-airbnb-aggplot.png
+    |nyc_collisions_quadtree|_
+
+    .. |nyc_collisions_quadtree| image:: ./examples/nyc-collisions-quadtree.png
         :width: 500px
 
-    .. _boston_airbnb_aggplot: ./examples/boston-airbnb-aggplot.html
+    .. _nyc_collisions_quadtree: ./examples/nyc-collisions-quadtree.html
+ 
+.. _gallery-tag-Quadtree:
