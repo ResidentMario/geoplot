@@ -164,7 +164,9 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
-    def paint_legend(self, supports_hue=True, supports_scale=False, verify_input=True):
+    def paint_legend(
+        self, supports_hue=True, supports_scale=False, verify_input=True, scale_multiplier=1,
+    ):
         legend = self.kwargs.pop('legend', None)
         legend_labels = self.kwargs.pop('legend_labels', None)
         legend_values = self.kwargs.pop('legend_values', None)
@@ -345,7 +347,7 @@ class LegendMixin:
             else:
                 markerfacecolors = ['None'] * len(legend_values)
 
-            markersizes = [self.dscale(d) for d in legend_values]
+            markersizes = [self.dscale(d) * scale_multiplier for d in legend_values]
 
             # If the user provides a markeredgecolor in legend_kwargs, use that. Otherwise,
             # if they provide an edgecolor in kwargs, reuse that. Otherwise, default to a
@@ -1475,7 +1477,16 @@ def cartogram(
             super().__init__(df, **kwargs)
             self.set_scale_values(size_kwarg=None, default_size=None)
             self.set_hue_values(color_kwarg='facecolor', default_color='steelblue')
-            self.paint_legend(supports_hue=True, supports_scale=True)
+
+            # Scaling a legend marker means scaling a point, whereas scaling a cartogram
+            # marker means scaling a polygon. The same scale has radically different effects
+            # on these two in perceptive terms. The scale_multiplier helps to make the point
+            # scaling commutative to the polygon scaling, though it's really just a guess.
+            # 25 is chosen because it is 5**2, where 5 is a "good" value for the radius of a
+            # point in a scatter point.
+            self.paint_legend(
+                supports_hue=True, supports_scale=True, scale_multiplier=25
+            )
 
         def draw(self):
             ax = self.ax
