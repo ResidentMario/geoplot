@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 
 # load the data
 nyc_boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
-precincts = gpd.read_file(gplt.datasets.get_path('nyc_precincts'))
 tickets = gpd.read_file(gplt.datasets.get_path('nyc_parking_tickets'))
 
 proj = gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)

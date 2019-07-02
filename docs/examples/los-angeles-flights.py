@@ -9,10 +9,6 @@ import cartopy
 
 # load the data
 la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
-la_flights = la_flights.assign(
-    start=la_flights.geometry.map(lambda mp: mp[0]),
-    end=la_flights.geometry.map(lambda mp: mp[1])
-)
 
 
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={
@@ -22,24 +18,21 @@ plt.suptitle('Popular Flights out of Los Angeles, 2016', fontsize=16)
 plt.subplots_adjust(top=0.95)
 
 ax = gplt.sankey(
-    la_flights, start='start', end='end', scale='Passengers', hue='Passengers', cmap='Purples', 
-    ax=axarr[0][0]
+    la_flights, scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][0]
 )
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.coastlines()
 
 ax = gplt.sankey(
-    la_flights, start='start', end='end', scale='Passengers', hue='Passengers', cmap='Purples',
-    ax=axarr[0][1]
+    la_flights, scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[0][1]
 )
 ax.set_global()
 ax.outline_patch.set_visible(True)
 ax.stock_img()
 
 ax = gplt.sankey(
-    la_flights, start='start', end='end', scale='Passengers', hue='Passengers', cmap='Purples',
-    ax=axarr[1][0]
+    la_flights, scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][0]
 )
 ax.set_global()
 ax.outline_patch.set_visible(True)
@@ -48,8 +41,7 @@ ax.coastlines()
 ax.add_feature(cartopy.feature.BORDERS)
 
 ax = gplt.sankey(
-    la_flights, start='start', end='end', scale='Passengers', hue='Passengers', cmap='Purples',
-    ax=axarr[1][1]
+    la_flights, scale='Passengers', hue='Passengers', cmap='Purples', ax=axarr[1][1]
 )
 ax.set_global()
 ax.outline_patch.set_visible(True)

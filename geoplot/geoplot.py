@@ -349,13 +349,10 @@ class LegendMixin:
 
             markersizes = [self.dscale(d) * scale_multiplier for d in legend_values]
 
-            # If the user provides a markeredgecolor in legend_kwargs, use that. Otherwise,
-            # if they provide an edgecolor in kwargs, reuse that. Otherwise, default to a
-            # steelblue or black markeredgecolor, depending on whether hue is defined.
+            # If the user provides a markeredgecolor in legend_kwargs, use that. Otherwise, default
+            # to a steelblue or black markeredgecolor, depending on whether hue is defined.
             if 'markeredgecolor' in legend_marker_kwargs:
                 markeredgecolor = legend_marker_kwargs.pop('markeredgecolor')
-            elif 'edgecolor' in self.kwargs:
-                markeredgecolor = self.kwargs.get('edgecolor')
             elif self.hue is None:
                 markeredgecolor = 'steelblue'
             else:
