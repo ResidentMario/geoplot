@@ -4,21 +4,19 @@ Customizing Plots
 
 ``geoplot`` plots have a large number of styling parameters, both
 cosmetic (for example, the colors of the map borders) and informative
-(for example, the choice of colormap). This section of the tutorial will
-explain the highlights.
+(for example, the choice of colormap). This section of the tutorial
+explains how these work.
 
-I recommend reading this notebook using
-`NBViewer <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing_Plots.ipynb>`__
-or, better yet, following along interactively using
+I recommend following along with this tutorial interactively using
 `Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`__.
 
-Visual variables
-----------------
+Position
+--------
 
 A `visual
 variable <https://wiki.gis.com/wiki/index.php/Visual_variable>`__ is an
-attribute of a plot that is used to convey information. In ``geoplot``
-there are generally three visual variables: position, color, and size.
+attribute of a plot that is used to convey information. One such
+variable that every map has in common is **position**.
 
 .. code:: ipython3
 
@@ -29,9 +27,6 @@ there are generally three visual variables: position, color, and size.
     continental_usa_cities = gpd.read_file(gplt.datasets.get_path('usa_cities'))
     continental_usa_cities = continental_usa_cities.query('STATE not in ["AK", "HI", "PR"]')
     contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
-
-Position
-~~~~~~~~
 
 .. code:: ipython3
 
@@ -46,22 +41,28 @@ Position
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11b66f908>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11e71d4a8>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_4_1.png
+.. image:: Customizing_Plots_files/Customizing_Plots_3_1.png
 
 
-This first plot of cities in the continental United States (locations
-with greater than 10,000 population) only has one visual variable,
-position. By examining the distribution of the points, we see that the
-part of the United States around the Rocky Mountains is more sparely
-populated than the coasts.
+This plot shows cities in the continental United States with greater
+than 10,000 population. It has only one visual variable, position. By
+examining the distribution of the points, we see that the part of the
+United States around the Rocky Mountains is more sparely populated than
+the coasts.
 
 Hue
-~~~
+---
+
+The “hue” parameter in ``geoplot`` adds **color** as a visual variable
+in your plot.
+
+   This parameter is called “hue”, not “color”, because ``color`` is a
+   reserved keyword in the ``matplotlib`` API.
 
 .. code:: ipython3
 
@@ -79,7 +80,7 @@ Hue
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1296fd550>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f0506d8>
 
 
 
@@ -87,10 +88,9 @@ Hue
 .. image:: Customizing_Plots_files/Customizing_Plots_7_2.png
 
 
-The ``hue`` parameter in ``geoplot`` adds color to your plot. In this
-case we set ``hue='POP_2010'``, telling ``geoplot`` to color the points
-based on population as of the 2010 census. In this new map, the darker
-the point, the more populous the city.
+In this case we set ``hue='POP_2010'``, telling ``geoplot`` to color the
+points based on population as of the 2010 census. In this new map, the
+darker the point, the more populous the city.
 
 There are a number of variables for controlling colors. One is ``cmap``,
 which determines which ``matplotlib`` colormap is used:
@@ -142,8 +142,7 @@ Naturally it is also possible to `create your own
 colormap <https://matplotlib.org/3.1.0/tutorials/colors/colormap-manipulation.html>`__;
 there is an
 `example <http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`__
-of this in the
-`Gallery <https://residentmario.github.io/geoplot/gallery.html>`__.
+of this in the Gallery.
 
 The `ColorBrewer
 paper <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.361.6082&rep=rep1&type=pdf>`__
@@ -233,11 +232,10 @@ of each county in New York which is white):
 
 Another good example is the `Parking
 Tickets <https://residentmario.github.io/geoplot/examples/nyc-parking-tickets.html>`__
-demo in the
-`Gallery <https://residentmario.github.io/geoplot/gallery.html>`__.
+demo in the Gallery.
 
-If you *are* using a categorical colormap, there is one last
-consideration you need to make: what `binning
+If you are using a categorical colormap, there is one last consideration
+you need to make: what `binning
 scheme <https://en.wikipedia.org/wiki/Data_binning>`__ to use.
 
 A binning scheme is a methodology for splitting a continuous dataset
@@ -310,11 +308,16 @@ of injuries demonstrates.
 .. image:: Customizing_Plots_files/Customizing_Plots_16_2.png
 
 
+As you can see, which binning scheme you choose has a major visual
+impact on the result that you get. Which binning scheme works best is
+dependent both on the shape of the data and the insight you are trying
+to communicate in the plot.
+
 Scale
-~~~~~
+-----
 
 Another visual variable present in some plots in ``geoplot`` is
-``scale``.
+**scale**.
 
 .. code:: ipython3
 
@@ -330,25 +333,25 @@ Another visual variable present in some plots in ``geoplot`` is
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11ec47a20>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1239c86a0>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_18_1.png
+.. image:: Customizing_Plots_files/Customizing_Plots_19_1.png
 
 
 Scale uses the size of the feature to communication information about
 its magnitude. For example in this plot we can see more easily than in
 the ``hue``-based plots how much larger certain cities (like New York
-City and Los Angeles) are larger than others.
+City and Los Angeles) are than others.
 
 ``geoplot`` uses a `linear
 scale <https://en.wikipedia.org/wiki/Linear_scale>`__ and a relatively
 modest maximum and minimum point size by default. You can adjust the
 maxima and minima to your liking using the ``limits`` parameter.
 
-   **Power User Feature: Custom Scaling Functions**
+**Power User Feature: Custom Scaling Functions**
 
    To use a different scale, like e.g. logarithmic, pass a scaling
    function to the ``scale_func`` parameter. The `Pointplot Scale
@@ -378,12 +381,12 @@ maxima and minima to your liking using the ``limits`` parameter.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f49f438>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x122262d68>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_20_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_21_2.png
 
 
 Oftentimes you can get even better results by using both ``hue`` and
@@ -423,12 +426,12 @@ To add a legend to your plot, set ``legend=True``.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f42f828>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x123973be0>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_23_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_24_2.png
 
 
 With the addition of the legend we can now do things like pick out which
@@ -458,16 +461,16 @@ To switch to a scale-based legend instead of a color-based one, set
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f570710>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1235e4e10>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_25_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_26_2.png
 
 
-To customize the legend values and labels use ``legend_values`` and
-``legend_labels``:
+Use ``legend_values`` and ``legend_labels`` to customize the markers and
+labels in the legend, respectively:
 
 .. code:: ipython3
 
@@ -493,15 +496,15 @@ To customize the legend values and labels use ``legend_values`` and
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f5e2898>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1236d6518>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_27_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_28_2.png
 
 
-   **Power User Feature: Custom Legends**
+**Power User Feature: Custom Legends**
 
    You can fine-tune the appearance of the legend even further using
    ``legend_kwargs`` parameter. This is demonstrated in the plot above,
@@ -512,12 +515,12 @@ To customize the legend values and labels use ``legend_values`` and
 
    If you specify a ``hue`` legend, and ``k != None``, then a
    ``matplotlib`` ``Legend`` will be used. A reference to the parameters
-   available is in `the ``matplotlib``
+   available is in `the matplotlib
    documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.legend.html>`__.
    If you specify a ``hue`` legend, and ``k == None``, then a
    ``matplotlib`` ``colorbar`` will be used instead. This legend has
    different parameters; a reference to the parameters available is on a
-   different page in `the ``matplotlib``
+   different page in `the matplotlib
    documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.colorbar.html>`__.
 
    Keywords starting with ``marker`` (e.g. ``marker``,
@@ -556,7 +559,7 @@ here’s a map of just populous cities in the state of California.
 
     /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
       return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:223: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:231: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
       f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
 
 
@@ -564,12 +567,12 @@ here’s a map of just populous cities in the state of California.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f7d7710>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x122f08da0>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_30_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_31_2.png
 
 
 The
@@ -646,7 +649,7 @@ pretty-looking plots:
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_33_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_34_2.png
 
 
 The `“Styling your

@@ -26,7 +26,7 @@ def get_path(dataset_name):
     elif dataset_name == 'dc_roads':
         return f'{src}/dc-roads.geojson'
     elif dataset_name == 'nyc_map_pluto_sample':
-        return f'{src}/nyc_map_pluto_sample.geojson'
+        return f'{src}/nyc-map-pluto-sample.geojson'
     elif dataset_name == 'nyc_collisions_sample':
         return f'{src}/nyc-collisions-sample.csv'
     elif dataset_name == 'boston_zip_codes':

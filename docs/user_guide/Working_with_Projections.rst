@@ -7,9 +7,7 @@ projections <https://en.wikipedia.org/wiki/Map_projection>`__. If you
 don’t know what a projection is, or are looking to learn more about how
 they work in ``geoplot``, this page is for you!
 
-I recommend reading this notebook using
-`NBViewer <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working_with_Projections.ipynb>`__
-or, better yet, following along interactively using
+I recommend following along with this tutorial interactively using
 `Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working_with_Projections.ipynb>`__.
 
 Projection and unprojection
@@ -30,7 +28,7 @@ Projection and unprojection
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x12992c080>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a914208>
 
 
 
@@ -59,7 +57,7 @@ This map of New York City, for example, is reasonably accurate:
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x12c2427b8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11d243898>
 
 
 
@@ -97,7 +95,7 @@ what we get when we try ``Albers`` out on the contiguous United States:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12cd51c50>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11dd02cc0>
 
 
 
@@ -131,7 +129,7 @@ another.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12ca30e80>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11da21c50>
 
 
 
@@ -140,9 +138,9 @@ another.
 
 
 By default, ``geoplot`` will set the
-```extent`` <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`__
+`extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`__
 (the area covered by the plot) to the
-```total_bounds`` <http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds>`__
+`total_bounds <http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds>`__
 of the last plot stacked onto the map.
 
 However, suppose that even though we have data for One entire United
@@ -163,7 +161,7 @@ contiguous United States. An easy way to get this is setting the
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12ca9c358>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11da947f0>
 
 
 
@@ -197,7 +195,7 @@ for stacking your plots together into a single more informative display.
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x12c8f8320>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11dc55438>
 
 
 
@@ -222,7 +220,7 @@ for stacking your plots together into a single more informative display.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12cf86ac8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11ded2b70>
 
 
 

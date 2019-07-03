@@ -7,9 +7,7 @@ This section of the tutorial discusses how to use ``geopandas`` and
 used these libraries before, or are looking for a refresher on how they
 work, this page is for you!
 
-I recommend reading this notebook using
-`NBViewer <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Geospatial%20Data.ipynb>`__
-or, better yet, following along interactively using
+I recommend following along with this tutorial interactively using
 `Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working%20with%20Geospatial%20Data.ipynb>`__.
 
 Coordinate reference systems
@@ -105,11 +103,19 @@ The ``GeoDataFrame`` is an augmented version of a ``pandas``
 
 
 
+.. raw:: html
+
+   <div style="margin-top:2em">
+
 Most operations that will work on a ``pandas`` ``DataFrame`` will work
 on a ``GeoDataFrame``, but the latter adds a few additional methods and
 features for dealing with geometry not present in the former. The most
 obvious of these is the addition of a column for storing geometries,
 accessible using the ``geometry`` attribute:
+
+.. raw:: html
+
+   </div>
 
 .. code:: ipython3
 
@@ -139,7 +145,7 @@ what CRS your polygons are stored in using the ``crs`` attribute:
 
 .. code:: ipython3
 
-    boroughs.crs
+    nyc_boroughs.crs
 
 
 
@@ -157,11 +163,12 @@ can look up using the handy
 `spatialreference.org <http://spatialreference.org/ref/epsg/wgs-84/>`__
 website.
 
-Why do coordinate reference systems exist? As an example, the United
-States Geolocial Service, which maintains extremely high-accuracy maps
-of the United States, maintains 110 coordinate reference systems,
-refered to as “state plane coordinate systems”, for various portions of
-the United States. Latitude-longitude uses `spherical
+Why do coordinate reference systems besides latitude-longitude even
+exist? As an example, the United States Geolocial Service, which
+maintains extremely high-accuracy maps of the United States, maintains
+110 coordinate reference systems, refered to as “state plane coordinate
+systems”, for various portions of the United States. Latitude-longitude
+uses `spherical
 coordinates <https://en.wikipedia.org/wiki/Spherical_coordinate_system>`__;
 state plane coordinate systems use “flat-Earth” `Cartesian
 coordinate <https://en.wikipedia.org/wiki/Cartesian_coordinate_system>`__.
@@ -170,11 +177,8 @@ computationally, while remaining accurate enough (within their “zone”)
 for most applications.
 
 For this reason, state plane coordinate systems remain in use throughout
-government. Similar “speciality coordinate systems” apply in other
-cases.
-
-For example, here’s a sample of data taken from the MapPLUTO dataset
-released by the City of New York:
+government. For example, here’s a sample of data taken from the MapPLUTO
+dataset released by the City of New York:
 
 .. code:: ipython3
 
@@ -294,10 +298,8 @@ released by the City of New York:
 This data is stored in the Long Island State Plane coordinate reference
 system (`EPSG
 2263 <https://www.spatialreference.org/ref/epsg/2263/>`__).
-
-**Note**: Unfortunately, due to a bug in ``geopandas`` the CRS on read
-is set incorrectly to ``epsg:4326`` and we have to set it to the correct
-coordinate reference system manually.
+Unfortunately the CRS on read is set incorrectly to ``epsg:4326`` and we
+have to set it to the correct coordinate reference system ourselves.
 
 .. code:: ipython3
 
@@ -314,40 +316,14 @@ coordinate reference system manually.
 
 
 Depending on the dataset, ``crs`` may be set to either ``epsg:<INT>`` or
-to a raw ```proj4`` <https://github.com/OSGeo/PROJ>`__ projection
-dictionary. For example, if we had read the data from the raw MapPLUTO
-file instead of from the sample I saved for this tutorial, we would get
-the following ``crs``:
+to a raw `proj4 <https://github.com/OSGeo/PROJ>`__ projection
+dictionary. The bottom line is, after reading in a dataset, always
+verify that the dataset coordinate reference system is set to what its
+documentation it should be set to.
 
-::
-
-   {'datum': 'NAD83',
-    'lat_0': 40.16666666666666,
-    'lat_1': 40.66666666666666,
-    'lat_2': 41.03333333333333,
-    'lon_0': -74,
-    'no_defs': True,
-    'proj': 'lcc',
-    'units': 'us-ft',
-    'x_0': 300000,
-    'y_0': 0}
-
-If the dataset does not provide any CRS, ``geopandas`` will assume the
-data is in lat-long as set ``crs`` to ``epsg:4326``, even if it isn’t.
-It’s even possible for a dataset to be wrong about its coordinate
-reference system.
-
-**Bottom line**: after reading in a dataset, always verify that the
-dataset coordinate reference system is set to what its documentation it
-should be set to.
-
-Once you’ve determined that your coordinates are not latitude-longitude,
-usually the first thing you want to do is covert to it. ``geoplot``,
-amongst other libraries, expects input to be in latitude-longitude, and
-will not work correctly witu any other system.
-
-Moving to latitude and longitude is easy. Just convert your data to
-coordinates using the ``geopandas`` ``to_crs`` method:
+If you determine that your coordinates are not latitude-longitude,
+usually the first thing you want to do is covert to it. ``to_crs`` does
+this:
 
 .. code:: ipython3
 
@@ -405,7 +381,7 @@ coordinates using the ``geopandas`` ``to_crs`` method:
           <td>...</td>
           <td>3940.840373</td>
           <td>5.018974e+05</td>
-          <td>POLYGON ((-74.04279194703045 40.68995148413112...</td>
+          <td>POLYGON ((-74.04279194703045 40.68995148413111...</td>
         </tr>
         <tr>
           <th>2</th>
@@ -455,7 +431,7 @@ coordinates using the ``geopandas`` ``to_crs`` method:
           <td>...</td>
           <td>2411.869687</td>
           <td>8.724423e+04</td>
-          <td>POLYGON ((-74.01111163437272 40.70102458543801...</td>
+          <td>POLYGON ((-74.01111163437271 40.70102458543801...</td>
         </tr>
       </tbody>
     </table>
@@ -477,45 +453,11 @@ format or the other at load time. Once you have converted your dataset
 to the right coordinate system, always always always make sure to next
 check that the geometries are also in the right coordinate order.
 
-This is such a common gotcha that it’s made it into the ``geoplot``
-``Quickstart``. It’s an easy mistake to make and people are making it
-constantly!
+This is an easy mistake to make and people are making it constantly!
 
 The fastest way to ensure that coordinates are in the right order is to
 know what the right x coordinates and y coordinates for your data should
-be and eyeball it. Alternatively, a foolproof way is to use
-``mplleaflet`` and plot a random landmark from the dataset on a webmap.
-If the point is where you expect it to be, the coordinate order is
-correct.
-
-**Note**: you must be running interactively to see the result of the
-following code cell.
-
-.. code:: ipython3
-
-    import mplleaflet
-    gplt.polyplot(nyc_map_pluto_sample.head(1))
-    mplleaflet.display()
-
-**Note**: this will get easier in forthcoming versions of ``geoplot``,
-which will include webmap tile support.
-
-.. code:: ipython3
-
-    import shapely
-
-.. code:: ipython3
-
-    shapely.geometry.LinearRing
-
-
-
-
-.. parsed-literal::
-
-    shapely.geometry.polygon.LinearRing
-
-
+be and eyeball it.
 
 Types of geometries
 -------------------
@@ -524,8 +466,7 @@ Every element of the ``geometry`` column in a ``GeoDataFrame`` is a
 ``shapely`` object. `Shapely <https://github.com/Toblerity/Shapely>`__
 is a geometric operations library which is used for manipulating
 geometries in space, and it’s the Python API of choice for working with
-shape data (under the hood, it uses
-`GEOS <http://trac.osgeo.org/geos/>`__, which is C++ and ancient).
+shape data.
 
 ``shapely`` defines just a handful of types of geometries:
 
@@ -570,7 +511,7 @@ You can check the ``type`` of a geometry using the ``type`` operator:
 Performing geometric operations
 -------------------------------
 
-The ```shapely`` user
+The `shapely user
 manual <https://shapely.readthedocs.io/en/latest/manual.html>`__
 provides an extensive list of geometric operations that you can perform
 using the library: from simple things like translations and
@@ -589,20 +530,20 @@ hulls <https://en.wikipedia.org/wiki/Convex_hull>`__:
 
 .. parsed-literal::
 
-    CPU times: user 69.2 ms, sys: 2.76 ms, total: 72 ms
-    Wall time: 71.3 ms
+    CPU times: user 62.7 ms, sys: 2.64 ms, total: 65.3 ms
+    Wall time: 71.6 ms
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11b3d0e80>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11c61d7b8>
 
 
 
 
-.. image:: Working_with_Geospatial_Data_files/Working_with_Geospatial_Data_24_2.png
+.. image:: Working_with_Geospatial_Data_files/Working_with_Geospatial_Data_18_2.png
 
 
 You can perform arbitrarily complex geometric transformations on your
@@ -618,8 +559,8 @@ faster way to create convex hulls, for example:
 
 .. parsed-literal::
 
-    CPU times: user 41.4 ms, sys: 1.99 ms, total: 43.4 ms
-    Wall time: 41.9 ms
+    CPU times: user 55.6 ms, sys: 6.45 ms, total: 62.1 ms
+    Wall time: 39.9 ms
 
 
 
@@ -638,9 +579,8 @@ faster way to create convex hulls, for example:
 It is beyond the scope of this short guide to dive too deeply into
 geospatial data transformations. Suffice to say that there are many of
 them, and that you can learn some more about them by consulting the
-```geopandas`` <http://geopandas.org/>`__ and
-```shapely`` <https://toblerity.org/shapely/manual.html>`__
-documentation.
+`geopandas <http://geopandas.org/>`__ and
+`shapely <https://toblerity.org/shapely/manual.html>`__ documentation.
 
 Defining your own geometries
 ----------------------------
@@ -731,6 +671,10 @@ file, which read into an ordinary ``pandas`` ``DataFrame``?
 
 
 
+.. raw:: html
+
+   <div style="margin-top:2em">
+
 It is extremely common for datasets containing light geospatial data
 (e.g. points, maybe line segments, but usually not whole polygons) to be
 saved in a non-geospatial formats.
@@ -738,6 +682,10 @@ saved in a non-geospatial formats.
 In this case can import ``shapely`` directly, use it to define our own
 geometries, then initialize a ``GeoDataFrame``. The ``pandas`` ``apply``
 function is the best to do this:
+
+.. raw:: html
+
+   </div>
 
 .. code:: ipython3
 
@@ -849,6 +797,10 @@ property of the ``GeoDataFrame`` initializer:
 
 
 
+.. raw:: html
+
+   <div style="margin-top:2em">
+
 In most cases, data with geospatial information provided in a CSV will
 be point data corresponding with individual coordinates. Sometimes,
 however, one may wish to define more complex geometry: square areas, for
@@ -856,6 +808,10 @@ example, and *maybe* even complex polygons. While we won’t cover these
 cases, they’re quite similar to the extremely simple point case we’ve
 shown here. For further reference on such a task, refer to the
 ``shapely`` documentation.
+
+.. raw:: html
+
+   </div>
 
 Joining on existing geometries
 ------------------------------
@@ -928,6 +884,10 @@ Suppose now that we have information on obesity by state.
 
 
 
+.. raw:: html
+
+   <div style="margin-top:2em">
+
 We’d like to put this information on a map. But we don’t have any
 geometry!
 
@@ -936,6 +896,10 @@ instead of writing our own, we will need to find data with state shapes,
 and join that data against this data. In other cases there may be other
 shapes: police precincts, survey zones, and so on. Here is just such a
 dataset:
+
+.. raw:: html
+
+   </div>
 
 .. code:: ipython3
 
@@ -965,46 +929,46 @@ dataset:
       <thead>
         <tr style="text-align: right;">
           <th></th>
-          <th>id</th>
+          <th>state</th>
           <th>adm1_code</th>
-          <th>State</th>
+          <th>population</th>
           <th>geometry</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <th>0</th>
-          <td>0</td>
-          <td>USA-3514</td>
           <td>Minnesota</td>
+          <td>USA-3514</td>
+          <td>5303925</td>
           <td>POLYGON ((-89.59940899999999 48.010274, -89.48...</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>1</td>
-          <td>USA-3515</td>
           <td>Montana</td>
+          <td>USA-3515</td>
+          <td>989415</td>
           <td>POLYGON ((-111.194189 44.561156, -111.291548 4...</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>2</td>
-          <td>USA-3516</td>
           <td>North Dakota</td>
+          <td>USA-3516</td>
+          <td>672591</td>
           <td>POLYGON ((-96.601359 46.351357, -96.5389080000...</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>4</td>
-          <td>USA-3518</td>
           <td>Idaho</td>
+          <td>USA-3518</td>
+          <td>1567582</td>
           <td>POLYGON ((-111.049728 44.488163, -111.050245 4...</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>5</td>
-          <td>USA-3519</td>
           <td>Washington</td>
+          <td>USA-3519</td>
+          <td>6724540</td>
           <td>POLYGON ((-116.998073 46.33017, -116.906528 46...</td>
         </tr>
       </tbody>
@@ -1013,11 +977,20 @@ dataset:
 
 
 
+.. raw:: html
+
+   <div style="margin-top:2em">
+
 A simple ``join`` solves the problem:
+
+.. raw:: html
+
+   </div>
 
 .. code:: ipython3
 
-    contiguous_usa.set_index('State').join(obesity.set_index('State')).head()
+    result = contiguous_usa.set_index('state').join(obesity.set_index('State'))
+    result.head()
 
 
 
@@ -1042,13 +1015,13 @@ A simple ``join`` solves the problem:
       <thead>
         <tr style="text-align: right;">
           <th></th>
-          <th>id</th>
           <th>adm1_code</th>
+          <th>population</th>
           <th>geometry</th>
           <th>Percent</th>
         </tr>
         <tr>
-          <th>State</th>
+          <th>state</th>
           <th></th>
           <th></th>
           <th></th>
@@ -1058,36 +1031,36 @@ A simple ``join`` solves the problem:
       <tbody>
         <tr>
           <th>Minnesota</th>
-          <td>0</td>
           <td>USA-3514</td>
+          <td>5303925</td>
           <td>POLYGON ((-89.59940899999999 48.010274, -89.48...</td>
           <td>25.5</td>
         </tr>
         <tr>
           <th>Montana</th>
-          <td>1</td>
           <td>USA-3515</td>
+          <td>989415</td>
           <td>POLYGON ((-111.194189 44.561156, -111.291548 4...</td>
           <td>24.6</td>
         </tr>
         <tr>
           <th>North Dakota</th>
-          <td>2</td>
           <td>USA-3516</td>
+          <td>672591</td>
           <td>POLYGON ((-96.601359 46.351357, -96.5389080000...</td>
           <td>31.0</td>
         </tr>
         <tr>
           <th>Idaho</th>
-          <td>4</td>
           <td>USA-3518</td>
+          <td>1567582</td>
           <td>POLYGON ((-111.049728 44.488163, -111.050245 4...</td>
           <td>29.6</td>
         </tr>
         <tr>
           <th>Washington</th>
-          <td>5</td>
           <td>USA-3519</td>
+          <td>6724540</td>
           <td>POLYGON ((-116.998073 46.33017, -116.906528 46...</td>
           <td>27.2</td>
         </tr>
@@ -1095,6 +1068,34 @@ A simple ``join`` solves the problem:
     </table>
     </div>
 
+
+
+.. raw:: html
+
+   <div style="margin-top:2em">
+
+Now we can plot it:
+
+.. raw:: html
+
+   </div>
+
+.. code:: ipython3
+
+    import geoplot.crs as gcrs
+    gplt.cartogram(result, scale='Percent', projection=gcrs.AlbersEqualArea())
+
+
+
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11c3bda20>
+
+
+
+
+.. image:: Working_with_Geospatial_Data_files/Working_with_Geospatial_Data_36_1.png
 
 
 Save formats
@@ -1140,12 +1141,5 @@ too complex for easy storage in a GeoJSON.
 These are the two best-known file formats, but there are `many many
 others <https://en.wikipedia.org/wiki/GIS_file_formats>`__. For a list
 of geospatial file formats supported by ``geopandas`` refer to the
-```fiona`` user
+`fiona user
 manual <https://fiona.readthedocs.io/en/latest/manual.html>`__.
-
-What to do next
----------------
-
-The next section of the tutorial, `Working with
-Projections <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`__,
-covers another important topic in geospatial visualization.
