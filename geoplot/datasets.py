@@ -6,6 +6,9 @@ src = 'https://raw.githubusercontent.com/ResidentMario/geoplot-data/master'
 
 
 def get_path(dataset_name):
+    """
+    Returns the URL path to an example dataset suitable for reading into ``geopandas``.
+    """
     if dataset_name == 'usa_cities':
         return f'{src}/usa-cities.geojson'
     elif dataset_name == 'contiguous_usa':
@@ -43,4 +46,6 @@ def get_path(dataset_name):
     elif dataset_name == 'world':
         return f'{src}/world.geojson'
     else:
-        raise NotImplementedError
+        raise ValueError(
+            f'The dataset_name value {dataset_name!r} is not in the list of valid names.'
+        )

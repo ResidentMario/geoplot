@@ -14,8 +14,8 @@ class Base:
     """
     Generate instances of ``cartopy.crs``.*name* where *name* matches the instance's class name.
 
-    Methods for Subclasses
-    ----------------------
+    Parameters
+    ----------
     `load` : Return a Cartopy CRS initialized with defaults from the `centerings` dictionary,
     overridden by initialization parameters.
 

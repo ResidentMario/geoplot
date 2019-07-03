@@ -1,9 +1,4 @@
-.. geoplot documentation master file, created by
-   sphinx-quickstart on Mon Dec  5 22:22:01 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Geoplot: geospatial data visualization
+geoplot: geospatial data visualization
 ======================================
 
 .. raw:: html
@@ -32,11 +27,6 @@ Geoplot: geospatial data visualization
 
     </div>
 
-.. raw:: html
-
-    <div style="float:left; width:66%;">
-
-    <span style="font-weight:bold; font-size:28px; margin-bottom:1em">About</span>
 
 ``geoplot`` is a high-level Python geospatial plotting library. It's an extension to ``cartopy`` and ``matplotlib``
 which makes mapping easy: like ``seaborn`` for geospatial. It comes with the following features:
@@ -47,33 +37,35 @@ which makes mapping easy: like ``seaborn`` for geospatial. It comes with the fol
 
 * **Compatibility with matplotlib**: While ``matplotlib`` is not a good fit for working with geospatial data directly, it’s a format that’s well-incorporated by other tools.
 
-* **Built with modern geospatial Python in mind**: Innovations in recent years have made working with geospatial data easier than ever, which geoplot leverages with an easy-to-use and widely compatible API.
+For a brief introduction refer to the `Quickstart`_.
 
-Browse the `Gallery <./gallery.html>`_ to see what ``geoplot`` can do, then jump into the
-`Quickstart <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Quickstart.ipynb>`_
-or the `API Reference <./api.html>`_ to see how to do it. For help installing, check out
-`Installation <./installing.html>`_.
+.. _Quickstart: https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Quickstart.ipynb
 
-.. raw:: html
-
-    </div>
-    <div style="float:right; width:33%;">
-
-    <span style="font-weight:bold; font-size:28px; margin-bottom:1em">Documentation</span>
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
+    :caption: Getting Started
 
-   installing
-   gallery
-   api
-   guides
+    installation.rst
+    quickstart/quickstart.rst
 
-.. raw:: html
-    </div>
+.. toctree::
+    :maxdepth: 1
+    :caption: User Guide
 
-..  Indices and tables
-    ==================
-    * :ref:`genindex`
-    * :ref:`modindex`
-    * :ref:`search`
+    user_guide/Working_with_Geospatial_Data.rst
+    user_guide/Working_with_Projections.rst
+    user_guide/Customizing_Plots.rst
+    plot_references/plot_reference.rst
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Gallery
+
+    gallery.rst
+
+.. toctree::
+    :maxdepth: 1
+    :caption: API Reference
+
+    api_reference.rst

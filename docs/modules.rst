@@ -1,7 +1,7 @@
-geoplot
-=======
+fahr
+====
 
 .. toctree::
    :maxdepth: 4
 
-   geoplot
+   fahr
