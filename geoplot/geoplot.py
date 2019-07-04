@@ -478,7 +478,7 @@ class QuadtreeComputeMixin:
         # n_sig < n, the quadtree algorithm will recurse infinitely. Jitter is applied randomly
         # on 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the
         # vast majority of geospatial applications. If the meaningful precision of your dataset
-        # exceeds 1cm, jitter the points yourself.
+        # exceeds 1cm, jitter the points yourself. cf. https://xkcd.com/2170/
         df = df.assign(geometry=jitter_points(df.geometry))
 
         # Generate a quadtree.
