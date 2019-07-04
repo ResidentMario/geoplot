@@ -7,8 +7,8 @@
 .. _sphx_glr_gallery_plot_minard_napoleon_russia.py:
 
 
-Sankey of Napoleon's disastarous march into Russia
-==================================================
+Sankey of Napoleon's disastarous march on Moscow
+================================================
 
 This example reproduces a famous historical flow map: Charles Joseph Minard's map depicting
 Napoleon's disastrously costly 1812 march on Russia during the Napoleonic Wars.
@@ -73,7 +73,7 @@ into an scrolly-panny webmap.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.730 seconds)
+   **Total running time of the script:** ( 0 minutes  0.552 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_minard_napoleon_russia.py:

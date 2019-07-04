@@ -1,6 +1,6 @@
 """
-Sankey of Napoleon's disastarous march into Russia
-==================================================
+Sankey of Napoleon's disastarous march on Moscow
+================================================
 
 This example reproduces a famous historical flow map: Charles Joseph Minard's map depicting
 Napoleon's disastrously costly 1812 march on Russia during the Napoleonic Wars.

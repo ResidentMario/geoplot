@@ -98,7 +98,7 @@ For more information visit `the cartopy docs
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.528 seconds)
+   **Total running time of the script:** ( 0 minutes  4.431 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_los_angeles_flights.py:
