@@ -16,7 +16,7 @@ quilt_packages/
 .pytest_cache/
 Untitled.ipynb
 
-# sphinx-gallery helper files
+# sphinx-gallery
 *.md5
-docs/gallery/*.ipynb
+docs/gallery/
 *.zip
