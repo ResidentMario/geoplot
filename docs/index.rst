@@ -62,7 +62,7 @@ For a brief introduction refer to the `Quickstart`_.
     :maxdepth: 1
     :caption: Gallery
 
-    gallery.rst
+    Gallery <gallery/index.rst>
 
 .. toctree::
     :maxdepth: 1
