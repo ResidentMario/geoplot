@@ -6,6 +6,9 @@ src = 'https://raw.githubusercontent.com/ResidentMario/geoplot-data/master'
 
 
 def get_path(dataset_name):
+    """
+    Returns the URL path to an example dataset suitable for reading into ``geopandas``.
+    """
     if dataset_name == 'usa_cities':
         return f'{src}/usa-cities.geojson'
     elif dataset_name == 'contiguous_usa':
@@ -23,7 +26,7 @@ def get_path(dataset_name):
     elif dataset_name == 'dc_roads':
         return f'{src}/dc-roads.geojson'
     elif dataset_name == 'nyc_map_pluto_sample':
-        return f'{src}/nyc_map_pluto_sample.geojson'
+        return f'{src}/nyc-map-pluto-sample.geojson'
     elif dataset_name == 'nyc_collisions_sample':
         return f'{src}/nyc-collisions-sample.csv'
     elif dataset_name == 'boston_zip_codes':
@@ -42,5 +45,11 @@ def get_path(dataset_name):
         return f'{src}/nyc-parking-tickets-sample.geojson'
     elif dataset_name == 'world':
         return f'{src}/world.geojson'
+    elif dataset_name == 'melbourne':
+        return f'{src}/melbourne.geojson'
+    elif dataset_name == 'melbourne_schools':
+        return f'{src}/melbourne-schools.geojson'
     else:
-        raise NotImplementedError
+        raise ValueError(
+            f'The dataset_name value {dataset_name!r} is not in the list of valid names.'
+        )

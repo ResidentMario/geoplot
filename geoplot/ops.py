@@ -197,7 +197,6 @@ def build_voronoi_polygons(df):
             idxs_vertices = np.array(vor.regions[idx_point_region])
             region_vertices = vor.vertices[idxs_vertices]
             region_poly = shapely.geometry.Polygon(region_vertices)
-
             polygons.append(region_poly)
 
         else:
