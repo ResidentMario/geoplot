@@ -7,8 +7,8 @@
 .. _sphx_glr_gallery_plot_dc_street_network.py:
 
 
-Sankey diagram of traffic volumes in Washington DC
-==================================================
+Sankey of traffic volumes in Washington DC
+==========================================
 
 This example demonstrates an application of the ``sankey`` plot type to a geospatial dataset of
 `annual average daily traffic volume 
@@ -44,7 +44,7 @@ This example demonstrates an application of the ``sankey`` plot type to a geospa
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  43.398 seconds)
+   **Total running time of the script:** ( 0 minutes  39.670 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dc_street_network.py:

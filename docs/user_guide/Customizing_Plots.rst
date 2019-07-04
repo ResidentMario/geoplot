@@ -8,7 +8,7 @@ cosmetic (for example, the colors of the map borders) and informative
 explains how these work.
 
 I recommend following along with this tutorial interactively using
-`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`__.
+`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`_.
 
 Position
 --------

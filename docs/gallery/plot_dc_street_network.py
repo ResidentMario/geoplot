@@ -1,6 +1,6 @@
 """
-Sankey diagram of traffic volumes in Washington DC
-==================================================
+Sankey of traffic volumes in Washington DC
+==========================================
 
 This example demonstrates an application of the ``sankey`` plot type to a geospatial dataset of
 `annual average daily traffic volume 

@@ -5,10 +5,11 @@
 
 Computation times
 =================
-**00:05.564** total execution time for **gallery** files:
+**00:01.916** total execution time for **gallery** files:
 
-- **00:05.564**: :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)
+- **00:01.916**: :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py` (``plot_minard_napoleon_russia.py``)
 - **00:00.000**: :ref:`sphx_glr_gallery_plot_dc_street_network.py` (``plot_dc_street_network.py``)
+- **00:00.000**: :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)
 - **00:00.000**: :ref:`sphx_glr_gallery_plot_los_angeles_flights.py` (``plot_los_angeles_flights.py``)
 - **00:00.000**: :ref:`sphx_glr_gallery_plot_ny_state_demographics.py` (``plot_ny_state_demographics.py``)
 - **00:00.000**: :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py` (``plot_nyc_collision_factors.py``)

@@ -50,6 +50,26 @@ Gallery
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example reproduces a famous historical flow map: Charles Joseph Minard&#x27;s map depicting Nap...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_minard_napoleon_russia
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example cartogram showcases regional trends for obesity in the United States. Rugged mount...">
 
 .. only:: html
