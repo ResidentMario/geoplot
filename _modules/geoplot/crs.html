@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>geoplot.crs &mdash; geoplot 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> geoplot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart/quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/Working_with_Geospatial_Data.html">Working with Geospatial Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/Working_with_Projections.html">Working with Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/Customizing_Plots.html">Customizing Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plot_references/plot_reference.html">Plot Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">geoplot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>geoplot.crs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for geoplot.crs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines the ``geoplot`` coordinate reference system classes, wrappers on</span>
+<span class="sd">``cartopy.crs`` objects meant to be used as parameters to the ``projection`` parameter of all</span>
+<span class="sd">front-end ``geoplot`` outputs. For the list of Cartopy CRS objects this module derives from,</span>
+<span class="sd">refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="c1"># TODO: RotatedPole</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate instances of ``cartopy.crs``.*name* where *name* matches the instance&#39;s class name.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `load` : Return a Cartopy CRS initialized with defaults from the `centerings` dictionary,</span>
+<span class="sd">    overridden by initialization parameters.</span>
+
+<span class="sd">    `_as_mpl_axes` : Return the result of calling cartopy&#39;s ``_as_mpl_axes`` for `self.load`</span>
+<span class="sd">    called with empty `df` and `centerings`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save parameters that initialize Cartopy CRSs.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A meta-method which abstracts the internals of individual projections&#39; load procedures.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : GeoDataFrame</span>
+<span class="sd">            The GeoDataFrame which has been passed as input to the plotter at the top level.</span>
+<span class="sd">            This data is needed to calculate reasonable centering variables in cases in which the</span>
+<span class="sd">            user does not already provide them; which is, incidentally, the reason behind all of</span>
+<span class="sd">            this funny twice-instantiation loading in the first place.</span>
+<span class="sd">        centerings: dict</span>
+<span class="sd">            A dictionary containing names and centering methods. Certain projections have certain</span>
+<span class="sd">            centering parameters whilst others lack them. For example, the geospatial projection</span>
+<span class="sd">            contains both ``central_longitude`` and ``central_latitude`` instance parameter, which</span>
+<span class="sd">            together control the center of the plot, while the North Pole Stereo projection has</span>
+<span class="sd">            only a ``central_longitude`` instance parameter, implying that latitude is fixed (as</span>
+<span class="sd">            indeed it is, as this projection is centered on the North Pole!).</span>
+
+<span class="sd">            A top-level centerings method is provided in each of the ``geoplot`` top-level plot</span>
+<span class="sd">            functions; each of the projection wrapper classes defined here in turn selects the</span>
+<span class="sd">            functions from this list relevent to this particular instance and passes them to</span>
+<span class="sd">            the ``_generic_load`` method here.</span>
+
+<span class="sd">            We then in turn execute these functions to get defaults for our ``df`` and pass them</span>
+<span class="sd">            off to our output ``cartopy.crs`` instance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        crs : ``cartopy.crs`` object instance</span>
+<span class="sd">            Returns a ``cartopy.crs`` object instance whose appropriate instance variables have</span>
+<span class="sd">            been set to reasonable defaults wherever not already provided by the user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ccrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)(</span><span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">centerings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">_as_mpl_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When ``matplotlib`` is provided a projection via a ``projection`` keyword argument, it</span>
+<span class="sd">        expects to get something with a callable ``as_mpl_axes`` method. The precise details of</span>
+<span class="sd">        what this method does, exactly, are not important: it suffices to know that every</span>
+<span class="sd">        ``cartopy`` coordinate reference system object has one.</span>
+
+<span class="sd">        When we pass a ``geoplot.crs`` crs object to a ``geoplot`` function, the loading and</span>
+<span class="sd">        centering of the data occurs automatically (using the function defined immediately above).</span>
+<span class="sd">        Since we control what ``geoplot`` does at execution, we gracefully integrate this two-step</span>
+<span class="sd">        procedure into the function body.</span>
+
+<span class="sd">        But there are also use cases outside of our control in which we are forced to pass a</span>
+<span class="sd">        ``geoplot.crs`` object without having first called ``load``: most prominently, when</span>
+<span class="sd">        creating a plot containing subplots, the &quot;overall&quot; projection must be pre-loaded. It&#39;s</span>
+<span class="sd">        possible to get around this by using ``cartopy.crs`` objects instead, but this is</span>
+<span class="sd">        inelegant. This method is a better way: when a ``geoplot.crs`` object called by</span>
+<span class="sd">        ``matplotlib``, it silently swaps itself out for a vanilla version of its ``cartopy.crs``</span>
+<span class="sd">        mirror, and calls that function&#39;s ``_as_mpl_axes`` instead.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        proj : geoplot.crs projection instance</span>
+<span class="sd">            The instance in question (self, in the method body).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Mutates into a ``cartopy.crs`` object and returns the result of executing ``_as_mpl_axes``</span>
+<span class="sd">        on that object instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">proj</span><span class="o">.</span><span class="n">_as_mpl_axes</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Filtering</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;CRS that `load`s with `centering` restricted to keys in `self.filter_`.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call `load` method with `centerings` filtered to keys in `self.filter_`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span>
+            <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span>
+             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">centerings</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_</span><span class="p">}</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">LongitudeCentering</span><span class="p">(</span><span class="n">Filtering</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Form a CRS that centers by longitude.&quot;&quot;&quot;</span>
+    <span class="n">filter_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;central_longitude&#39;</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">LatitudeCentering</span><span class="p">(</span><span class="n">Filtering</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;For a CRS that centers by latitude.&quot;&quot;&quot;</span>
+    <span class="n">filter_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;central_latitude&#39;</span><span class="p">}</span>
+
+
+<span class="n">PlateCarree</span><span class="p">,</span>\
+    <span class="n">LambertCylindrical</span><span class="p">,</span>\
+    <span class="n">Mercator</span><span class="p">,</span>\
+    <span class="n">Miller</span><span class="p">,</span>\
+    <span class="n">Mollweide</span><span class="p">,</span>\
+    <span class="n">Robinson</span><span class="p">,</span>\
+    <span class="n">Sinusoidal</span><span class="p">,</span>\
+    <span class="n">InterruptedGoodeHomolosine</span><span class="p">,</span>\
+    <span class="n">Geostationary</span><span class="p">,</span>\
+    <span class="n">NorthPolarStereo</span><span class="p">,</span>\
+    <span class="n">SouthPolarStereo</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">LongitudeCentering</span><span class="p">,),</span> <span class="p">{})</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;PlateCarree&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;LambertCylindrical&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Mercator&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Miller&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Mollweide&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Robinson&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Sinusoidal&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;InterruptedGoodeHomolosine&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Geostationary&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;NorthPolarStereo&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;SouthPolarStereo&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">Gnomonic</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;Gnomonic&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">LatitudeCentering</span><span class="p">,),</span> <span class="p">{})</span>
+
+<span class="n">AlbersEqualArea</span><span class="p">,</span>\
+    <span class="n">AzimuthalEquidistant</span><span class="p">,</span>\
+    <span class="n">LambertConformal</span><span class="p">,</span>\
+    <span class="n">Orthographic</span><span class="p">,</span>\
+    <span class="n">Stereographic</span><span class="p">,</span>\
+    <span class="n">TransverseMercator</span><span class="p">,</span>\
+    <span class="n">LambertAzimuthalEqualArea</span><span class="p">,</span>\
+    <span class="n">UTM</span><span class="p">,</span>\
+    <span class="n">OSGB</span><span class="p">,</span>\
+    <span class="n">EuroPP</span><span class="p">,</span>\
+    <span class="n">OSNI</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">Base</span><span class="p">,),</span> <span class="p">{})</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;AlbersEqualArea&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;AzimuthalEquidistant&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;LambertConformal&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Orthographic&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;Stereographic&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;TransverseMercator&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;LambertAzimuthalEqualArea&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;UTM&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;OSGB&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;EuroPP&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;OSNI&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Aleksey Bilogur
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

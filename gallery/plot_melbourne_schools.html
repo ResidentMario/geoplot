@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Voronoi of Melbourne primary schools &mdash; geoplot 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cartogram of US states by obesity rate" href="plot_obesity.html" />
+    <link rel="prev" title="Sankey of Napoleon’s disastarous march on Moscow" href="plot_minard_napoleon_russia.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> geoplot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Working_with_Geospatial_Data.html">Working with Geospatial Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Working_with_Projections.html">Working with Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Customizing_Plots.html">Customizing Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plot_references/plot_reference.html">Plot Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Voronoi of Melbourne primary schools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">geoplot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Gallery</a> &raquo;</li>
+        
+      <li>Voronoi of Melbourne primary schools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/gallery/plot_melbourne_schools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-gallery-plot-melbourne-schools-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="voronoi-of-melbourne-primary-schools">
+<span id="sphx-glr-gallery-plot-melbourne-schools-py"></span><h1>Voronoi of Melbourne primary schools<a class="headerlink" href="#voronoi-of-melbourne-primary-schools" title="Permalink to this headline">¶</a></h1>
+<p>This example shows a <code class="docutils literal notranslate"><span class="pre">pointplot</span></code> combined with a <code class="docutils literal notranslate"><span class="pre">voronoi</span></code> mapping primary schools in
+Melbourne. Schools in outlying, less densely populated areas serve larger zones than those in
+central Melbourne.</p>
+<p>This example inspired by the <a class="reference external" href="http://melbourneschoolzones.com/">Melbourne Schools Zones Webmap</a>.</p>
+<img alt="../_images/sphx_glr_plot_melbourne_schools_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_melbourne_schools_001.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">melbourne</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;melbourne&#39;</span><span class="p">))</span>
+<span class="n">melbourne_primary_schools</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;melbourne_schools&#39;</span><span class="p">))</span>\
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;School_Type == &quot;Primary&quot;&#39;</span><span class="p">)</span>
+
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
+    <span class="n">melbourne_primary_schools</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">melbourne</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">melbourne</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">melbourne_primary_schools</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">melbourne</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Primary Schools in Greater Melbourne, 2018&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;melbourne-schools.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.976 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-melbourne-schools-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/6f1bd3dc6a6132a63d6a34a6543bf9bb/plot_melbourne_schools.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_melbourne_schools.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/772e038e6ba12b7ebd606ef293733d87/plot_melbourne_schools.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_melbourne_schools.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_obesity.html" class="btn btn-neutral float-right" title="Cartogram of US states by obesity rate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_minard_napoleon_russia.html" class="btn btn-neutral float-left" title="Sankey of Napoleon’s disastarous march on Moscow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Aleksey Bilogur
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

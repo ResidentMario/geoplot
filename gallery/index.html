@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Gallery &mdash; geoplot 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sankey of traffic volumes in Washington DC" href="plot_dc_street_network.html" />
+    <link rel="prev" title="Plot Reference" href="../plot_references/plot_reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> geoplot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Working_with_Geospatial_Data.html">Working with Geospatial Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Working_with_Projections.html">Working with Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/Customizing_Plots.html">Customizing Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plot_references/plot_reference.html">Plot Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Gallery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">geoplot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Gallery</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/gallery/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gallery">
+<span id="sphx-glr-gallery"></span><h1>Gallery<a class="headerlink" href="#gallery" title="Permalink to this headline">¶</a></h1>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates an application of the sankey plot type to a geospatial dataset of `an..."><div class="figure align-default" id="id1">
+<img alt="../_images/sphx_glr_plot_dc_street_network_thumb.png" src="../_images/sphx_glr_plot_dc_street_network_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_dc_street_network.html#sphx-glr-gallery-plot-dc-street-network-py"><span class="std std-ref">Sankey of traffic volumes in Washington DC</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates a combined application of kdeplot and pointplot to a dataset of AirBn..."><div class="figure align-default" id="id2">
+<img alt="../_images/sphx_glr_plot_boston_airbnb_kde_thumb.png" src="../_images/sphx_glr_plot_boston_airbnb_kde_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_boston_airbnb_kde.html#sphx-glr-gallery-plot-boston-airbnb-kde-py"><span class="std std-ref">KDEPlot of Boston AirBnB Locations</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot overlayed on a quadtree mapping traffic accident collisions in N..."><div class="figure align-default" id="id3">
+<img alt="../_images/sphx_glr_plot_nyc_collisions_quadtree_thumb.png" src="../_images/sphx_glr_plot_nyc_collisions_quadtree_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nyc_collisions_quadtree.html#sphx-glr-gallery-plot-nyc-collisions-quadtree-py"><span class="std std-ref">Quadtree of NYC traffic collisions</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example shows a choropleth of the percentage of residents in New York State by county who ..."><div class="figure align-default" id="id4">
+<img alt="../_images/sphx_glr_plot_ny_state_demographics_thumb.png" src="../_images/sphx_glr_plot_ny_state_demographics_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_ny_state_demographics.html#sphx-glr-gallery-plot-ny-state-demographics-py"><span class="std std-ref">Choropleth of New York State population demographics</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example reproduces a famous historical flow map: Charles Joseph Minard&#x27;s map depicting Nap..."><div class="figure align-default" id="id5">
+<img alt="../_images/sphx_glr_plot_minard_napoleon_russia_thumb.png" src="../_images/sphx_glr_plot_minard_napoleon_russia_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_minard_napoleon_russia.html#sphx-glr-gallery-plot-minard-napoleon-russia-py"><span class="std std-ref">Sankey of Napoleon’s disastarous march on Moscow</span></a></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot combined with a voronoi mapping primary schools in Melbourne. Sc..."><div class="figure align-default" id="id6">
+<img alt="../_images/sphx_glr_plot_melbourne_schools_thumb.png" src="../_images/sphx_glr_plot_melbourne_schools_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_melbourne_schools.html#sphx-glr-gallery-plot-melbourne-schools-py"><span class="std std-ref">Voronoi of Melbourne primary schools</span></a></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example cartogram showcases regional trends for obesity in the United States. Rugged mount..."><div class="figure align-default" id="id7">
+<img alt="../_images/sphx_glr_plot_obesity_thumb.png" src="../_images/sphx_glr_plot_obesity_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_obesity.html#sphx-glr-gallery-plot-obesity-py"><span class="std std-ref">Cartogram of US states by obesity rate</span></a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example, taken from the User Guide, plots cities in the contiguous United States by their ..."><div class="figure align-default" id="id8">
+<img alt="../_images/sphx_glr_plot_largest_cities_usa_thumb.png" src="../_images/sphx_glr_plot_largest_cities_usa_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_largest_cities_usa.html#sphx-glr-gallery-plot-largest-cities-usa-py"><span class="std std-ref">Pointplot of US cities by population</span></a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example choropleth plots a subset of parking tickets issued to drivers in New York City. S..."><div class="figure align-default" id="id9">
+<img alt="../_images/sphx_glr_plot_nyc_parking_tickets_thumb.png" src="../_images/sphx_glr_plot_nyc_parking_tickets_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nyc_parking_tickets.html#sphx-glr-gallery-plot-nyc-parking-tickets-py"><span class="std std-ref">Choropleth of parking tickets issued to state by precinct in NYC</span></a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example shows a kdeplot of traffic accident densities for two common contributing factors:..."><div class="figure align-default" id="id10">
+<img alt="../_images/sphx_glr_plot_nyc_collision_factors_thumb.png" src="../_images/sphx_glr_plot_nyc_collision_factors_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nyc_collision_factors.html#sphx-glr-gallery-plot-nyc-collision-factors-py"><span class="std std-ref">KDEPlot of two NYC traffic accident contributing factors</span></a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example plots passenger volumes for the most important flight routes out of Los Angeles In..."><div class="figure align-default" id="id11">
+<img alt="../_images/sphx_glr_plot_los_angeles_flights_thumb.png" src="../_images/sphx_glr_plot_los_angeles_flights_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_los_angeles_flights.html#sphx-glr-gallery-plot-los-angeles-flights-py"><span class="std std-ref">Sankey of Los Angeles flight volumes with Cartopy globes</span></a></span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="The example pointplot of fatal (&gt;1 fatality) and injurious (&gt;1 injury requiring a hospital visi..."><div class="figure align-default" id="id12">
+<img alt="../_images/sphx_glr_plot_nyc_collisions_map_thumb.png" src="../_images/sphx_glr_plot_nyc_collisions_map_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_nyc_collisions_map.html#sphx-glr-gallery-plot-nyc-collisions-map-py"><span class="std std-ref">Pointplot of NYC fatal and injurious traffic collisions</span></a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example plots United States cities by their elevation. Several different possible scaling ..."><div class="figure align-default" id="id13">
+<img alt="../_images/sphx_glr_plot_usa_city_elevations_thumb.png" src="../_images/sphx_glr_plot_usa_city_elevations_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py"><span class="std std-ref">Pointplot of US city elevations with custom scale functions</span></a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/ffe70a6f565c906dc254a54f6399c746/gallery_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">gallery_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/dd1deb4ef8926744ef810a6e9eea9095/gallery_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">gallery_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_dc_street_network.html" class="btn btn-neutral float-right" title="Sankey of traffic volumes in Washington DC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../plot_references/plot_reference.html" class="btn btn-neutral float-left" title="Plot Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Aleksey Bilogur
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

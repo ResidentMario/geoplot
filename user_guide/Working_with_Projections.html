@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Working with Projections &mdash; geoplot 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Customizing Plots" href="Customizing_Plots.html" />
+    <link rel="prev" title="Working with Geospatial Data" href="Working_with_Geospatial_Data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> geoplot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Working_with_Geospatial_Data.html">Working with Geospatial Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with Projections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projection-and-unprojection">Projection and unprojection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stacking-projected-plots">Stacking projected plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projections-on-subplots">Projections on subplots</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Customizing_Plots.html">Customizing Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plot_references/plot_reference.html">Plot Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../gallery/index.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">geoplot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Working with Projections</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/user_guide/Working_with_Projections.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="working-with-projections">
+<h1>Working with Projections<a class="headerlink" href="#working-with-projections" title="Permalink to this headline">¶</a></h1>
+<p>This section of the tutorial discusses <a class="reference external" href="https://en.wikipedia.org/wiki/Map_projection">map
+projections</a>. If you
+don’t know what a projection is, or are looking to learn more about how
+they work in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>, this page is for you!</p>
+<p>I recommend following along with this tutorial interactively using
+<a class="reference external" href="https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working_with_Projections.ipynb">Binder</a>.</p>
+<div class="section" id="projection-and-unprojection">
+<h2>Projection and unprojection<a class="headerlink" href="#projection-and-unprojection" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1"># load the example data</span>
+<span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x11a914208</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_1_1.png" src="../_images/Working_with_Projections_1_1.png" />
+<p>This map is an example of an unprojected plot: it reproduces our
+coordinates as if they were on a flat Cartesian plane. But remember, the
+Earth is not a flat surface; it’s a sphere. This isn’t a map of the
+United States that you’d seen in print anywhere because it badly
+distorts both of the <a class="reference external" href="http://www.geo.hunter.cuny.edu/~jochen/gtech201/lectures/lec6concepts/Map%20coordinate%20systems/How%20to%20choose%20a%20projection.htm">two
+criteria</a>
+most projections are evaluated on: <em>shape</em> and <em>area</em>.</p>
+<p>For sufficiently small areas, the amount of distortion is very small.
+This map of New York City, for example, is reasonably accurate:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x11d243898</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_3_1.png" src="../_images/Working_with_Projections_3_1.png" />
+<p>But there is a better way: use a <strong>projection</strong>.</p>
+<p>A projection is a way of mapping points on the surface of the Earth into
+two dimensions (like a piece of paper or a computer screen). Because
+moving from three dimensions to two is intrinsically lossy, no
+projection is perfect, but some will definitely work better in certain
+case than others.</p>
+<p>The most common projection used for the contiguous United States is the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Albers_projection">Albers Equal Area
+projection</a>. This
+projection works by wrapping the Earth around a cone, one that’s
+particularly well optimized for locations near the middle of the
+Northern Hemisphere (and particularly poorly for locations at the
+poles).</p>
+<p>To add a projection to a map in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>, pass a <code class="docutils literal notranslate"><span class="pre">geoplot.crs</span></code>
+object to the <code class="docutils literal notranslate"><span class="pre">projection</span></code> parameter on the plot. For instance, here’s
+what we get when we try <code class="docutils literal notranslate"><span class="pre">Albers</span></code> out on the contiguous United States:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11dd02cc0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_5_1.png" src="../_images/Working_with_Projections_5_1.png" />
+<p>For a list of projections implemented in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>, refer to <a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/crs/projections.html">the
+projections
+reference</a>
+in the <code class="docutils literal notranslate"><span class="pre">cartopy</span></code> documentation (<code class="docutils literal notranslate"><span class="pre">cartopy</span></code> is the library <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>
+relies on for its projections).</p>
+</div>
+<div class="section" id="stacking-projected-plots">
+<h2>Stacking projected plots<a class="headerlink" href="#stacking-projected-plots" title="Permalink to this headline">¶</a></h2>
+<p>A key feature of <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> is the ability to stack plots on top of one
+another.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cities</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;usa_cities&#39;</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
+    <span class="n">contiguous_usa</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11da21c50</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_8_1.png" src="../_images/Working_with_Projections_8_1.png" />
+<p>By default, <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> will set the
+<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">extent</a>
+(the area covered by the plot) to the
+<a class="reference external" href="http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds">total_bounds</a>
+of the last plot stacked onto the map.</p>
+<p>However, suppose that even though we have data for One entire United
+States (plus Puerto Rico) we actually want to display just data for the
+contiguous United States. An easy way to get this is setting the
+<code class="docutils literal notranslate"><span class="pre">extent</span></code> parameter using <code class="docutils literal notranslate"><span class="pre">total_bounds</span></code>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
+    <span class="n">contiguous_usa</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">contiguous_usa</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11da947f0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_10_1.png" src="../_images/Working_with_Projections_10_1.png" />
+<p>The section of the tutorial on <a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing
+Plots</a>
+explains the <code class="docutils literal notranslate"><span class="pre">extent</span></code> parameter in more detail.</p>
+</div>
+<div class="section" id="projections-on-subplots">
+<h2>Projections on subplots<a class="headerlink" href="#projections-on-subplots" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to compose multiple axes together into a single panel
+figure in <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> using the <code class="docutils literal notranslate"><span class="pre">subplots</span></code> feature. This feature is
+highly useful for creating side-by-side comparisons of your plots, or
+for stacking your plots together into a single more informative display.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x11dc55438</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_13_1.png" src="../_images/Working_with_Projections_13_1.png" />
+<p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> supports subplotting projected maps using the
+<code class="docutils literal notranslate"><span class="pre">projection</span></code> argument to <code class="docutils literal notranslate"><span class="pre">subplot_kw</span></code>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">proj</span>
+<span class="p">})</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11ded2b70</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Working_with_Projections_15_1.png" src="../_images/Working_with_Projections_15_1.png" />
+<p>The <a class="reference external" href="https://residentmario.github.io/geoplot/gallery.html">Gallery</a>
+includes several demos, like the <a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale
+Functions</a>
+demo, that use this feature to good effect.</p>
+<p>Notice that in this code sample we specified some additional parameters
+for our projection. The <code class="docutils literal notranslate"><span class="pre">central_longitude=-98</span></code> and
+<code class="docutils literal notranslate"><span class="pre">central_latitude=39.5</span></code> parameters set the “center point” around which
+the points and shapes on the map are reprojected (in this case we use
+the <a class="reference external" href="https://en.wikipedia.org/wiki/Geographic_center_of_the_contiguous_United_States">geographic center of the contiguous United
+States</a>).</p>
+<p>When you pass a projection to a <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> function, <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> will
+infer these values for you. But when passing the projection directly to
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> you must set them yourself.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Customizing_Plots.html" class="btn btn-neutral float-right" title="Customizing Plots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Working_with_Geospatial_Data.html" class="btn btn-neutral float-left" title="Working with Geospatial Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2019, Aleksey Bilogur
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
