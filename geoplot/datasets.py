@@ -45,6 +45,10 @@ def get_path(dataset_name):
         return f'{src}/nyc-parking-tickets-sample.geojson'
     elif dataset_name == 'world':
         return f'{src}/world.geojson'
+    elif dataset_name == 'melbourne':
+        return f'{src}/melbourne.geojson'
+    elif dataset_name == 'melbourne_schools':
+        return f'{src}/melbourne-schools.geojson'
     else:
         raise ValueError(
             f'The dataset_name value {dataset_name!r} is not in the list of valid names.'

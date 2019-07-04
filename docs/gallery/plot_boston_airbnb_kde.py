@@ -1,6 +1,6 @@
 """
-Overlayed KDEPlot and Pointplot of Boston AirBnB Locations
-==========================================================
+KDEPlot of Boston AirBnB Locations
+==================================
 
 This example demonstrates a combined application of ``kdeplot`` and ``pointplot`` to a
 dataset of AirBnB locations in Boston. The result is outputted to a webmap using the nifty

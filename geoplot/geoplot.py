@@ -419,7 +419,7 @@ class ClipMixin:
         if clip is not None:
             clip_shp = clip.unary_union
             gdf = gdf.assign(
-                geometry=gdf.geometry.map(lambda geom: clip_shp.intersection(geom))
+                geometry=gdf.geometry.intersection(clip_shp)
             )
         return gdf
 
@@ -1003,6 +1003,18 @@ def quadtree(
             geoms = self.set_clip(geoms)
 
             for geom, color in zip(geoms.geometry, self.colors):
+                # Splitting rules that specify an nmax but not an nmin can result in partitions
+                # which are completely outside (e.g. do not intersect at all with) the clip
+                # geometry. The intersection operation run in set_clip will return an empty
+                # GeometryCollection for these results. The plot drivers do not try to interpret
+                # GeometryCollection objects, even empty ones, and will raise an error when passed
+                # one, so we have to exclude these bad partitions ourselves.
+                if (
+                    isinstance(geom, shapely.geometry.GeometryCollection) and
+                    len(geom) == 0
+                ):
+                    continue
+
                 if projection:
                     feature = ShapelyFeature([geom], ccrs.PlateCarree())
                     ax.add_feature(
@@ -1470,8 +1482,14 @@ def voronoi(
                 return ax
 
             geoms = build_voronoi_polygons(self.df)
+            # Must take the .values of the output GeoDataFrame because assign is index-aligned.
+            # So self.df can have any index. But set_clip constructs a new GeoSeries with a fresh
+            # descending (1..N) index. If self.df doesn't also have a 1..N index, the join will
+            # be misaligned and/or nan values will be inserted. The easiest way to assign in an
+            # index-naive (e.g. index-based) manner is to provide a numpy array instead of a
+            # GeoSeries by taking .values.
             self.df = self.df.assign(
-                geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms))
+                geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms)).values
             )
             if self.projection:
                 for color, geom in zip(self.colors, self.df.geometry):

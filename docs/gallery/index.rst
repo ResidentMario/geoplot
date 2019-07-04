@@ -50,6 +50,26 @@ Gallery
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot overlayed on a quadtree mapping traffic accident collisions in N...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_nyc_collisions_quadtree
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows a choropleth of the percentage of residents in New York State by county who ...">
 
 .. only:: html
@@ -87,6 +107,26 @@ Gallery
    :hidden:
 
    /gallery/plot_minard_napoleon_russia
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot combined with a voronoi mapping primary schools in Melbourne. Sc...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_melbourne_schools_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_melbourne_schools.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_melbourne_schools
 
 .. raw:: html
 

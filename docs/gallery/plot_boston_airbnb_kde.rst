@@ -7,8 +7,8 @@
 .. _sphx_glr_gallery_plot_boston_airbnb_kde.py:
 
 
-Overlayed KDEPlot and Pointplot of Boston AirBnB Locations
-==========================================================
+KDEPlot of Boston AirBnB Locations
+==================================
 
 This example demonstrates a combined application of ``kdeplot`` and ``pointplot`` to a
 dataset of AirBnB locations in Boston. The result is outputted to a webmap using the nifty
@@ -60,7 +60,7 @@ overwhelming the renderer.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.337 seconds)
+   **Total running time of the script:** ( 0 minutes  5.529 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_boston_airbnb_kde.py:
