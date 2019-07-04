@@ -60,7 +60,7 @@ overwhelming the renderer.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.529 seconds)
+   **Total running time of the script:** ( 0 minutes  3.548 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_boston_airbnb_kde.py:
