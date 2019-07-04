@@ -10,7 +10,7 @@ demonstrates using the ``mplleaflet`` library to quickly and easily transform th
 into an scrolly-panny webmap.
 
 `Click here to see the interactive webmap version. 
-<http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_.
+<http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_
 """
 
 import geopandas as gpd

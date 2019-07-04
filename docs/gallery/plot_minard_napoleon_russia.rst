@@ -18,7 +18,7 @@ demonstrates using the ``mplleaflet`` library to quickly and easily transform th
 into an scrolly-panny webmap.
 
 `Click here to see the interactive webmap version. 
-<http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_.
+<http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_
 
 
 
@@ -73,7 +73,7 @@ into an scrolly-panny webmap.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.916 seconds)
+   **Total running time of the script:** ( 0 minutes  0.730 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_minard_napoleon_russia.py:

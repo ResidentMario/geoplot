@@ -30,6 +30,26 @@ Gallery
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates a combined application of kdeplot and pointplot to a dataset of AirBn...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_boston_airbnb_kde_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_boston_airbnb_kde
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows a choropleth of the percentage of residents in New York State by county who ...">
 
 .. only:: html
