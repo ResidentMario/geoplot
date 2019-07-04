@@ -15,3 +15,8 @@ tests/baseline/
 quilt_packages/
 .pytest_cache/
 Untitled.ipynb
+
+# sphinx-gallery helper files
+*.md5
+docs/gallery/*.ipynb
+*.zip
