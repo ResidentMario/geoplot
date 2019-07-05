@@ -44,7 +44,7 @@ This example demonstrates an application of the ``sankey`` plot type to a geospa
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  33.305 seconds)
+   **Total running time of the script:** ( 0 minutes  43.050 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dc_street_network.py:

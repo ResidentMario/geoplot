@@ -5,18 +5,18 @@
 
 Computation times
 =================
-**01:10.898** total execution time for **gallery** files:
+**02:43.493** total execution time for **gallery** files:
 
-- **00:18.261**: :ref:`sphx_glr_gallery_plot_melbourne_schools.py` (``plot_melbourne_schools.py``)
-- **00:15.900**: :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py` (``plot_nyc_collision_factors.py``)
-- **00:11.843**: :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py` (``plot_nyc_collisions_map.py``)
-- **00:10.658**: :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py` (``plot_nyc_parking_tickets.py``)
-- **00:04.706**: :ref:`sphx_glr_gallery_plot_los_angeles_flights.py` (``plot_los_angeles_flights.py``)
-- **00:04.604**: :ref:`sphx_glr_gallery_plot_usa_city_elevations.py` (``plot_usa_city_elevations.py``)
-- **00:02.716**: :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)
-- **00:02.210**: :ref:`sphx_glr_gallery_plot_obesity.py` (``plot_obesity.py``)
-- **00:00.000**: :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py` (``plot_boston_airbnb_kde.py``)
-- **00:00.000**: :ref:`sphx_glr_gallery_plot_dc_street_network.py` (``plot_dc_street_network.py``)
-- **00:00.000**: :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py` (``plot_minard_napoleon_russia.py``)
-- **00:00.000**: :ref:`sphx_glr_gallery_plot_ny_state_demographics.py` (``plot_ny_state_demographics.py``)
-- **00:00.000**: :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py` (``plot_nyc_collisions_quadtree.py``)
+- **00:43.050**: :ref:`sphx_glr_gallery_plot_dc_street_network.py` (``plot_dc_street_network.py``)
+- **00:34.751**: :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py` (``plot_nyc_collisions_quadtree.py``)
+- **00:19.350**: :ref:`sphx_glr_gallery_plot_melbourne_schools.py` (``plot_melbourne_schools.py``)
+- **00:15.448**: :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py` (``plot_nyc_collision_factors.py``)
+- **00:14.640**: :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py` (``plot_nyc_collisions_map.py``)
+- **00:12.124**: :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py` (``plot_nyc_parking_tickets.py``)
+- **00:06.289**: :ref:`sphx_glr_gallery_plot_los_angeles_flights.py` (``plot_los_angeles_flights.py``)
+- **00:05.686**: :ref:`sphx_glr_gallery_plot_usa_city_elevations.py` (``plot_usa_city_elevations.py``)
+- **00:03.861**: :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py` (``plot_boston_airbnb_kde.py``)
+- **00:03.148**: :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)
+- **00:02.595**: :ref:`sphx_glr_gallery_plot_obesity.py` (``plot_obesity.py``)
+- **00:01.885**: :ref:`sphx_glr_gallery_plot_ny_state_demographics.py` (``plot_ny_state_demographics.py``)
+- **00:00.667**: :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py` (``plot_minard_napoleon_russia.py``)
