@@ -3,27 +3,41 @@ geoplot: geospatial data visualization
 
 .. raw:: html
 
-    <div class="row">
-    <a href=./examples/nyc-collision-factors.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png" height="200" width="200">
-    </a>
+    <div class="row" style="display:flex; width:100%; flex-direction:row">
+        <div style="flex:1; display: inline-block">
+            <a href=./gallery/plot_nyc_collision_factors.html>
+            <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
+             style="width:100%; height:auto">
+            </a>
+        </div>
 
-    <a href=./examples/los-angeles-flights.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png" height="200" width="200">
-    </a>
+        <div style="display:flex; flex:1; display: inline-block">
+            <a href=./gallery/plot_los_angeles_flights.html>
+            <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png"
+             style="width:100%; height:auto">
+            </a>
+        </div>
 
-    <a href=./examples/usa-city-elevations.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
-     height="200">
-    </a>
+        <div style="display:flex; flex:1.5; display: inline-block">
+            <a href=./gallery/plot_usa_city_elevations.html>
+            <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
+             style="width:100%; height:auto">
+            </a>
+        </div>
 
-    <a href=./examples/nyc-parking-tickets.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png" height="200" width="200">
-    </a>
+        <div style="display:flex; flex:1; display: inline-block">
+            <a href=./gallery/plot_nyc_parking_tickets.html>
+            <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png"
+             style="width:100%; height:auto">
+            </a>
+        </div>
 
-    <a href=./examples/dc-street-network.html>
-    <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png" height="200" width="200">
-    </a>
+        <div style="display:flex; flex:1; display: inline-block">
+            <a href=./gallery/plot_dc_street_network.html>
+            <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png"
+             style="width:100%; height:auto">
+            </a>
+        </div>
 
     </div>
 

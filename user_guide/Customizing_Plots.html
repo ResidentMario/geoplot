@@ -267,7 +267,7 @@ list</a>.
 Naturally it is also possible to <a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormap-manipulation.html">create your own
 colormap</a>;
 there is an
-<a class="reference external" href="http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746">example</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html">example</a>
 of this in the Gallery.</p>
 <p>The <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.361.6082&amp;rep=rep1&amp;type=pdf">ColorBrewer
 paper</a>
@@ -327,7 +327,7 @@ of each county in New York which is white):</p>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_13_1.png" src="../_images/Customizing_Plots_13_1.png" />
-<p>Another good example is the <a class="reference external" href="https://residentmario.github.io/geoplot/examples/nyc-parking-tickets.html">Parking
+<p>Another good example is the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_nyc_parking_tickets.html">Parking
 Tickets</a>
 demo in the Gallery.</p>
 <p>If you are using a categorical colormap, there is one last consideration
@@ -418,10 +418,10 @@ maxima and minima to your liking using the <code class="docutils literal notrans
 <p><strong>Power User Feature: Custom Scaling Functions</strong></p>
 <blockquote>
 <div><p>To use a different scale, like e.g. logarithmic, pass a scaling
-function to the <code class="docutils literal notranslate"><span class="pre">scale_func</span></code> parameter. The <a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale
+function to the <code class="docutils literal notranslate"><span class="pre">scale_func</span></code> parameter. The <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html">Pointplot Scale
 Functions</a>
 demo in the
-<a class="reference external" href="https://residentmario.github.io/geoplot/gallery.html">Gallery</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/index.html">Gallery</a>
 demonstrates several such functions/scales in actions.</p>
 </div></blockquote>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
@@ -525,8 +525,8 @@ different page in <a class="reference external" href="https://matplotlib.org/3.1
 documentation</a>.</p>
 <p>Keywords starting with <code class="docutils literal notranslate"><span class="pre">marker</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">marker</span></code>,
 <code class="docutils literal notranslate"><span class="pre">markeredgecolor</span></code>, <code class="docutils literal notranslate"><span class="pre">markeredgewidth</span></code>, <code class="docutils literal notranslate"><span class="pre">markerfacecolor</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">markersize</span></code>) will be passed through the legend down to the legend
-markers.</p>
+<code class="docutils literal notranslate"><span class="pre">markersize</span></code>) <a class="reference external" href="https://github.com/ResidentMario/geoplot/issues/35#issuecomment-507196579">will be passed through the legend down to the legend
+markers</a>.</p>
 </div></blockquote>
 </div>
 <div class="section" id="extent">
@@ -560,7 +560,7 @@ here’s a map of just populous cities in the state of California.</p>
 </div>
 <img alt="../_images/Customizing_Plots_31_2.png" src="../_images/Customizing_Plots_31_2.png" />
 <p>The
-<code class="docutils literal notranslate"><span class="pre">`total_bounds</span></code> &lt;<a class="reference external" href="http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds">http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds</a>&gt;`__
+<a class="reference external" href="http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds">total_bounds</a>
 property on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, which returns the extent bounding box
 values for a given chunk of data, is extremely useful for this purpose.</p>
 </div>
@@ -621,8 +621,8 @@ pretty-looking plots:</p>
 <img alt="../_images/Customizing_Plots_34_2.png" src="../_images/Customizing_Plots_34_2.png" />
 <p>The <a class="reference external" href="https://www.kaggle.com/residentmario/styling-your-plots">“Styling your
 plots”</a>
-guide on Kaggle is a good reference on <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styling in a
-nutshell.</p>
+guide on Kaggle documents some other common <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styling
+options.</p>
 </div>
 </div>
 

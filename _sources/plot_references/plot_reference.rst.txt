@@ -221,7 +221,7 @@ geometry.
 
 .. code-block:: python
 
-    ax = gplt.polyplot(boroughs, ax=ax, projection=gcrs.AlbersEqualArea())
+    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
     gplt.kdeplot(collisions, cmap='Reds', shade=True, clip=boroughs, ax=ax)
 
 .. image:: ../figures/kdeplot/kdeplot-clip.png

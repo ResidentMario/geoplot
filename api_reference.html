@@ -181,10 +181,10 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p></li>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p></li>
 <li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p></li>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the number of color categories to split the data into. For a
@@ -192,21 +192,21 @@ continuous colormap, set this value to <code class="docutils literal notranslate
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the categorical binning scheme to use.</p></li>
 <li><p><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) – The column in the dataset (or an iterable of some other data) with which to scale output
 points. For a reference on this and the other scale-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale">Customizing Plots#Scale</a>.</p></li>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale">Customizing Plots#Scale</a>.</p></li>
 <li><p><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the minimum and maximum size of the points.</p></li>
 <li><p><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the function used to determine the size of each point. For reference
 see the
-<a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale Functions</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py">Pointplot Scale Functions</a>
 demo.</p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p></li>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) – Which variable, <code class="docutils literal notranslate"><span class="pre">hue</span></code> or <code class="docutils literal notranslate"><span class="pre">scale</span></code>, to use in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p></li>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
 instance to paint the plot on. Defaults to a new axis.</p></li>
@@ -231,16 +231,15 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
 instance to paint the plot on. Defaults to a new axis.</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib.patches.Polygon</span></code> objects
-&lt;<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon</a>&gt;`_.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying matplotlib <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -261,11 +260,11 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
-<li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>required</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
+<li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p>
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>The
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
@@ -275,18 +274,19 @@ value to <code class="docutils literal notranslate"><span class="pre">None</span
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – The categorical binning scheme to use.</p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – <p>Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p>
 </p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
 instance to paint the plot on. Defaults to a new axis.</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -307,11 +307,13 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
+</p></li>
+<li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>The <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
 </p></li>
 <li><p><strong>clip</strong> (<em>None</em><em> or </em><em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – If specified, isochrones will be clipped to the boundaries of this geometry.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
@@ -338,21 +340,21 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
-<li><p><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>required</em>) – <p>The column in the dataset (or an iterable of some other data) with which to scale output
+<li><p><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) with which to scale output
 points. For a reference on this and the other scale-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale">Customizing Plots#Scale</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale">Customizing Plots#Scale</a>.</p>
 </p></li>
 <li><p><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the minimum and maximum size of the points.</p></li>
 <li><p><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the function used to determine the size of each point. For reference
 see the
-<a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale Functions</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py">Pointplot Scale Functions</a>
 demo.</p>
 </p></li>
 <li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p>
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
@@ -362,14 +364,14 @@ continuous colormap, set this value to <code class="docutils literal notranslate
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the categorical binning scheme to use.</p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – <p>Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p>
 </p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) – Which variable, <code class="docutils literal notranslate"><span class="pre">hue</span></code> or <code class="docutils literal notranslate"><span class="pre">scale</span></code>, to use in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
@@ -396,11 +398,11 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em><em>, </em><em>optional</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
 <li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p>
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
@@ -410,24 +412,24 @@ continuous colormap, set this value to <code class="docutils literal notranslate
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the categorical binning scheme to use.</p></li>
 <li><p><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) with which to scale output
 points. For a reference on this and the other scale-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale">Customizing Plots#Scale</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale">Customizing Plots#Scale</a>.</p>
 </p></li>
 <li><p><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the minimum and maximum size of the points.</p></li>
 <li><p><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the function used to determine the size of each point. For reference
 see the
-<a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale Functions</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py">Pointplot Scale Functions</a>
 demo.</p>
 </p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – <p>Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p>
 </p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) – Which variable, <code class="docutils literal notranslate"><span class="pre">hue</span></code> or <code class="docutils literal notranslate"><span class="pre">scale</span></code>, to use in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
@@ -455,12 +457,12 @@ instances.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
 <li><p><strong>clip</strong> (<em>None</em><em> or </em><em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – If specified, quadrangles will be clipped to the boundaries of this geometry.</p></li>
 <li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p>
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
@@ -475,13 +477,13 @@ removed).</p></li>
 <li><p><strong>agg</strong> (<em>function</em><em>, </em><em>optional</em>) – The aggregation func used for the colormap. Defaults to <code class="docutils literal notranslate"><span class="pre">np.mean</span></code>.</p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – <p>Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p>
 </p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
@@ -508,12 +510,12 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
 <li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb">Working with Projections</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.</p>
 </p></li>
 <li><p><strong>clip</strong> (<em>None</em><em> or </em><em>iterable</em><em> or </em><em>GeoSeries</em><em>, </em><em>optional</em>) – If specified, the output will be clipped to the boundaries of this geometry.</p></li>
 <li><p><strong>hue</strong> (<em>None</em><em>, </em><em>Series</em><em>, </em><em>GeoSeries</em><em>, </em><em>iterable</em><em>, or </em><em>str</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) used to color the points.
 For a reference on this and the other hue-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Hue">Customizing Plots#Hue</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p>
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
@@ -523,24 +525,24 @@ continuous colormap, set this value to <code class="docutils literal notranslate
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the categorical binning scheme to use.</p></li>
 <li><p><strong>scale</strong> (<em>str</em><em> or </em><em>iterable</em><em>, </em><em>optional</em>) – <p>The column in the dataset (or an iterable of some other data) with which to scale output
 points. For a reference on this and the other scale-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Scale">Customizing Plots#Scale</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale">Customizing Plots#Scale</a>.</p>
 </p></li>
 <li><p><strong>limits</strong> (<em>(</em><em>min</em><em>, </em><em>max</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the minimum and maximum size of the points.</p></li>
 <li><p><strong>scale_func</strong> (<em>ufunc</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">scale</span></code> is set, the function used to determine the size of each point. For reference
 see the
-<a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">Pointplot Scale Functions</a>
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py">Pointplot Scale Functions</a>
 demo.</p>
 </p></li>
 <li><p><strong>legend</strong> (<em>boolean</em><em>, </em><em>optional</em>) – <p>Whether or not to include a map legend. For a reference on this and the other
 legend-related parameters that follow, see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Legend">Customizing Plots#Legend</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend">Customizing Plots#Legend</a>.</p>
 </p></li>
 <li><p><strong>legend_values</strong> (<em>list</em><em>, </em><em>optional</em>) – The data values to be used in the legend.</p></li>
 <li><p><strong>legend_labels</strong> (<em>list</em><em>, </em><em>optional</em>) – The data labels to be used in the legend.</p></li>
 <li><p><strong>legend_var</strong> (<em>&quot;hue&quot;</em><em> or </em><em>&quot;scale&quot;</em><em>, </em><em>optional</em>) – Which variable, <code class="docutils literal notranslate"><span class="pre">hue</span></code> or <code class="docutils literal notranslate"><span class="pre">scale</span></code>, to use in the legend.</p></li>
 <li><p><strong>legend_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Keyword arguments to be passed to the underlying legend.</p></li>
 <li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
-<a class="reference external" href="https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent">Customizing Plots#Extent</a>.</p>
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
 </p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
