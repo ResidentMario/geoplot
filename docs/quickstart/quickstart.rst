@@ -18,8 +18,8 @@ You can run this tutorial code yourself interactively using
     # Unclutter the display.
     import pandas as pd; pd.set_option('max_columns', 6)
 
-Working with geospatial data
-----------------------------
+Getting geospatial data
+-----------------------
 
 The starting point for geospatial analysis is geospatial data. The
 standard way of dealing with such data in Python using ``geopandas``—a
@@ -131,41 +131,27 @@ All functions in ``geoplot`` take a ``GeoDataFrame`` as input.
    format, so after reading in some data make sure to verify that your
    coordinates are in the right order!
 
+To learn more about manipulating geospatial data, check out the section
+of the tutorial on `Working with Geospatial
+Data <https://residentmario.github.io/geoplot/user_guide/Working_with_Geospatial_Data.html>`__.
+
 .. raw:: html
 
    </div>
 
-Basic usage
------------
-
-If you have ever worked with ``geopandas`` before you are probably
-familiar with ``plot``, which can be used to quickly and easily plot the
-data in a ``GeoDataFrame``:
-
-.. code:: ipython3
-
-    continental_usa_cities = usa_cities.query('STATE not in ["HI", "AK", "PR"]')
-    continental_usa_cities.plot()
-
-
-
-
-.. parsed-literal::
-
-    <matplotlib.axes._subplots.AxesSubplot at 0x121beb860>
-
-
-
-
-.. image:: quickstart_files/quickstart_8_1.png
-
-
-We can replicate this result with nicer defaults using the ``pointplot``
-function in ``geoplot``:
+Plotting points and polygons
+----------------------------
 
 .. code:: ipython3
 
     import geoplot as gplt
+
+If your data consists of a bunch of points, you can display those points
+using ``pointplot``.
+
+.. code:: ipython3
+
+    continental_usa_cities = usa_cities.query('STATE not in ["HI", "AK", "PR"]')
     gplt.pointplot(continental_usa_cities)
 
 
@@ -173,12 +159,12 @@ function in ``geoplot``:
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x10a67e2e8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a81b358>
 
 
 
 
-.. image:: quickstart_files/quickstart_10_1.png
+.. image:: Quickstart_files/Quickstart_10_1.png
 
 
 If you have polygonal data instead, you can plot that using a
@@ -197,12 +183,12 @@ If you have polygonal data instead, you can plot that using a
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x1224876a0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a876eb8>
 
 
 
 
-.. image:: quickstart_files/quickstart_13_1.png
+.. image:: Quickstart_files/Quickstart_13_1.png
 
 
 We can combine the these two plots using overplotting. **Overplotting**
@@ -224,7 +210,7 @@ useful for providing additional context for our plots:
 
 
 
-.. image:: quickstart_files/quickstart_15_1.png
+.. image:: Quickstart_files/Quickstart_15_1.png
 
 
 You might notice that this map of the United States looks very strange.
@@ -242,67 +228,43 @@ States. Here’s how you use it with ``geoplot``:
 
     import geoplot.crs as gcrs
     
-    proj = gcrs.AlbersEqualArea()
-    ax = gplt.polyplot(contiguous_usa, projection=proj)
-    gplt.pointplot(continental_usa_cities, ax=ax, projection=proj)
+    ax = gplt.polyplot(contiguous_usa, projection=gcrs.AlbersEqualArea())
+    gplt.pointplot(continental_usa_cities, ax=ax)
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12259ce10>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11a902518>
 
 
 
 
-.. image:: quickstart_files/quickstart_17_1.png
+.. image:: Quickstart_files/Quickstart_17_1.png
 
 
 This looks much better than our first plot! In fact, this is the version
-of the United States that you’ll probably most often see in maps; and
-it’s just one of dozens of projections provided in ``geoplot``.
+of the United States that you’ll probably most often see in maps.
 
 To learn more about projections check out the section of the tutorial on
 `Working with
-Projection <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Working%20with%20Projections.ipynb>`__.
+Projections <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`__.
 
-What if you want to make your plot prettier? ``geoplot`` has tons of
-options for doing so, courtesy of ``matplotlib``:
+Adding visual parameters
+------------------------
+
+This map tells us that there are more cities on either coast than there
+are in and around the Rocky Mountains, but it doesn’t tell us anything
+about the cities themselves. We can make an informative plot by adding
+more **visual parameters** to our plot.
+
+We’ll start with ``hue``.
 
 .. code:: ipython3
 
-    import matplotlib.pyplot as plt
-    
-    proj = gcrs.AlbersEqualArea()
-    
-    ax = gplt.polyplot(
-        contiguous_usa, 
-        zorder=-1,  # place the state shapes below the cities.
-        linewidth=1,
-        projection=proj,
-        edgecolor='white',
-        facecolor='lightgray',
-        figsize=(12, 12)  # make the figure bigger.
-    )
-    
-    gplt.pointplot(
-        continental_usa_cities, 
-        scale='POP_2010',  # set point size based on population
-        limits=(2, 40),    # scale points from 1x to 80x
-        hue='POP_2010',    # Changing the color with population, too...
-        cmap='Blues',      # ...more blue, more people...
-        k=5,               # but let's limit ourselves to just five "classes" of city sizes
-        legend=True,       # Show a legend based on circle size, with the following values
-        legend_var='scale',
-        legend_values=[8000000, 2000000, 1000000, 100000],
-        legend_labels=['8 million', '2 million', '1 million', '100 thousand'],
-        legend_kwargs={'frameon': False, 'loc': 'lower right'},
-        ax=ax, 
-        projection=proj
-    )
-    
-    plt.title("Cities in the contiguous United States, 2010")  # add a title
+    ax = gplt.polyplot(contiguous_usa, projection=gcrs.AlbersEqualArea())
+    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', legend=True)
 
 
 .. parsed-literal::
@@ -315,49 +277,213 @@ options for doing so, courtesy of ``matplotlib``:
 
 .. parsed-literal::
 
-    Text(0.5, 1.0, 'Cities in the contiguous United States, 2010')
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11d921198>
 
 
 
 
-.. image:: quickstart_files/quickstart_19_2.png
+.. image:: Quickstart_files/Quickstart_19_2.png
 
 
-For a detailed guide to the plot customization options available in
-``geoplot``, check out the section of the tutorial on Customizing Plots.
+This map tells a clear story: that cities in the central United States
+have a higher ``ELEV_IN_FT`` then most other cities in the United
+States, especially those on the coast. Toggling the legend on helps make
+this result more interpretable.
 
-More plotting options
+Which colors get assigned to which category are controlled by a
+`colormap <https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html>`__
+(or ``cmap``). There are over fifty visually distinct colormaps in
+``matplotlib``; it’s also possible to create your own on the fly. This
+plot uses the default ``matplotlib`` ``cmap``, ``viridis``, but we can
+pick a different one that perhaps better suites our data if we so
+choose:
+
+.. code:: ipython3
+
+    ax = gplt.polyplot(contiguous_usa, projection=gcrs.AlbersEqualArea())
+    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues', legend=True)
+
+
+.. parsed-literal::
+
+    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+
+
+
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11dc8f278>
+
+
+
+
+.. image:: Quickstart_files/Quickstart_21_2.png
+
+
+Next, let’s try adding still another visual variable to our plot:
+``scale``. We’ll also specify two other new parameters: ``limits``,
+which controls the maximum and minimum sizes of the scaled-out points;
+and ``legend_var``, which specifies which visual variable (``scale`` or
+``hue``) will appear in the legend.
+
+.. code:: ipython3
+
+    ax = gplt.polyplot(contiguous_usa, projection=gcrs.AlbersEqualArea())
+    gplt.pointplot(
+        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues',
+        scale='ELEV_IN_FT', limits=(1, 10),    
+        legend=True, legend_var='scale'
+    )
+
+
+.. parsed-literal::
+
+    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+
+
+
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11ef48898>
+
+
+
+
+.. image:: Quickstart_files/Quickstart_23_2.png
+
+
+This new plot shows more clearly than the previous one the difference in
+height between cities in the Rocky Mountain states like Colorado, Utah,
+and Wyoming, and those elsewhere in the United States.
+
+Making the plot pretty
+----------------------
+
+Ugly maps distract the reader from the story you want to tell. Once
+you’ve got the basic outline ready, it’s handy to be able to tweak your
+plot a bit to “prettify” it.
+
+``geoplot`` comes equipped with a variety of visual parameters (many of
+them from ``matplotlib``) that can be used to adjust the look and feel
+of the plot.
+
+.. code:: ipython3
+
+    ax = gplt.polyplot(
+        contiguous_usa, projection=gcrs.AlbersEqualArea(),
+        edgecolor='white', facecolor='lightgray',
+        figsize=(12, 8)
+    )
+    gplt.pointplot(
+        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues',
+        scale='ELEV_IN_FT', limits=(1, 10),    
+        legend=True, legend_var='scale',
+        legend_kwargs={'frameon': False},
+        legend_values=[-110, 1750, 3600, 5500, 7400],
+        legend_labels=['-110 feet', '1750 feet', '3600 feet', '5500 feet', '7400 feet']   
+    )
+    ax.set_title('Cities in the Continental United States by Elevation', fontsize=16)
+
+
+.. parsed-literal::
+
+    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+
+
+
+
+.. parsed-literal::
+
+    Text(0.5, 1.0, 'Cities in the Continental United States by Elevation')
+
+
+
+
+.. image:: Quickstart_files/Quickstart_26_2.png
+
+
+Some other plot types
 ---------------------
 
-``geoplot`` is organized in terms of **plots**. There are many different
-different plot types, each of which has strengths, weaknesses, and
-expected data types.
+So far we’ve worked with ``pointplot`` and ``polyplot``. ``geoplot`` has
+a variety of other plot types available as well. We’ll take a brief look
+at just two of them; the full list is covered in detail in the `Plot
+Reference <https://residentmario.github.io/geoplot/plot_references/plot_reference.html>`__.
 
-We have seen two so far: ``polyplot`` and ``pointplot``.
+.. code:: ipython3
 
-``polyplot`` is the simplest plot in ``geoplot``. It takes polygonal
-data (a ``GeoDataFrame`` with ``POLYGON`` or ``MULTIPOLYGON`` objects in
-the ``geometry`` column) as input, and provides a map of those polygons
-as output. It is used for adding a **basemap** to your visualiaztion: a
-representation of the space which adds context to the data you are
-actually trying to display.
+    gplt.choropleth(
+        contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
+        edgecolor='white', linewidth=1,
+        cmap='Greens', legend=True,
+        scheme='fisher_jenks',
+        legend_labels=[
+            '<3 million', '3-6.7 million', '6.7-12.8 million',
+            '12.8-25 million', '25-37 million'
+        ]
+    )
 
-``pointplot`` is a geospatial scatter plot. It takes point data (a
-``GeoDataFrame`` with ``POINT`` objects in the ``geometry`` column) as
-input, and provides a map of those points as output. If your data
-consists of a set of points, this plot type is a good fist choice: it’s
-easy, obviously, and easily explainable.
 
-To browse the other plot types, check out the Plot Reference or the
-Gallery.
 
-What to do next
----------------
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121005b70>
+
+
+
+
+.. image:: Quickstart_files/Quickstart_29_1.png
+
+
+This ``choropleth`` of population by state shows how much larger certain
+coastal states are than their peers in the central United States. A
+``choropleth`` is the standard-bearer in cartography for showing
+information about areas because it’s easy to make and interpret.
+
+.. code:: ipython3
+
+    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+    collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
+    
+    ax = gplt.kdeplot(collisions, cmap='Reds', shade=True, clip=boroughs, projection=gcrs.AlbersEqualArea())
+    gplt.polyplot(boroughs, zorder=1, ax=ax)
+
+
+.. parsed-literal::
+
+    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+
+
+
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121738e10>
+
+
+
+
+.. image:: Quickstart_files/Quickstart_31_2.png
+
+
+A ``kdeplot`` smoothes point data out into a heatmap. This makes it easy
+to spot regional trends in your input data. The ``clip`` parameter can
+be used to clip the resulting plot to the surrounding geometry—in this
+case, the outline of New York City.
+
+Next steps
+----------
 
 You should now know enough ``geoplot`` to try it out in your own
-projects.
+projects!
 
-To install ``geoplot``, run ``conda install geoplot``. To keep learning
-about ``geoplot`` and geospatial plotting, refer to the User Guide.
-Finally, the API Reference is the definitive guide all of to the options
-available for the plot types in ``geoplot``.
+To install ``geoplot``, run ``conda install geoplot``. To see more
+examples using ``geoplot``, check out the
+`Gallery <https://residentmario.github.io/geoplot/gallery/index.html>`__.

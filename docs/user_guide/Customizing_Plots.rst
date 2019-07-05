@@ -525,8 +525,8 @@ labels in the legend, respectively:
 
    Keywords starting with ``marker`` (e.g. ``marker``,
    ``markeredgecolor``, ``markeredgewidth``, ``markerfacecolor``, and
-   ``markersize``) will be passed through the legend down to the legend
-   markers.
+   ``markersize``) `will be passed through the legend down to the legend
+   markers <https://github.com/ResidentMario/geoplot/issues/35#issuecomment-507196579>`__.
 
 Extent
 ------
