@@ -138,7 +138,7 @@ another.
 
 
 By default, ``geoplot`` will set the
-`extent <https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Customizing%20Plots.ipynb#Extent>`__
+`extent <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`__
 (the area covered by the plot) to the
 `total_bounds <http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds>`__
 of the last plot stacked onto the map.
@@ -228,9 +228,10 @@ for stacking your plots together into a single more informative display.
 .. image:: Working_with_Projections_files/Working_with_Projections_15_1.png
 
 
-The `Gallery <https://residentmario.github.io/geoplot/gallery.html>`__
+The
+`Gallery <https://residentmario.github.io/geoplot/gallery/index.html>`__
 includes several demos, like the `Pointplot Scale
-Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`__
+Functions <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`__
 demo, that use this feature to good effect.
 
 Notice that in this code sample we specified some additional parameters
