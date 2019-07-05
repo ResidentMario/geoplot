@@ -53,7 +53,7 @@ which makes mapping easy: like ``seaborn`` for geospatial. It comes with the fol
 
 For a brief introduction refer to the `Quickstart`_.
 
-.. _Quickstart: https://nbviewer.jupyter.org/github/ResidentMario/geoplot/blob/master/notebooks/tutorials/Quickstart.ipynb
+.. _Quickstart: https://residentmario.github.io/geoplot/quickstart/quickstart.html
 
 
 .. toctree::

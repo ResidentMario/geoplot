@@ -48,7 +48,7 @@ accident frequency in different parts of New York City.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  34.751 seconds)
+   **Total running time of the script:** ( 0 minutes  32.826 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:
