@@ -238,6 +238,79 @@ lowest (basal) layer of the kernel density estimate.
 
 .. image:: ../figures/kdeplot/kdeplot-shade-lowest.png
 
+Cartogram
+---------
+
+A cartogram distorts (grows or shrinks) polygons on a map according to the magnitude of some
+input data. They are a less common but more visually "poppy" alternative to a choropleth.
+A basic cartogram specifies data, a projection, and a ``scale`` parameter.
+
+.. code-block:: python
+    import geoplot as gplt
+    import geoplot.crs as gcrs
+    import geopandas as gpd
+    contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
+    gplt.cartogram(contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea())
+
+.. image:: ../figures/cartogram/cartogram-initial.png
+
+Toggle the legend with ``legend``. Keyword arguments can be passed to the legend using the
+``legend_kwargs`` argument. These arguments will be passed to the underlying legend.
+
+.. code-block:: python
+    gplt.cartogram(
+        contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+        legend=True, legend_kwargs={'loc': 'lower right'}
+    )
+
+.. image:: ../figures/cartogram/cartogram-trace-legend.png
+
+To add a colormap to the plot, specify ``hue``. Use ``cmap`` to control the colormap used
+and ``k`` to control the number of color bins. In this plot we also add a backing outline
+of the original state shapes, for better geospatial context.
+
+.. code-block:: python
+    ax = gplt.cartogram(
+        contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+        legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+        hue='population', cmap='Greens'
+    )
+    gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
+
+.. image:: ../figures/cartogram/cartogram-cmap.png
+
+Use ``legend_labels`` and ``legend_values`` to customize the labels and values that appear
+in the legend.
+
+.. code-block:: python
+    gplt.cartogram(
+        contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+        legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+        hue='population', cmap='Greens',
+        legend_labels=[
+            '<1.4 million', '1.4-3.2 million', '3.2-5.6 million',
+            '5.6-9 million', '9-37 million'
+        ]
+    )
+
+.. image:: ../figures/cartogram/cartogram-legend-labels.png
+
+Use the ``limits`` parameter to adjust the minimum and maximum scaling factors. You can also
+pass a custom scaling function to ``scale_func`` to apply a different scale to the plot (the
+default scaling function is linear); see the `USA City Elevations demo 
+<https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_ for an example.
+
+.. code-block:: python
+    ax = gplt.cartogram(
+        contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
+        legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
+        hue='population', cmap='Greens',
+        limits=(0.5, 1)
+    )
+    gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
+
+.. image:: ../figures/cartogram/cartogram-limits.png
+
 Sankey
 ------
 
