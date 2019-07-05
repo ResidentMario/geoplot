@@ -79,7 +79,7 @@ population. It demonstrates some of the range of styling options available in ``
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.874 seconds)
+   **Total running time of the script:** ( 0 minutes  2.716 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_largest_cities_usa.py:

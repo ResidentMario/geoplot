@@ -51,7 +51,7 @@ vastly higher ethnical diversity as compared to the rest of the state.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.688 seconds)
+   **Total running time of the script:** ( 0 minutes  1.646 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_ny_state_demographics.py:
