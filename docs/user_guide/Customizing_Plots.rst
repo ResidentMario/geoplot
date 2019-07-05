@@ -8,7 +8,7 @@ cosmetic (for example, the colors of the map borders) and informative
 explains how these work.
 
 I recommend following along with this tutorial interactively using
-`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`_.
+`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`__.
 
 Position
 --------
@@ -141,7 +141,7 @@ list <https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html>`__.
 Naturally it is also possible to `create your own
 colormap <https://matplotlib.org/3.1.0/tutorials/colors/colormap-manipulation.html>`__;
 there is an
-`example <http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`__
+`example <https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html>`__
 of this in the Gallery.
 
 The `ColorBrewer
@@ -231,7 +231,7 @@ of each county in New York which is white):
 
 
 Another good example is the `Parking
-Tickets <https://residentmario.github.io/geoplot/examples/nyc-parking-tickets.html>`__
+Tickets <https://residentmario.github.io/geoplot/gallery/plot_nyc_parking_tickets.html>`__
 demo in the Gallery.
 
 If you are using a categorical colormap, there is one last consideration
@@ -355,9 +355,9 @@ maxima and minima to your liking using the ``limits`` parameter.
 
    To use a different scale, like e.g. logarithmic, pass a scaling
    function to the ``scale_func`` parameter. The `Pointplot Scale
-   Functions <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`__
+   Functions <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>`__
    demo in the
-   `Gallery <https://residentmario.github.io/geoplot/gallery.html>`__
+   `Gallery <https://residentmario.github.io/geoplot/gallery/index.html>`__
    demonstrates several such functions/scales in actions.
 
 .. code:: ipython3
@@ -576,7 +576,7 @@ here’s a map of just populous cities in the state of California.
 
 
 The
-```total_bounds`` <http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds>`__
+`total_bounds <http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds>`__
 property on a ``GeoDataFrame``, which returns the extent bounding box
 values for a given chunk of data, is extremely useful for this purpose.
 
@@ -654,5 +654,5 @@ pretty-looking plots:
 
 The `“Styling your
 plots” <https://www.kaggle.com/residentmario/styling-your-plots>`__
-guide on Kaggle is a good reference on ``matplotlib`` styling in a
-nutshell.
+guide on Kaggle documents some other common ``matplotlib`` styling
+options.
