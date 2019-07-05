@@ -1,34 +1,27 @@
 ## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-stable-green.svg) ![https://anaconda.org/conda-forge/geoplot](https://img.shields.io/conda/v/conda-forge/geoplot.svg)
 
 <div class="row">
-<a href=https://residentmario.github.io/geoplot/examples/nyc-collision-factors.html>
+<a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_collision_factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
  height="150" width="150">
 </a>
 
-<a href=https://residentmario.github.io/geoplot/examples/los-angeles-flights.html>
+<a href=https://residentmario.github.io/geoplot/gallery/plot_los_angeles_flights.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png"
  height="150" width="150">
 </a>
 
-<!--
-<a href=.>
-<img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/aggplot-collisions.png"
-height="150" width="150">
-</a>
--->
-
-<a href=https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>
+<a href=https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
  height="150">
 </a>
 
-<a href=https://residentmario.github.io/geoplot/examples/nyc-parking-tickets.html>
+<a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_parking_tickets.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png"
  height="150" width="150">
 </a>
 
-<a href=https://residentmario.github.io/geoplot/examples/dc-street-network.html>
+<a href=https://residentmario.github.io/geoplot/gallery/plot_dc_street_network.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png"
 height="150" width="150">
 </a>
