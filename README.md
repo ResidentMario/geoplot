@@ -1,4 +1,4 @@
-## geoplot: geospatial data visualization  ![t](https://img.shields.io/badge/status-stable-green.svg) ![https://anaconda.org/conda-forge/geoplot](https://img.shields.io/conda/v/conda-forge/geoplot.svg)
+## geoplot: geospatial data visualization  ![](https://img.shields.io/badge/status-stable-green.svg?style=flat-square) ![](https://img.shields.io/conda/v/conda-forge/geoplot.svg?style=flat-square) ![](https://img.shields.io/pypi/pyversions/geoplot.svg?style=flat-square)
 
 <div class="row">
 <a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_collision_factors.html>
