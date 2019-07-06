@@ -1,0 +1,13 @@
+name: geoplot-dev
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python>=3.6
+  - geopandas
+  - mapclassify
+  - matplotlib
+  - seaborn
+  - cartopy
+  - descartes

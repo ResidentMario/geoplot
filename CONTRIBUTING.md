@@ -17,13 +17,12 @@ git checkout -B new-branch-name
 
 ## Environment
 
-To install the `geoplot` development environment run the following:
+To install the `geoplot` development environment run the following in the root directory:
 
 ```bash
-cd envs
-conda env create -f devenv.yml
-cd ..
-pip install -e .
+conda env create -f environment.yml
+conda activate geoplot-dev
+pip install -e .[develop]
 ```
 
 ## Testing
