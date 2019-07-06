@@ -159,7 +159,7 @@ using ``pointplot``.
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11a81b358>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11e748978>
 
 
 
@@ -183,7 +183,7 @@ If you have polygonal data instead, you can plot that using a
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x11a876eb8>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11a49f0b8>
 
 
 
@@ -205,7 +205,7 @@ useful for providing additional context for our plots:
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x122505ef0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x11f0d7828>
 
 
 
@@ -236,7 +236,7 @@ States. Here’s how you use it with ``geoplot``:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11a902518>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f169e80>
 
 
 
@@ -267,22 +267,16 @@ We’ll start with ``hue``.
     gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', legend=True)
 
 
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11d921198>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f2027f0>
 
 
 
 
-.. image:: Quickstart_files/Quickstart_19_2.png
+.. image:: Quickstart_files/Quickstart_19_1.png
 
 
 This map tells a clear story: that cities in the central United States
@@ -304,22 +298,16 @@ choose:
     gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues', legend=True)
 
 
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11dc8f278>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f15ae80>
 
 
 
 
-.. image:: Quickstart_files/Quickstart_21_2.png
+.. image:: Quickstart_files/Quickstart_21_1.png
 
 
 Next, let’s try adding still another visual variable to our plot:
@@ -338,22 +326,16 @@ and ``legend_var``, which specifies which visual variable (``scale`` or
     )
 
 
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11ef48898>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121e4a2b0>
 
 
 
 
-.. image:: Quickstart_files/Quickstart_23_2.png
+.. image:: Quickstart_files/Quickstart_23_1.png
 
 
 This new plot shows more clearly than the previous one the difference in
@@ -389,12 +371,6 @@ of the plot.
     ax.set_title('Cities in the Continental United States by Elevation', fontsize=16)
 
 
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
 
 
 .. parsed-literal::
@@ -404,7 +380,7 @@ of the plot.
 
 
 
-.. image:: Quickstart_files/Quickstart_26_2.png
+.. image:: Quickstart_files/Quickstart_26_1.png
 
 
 Some other plot types
@@ -421,7 +397,7 @@ Reference <https://residentmario.github.io/geoplot/plot_references/plot_referenc
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
         cmap='Greens', legend=True,
-        scheme='fisher_jenks',
+        scheme='fisherjenks',
         legend_labels=[
             '<3 million', '3-6.7 million', '6.7-12.8 million',
             '12.8-25 million', '25-37 million'
@@ -433,7 +409,7 @@ Reference <https://residentmario.github.io/geoplot/plot_references/plot_referenc
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121005b70>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1227abb70>
 
 
 
@@ -455,22 +431,16 @@ information about areas because it’s easy to make and interpret.
     gplt.polyplot(boroughs, zorder=1, ax=ax)
 
 
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121738e10>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1231e8d30>
 
 
 
 
-.. image:: Quickstart_files/Quickstart_31_2.png
+.. image:: Quickstart_files/Quickstart_31_1.png
 
 
 A ``kdeplot`` smoothes point data out into a heatmap. This makes it easy

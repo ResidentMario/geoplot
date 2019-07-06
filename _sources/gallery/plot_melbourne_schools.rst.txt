@@ -51,7 +51,7 @@ This example inspired by the `Melbourne Schools Zones Webmap <http://melbournesc
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  18.332 seconds)
+   **Total running time of the script:** ( 0 minutes  22.881 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_melbourne_schools.py:

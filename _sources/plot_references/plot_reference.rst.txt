@@ -246,6 +246,7 @@ input data. They are a less common but more visually "poppy" alternative to a ch
 A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
 .. code-block:: python
+
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
@@ -258,6 +259,7 @@ Toggle the legend with ``legend``. Keyword arguments can be passed to the legend
 ``legend_kwargs`` argument. These arguments will be passed to the underlying legend.
 
 .. code-block:: python
+
     gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'loc': 'lower right'}
@@ -270,6 +272,7 @@ and ``k`` to control the number of color bins. In this plot we also add a backin
 of the original state shapes, for better geospatial context.
 
 .. code-block:: python
+
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
@@ -283,6 +286,7 @@ Use ``legend_labels`` and ``legend_values`` to customize the labels and values t
 in the legend.
 
 .. code-block:: python
+
     gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
@@ -301,6 +305,7 @@ default scaling function is linear); see the `USA City Elevations demo
 <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_ for an example.
 
 .. code-block:: python
+
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',

@@ -8,7 +8,7 @@ used these libraries before, or are looking for a refresher on how they
 work, this page is for you!
 
 I recommend following along with this tutorial interactively using
-`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working%20with%20Geospatial%20Data.ipynb>`__.
+`Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working_with_Geospatial_Data.ipynb>`__.
 
 Coordinate reference systems
 ----------------------------
