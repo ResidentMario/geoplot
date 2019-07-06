@@ -179,7 +179,10 @@ def build_voronoi_polygons(df):
 
     Returns a list of shapely.geometry.Polygon objects, each one a Voronoi polygon.
     """
-    from scipy.spatial import Voronoi
+    try:
+        from scipy.spatial import Voronoi
+    except ImportError:
+        raise ImportError("Install scipy >= 0.12.0 for Voronoi support")
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
     vor = Voronoi(geom)
 

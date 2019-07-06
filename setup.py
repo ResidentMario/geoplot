@@ -5,6 +5,7 @@ setup(
     install_requires=[
         'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes', 'mapclassify'
     ],
+    extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy']},
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
     version='0.3.0',
     python_requires='>=3.6.0',
