@@ -1,6 +1,5 @@
-## geoplot: geospatial data visualization  ![](https://img.shields.io/badge/status-stable-green.svg?style=flat-square) ![](https://img.shields.io/conda/v/conda-forge/geoplot.svg?style=flat-square) ![](https://img.shields.io/pypi/pyversions/geoplot.svg?style=flat-square)
+## geoplot: geospatial data visualization  ![](https://img.shields.io/badge/status-stable-green.svg) [![](https://img.shields.io/conda/v/conda-forge/geoplot.svg)](https://github.com/conda-forge/geoplot-feedstock) ![](https://img.shields.io/badge/python-3.6+-blue.svg) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks%2Ftutorials%2FQuickstart.ipynb)
 
-<div class="row">
 <a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_collision_factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
  height="150" width="150">
@@ -25,8 +24,6 @@
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png"
 height="150" width="150">
 </a>
-
-</div>
 
 ``geoplot`` is a high-level Python geospatial plotting library. It's an extension to `cartopy` and `matplotlib` which makes mapping easy: like `seaborn` for geospatial. It comes with the following features:
 
