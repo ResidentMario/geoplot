@@ -212,6 +212,10 @@
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/melbourne.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;melbourne_schools&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/melbourne-schools.geojson&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;san_francisco&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/san-francisco.geojson&#39;</span>
+    <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;san_francisco_street_trees_sample&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/san-francisco-street-trees-sample.geojson&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="n">f</span><span class="s1">&#39;The dataset_name value </span><span class="si">{dataset_name!r}</span><span class="s1"> is not in the list of valid names.&#39;</span>

@@ -90,6 +90,26 @@ Gallery
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="San Francisco maintains data about city-maintained street trees in the city. Most trees are ide...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_san_francisco_trees_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_san_francisco_trees.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_san_francisco_trees
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example reproduces a famous historical flow map: Charles Joseph Minard&#x27;s map depicting Nap...">
 
 .. only:: html
