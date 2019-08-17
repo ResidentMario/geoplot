@@ -58,7 +58,7 @@ class HueMixin:
                     f'Cannot specify "cmap" or "scheme" without specifying "hue".'
                 )
 
-        hue = _to_geoseries(self.df, hue)
+        hue = _to_geoseries(self.df, hue, "hue")
         if hue is None:  # no colormap
             color = self.kwargs.pop(color_kwarg, default_color)
             colors = [color] * len(self.df)
@@ -117,7 +117,7 @@ class ScaleMixin:
         self.limits = self.kwargs.pop('limits')
         self.scale_func = self.kwargs.pop('scale_func')
         self.scale = self.kwargs.pop('scale')
-        self.scale = _to_geoseries(self.df, self.scale)
+        self.scale = _to_geoseries(self.df, self.scale, "scale")
 
         if self.scale is not None:
             dmin, dmax = np.min(self.scale), np.max(self.scale)
@@ -414,7 +414,7 @@ class ClipMixin:
     """
     def set_clip(self, gdf):
         clip = self.kwargs.pop('clip')
-        clip = _to_geoseries(gdf, clip)
+        clip = _to_geom_geoseries(gdf, clip, "clip")
 
         if clip is not None:
             clip_shp = clip.unary_union
@@ -438,7 +438,7 @@ class ClipMixin:
 
     def paint_clip(self):
         clip = self.kwargs.pop('clip')
-        clip = _to_geoseries(self.df, clip)
+        clip = _to_geom_geoseries(self.df, clip, "clip")
         if clip is not None:
             if self.projection is not None:
                 clip_geom = self._get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
@@ -465,7 +465,7 @@ class QuadtreeComputeMixin:
         hue = self.kwargs.get('hue', None)
 
         df = gpd.GeoDataFrame(self.df, geometry=self.df.geometry)
-        hue = _to_geoseries(df, hue)
+        hue = _to_geoseries(df, hue, "hue")
         if hue is not None:
             # TODO: what happens in the case of a column name collision?
             df = df.assign(hue_col=hue)
@@ -562,7 +562,7 @@ class Plot:
                 np.min([90, ymax + window_resize_val])
             ])
 
-        extent = _to_geoseries(self.df, self.extent)
+        extent = _to_geom_geoseries(self.df, self.extent, "extent")
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
@@ -1557,20 +1557,69 @@ def voronoi(
 # HELPER METHODS #
 ##################
 
-def _to_geoseries(df, var):
+def _to_geom_geoseries(df, var, var_name):
+    if isinstance(var, gpd.GeoDataFrame):
+        s = var.geometry
+    else:
+        s = _to_geoseries(df, var, var_name, validate=False)
+    return s
+
+def _to_geoseries(df, var, var_name, validate=True):
     """
     Some top-level parameters present in most plot types accept a variety of iterables as input
-    types. This method condenses this variety into a single preferred format - a GeoSeries.
+    types. This method condenses this variety into a single preferred format - a GeoSeries whose
+    index aligns with that of the master GeoDataFrame.
+
+    Input to geometry variables perform a bit differently from input to non-geometry variables:
+    GeoDataFrame values is and index validation doesn't need to performed. Cf. _to_geom_geoseries.
     """
     if var is None:
         return None
+    # Data taken from the input GeoDataFrame do not need index validation.
     elif isinstance(var, str):
         var = df[var]
         return var
-    elif isinstance(var, gpd.GeoDataFrame):
-        return var.geometry
+
+    # GeoSeries and dict inputs need validation to make sure the index matches.
+    elif isinstance(var, gpd.GeoSeries):
+        s = var
+    elif isinstance(var, dict):
+        s = gpd.GeoSeries(var)
+    # List-like inputs do not need index validation, it simply takes on the base data index.
+    # However, it has to be the exact same length as the base data.
     else:
-        return gpd.GeoSeries(var)
+        if len(var) != len(df):
+            raise ValueError(
+                f"{len(var)} values were passed to {var_name!r}, but {len(df)} were expected."
+            )
+        try:
+            return gpd.GeoSeries(var, index=df.index)
+        except TypeError:
+            raise ValueError(
+                f"{var_name!r} expects a GeoSeries, str, or list-like object as input, but a "
+                f"{type(var)} was provided instead."
+            )
+
+    if validate:
+        # df is allowed to have duplicates in its index, but the input series is not the input series
+        # index must be a superset of the df index
+        if s.index.duplicated().any():
+            raise ValueError(
+                f"The input provided to {var_name!r} contains duplicate values in its index, which "
+                f"is not allowed. Try using pandas.Series.drop_duplicates or "
+                f"pandas.DataFrame.drop_duplicates to remove the extra values."
+            )
+        if not set(s.index.values).issuperset(set(df.index.values)):
+            raise ValueError(
+                f"The {var_name!r} index is not aligned with the index of the input GeoDataFrame, "
+                f"containing only a subset of the expected values. To align your data using index "
+                f"position, try passing your {var_name!r} data as a list or numpy array instead."
+            )
+        # If we pass validation, shuffle the s index to match the df index before returning
+        s = s.reindex(df.index)
+        return s
+    else:
+        return s
 
 
 def _validate_buckets(df, hue, k, scheme):
