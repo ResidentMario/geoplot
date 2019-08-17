@@ -226,7 +226,7 @@ class LegendMixin:
                         f'unspecified.'
                     )
             else:
-                if self.hue is not None and self.scale is not None:
+                if legend and self.hue is not None and self.scale is not None:
                     warnings.warn(
                         f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
                         f'specified. Defaulting to "legend_var=\'hue\'".'
