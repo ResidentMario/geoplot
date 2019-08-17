@@ -1581,7 +1581,7 @@ def _to_geoseries(df, var, var_name, validate=True):
         return var
 
     # GeoSeries and dict inputs need validation to make sure the index matches.
-    elif isinstance(var, gpd.GeoSeries):
+    elif isinstance(var, pd.Series):
         s = var
     elif isinstance(var, dict):
         s = gpd.GeoSeries(var)
