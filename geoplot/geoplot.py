@@ -34,6 +34,7 @@ class HueMixin:
     ):
         hue = self.kwargs.pop('hue', None)
         cmap = self.kwargs.pop('cmap', 'viridis')
+        norm = self.kwargs.pop('norm', None)
 
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
@@ -65,14 +66,17 @@ class HueMixin:
             categorical = False
             categories = None
         elif k is None:  # continuous colormap
-            mn = min(hue)
-            mx = max(hue)
-            norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
+            if norm is None:
+                mn = min(hue)
+                mx = max(hue)
+                norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
+
             cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             colors = [cmap.to_rgba(v) for v in hue]
             categorical = False
             categories = None
         else:  # categorical colormap
+            import pdb; pdb.set_trace()
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
@@ -95,7 +99,10 @@ class HueMixin:
                     value_map = {v: i for i, v in enumerate(categories)}
                     values = [value_map[d] for d in hue]
 
-                cmap = _norm_cmap(values, cmap, mpl.colors.Normalize, mpl.cm)
+                if norm is None:
+                    norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
+
+                cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
                 colors = [cmap.to_rgba(v) for v in values]
 
         self.colors = colors
