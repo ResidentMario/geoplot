@@ -76,7 +76,6 @@ class HueMixin:
             categorical = False
             categories = None
         else:  # categorical colormap
-            import pdb; pdb.set_trace()
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
             categories = None
             if hue is not None:
@@ -86,6 +85,7 @@ class HueMixin:
                 # plot). ax.legend sorts the patch-label tuples by patch value in ascending order
                 # internally. This obviates the need for sorting it ourselves here, but also forces
                 # us to also use ascending (not descending) order on the scale legend also.
+                import pdb; pdb.set_trace()
                 if not categorical:
                     binning = _mapclassify_choro(hue, scheme, k=k)
                     values = binning.yb
@@ -102,7 +102,7 @@ class HueMixin:
                 if norm is None:
                     norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
 
-                cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+                cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
                 colors = [cmap.to_rgba(v) for v in values]
 
         self.colors = colors
