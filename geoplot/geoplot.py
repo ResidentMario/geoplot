@@ -85,7 +85,6 @@ class HueMixin:
                 # plot). ax.legend sorts the patch-label tuples by patch value in ascending order
                 # internally. This obviates the need for sorting it ourselves here, but also forces
                 # us to also use ascending (not descending) order on the scale legend also.
-                import pdb; pdb.set_trace()
                 if not categorical:
                     binning = _mapclassify_choro(hue, scheme, k=k)
                     values = binning.yb
