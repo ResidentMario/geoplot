@@ -8,6 +8,7 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
+import geoplot.crs as gcrs  # TODO: needed?
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
@@ -1572,6 +1573,89 @@ def voronoi(
         clip=clip,
         **kwargs
     )
+    return plot.draw()
+
+
+def webmap(
+    df, extent=None, figsize=(8, 6), projection=None, driver='contextily', ax=None, **kwargs
+):
+    """
+    A webmap.
+
+    Parameters
+    ----------
+    df : GeoDataFrame
+        The data being plotted.
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots#Extent
+        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
+    kwargs: dict, optional
+        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+
+    Returns
+    -------
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis.
+    """
+    class WebmapPlot(Plot):
+        def __init__(self, df, **kwargs):
+            import pdb; pdb.set_trace()
+
+            # webmap is restricted to the WebMercator projection and no projection, which requires
+            # special axis and projection initialization rules to get right.
+            if isinstance(ax, GeoAxesSubplot):
+                proj_name = ax.projection.__class__.__name__
+                if proj_name != 'WebMercator':
+                    raise ValueError(
+                        f'"webmap" is only compatible with the "WebMercator" projection, but '
+                        f'the input axis is in the {proj_name!r} projection instead. To fix, '
+                        f'pass projection=gcrs.WebMercator() to the first plot on the axis.'
+                    )
+            elif isinstance(ax, mpl.axes.Axes):
+                # TODO: implement this.
+                raise NotImplementedError
+            elif ax is None and projection is None:
+                warnings.warn(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but the '
+                    f'input axis is unspecified. Reprojecting the data to "WebMercator" '
+                    f'automatically. To suppress this warning, set projection=gcrs.WebMercator() '
+                    f'explicitly.'
+                )
+                super().__init__(df, projection=gcrs.WebMercator(), **kwargs)
+            elif (ax is None and
+                  projection is not None and
+                  projection.__class__.__name__ != 'WebMercator'):
+                raise ValueError(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but '
+                    f'the input projection is set to {projection.__class__.__name__!r}. Set '
+                    f'projection=gcrs.WebMercator() instead.'
+                )
+            elif (ax is None and
+                  projection is not None and
+                  projection.__class__.__name__ == 'WebMercator'):
+                super().__init__(df, projection=projection, **kwargs)
+
+        def draw(self):
+            import contextily as ctx
+
+            ax = self.ax
+            if len(self.df.geometry) == 0:
+                return ax
+
+            import pdb; pdb.set_trace()
+            basemap, extent = ctx.bounds2img(*self.df.total_bounds, zoom=11, ll=True)
+            extent = (extent[0], extent[1], extent[3], extent[2])
+            ax.imshow(basemap, extent=extent, interpolation='bilinear')
+            return ax
+
+    plot = WebmapPlot(df, figsize=figsize, ax=ax, extent=extent, **kwargs)
     return plot.draw()
 
 

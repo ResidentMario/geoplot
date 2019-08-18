@@ -8,7 +8,6 @@ refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.
 import cartopy.crs as ccrs
 import geopandas as gpd
 
-
 class Base:
     # TODO: RotatedPole
     """
@@ -59,7 +58,39 @@ class Base:
             Returns a ``cartopy.crs`` object instance whose appropriate instance variables have
             been set to reasonable defaults wherever not already provided by the user.
         """
-        return getattr(ccrs, self.__class__.__name__)(**{**centerings, **self.args})
+        # WebMercator is a special case.
+        if self.__class__.__name__ == 'WebMercator':
+            class WebMercator(ccrs.Mercator):
+                def __init__(self, args):
+                    super().__init__(
+                        central_longitude=0,
+                        min_latitude=-85.0511287798066,
+                        max_latitude=85.0511287798066,
+                        globe=ccrs.Globe(
+                            ellipse=None,
+                            semimajor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
+                            semiminor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
+                            nadgrids='@null'
+                        ),
+                        **args
+                    )
+            return WebMercator(self.args)
+            # This is the old code below; this code didn't resolve its type to WebMercator.
+            # return ccrs.Mercator(
+            #     central_longitude=0,
+            #     min_latitude=-85.0511287798066,
+            #     max_latitude=85.0511287798066,
+            #     globe=ccrs.Globe(
+            #         ellipse=None,
+            #         semimajor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
+            #         semiminor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
+            #         nadgrids='@null'
+            #     ),
+            #     # **centerings,  # TODO: is this correct?
+            #     **self.args
+            # )
+        else:
+            return getattr(ccrs, self.__class__.__name__)(**{**centerings, **self.args})
 
     def _as_mpl_axes(self):
         """
@@ -118,6 +149,11 @@ class LatitudeCentering(Filtering):
     filter_ = {'central_latitude'}
 
 
+class LongitudeLatitudeCentering(Filtering):
+    """Form a CRS that accepts neither longitude or latitude centering."""
+    filter_ = {'central_longitude', 'central_latitude'}
+
+
 PlateCarree,\
     LambertCylindrical,\
     Mercator,\
@@ -144,6 +180,8 @@ PlateCarree,\
 )
 
 Gnomonic = type('Gnomonic', (LatitudeCentering,), {})
+
+WebMercator = type('WebMercator', (LongitudeLatitudeCentering,), {})
 
 AlbersEqualArea,\
     AzimuthalEquidistant,\
