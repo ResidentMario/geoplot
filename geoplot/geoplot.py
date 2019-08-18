@@ -67,9 +67,7 @@ class HueMixin:
             categories = None
         elif k is None:  # continuous colormap
             if norm is None:
-                mn = min(hue)
-                mx = max(hue)
-                norm = mpl.colors.Normalize(vmin=mn, vmax=mx)
+                norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
 
             cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             colors = [cmap.to_rgba(v) for v in hue]
@@ -644,7 +642,7 @@ class Plot:
 
 def pointplot(
     df, projection=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=5, scheme=None,
     scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
@@ -668,6 +666,9 @@ def pointplot(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
@@ -746,7 +747,7 @@ def pointplot(
 
     plot = PointPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         scale=scale, limits=limits, scale_func=scale_func,
         legend=legend, legend_var=legend_var, legend_values=legend_values,
         legend_labels=legend_labels, legend_kwargs=legend_kwargs,
@@ -829,7 +830,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
 
 def choropleth(
     df, projection=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -853,6 +854,9 @@ def choropleth(
     cmap : matplotlib color, optional
         The
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         The number of color categories to split the data into. For a continuous colormap, set this
         value to ``None``.
@@ -924,7 +928,7 @@ def choropleth(
 
     plot = ChoroplethPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, **kwargs
     )
@@ -933,7 +937,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=5, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None, legend_values=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -959,6 +963,9 @@ def quadtree(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         The number of color categories to split the data into. For a continuous colormap, set this
         value to ``None``.
@@ -1053,7 +1060,7 @@ def quadtree(
     plot = QuadtreePlot(
         df, projection=projection,
         clip=clip,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         nmax=nmax, nmin=nmin, nsig=nsig, agg=agg,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
@@ -1066,7 +1073,7 @@ def quadtree(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=5, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1102,6 +1109,9 @@ def cartogram(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
@@ -1189,7 +1199,7 @@ def cartogram(
         df, projection=projection,
         figsize=figsize, ax=ax, extent=extent,
         scale=scale, limits=limits, scale_func=scale_func,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
@@ -1275,7 +1285,7 @@ def kdeplot(
 
 def sankey(
     df, projection=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, norm=None, cmap=None, k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
     scale=None, scale_func=None, limits=(1, 5),
@@ -1300,6 +1310,9 @@ def sankey(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
@@ -1430,7 +1443,7 @@ def sankey(
     plot = SankeyPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
         scale=scale, limits=limits, scale_func=scale_func,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
@@ -1440,7 +1453,7 @@ def sankey(
 
 def voronoi(
     df, projection=None, clip=None,
-    hue=None, cmap=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=5, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1465,6 +1478,9 @@ def voronoi(
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+    norm: function, optional
+        A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
+        which will be applied to the data before plotting.
     k : int or None, optional
         If ``hue`` is specified, the number of color categories to split the data into. For a
         continuous colormap, set this value to ``None``.
@@ -1550,7 +1566,7 @@ def voronoi(
 
     plot = VoronoiPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap,
+        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
         clip=clip,
@@ -1645,18 +1661,3 @@ def _validate_buckets(df, hue, k, scheme):
         categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
-
-
-#######################
-# COMPATIBILITY SHIMS #
-#######################
-
-def _norm_cmap(values, cmap, normalize, cm):
-    """
-    Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.
-    """
-    mn = min(values)
-    mx = max(values)
-    norm = normalize(vmin=mn, vmax=mx)
-    n_cmap = cm.ScalarMappable(norm=norm, cmap=cmap)
-    return n_cmap
