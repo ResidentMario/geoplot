@@ -1577,7 +1577,8 @@ def voronoi(
 
 
 def webmap(
-    df, extent=None, figsize=(8, 6), projection=None, driver='contextily', ax=None, **kwargs
+    df, extent=None, figsize=(8, 6), projection=None, zoom=None, provider='OSM_A',
+    ax=None, **kwargs
 ):
     """
     A webmap.
@@ -1586,10 +1587,24 @@ def webmap(
     ----------
     df : GeoDataFrame
         The data being plotted.
+    projection : geoplot.crs object instance, optional
+        The projection to use. For reference see
+        `Working with Projections
+        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        ``webmap`` only supports a single projection: ``WebMercator``.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see 
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+    zoom: None or int
+        The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,
+        but will also take longer to generate and will have more clutter. There are generally
+        only two or three zoom levels that are appropriate for any given area. For reference
+        see the OpenStreetMaps reference on 
+        `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
+    provider: str
+        The tile provider. If no provider is set, the default OpenStreetMap tile service,
+        "OSM_A", will be used.        
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1651,7 +1666,15 @@ def webmap(
             if len(self.df.geometry) == 0:
                 return ax
 
-            basemap, extent = ctx.bounds2img(*self.df.total_bounds, zoom=11, ll=True)
+            # TODO: use a smart default value.
+            if zoom is None:
+                raise NotImplementedError('The "zoom" variable must be set.')
+
+            # TODO: investigate why this results in a 404 forbidden when url is specified,
+            # but doesn't when it's not.
+            basemap, extent = ctx.bounds2img(
+                *self.df.total_bounds, zoom=zoom, url=getattr(ctx.sources, provider), ll=True
+            )
             extent = (extent[0], extent[1], extent[3], extent[2])
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
             return ax
