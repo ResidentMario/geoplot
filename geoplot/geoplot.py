@@ -1605,26 +1605,28 @@ def webmap(
         The plot axis.
     """
     class WebmapPlot(Plot):
+        # webmap is restricted to the WebMercator projection and no projection, which requires
+        # special axis and projection initialization rules to get right.
         def __init__(self, df, **kwargs):
-            import pdb; pdb.set_trace()
-
-            # webmap is restricted to the WebMercator projection and no projection, which requires
-            # special axis and projection initialization rules to get right.
             if isinstance(ax, GeoAxesSubplot):
                 proj_name = ax.projection.__class__.__name__
                 if proj_name != 'WebMercator':
                     raise ValueError(
                         f'"webmap" is only compatible with the "WebMercator" projection, but '
                         f'the input axis is in the {proj_name!r} projection instead. To fix, '
-                        f'pass projection=gcrs.WebMercator() to the first plot on the axis.'
+                        f'pass projection=gcrs.WebMercator() to the axis initializer.'
                     )
+                super().__init__(df, projection=projection, **kwargs)
             elif isinstance(ax, mpl.axes.Axes):
-                # TODO: implement this.
-                raise NotImplementedError
+                raise ValueError(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but '
+                    f'the input axis is unprojected. To fix, pass projection=gcrs.WebMercator() '
+                    f'to the axis initializer.'
+                )
             elif ax is None and projection is None:
                 warnings.warn(
                     f'"webmap" is only compatible with the "WebMercator" projection, but the '
-                    f'input axis is unspecified. Reprojecting the data to "WebMercator" '
+                    f'input projection is unspecified. Reprojecting the data to "WebMercator" '
                     f'automatically. To suppress this warning, set projection=gcrs.WebMercator() '
                     f'explicitly.'
                 )
@@ -1645,11 +1647,10 @@ def webmap(
         def draw(self):
             import contextily as ctx
 
-            ax = self.ax
+            ax = plot.ax
             if len(self.df.geometry) == 0:
                 return ax
 
-            import pdb; pdb.set_trace()
             basemap, extent = ctx.bounds2img(*self.df.total_bounds, zoom=11, ll=True)
             extent = (extent[0], extent[1], extent[3], extent[2])
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
