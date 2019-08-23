@@ -14,6 +14,7 @@ import warnings
 import shapely.geometry
 import pandas as pd
 import descartes
+import contextily as ctx
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
 try:
@@ -1659,27 +1660,39 @@ def webmap(
                   projection.__class__.__name__ == 'WebMercator'):
                 super().__init__(df, projection=projection, **kwargs)
 
+            zoom = kwargs.pop('zoom', None)
+            if zoom is None:
+                zoom = ctx.tile._calculate_zoom(*self.df.total_bounds)
+            else:
+                howmany = ctx.tile.howmany(*self.df.total_bounds, zoom, ll=True, verbose=False)
+                if howmany > 100:
+                    better_zoom_level = ctx.tile._calculate_zoom(*self.df.total_bounds)
+                    warnings.warn(
+                        f'Generating a webmap at zoom level {zoom} for the given plot extent '
+                        f'requires downloading {howmany} individual tiles. This slows down '
+                        f'plot generation and places additional pressure on the tile '
+                        f'provider\'s server, which many deny your request when placed under '
+                        f'high load or high request volume. Consider setting "zoom" to '
+                        f'{better_zoom_level} instead. This is the recommended zoom level for '
+                        f'the given plot extent.'
+                    )
+            self.zoom = zoom
+
         def draw(self):
-            import contextily as ctx
 
             ax = plot.ax
             if len(self.df.geometry) == 0:
                 return ax
 
-            # TODO: use a smart default value.
-            if zoom is None:
-                raise NotImplementedError('The "zoom" variable must be set.')
-
-            # TODO: investigate why this results in a 404 forbidden when url is specified,
-            # but doesn't when it's not.
             basemap, extent = ctx.bounds2img(
-                *self.df.total_bounds, zoom=zoom, url=getattr(ctx.sources, provider), ll=True
+                *self.df.total_bounds, zoom=self.zoom, 
+                url=getattr(ctx.sources, provider), ll=True
             )
             extent = (extent[0], extent[1], extent[3], extent[2])
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
             return ax
 
-    plot = WebmapPlot(df, figsize=figsize, ax=ax, extent=extent, **kwargs)
+    plot = WebmapPlot(df, figsize=figsize, ax=ax, extent=extent, zoom=zoom, **kwargs)
     return plot.draw()
 
 
