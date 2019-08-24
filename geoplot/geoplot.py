@@ -8,7 +8,7 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
-import geoplot.crs as gcrs  # TODO: needed?
+import geoplot.crs as gcrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
@@ -22,7 +22,7 @@ try:
 except ImportError:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 
 class HueMixin:
@@ -1597,7 +1597,8 @@ def webmap(
         `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
     provider: str
         The tile provider. If no provider is set, the default OpenStreetMap tile service,
-        "OSM_A", will be used.        
+        "OSM_A", will be used. For reference see `the contextily documentation 
+        <https://github.com/darribas/contextily>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1791,12 +1792,12 @@ def relax_bounds(xmin, ymin, xmax, ymax):
     """
     Increases the viewport slightly. Used to ameliorate plot featurs that fall out of bounds.
     """
-    viewport_area = (xmax - xmin) * (ymax - ymin)
-    window_resize_val = 0.1 * viewport_area
+    window_resize_val_x = 0.1 * (xmax - xmin)
+    window_resize_val_y = 0.1 * (ymax - ymin)
     extrema = np.array([
-        np.max([-180, xmin - window_resize_val]),
-        np.max([-90, ymin - window_resize_val]),
-        np.min([180, xmax + window_resize_val]),
-        np.min([90, ymax + window_resize_val])
+        np.max([-180, xmin - window_resize_val_x]),
+        np.max([-90, ymin - window_resize_val_y]),
+        np.min([180, xmax + window_resize_val_x]),
+        np.min([90, ymax + window_resize_val_y])
     ])
     return extrema
