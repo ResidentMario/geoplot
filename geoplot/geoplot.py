@@ -8,11 +8,13 @@ import matplotlib as mpl
 import numpy as np
 from cartopy.feature import ShapelyFeature
 import cartopy.crs as ccrs
+import geoplot.crs as gcrs  # TODO: needed?
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
 import pandas as pd
 import descartes
+import contextily as ctx
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
 try:
@@ -557,16 +559,9 @@ class Plot:
             # coordinate area covered will differ from the actual area covered, as distance between
             # degrees varies depending on where you are on the globe. Since the effect is small we
             # ignore this problem here, for simplicity's sake.
-            viewport_area = (xmax - xmin) * (ymax - ymin)
-            window_resize_val = 0.0025 * viewport_area
-            extrema = np.array([
-                np.max([-180, xmin - window_resize_val]),
-                np.max([-90, ymin - window_resize_val]),
-                np.min([180, xmax + window_resize_val]),
-                np.min([90, ymax + window_resize_val])
-            ])
+            extrema = relax_bounds(xmin, ymin, xmax, ymax)
 
-        extent = _to_geom_geoseries(self.df, self.extent, "extent")
+        extent = gpd.GeoSeries(self.extent) if self.extent is not None else None
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
@@ -629,7 +624,6 @@ class Plot:
                             'Cound not set plot extent successfully due to numerical instability. '
                             'Try setting extent manually. Defaulting to a global extent.'
                         )
-                    pass
 
                 ax.outline_patch.set_visible(False)
             else:
@@ -1575,6 +1569,138 @@ def voronoi(
     return plot.draw()
 
 
+def webmap(
+    df, extent=None, figsize=(8, 6), projection=None, zoom=None, provider='OSM_A',
+    ax=None, **kwargs
+):
+    """
+    A webmap.
+
+    Parameters
+    ----------
+    df : GeoDataFrame
+        The data being plotted.
+    projection : geoplot.crs object instance, optional
+        The projection to use. For reference see
+        `Working with Projections
+        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        ``webmap`` only supports a single projection: ``WebMercator``.
+    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
+        Controls the plot extents. For reference see 
+        `Customizing Plots#Extent
+        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+    zoom: None or int
+        The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,
+        but will also take longer to generate and will have more clutter. There are generally
+        only two or three zoom levels that are appropriate for any given area. For reference
+        see the OpenStreetMaps reference on 
+        `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
+    provider: str
+        The tile provider. If no provider is set, the default OpenStreetMap tile service,
+        "OSM_A", will be used.        
+    figsize : (x, y) tuple, optional
+        Sets the size of the plot figure (in inches).
+    ax : AxesSubplot or GeoAxesSubplot instance, optional
+        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
+        instance to paint the plot on. Defaults to a new axis.
+    kwargs: dict, optional
+        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
+        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+
+    Returns
+    -------
+    ``AxesSubplot`` or ``GeoAxesSubplot``
+        The plot axis.
+    """
+    class WebmapPlot(Plot):
+        # webmap is restricted to the WebMercator projection and no projection, which requires
+        # special axis and projection initialization rules to get right.
+        def __init__(self, df, **kwargs):
+            if isinstance(ax, GeoAxesSubplot):
+                proj_name = ax.projection.__class__.__name__
+                if proj_name != 'WebMercator':
+                    raise ValueError(
+                        f'"webmap" is only compatible with the "WebMercator" projection, but '
+                        f'the input axis is in the {proj_name!r} projection instead. To fix, '
+                        f'pass "projection=gcrs.WebMercator()" to the axis initializer.'
+                    )
+                super().__init__(df, projection=projection, **kwargs)
+            elif isinstance(ax, mpl.axes.Axes):
+                raise ValueError(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but '
+                    f'the input axis is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
+                    f'to the axis initializer.'
+                )
+            elif ax is None and projection is None:
+                warnings.warn(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but the '
+                    f'input projection is unspecified. Reprojecting the data to "WebMercator" '
+                    f'automatically. To suppress this warning, set '
+                    f'"projection=gcrs.WebMercator()" explicitly.'
+                )
+                super().__init__(df, projection=gcrs.WebMercator(), **kwargs)
+            elif (ax is None and
+                  projection is not None and
+                  projection.__class__.__name__ != 'WebMercator'):
+                raise ValueError(
+                    f'"webmap" is only compatible with the "WebMercator" projection, but '
+                    f'the input projection is set to {projection.__class__.__name__!r}. Set '
+                    f'projection=gcrs.WebMercator() instead.'
+                )
+            elif (ax is None and
+                  projection is not None and
+                  projection.__class__.__name__ == 'WebMercator'):
+                super().__init__(df, projection=projection, **kwargs)
+
+            zoom = kwargs.pop('zoom', None)
+
+            # The plot extent is a well-defined function of plot data geometry and user input to
+            # the "extent" parameter, except in the case of numerical instability or invalid user
+            # input, in which case the default plot extent for the given projection is used. But
+            # the default extent is not well-exposed inside of the Cartopy API, so in edge cases
+            # where we are forced to fall back to default extent we don't actually know the true
+            # plot extent.
+            #
+            # For this reason we (1) recalculate "good case" plot extent here, instead of saving
+            # the value to an init variable and (2) accept that this calculation is potentially
+            # incorrect in edge cases.
+            extent = relax_bounds(*self.df.total_bounds) if self.extent is None else self.extent
+
+            if zoom is None:
+                zoom = ctx.tile._calculate_zoom(*extent)
+            else:
+                howmany = ctx.tile.howmany(*extent, zoom, ll=True, verbose=False)
+                if howmany > 100:
+                    better_zoom_level = ctx.tile._calculate_zoom(*extent)
+                    warnings.warn(
+                        f'Generating a webmap at zoom level {zoom} for the given plot extent '
+                        f'requires downloading {howmany} individual tiles. This slows down '
+                        f'plot generation and places additional pressure on the tile '
+                        f'provider\'s server, which many deny your request when placed under '
+                        f'high load or high request volume. Consider setting "zoom" to '
+                        f'{better_zoom_level} instead. This is the recommended zoom level for '
+                        f'the given plot extent.'
+                    )
+            self.zoom = zoom
+            self._webmap_extent = extent
+
+        def draw(self):
+            ax = plot.ax
+            if len(self.df.geometry) == 0:
+                return ax
+
+            basemap, extent = ctx.bounds2img(
+                *self._webmap_extent, zoom=self.zoom, 
+                url=getattr(ctx.sources, provider), ll=True
+            )
+            extent = (extent[0], extent[1], extent[3], extent[2])
+            ax.imshow(basemap, extent=extent, interpolation='bilinear')
+            return ax
+
+    plot = WebmapPlot(df, figsize=figsize, ax=ax, extent=extent, zoom=zoom, **kwargs)
+    return plot.draw()
+
+
 ##################
 # HELPER METHODS #
 ##################
@@ -1643,7 +1769,6 @@ def _to_geoseries(df, var, var_name, validate=True):
     else:
         return s
 
-
 def _validate_buckets(df, hue, k, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
@@ -1661,3 +1786,17 @@ def _validate_buckets(df, hue, k, scheme):
         categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
+
+def relax_bounds(xmin, ymin, xmax, ymax):
+    """
+    Increases the viewport slightly. Used to ameliorate plot featurs that fall out of bounds.
+    """
+    viewport_area = (xmax - xmin) * (ymax - ymin)
+    window_resize_val = 0.1 * viewport_area
+    extrema = np.array([
+        np.max([-180, xmin - window_resize_val]),
+        np.max([-90, ymin - window_resize_val]),
+        np.min([180, xmax + window_resize_val]),
+        np.min([90, ymax + window_resize_val])
+    ])
+    return extrema
