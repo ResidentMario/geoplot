@@ -75,20 +75,6 @@ class Base:
                         **args
                     )
             return WebMercator(self.args)
-            # This is the old code below; this code didn't resolve its type to WebMercator.
-            # return ccrs.Mercator(
-            #     central_longitude=0,
-            #     min_latitude=-85.0511287798066,
-            #     max_latitude=85.0511287798066,
-            #     globe=ccrs.Globe(
-            #         ellipse=None,
-            #         semimajor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
-            #         semiminor_axis=ccrs.WGS84_SEMIMAJOR_AXIS,
-            #         nadgrids='@null'
-            #     ),
-            #     # **centerings,  # TODO: is this correct?
-            #     **self.args
-            # )
         else:
             return getattr(ccrs, self.__class__.__name__)(**{**centerings, **self.args})
 
