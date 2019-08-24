@@ -41,7 +41,7 @@ variable that every map has in common is **position**.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11e71d4a8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1232b8470>
 
 
 
@@ -80,7 +80,7 @@ in your plot.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11f0506d8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12333d588>
 
 
 
@@ -313,6 +313,19 @@ impact on the result that you get. Which binning scheme works best is
 dependent both on the shape of the data and the insight you are trying
 to communicate in the plot.
 
+**Power User Feature: Colormap Normalization**
+
+Passing a `colormap
+normalizer <https://matplotlib.org/users/colormapnorms.html>`__ to the
+``norm`` parameter will allow you to modify the colormap fitted to your
+dataset to suit your needs. Alternatively, you can assume full control
+of your colormap by constructing your own. See the section of the
+``matplotlib`` documentation on `colormap
+manipulation <https://matplotlib.org/3.1.1/tutorials/colors/colormap-manipulation.html>`__
+to learn more, and see the `Napoleon sankey
+demo <https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html>`__
+in the Gallery for an example application.
+
 Scale
 -----
 
@@ -333,7 +346,7 @@ Another visual variable present in some plots in ``geoplot`` is
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1239c86a0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132aa15f8>
 
 
 
@@ -381,7 +394,7 @@ maxima and minima to your liking using the ``limits`` parameter.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x122262d68>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133fafb00>
 
 
 
@@ -426,7 +439,7 @@ To add a legend to your plot, set ``legend=True``.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x123973be0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132a66940>
 
 
 
@@ -461,7 +474,7 @@ To switch to a scale-based legend instead of a color-based one, set
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1235e4e10>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133dc1a20>
 
 
 
@@ -496,7 +509,7 @@ labels in the legend, respectively:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1236d6518>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133eb3470>
 
 
 
@@ -559,15 +572,13 @@ here’s a map of just populous cities in the state of California.
 
     /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
       return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:231: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
-      f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x122f08da0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132a34e48>
 
 
 

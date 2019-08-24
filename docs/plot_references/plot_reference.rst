@@ -104,6 +104,33 @@ The polyplot draws polygons on a map.
 
 .. image:: ../figures/polyplot/polyplot-stacked.png
 
+Webmap
+------
+
+The webmap creates a static webmap.
+
+.. code-block:: python
+
+    import geoplot as gplt
+    import geoplot.crs as gcrs
+    import geopandas as gpd
+    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+    gplt.webmap(boroughs, projection=gcrs.WebMercator())
+
+.. image:: ../figures/webmap/webmap-initial.png
+
+``webmap`` is intended to act as a basemap for other plot types.
+
+.. code-block:: python
+
+    ax = gplt.webmap(boroughs, projection=gcrs.WebMercator())
+    gplt.pointplot(
+        collisions[collisions['BOROUGH'].notnull()], hue='BOROUGH', ax=ax, legend=True
+    )
+
+.. image:: ../figures/webmap/webmap-stacked.png
+
+
 Choropleth
 ----------
 
