@@ -164,7 +164,7 @@ using ``pointplot``.
 
 
 
-.. image:: QuickStart_files/QuickStart_10_1.png
+.. image:: Quickstart_files/Quickstart_10_1.png
 
 
 If you have polygonal data instead, you can plot that using a
@@ -188,7 +188,7 @@ If you have polygonal data instead, you can plot that using a
 
 
 
-.. image:: QuickStart_files/QuickStart_13_1.png
+.. image:: Quickstart_files/Quickstart_13_1.png
 
 
 We can combine the these two plots using overplotting. **Overplotting**
@@ -210,7 +210,7 @@ useful for providing additional context for our plots:
 
 
 
-.. image:: QuickStart_files/QuickStart_15_1.png
+.. image:: Quickstart_files/Quickstart_15_1.png
 
 
 You might notice that this map of the United States looks very strange.
@@ -241,7 +241,7 @@ States. Here’s how you use it with ``geoplot``:
 
 
 
-.. image:: QuickStart_files/QuickStart_17_1.png
+.. image:: Quickstart_files/Quickstart_17_1.png
 
 
 This looks much better than our first plot! In fact, this is the version
@@ -269,7 +269,7 @@ do.
 
 
 
-.. image:: QuickStart_files/QuickStart_19_1.png
+.. image:: Quickstart_files/Quickstart_19_1.png
 
 
 ``geoplot`` can even be used with ``mplleaflet`` to create animated
@@ -308,7 +308,7 @@ We’ll start with ``hue``.
 
 
 
-.. image:: QuickStart_files/QuickStart_21_2.png
+.. image:: Quickstart_files/Quickstart_21_2.png
 
 
 This map tells a clear story: that cities in the central United States
@@ -345,7 +345,7 @@ choose:
 
 
 
-.. image:: QuickStart_files/QuickStart_23_2.png
+.. image:: Quickstart_files/Quickstart_23_2.png
 
 
 Next, let’s try adding still another visual variable to our plot:
@@ -379,7 +379,7 @@ and ``legend_var``, which specifies which visual variable (``scale`` or
 
 
 
-.. image:: QuickStart_files/QuickStart_25_2.png
+.. image:: Quickstart_files/Quickstart_25_2.png
 
 
 This new plot shows more clearly than the previous one the difference in
@@ -430,7 +430,7 @@ of the plot.
 
 
 
-.. image:: QuickStart_files/QuickStart_28_2.png
+.. image:: Quickstart_files/Quickstart_28_2.png
 
 
 Some other plot types
@@ -464,7 +464,7 @@ Reference <https://residentmario.github.io/geoplot/plot_references/plot_referenc
 
 
 
-.. image:: QuickStart_files/QuickStart_31_1.png
+.. image:: Quickstart_files/Quickstart_31_1.png
 
 
 This ``choropleth`` of population by state shows how much larger certain
@@ -496,7 +496,7 @@ information about areas because it’s easy to make and interpret.
 
 
 
-.. image:: QuickStart_files/QuickStart_33_2.png
+.. image:: Quickstart_files/Quickstart_33_2.png
 
 
 A ``kdeplot`` smoothes point data out into a heatmap. This makes it easy
