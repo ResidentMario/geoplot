@@ -71,8 +71,10 @@ The documentation is served at [residentmario.github.io](https://residentmario.g
 git checkout gh-pages
 rm -rf *
 git checkout master -- docs/ examples/ geoplot/
+cd docs
 make html
-mv .docs/_build/html/* ./
+cd ..
+mv docs/_build/html/* ./
 rm -rf docs/ examples/ geoplot/
 git add .
 git commit -m "Publishing update docs..."

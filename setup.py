@@ -3,11 +3,12 @@ setup(
     name='geoplot',
     packages=['geoplot'], # this must be the same as the name above
     install_requires=[
-        'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes', 'mapclassify'
+        'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes', 'mapclassify',
+        'contextily>=1.0rc2'
     ],
     extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy']},
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
-    version='0.3.0',
+    version='0.3.1',
     python_requires='>=3.6.0',
     description='High-level geospatial plotting for Python.',
     author='Aleksey Bilogur',
