@@ -11,6 +11,8 @@ Plots
 
 .. automethod:: geoplot.polyplot
 
+.. automethod:: geoplot.webmap
+
 .. automethod:: geoplot.choropleth
 
 .. automethod:: geoplot.kdeplot
@@ -31,6 +33,8 @@ Projections
 .. automethod:: geoplot.crs.LambertCylindrical
 
 .. automethod:: geoplot.crs.Mercator
+
+.. automethod:: geoplot.crs.WebMercator
 
 .. automethod:: geoplot.crs.Miller
 

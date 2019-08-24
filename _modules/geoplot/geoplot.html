@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>geoplot.geoplot &mdash; geoplot 0.3.0 documentation</title>
+  <title>geoplot.geoplot &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -171,11 +171,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">cartopy.feature</span> <span class="k">import</span> <span class="n">ShapelyFeature</span>
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">from</span> <span class="nn">cartopy.mpl.geoaxes</span> <span class="k">import</span> <span class="n">GeoAxesSubplot</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">descartes</span>
+<span class="kn">import</span> <span class="nn">contextily</span> <span class="k">as</span> <span class="nn">ctx</span>
 <span class="kn">from</span> <span class="nn">.ops</span> <span class="k">import</span> <span class="n">QuadTree</span><span class="p">,</span> <span class="n">build_voronoi_polygons</span><span class="p">,</span> <span class="n">jitter_points</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -183,7 +185,7 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">geopandas.plotting</span> <span class="k">import</span> <span class="n">__pysal_choro</span> <span class="k">as</span> <span class="n">_mapclassify_choro</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.3.0&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.3.1&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">HueMixin</span><span class="p">:</span>
@@ -197,6 +199,7 @@
     <span class="p">):</span>
         <span class="n">hue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">cmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">supports_categorical</span><span class="p">:</span>
             <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;scheme&#39;</span><span class="p">)</span>
@@ -221,16 +224,16 @@
                     <span class="n">f</span><span class="s1">&#39;Cannot specify &quot;cmap&quot; or &quot;scheme&quot; without specifying &quot;hue&quot;.&#39;</span>
                 <span class="p">)</span>
 
-        <span class="n">hue</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">)</span>
+        <span class="n">hue</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span> <span class="s2">&quot;hue&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">hue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># no colormap</span>
             <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">color_kwarg</span><span class="p">,</span> <span class="n">default_color</span><span class="p">)</span>
             <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">color</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
             <span class="n">categorical</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">categories</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># continuous colormap</span>
-            <span class="n">mn</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">hue</span><span class="p">)</span>
-            <span class="n">mx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hue</span><span class="p">)</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">mn</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">mx</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
             <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
             <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
             <span class="n">categorical</span> <span class="o">=</span> <span class="kc">False</span>
@@ -258,7 +261,10 @@
                     <span class="n">value_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">categories</span><span class="p">)}</span>
                     <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_map</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
 
-                <span class="n">cmap</span> <span class="o">=</span> <span class="n">_norm_cmap</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+
+                <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
                 <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span>
@@ -280,7 +286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;limits&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;scale_func&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
@@ -389,7 +395,7 @@
                         <span class="n">f</span><span class="s1">&#39;unspecified.&#39;</span>
                     <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">legend</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="n">f</span><span class="s1">&#39;Please specify &quot;legend_var&quot; explicitly when both &quot;hue&quot; and &quot;scale&quot; are &#39;</span>
                         <span class="n">f</span><span class="s1">&#39;specified. Defaulting to &quot;legend_var=</span><span class="se">\&#39;</span><span class="s1">hue</span><span class="se">\&#39;</span><span class="s1">&quot;.&#39;</span>
@@ -577,7 +583,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">set_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdf</span><span class="p">):</span>
         <span class="n">clip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;clip&#39;</span><span class="p">)</span>
-        <span class="n">clip</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">_to_geom_geoseries</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="s2">&quot;clip&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">clip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">clip_shp</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">unary_union</span>
@@ -601,7 +607,7 @@
 
     <span class="k">def</span> <span class="nf">paint_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">clip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;clip&#39;</span><span class="p">)</span>
-        <span class="n">clip</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">_to_geom_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="s2">&quot;clip&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">clip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">clip_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()),</span> <span class="n">clip</span><span class="p">)</span>
@@ -628,7 +634,7 @@
         <span class="n">hue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
-        <span class="n">hue</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">)</span>
+        <span class="n">hue</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span> <span class="s2">&quot;hue&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">hue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># TODO: what happens in the case of a column name collision?</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">hue_col</span><span class="o">=</span><span class="n">hue</span><span class="p">)</span>
@@ -716,16 +722,9 @@
             <span class="c1"># coordinate area covered will differ from the actual area covered, as distance between</span>
             <span class="c1"># degrees varies depending on where you are on the globe. Since the effect is small we</span>
             <span class="c1"># ignore this problem here, for simplicity&#39;s sake.</span>
-            <span class="n">viewport_area</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span>
-            <span class="n">window_resize_val</span> <span class="o">=</span> <span class="mf">0.0025</span> <span class="o">*</span> <span class="n">viewport_area</span>
-            <span class="n">extrema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="n">xmin</span> <span class="o">-</span> <span class="n">window_resize_val</span><span class="p">]),</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="n">window_resize_val</span><span class="p">]),</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">180</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">+</span> <span class="n">window_resize_val</span><span class="p">]),</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">90</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">window_resize_val</span><span class="p">])</span>
-            <span class="p">])</span>
+            <span class="n">extrema</span> <span class="o">=</span> <span class="n">relax_bounds</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
 
-        <span class="n">extent</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">central_longitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extent</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span> <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>\
             <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extrema</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
         <span class="n">central_latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extent</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span> <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>\
@@ -788,7 +787,6 @@
                             <span class="s1">&#39;Cound not set plot extent successfully due to numerical instability. &#39;</span>
                             <span class="s1">&#39;Try setting extent manually. Defaulting to a global extent.&#39;</span>
                         <span class="p">)</span>
-                    <span class="k">pass</span>
 
                 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -801,7 +799,7 @@
 
 <span class="k">def</span> <span class="nf">pointplot</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -825,6 +823,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        If ``hue`` is specified, the</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
 <span class="sd">        continuous colormap, set this value to ``None``.</span>
@@ -903,7 +904,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">PointPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span>
         <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
@@ -986,7 +987,7 @@
 
 <span class="k">def</span> <span class="nf">choropleth</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1010,6 +1011,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        The</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        The number of color categories to split the data into. For a continuous colormap, set this</span>
 <span class="sd">        value to ``None``.</span>
@@ -1081,7 +1085,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">ChoroplethPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
@@ -1090,7 +1094,7 @@
 
 <span class="k">def</span> <span class="nf">quadtree</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -1116,6 +1120,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        If ``hue`` is specified, the</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        The number of color categories to split the data into. For a continuous colormap, set this</span>
 <span class="sd">        value to ``None``.</span>
@@ -1210,7 +1217,7 @@
     <span class="n">plot</span> <span class="o">=</span> <span class="n">QuadtreePlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">nmax</span><span class="o">=</span><span class="n">nmax</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="n">nmin</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="n">nsig</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">agg</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
@@ -1223,7 +1230,7 @@
 <span class="k">def</span> <span class="nf">cartogram</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1259,6 +1266,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        If ``hue`` is specified, the</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
 <span class="sd">        continuous colormap, set this value to ``None``.</span>
@@ -1346,7 +1356,7 @@
         <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
@@ -1432,7 +1442,7 @@
 
 <span class="k">def</span> <span class="nf">sankey</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -1457,6 +1467,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        If ``hue`` is specified, the</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
 <span class="sd">        continuous colormap, set this value to ``None``.</span>
@@ -1587,7 +1600,7 @@
     <span class="n">plot</span> <span class="o">=</span> <span class="n">SankeyPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
@@ -1597,7 +1610,7 @@
 
 <span class="k">def</span> <span class="nf">voronoi</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1622,6 +1635,9 @@
 <span class="sd">    cmap : matplotlib color, optional</span>
 <span class="sd">        If ``hue`` is specified, the</span>
 <span class="sd">        `colormap &lt;http://matplotlib.org/examples/color/colormaps_reference.html&gt;`_ to use.</span>
+<span class="sd">    norm: function, optional</span>
+<span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
+<span class="sd">        which will be applied to the data before plotting.</span>
 <span class="sd">    k : int or None, optional</span>
 <span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
 <span class="sd">        continuous colormap, set this value to ``None``.</span>
@@ -1707,7 +1723,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">VoronoiPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>
@@ -1716,25 +1732,206 @@
     <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
 
+<span class="k">def</span> <span class="nf">webmap</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="s1">&#39;OSM_A&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A webmap.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : GeoDataFrame</span>
+<span class="sd">        The data being plotted.</span>
+<span class="sd">    projection : geoplot.crs object instance, optional</span>
+<span class="sd">        The projection to use. For reference see</span>
+<span class="sd">        `Working with Projections</span>
+<span class="sd">        &lt;https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html&gt;`_.</span>
+<span class="sd">        ``webmap`` only supports a single projection: ``WebMercator``.</span>
+<span class="sd">    extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional</span>
+<span class="sd">        Controls the plot extents. For reference see </span>
+<span class="sd">        `Customizing Plots#Extent</span>
+<span class="sd">        &lt;https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent&gt;`_.</span>
+<span class="sd">    zoom: None or int</span>
+<span class="sd">        The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,</span>
+<span class="sd">        but will also take longer to generate and will have more clutter. There are generally</span>
+<span class="sd">        only two or three zoom levels that are appropriate for any given area. For reference</span>
+<span class="sd">        see the OpenStreetMaps reference on </span>
+<span class="sd">        `zoom levels &lt;https://wiki.openstreetmap.org/wiki/Zoom_levels&gt;`_.</span>
+<span class="sd">    provider: str</span>
+<span class="sd">        The tile provider. If no provider is set, the default OpenStreetMap tile service,</span>
+<span class="sd">        &quot;OSM_A&quot;, will be used. For reference see `the contextily documentation </span>
+<span class="sd">        &lt;https://github.com/darribas/contextily&gt;`_.</span>
+<span class="sd">    figsize : (x, y) tuple, optional</span>
+<span class="sd">        Sets the size of the plot figure (in inches).</span>
+<span class="sd">    ax : AxesSubplot or GeoAxesSubplot instance, optional</span>
+<span class="sd">        If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``</span>
+<span class="sd">        instance to paint the plot on. Defaults to a new axis.</span>
+<span class="sd">    kwargs: dict, optional</span>
+<span class="sd">        Keyword arguments to be passed to the underlying matplotlib `Polygon patches</span>
+<span class="sd">        &lt;http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon&gt;`_.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``AxesSubplot`` or ``GeoAxesSubplot``</span>
+<span class="sd">        The plot axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">class</span> <span class="nc">WebmapPlot</span><span class="p">(</span><span class="n">Plot</span><span class="p">):</span>
+        <span class="c1"># webmap is restricted to the WebMercator projection and no projection, which requires</span>
+        <span class="c1"># special axis and projection initialization rules to get right.</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">GeoAxesSubplot</span><span class="p">):</span>
+                <span class="n">proj_name</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="k">if</span> <span class="n">proj_name</span> <span class="o">!=</span> <span class="s1">&#39;WebMercator&#39;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s1">&#39;&quot;webmap&quot; is only compatible with the &quot;WebMercator&quot; projection, but &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;the input axis is in the </span><span class="si">{proj_name!r}</span><span class="s1"> projection instead. To fix, &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;pass &quot;projection=gcrs.WebMercator()&quot; to the axis initializer.&#39;</span>
+                    <span class="p">)</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s1">&#39;&quot;webmap&quot; is only compatible with the &quot;WebMercator&quot; projection, but &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;the input axis is unprojected. To fix, pass &quot;projection=gcrs.WebMercator()&quot; &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;to the axis initializer.&#39;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s1">&#39;&quot;webmap&quot; is only compatible with the &quot;WebMercator&quot; projection, but the &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;input projection is unspecified. Reprojecting the data to &quot;WebMercator&quot; &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;automatically. To suppress this warning, set &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;&quot;projection=gcrs.WebMercator()&quot; explicitly.&#39;</span>
+                <span class="p">)</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span>
+                  <span class="n">projection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                  <span class="n">projection</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;WebMercator&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s1">&#39;&quot;webmap&quot; is only compatible with the &quot;WebMercator&quot; projection, but &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;the input projection is set to </span><span class="si">{projection.__class__.__name__!r}</span><span class="s1">. Set &#39;</span>
+                    <span class="n">f</span><span class="s1">&#39;projection=gcrs.WebMercator() instead.&#39;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span>
+                  <span class="n">projection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                  <span class="n">projection</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;WebMercator&#39;</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="n">zoom</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;zoom&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="c1"># The plot extent is a well-defined function of plot data geometry and user input to</span>
+            <span class="c1"># the &quot;extent&quot; parameter, except in the case of numerical instability or invalid user</span>
+            <span class="c1"># input, in which case the default plot extent for the given projection is used. But</span>
+            <span class="c1"># the default extent is not well-exposed inside of the Cartopy API, so in edge cases</span>
+            <span class="c1"># where we are forced to fall back to default extent we don&#39;t actually know the true</span>
+            <span class="c1"># plot extent.</span>
+            <span class="c1">#</span>
+            <span class="c1"># For this reason we (1) recalculate &quot;good case&quot; plot extent here, instead of saving</span>
+            <span class="c1"># the value to an init variable and (2) accept that this calculation is potentially</span>
+            <span class="c1"># incorrect in edge cases.</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="n">relax_bounds</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span>
+
+            <span class="k">if</span> <span class="n">zoom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zoom</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">_calculate_zoom</span><span class="p">(</span><span class="o">*</span><span class="n">extent</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">howmany</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">howmany</span><span class="p">(</span><span class="o">*</span><span class="n">extent</span><span class="p">,</span> <span class="n">zoom</span><span class="p">,</span> <span class="n">ll</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">howmany</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+                    <span class="n">better_zoom_level</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">_calculate_zoom</span><span class="p">(</span><span class="o">*</span><span class="n">extent</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s1">&#39;Generating a webmap at zoom level </span><span class="si">{zoom}</span><span class="s1"> for the given plot extent &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;requires downloading </span><span class="si">{howmany}</span><span class="s1"> individual tiles. This slows down &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;plot generation and places additional pressure on the tile &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;provider</span><span class="se">\&#39;</span><span class="s1">s server, which many deny your request when placed under &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;high load or high request volume. Consider setting &quot;zoom&quot; to &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;</span><span class="si">{better_zoom_level}</span><span class="s1"> instead. This is the recommended zoom level for &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;the given plot extent.&#39;</span>
+                    <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">=</span> <span class="n">zoom</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_webmap_extent</span> <span class="o">=</span> <span class="n">extent</span>
+
+        <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">ax</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ax</span>
+
+            <span class="n">basemap</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">bounds2img</span><span class="p">(</span>
+                <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_webmap_extent</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zoom</span><span class="p">,</span> 
+                <span class="n">url</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">provider</span><span class="p">),</span> <span class="n">ll</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">basemap</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">WebmapPlot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="n">zoom</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plot</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+
 <span class="c1">##################</span>
 <span class="c1"># HELPER METHODS #</span>
 <span class="c1">##################</span>
 
-<span class="k">def</span> <span class="nf">_to_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_to_geom_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">geometry</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">_to_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">_to_geoseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Some top-level parameters present in most plot types accept a variety of iterables as input</span>
-<span class="sd">    types. This method condenses this variety into a single preferred format - a GeoSeries.</span>
+<span class="sd">    types. This method condenses this variety into a single preferred format - a GeoSeries whose</span>
+<span class="sd">    index aligns with that of the master GeoDataFrame.</span>
+
+<span class="sd">    Input to geometry variables perform a bit differently from input to non-geometry variables:</span>
+<span class="sd">    GeoDataFrame values is and index validation doesn&#39;t need to performed. Cf. _to_geom_geoseries.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Data taken from the input GeoDataFrame do not need index validation.</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">var</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">var</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">var</span><span class="o">.</span><span class="n">geometry</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 
+    <span class="c1"># GeoSeries and dict inputs need validation to make sure the index matches.</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">var</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="c1"># List-like inputs do not need index validation, it simply takes on the base data index.</span>
+    <span class="c1"># However, it has to be the exact same length as the base data.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;{len(var)} values were passed to </span><span class="si">{var_name!r}</span><span class="s2">, but {len(df)} were expected.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{var_name!r}</span><span class="s2"> expects a GeoSeries, str, or list-like object as input, but a &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;{type(var)} was provided instead.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+        <span class="c1"># df is allowed to have duplicates in its index, but the input series is not the input series</span>
+        <span class="c1"># index must be a superset of the df index</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;The input provided to </span><span class="si">{var_name!r}</span><span class="s2"> contains duplicate values in its index, which &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;is not allowed. Try using pandas.Series.drop_duplicates or &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;pandas.DataFrame.drop_duplicates to remove the extra values.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">issuperset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;The </span><span class="si">{var_name!r}</span><span class="s2"> index is not aligned with the index of the input GeoDataFrame, &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;containing only a subset of the expected values. To align your data using index &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;position, try passing your </span><span class="si">{var_name!r}</span><span class="s2"> data as a list or numpy array instead.&quot;</span>
+            <span class="p">)</span>
+        <span class="c1"># If we pass validation, shuffle the s index to match the df index before returning</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
 
 <span class="k">def</span> <span class="nf">_validate_buckets</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">scheme</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1754,20 +1951,19 @@
     <span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span> <span class="k">if</span> <span class="n">scheme</span> <span class="k">else</span> <span class="s1">&#39;Quantiles&#39;</span>
     <span class="k">return</span> <span class="n">categorical</span><span class="p">,</span> <span class="n">scheme</span>
 
-
-<span class="c1">#######################</span>
-<span class="c1"># COMPATIBILITY SHIMS #</span>
-<span class="c1">#######################</span>
-
-<span class="k">def</span> <span class="nf">_norm_cmap</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">cm</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">relax_bounds</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Normalize and set colormap. Taken from geopandas@0.2.1 codebase, removed in geopandas@0.3.0.</span>
+<span class="sd">    Increases the viewport slightly. Used to ameliorate plot featurs that fall out of bounds.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mn</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">mx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">norm</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">mn</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">mx</span><span class="p">)</span>
-    <span class="n">n_cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">n_cmap</span>
+    <span class="n">window_resize_val_x</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
+    <span class="n">window_resize_val_y</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span>
+    <span class="n">extrema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="n">xmin</span> <span class="o">-</span> <span class="n">window_resize_val_x</span><span class="p">]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="n">window_resize_val_y</span><span class="p">]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">180</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">+</span> <span class="n">window_resize_val_x</span><span class="p">]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">90</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">window_resize_val_y</span><span class="p">])</span>
+    <span class="p">])</span>
+    <span class="k">return</span> <span class="n">extrema</span>
 </pre></div>
 
            </div>

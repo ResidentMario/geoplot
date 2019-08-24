@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Customizing Plots &mdash; geoplot 0.3.0 documentation</title>
+  <title>Customizing Plots &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -202,7 +202,7 @@ variable that every map has in common is <strong>position</strong>.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11e71d4a8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1232b8470</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_3_1.png" src="../_images/Customizing_Plots_3_1.png" />
@@ -226,7 +226,7 @@ reserved keyword in the <code class="docutils literal notranslate"><span class="
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11f0506d8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12333d588</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_7_2.png" src="../_images/Customizing_Plots_7_2.png" />
@@ -390,6 +390,17 @@ of injuries demonstrates.</p>
 impact on the result that you get. Which binning scheme works best is
 dependent both on the shape of the data and the insight you are trying
 to communicate in the plot.</p>
+<p><strong>Power User Feature: Colormap Normalization</strong></p>
+<p>Passing a <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap
+normalizer</a> to the
+<code class="docutils literal notranslate"><span class="pre">norm</span></code> parameter will allow you to modify the colormap fitted to your
+dataset to suit your needs. Alternatively, you can assume full control
+of your colormap by constructing your own. See the section of the
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> documentation on <a class="reference external" href="https://matplotlib.org/3.1.1/tutorials/colors/colormap-manipulation.html">colormap
+manipulation</a>
+to learn more, and see the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html">Napoleon sankey
+demo</a>
+in the Gallery for an example application.</p>
 </div>
 <div class="section" id="scale">
 <h2>Scale<a class="headerlink" href="#scale" title="Permalink to this headline">¶</a></h2>
@@ -403,7 +414,7 @@ to communicate in the plot.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1239c86a0</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x132aa15f8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_19_1.png" src="../_images/Customizing_Plots_19_1.png" />
@@ -435,7 +446,7 @@ demonstrates several such functions/scales in actions.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x122262d68</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x133fafb00</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_21_2.png" src="../_images/Customizing_Plots_21_2.png" />
@@ -463,7 +474,7 @@ values as well.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x123973be0</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x132a66940</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_24_2.png" src="../_images/Customizing_Plots_24_2.png" />
@@ -482,7 +493,7 @@ are &gt;3.4 million in population.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1235e4e10</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x133dc1a20</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_26_2.png" src="../_images/Customizing_Plots_26_2.png" />
@@ -502,7 +513,7 @@ labels in the legend, respectively:</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1236d6518</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x133eb3470</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_28_2.png" src="../_images/Customizing_Plots_28_2.png" />
@@ -552,10 +563,8 @@ here’s a map of just populous cities in the state of California.</p>
 </pre></div>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-/Users/alex/Desktop/geoplot/geoplot/geoplot.py:231: UserWarning: Please specify &quot;legend_var&quot; explicitly when both &quot;hue&quot; and &quot;scale&quot; are specified. Defaulting to &quot;legend_var='hue'&quot;.
-  f'Please specify &quot;legend_var&quot; explicitly when both &quot;hue&quot; and &quot;scale&quot; are '</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x122f08da0</span><span class="o">&gt;</span>
+  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x132a34e48</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_31_2.png" src="../_images/Customizing_Plots_31_2.png" />

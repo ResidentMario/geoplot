@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; geoplot 0.3.0 documentation</title>
+  <title>API Reference &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -174,7 +174,7 @@
 <h2>Plots<a class="headerlink" href="#plots" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="geoplot.geoplot.pointplot">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">pointplot</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">pointplot</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial scatter plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -187,6 +187,8 @@ For a reference on this and the other hue-related parameters that follow, see
 <a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots#Hue</a>.</p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the number of color categories to split the data into. For a
 continuous colormap, set this value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>scheme</strong> (<em>None</em><em> or </em><em>{&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the categorical binning scheme to use.</p></li>
@@ -252,8 +254,46 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dd></dl>
 
 <dl class="method">
+<dt id="geoplot.geoplot.webmap">
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">webmap</code><span class="sig-paren">(</span><em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">projection=None</em>, <em class="sig-param">zoom=None</em>, <em class="sig-param">provider='OSM_A'</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.webmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A webmap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>GeoDataFrame</em>) – The data being plotted.</p></li>
+<li><p><strong>projection</strong> (<em>geoplot.crs object instance</em><em>, </em><em>optional</em>) – <p>The projection to use. For reference see
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with Projections</a>.
+<code class="docutils literal notranslate"><span class="pre">webmap</span></code> only supports a single projection: <code class="docutils literal notranslate"><span class="pre">WebMercator</span></code>.</p>
+</p></li>
+<li><p><strong>extent</strong> (<em>None</em><em> or </em><em>(</em><em>min_longitude</em><em>, </em><em>min_latitude</em><em>, </em><em>max_longitude</em><em>, </em><em>max_latitude</em><em>)</em><em>, </em><em>optional</em>) – <p>Controls the plot extents. For reference see
+<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent">Customizing Plots#Extent</a>.</p>
+</p></li>
+<li><p><strong>zoom</strong> (<em>None</em><em> or </em><em>int</em>) – The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,
+but will also take longer to generate and will have more clutter. There are generally
+only two or three zoom levels that are appropriate for any given area. For reference
+see the OpenStreetMaps reference on
+<a class="reference external" href="https://wiki.openstreetmap.org/wiki/Zoom_levels">zoom levels</a>.</p></li>
+<li><p><strong>provider</strong> (<em>str</em>) – The tile provider. If no provider is set, the default OpenStreetMap tile service,
+“OSM_A”, will be used. For reference see <a class="reference external" href="https://github.com/darribas/contextily">the contextily documentation</a>.</p></li>
+<li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
+<li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
+instance to paint the plot on. Defaults to a new axis.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Keyword arguments to be passed to the underlying matplotlib <a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The plot axis.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">GeoAxesSubplot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="geoplot.geoplot.choropleth">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">choropleth</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">choropleth</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
 <dd><p>A color-mapped area plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -268,6 +308,9 @@ For a reference on this and the other hue-related parameters that follow, see
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>The
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
+</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p>
 </p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The number of color categories to split the data into. For a continuous colormap, set this
 value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -333,7 +376,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 
 <dl class="method">
 <dt id="geoplot.geoplot.cartogram">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">cartogram</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(0.2</em>, <em class="sig-param">1)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_var='scale'</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">cartogram</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(0.2</em>, <em class="sig-param">1)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_var='scale'</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>A scaling area plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -358,6 +401,9 @@ For a reference on this and the other hue-related parameters that follow, see
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
+</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p>
 </p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the number of color categories to split the data into. For a
 continuous colormap, set this value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -391,7 +437,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 
 <dl class="method">
 <dt id="geoplot.geoplot.sankey">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">sankey</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">sankey</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spatial Sankey or flow map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -406,6 +452,9 @@ For a reference on this and the other hue-related parameters that follow, see
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
+</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p>
 </p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the number of color categories to split the data into. For a
 continuous colormap, set this value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -450,7 +499,7 @@ instances.</p></li>
 
 <dl class="method">
 <dt id="geoplot.geoplot.quadtree">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">quadtree</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">nmax=None</em>, <em class="sig-param">nmin=None</em>, <em class="sig-param">nsig=0</em>, <em class="sig-param">agg=&lt;function mean&gt;</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.quadtree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">quadtree</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">nmax=None</em>, <em class="sig-param">nmin=None</em>, <em class="sig-param">nsig=0</em>, <em class="sig-param">agg=&lt;function mean&gt;</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.quadtree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A choropleth with point aggregate neighborhoods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -466,6 +515,9 @@ For a reference on this and the other hue-related parameters that follow, see
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
+</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p>
 </p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The number of color categories to split the data into. For a continuous colormap, set this
 value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -503,7 +555,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 
 <dl class="method">
 <dt id="geoplot.geoplot.voronoi">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">voronoi</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">edgecolor='black'</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.voronoi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">voronoi</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">k=5</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">edgecolor='black'</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.voronoi" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial Voronoi diagram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -519,6 +571,9 @@ For a reference on this and the other hue-related parameters that follow, see
 </p></li>
 <li><p><strong>cmap</strong> (<em>matplotlib color</em><em>, </em><em>optional</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the
 <a class="reference external" href="http://matplotlib.org/examples/color/colormaps_reference.html">colormap</a> to use.</p>
+</p></li>
+<li><p><strong>norm</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap normalization function</a>
+which will be applied to the data before plotting.</p>
 </p></li>
 <li><p><strong>k</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">hue</span></code> is specified, the number of color categories to split the data into. For a
 continuous colormap, set this value to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -578,6 +633,12 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 <dt id="geoplot.crs.Mercator">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Mercator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="geoplot.crs.WebMercator">
+<code class="sig-prename descclassname">crs.</code><code class="sig-name descname">WebMercator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.WebMercator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form a CRS that accepts neither longitude or latitude centering.</p>
 </dd></dl>
 
 <dl class="method">

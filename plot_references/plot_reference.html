@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Plot Reference &mdash; geoplot 0.3.0 documentation</title>
+  <title>Plot Reference &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -94,6 +94,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Plot Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pointplot">Pointplot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#polyplot">Polyplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#webmap">Webmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#choropleth">Choropleth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#kdeplot">KDEPlot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cartogram">Cartogram</a></li>
@@ -252,6 +253,26 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 </pre></div>
 </div>
 <img alt="../_images/polyplot-stacked.png" src="../_images/polyplot-stacked.png" />
+</div>
+<div class="section" id="webmap">
+<h2>Webmap<a class="headerlink" href="#webmap" title="Permalink to this headline">¶</a></h2>
+<p>The webmap creates a static webmap.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="kn">as</span> <span class="nn">gpd</span>
+<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
+</pre></div>
+</div>
+<img alt="../_images/webmap-initial.png" src="../_images/webmap-initial.png" />
+<p><code class="docutils literal notranslate"><span class="pre">webmap</span></code> is intended to act as a basemap for other plot types.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+    <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/webmap-stacked.png" src="../_images/webmap-stacked.png" />
 </div>
 <div class="section" id="choropleth">
 <h2>Choropleth<a class="headerlink" href="#choropleth" title="Permalink to this headline">¶</a></h2>

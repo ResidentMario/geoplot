@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>geoplot.crs &mdash; geoplot 0.3.0 documentation</title>
+  <title>geoplot.crs &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -171,7 +171,6 @@
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 
-
 <span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
     <span class="c1"># TODO: RotatedPole</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -222,7 +221,25 @@
 <span class="sd">            Returns a ``cartopy.crs`` object instance whose appropriate instance variables have</span>
 <span class="sd">            been set to reasonable defaults wherever not already provided by the user.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ccrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)(</span><span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">centerings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">})</span>
+        <span class="c1"># WebMercator is a special case.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;WebMercator&#39;</span><span class="p">:</span>
+            <span class="k">class</span> <span class="nc">WebMercator</span><span class="p">(</span><span class="n">ccrs</span><span class="o">.</span><span class="n">Mercator</span><span class="p">):</span>
+                <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                        <span class="n">central_longitude</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">min_latitude</span><span class="o">=-</span><span class="mf">85.0511287798066</span><span class="p">,</span>
+                        <span class="n">max_latitude</span><span class="o">=</span><span class="mf">85.0511287798066</span><span class="p">,</span>
+                        <span class="n">globe</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">Globe</span><span class="p">(</span>
+                            <span class="n">ellipse</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">semimajor_axis</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">WGS84_SEMIMAJOR_AXIS</span><span class="p">,</span>
+                            <span class="n">semiminor_axis</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">WGS84_SEMIMAJOR_AXIS</span><span class="p">,</span>
+                            <span class="n">nadgrids</span><span class="o">=</span><span class="s1">&#39;@null&#39;</span>
+                        <span class="p">),</span>
+                        <span class="o">**</span><span class="n">args</span>
+                    <span class="p">)</span>
+            <span class="k">return</span> <span class="n">WebMercator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ccrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)(</span><span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">centerings</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">})</span>
 
     <span class="k">def</span> <span class="nf">_as_mpl_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -281,6 +298,11 @@
     <span class="n">filter_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;central_latitude&#39;</span><span class="p">}</span>
 
 
+<span class="k">class</span> <span class="nc">LongitudeLatitudeCentering</span><span class="p">(</span><span class="n">Filtering</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Form a CRS that accepts neither longitude or latitude centering.&quot;&quot;&quot;</span>
+    <span class="n">filter_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;central_longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;central_latitude&#39;</span><span class="p">}</span>
+
+
 <span class="n">PlateCarree</span><span class="p">,</span>\
     <span class="n">LambertCylindrical</span><span class="p">,</span>\
     <span class="n">Mercator</span><span class="p">,</span>\
@@ -307,6 +329,8 @@
 <span class="p">)</span>
 
 <span class="n">Gnomonic</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;Gnomonic&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">LatitudeCentering</span><span class="p">,),</span> <span class="p">{})</span>
+
+<span class="n">WebMercator</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;WebMercator&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">LongitudeLatitudeCentering</span><span class="p">,),</span> <span class="p">{})</span>
 
 <span class="n">AlbersEqualArea</span><span class="p">,</span>\
     <span class="n">AzimuthalEquidistant</span><span class="p">,</span>\

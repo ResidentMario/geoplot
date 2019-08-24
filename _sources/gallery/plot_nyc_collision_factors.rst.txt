@@ -85,7 +85,7 @@ pattern differs between the two: lost consciousness crashes are more localized t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.855 seconds)
+   **Total running time of the script:** ( 0 minutes  14.028 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collision_factors.py:
