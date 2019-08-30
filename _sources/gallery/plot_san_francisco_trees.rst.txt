@@ -70,7 +70,7 @@ For more tools for visualizing data nullity, `check out the missingno library
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  24.568 seconds)
+   **Total running time of the script:** ( 0 minutes  20.816 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_san_francisco_trees.py:
