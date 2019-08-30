@@ -32,8 +32,7 @@ variable that every map has in common is **position**.
 
     import geoplot.crs as gcrs
     
-    proj = gcrs.AlbersEqualArea()
-    ax = gplt.polyplot(contiguous_usa, projection=proj)
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
     gplt.pointplot(continental_usa_cities, ax=ax)
 
 
@@ -41,7 +40,7 @@ variable that every map has in common is **position**.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1232b8470>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12402b438>
 
 
 
@@ -66,7 +65,7 @@ in your plot.
 
 .. code:: ipython3
 
-    ax = gplt.polyplot(contiguous_usa, projection=gcrs.AlbersEqualArea())
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
     gplt.pointplot(continental_usa_cities, hue='POP_2010', cmap='Blues', ax=ax)
 
 
@@ -80,7 +79,7 @@ in your plot.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12333d588>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1241044a8>
 
 
 
@@ -212,17 +211,17 @@ of each county in New York which is white):
         percent_white=ny_census_tracts['WHITE'] / ny_census_tracts['POP2000']
     )
     gplt.choropleth(
-        ny_census_tracts, hue='percent_white', projection=gcrs.AlbersEqualArea(),
-        cmap='Purples', linewidth=0.5, edgecolor='white', k=None, legend=True
+        ny_census_tracts, hue='percent_white',
+        cmap='Purples', linewidth=0.5, edgecolor='white', k=None, legend=True,
+        projection=gcrs.WebMercator()
     )
-    plt.title("k=None, legend=True")
 
 
 
 
 .. parsed-literal::
 
-    Text(0.5, 1.0, 'k=None, legend=True')
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12809d5f8>
 
 
 
@@ -346,7 +345,7 @@ Another visual variable present in some plots in ``geoplot`` is
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132aa15f8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129e81080>
 
 
 
@@ -359,51 +358,18 @@ its magnitude. For example in this plot we can see more easily than in
 the ``hue``-based plots how much larger certain cities (like New York
 City and Los Angeles) are than others.
 
-``geoplot`` uses a `linear
-scale <https://en.wikipedia.org/wiki/Linear_scale>`__ and a relatively
-modest maximum and minimum point size by default. You can adjust the
-maxima and minima to your liking using the ``limits`` parameter.
+You can adjust the minimum and maximum size of the of the plot elements
+to your liking using the ``limits`` parameter.
 
 **Power User Feature: Custom Scaling Functions**
 
-   To use a different scale, like e.g. logarithmic, pass a scaling
-   function to the ``scale_func`` parameter. The `Pointplot Scale
+   ``geoplot`` uses a linear scale by default. To use a different scale,
+   like e.g. logarithmic, pass a scaling function to the ``scale_func``
+   parameter. The `Pointplot Scale
    Functions <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>`__
    demo in the
    `Gallery <https://residentmario.github.io/geoplot/gallery/index.html>`__
-   demonstrates several such functions/scales in actions.
-
-.. code:: ipython3
-
-    ax = gplt.pointplot(
-        large_continental_usa_cities,
-        projection=gcrs.AlbersEqualArea(),
-        scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples', legend_var='scale'
-    )
-    gplt.polyplot(contiguous_usa, ax=ax)
-
-
-.. parsed-literal::
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-
-
-
-
-.. parsed-literal::
-
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133fafb00>
-
-
-
-
-.. image:: Customizing_Plots_files/Customizing_Plots_21_2.png
-
-
-Oftentimes you can get even better results by using both ``hue`` and
-``scale`` in the same plot.
+   demonstrates how this works.
 
 Legend
 ------
@@ -424,7 +390,7 @@ To add a legend to your plot, set ``legend=True``.
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
         hue='POP_2010', cmap='Purples',
-        legend=True, legend_var='scale'
+        legend=True
     )
     gplt.polyplot(contiguous_usa, ax=ax)
 
@@ -433,18 +399,20 @@ To add a legend to your plot, set ``legend=True``.
 
     /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
       return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:237: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
+      f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132a66940>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129d32ef0>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_24_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_22_2.png
 
 
 With the addition of the legend we can now do things like pick out which
@@ -474,12 +442,12 @@ To switch to a scale-based legend instead of a color-based one, set
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133dc1a20>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129e61390>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_26_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_24_2.png
 
 
 Use ``legend_values`` and ``legend_labels`` to customize the markers and
@@ -509,12 +477,12 @@ labels in the legend, respectively:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x133eb3470>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129a2e6d8>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_28_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_26_2.png
 
 
 **Power User Feature: Custom Legends**
@@ -578,12 +546,12 @@ here’s a map of just populous cities in the state of California.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x132a34e48>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129dff550>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_31_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_29_2.png
 
 
 The
@@ -660,7 +628,7 @@ pretty-looking plots:
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_34_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_32_2.png
 
 
 The `“Styling your
