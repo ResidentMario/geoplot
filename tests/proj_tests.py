@@ -7,6 +7,7 @@ import geoplot as gplt
 import geoplot.crs as gcrs
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import warnings
 
 
 @pytest.fixture(scope="module")
@@ -16,7 +17,6 @@ def countries():
 
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("proj", [
-    # TODO: Fix errors in the projections that do not currently work.
     gcrs.PlateCarree(),
     gcrs.LambertCylindrical(),
     gcrs.Mercator(),
@@ -35,13 +35,13 @@ def countries():
     gcrs.Orthographic(),
     gcrs.Stereographic(),
     pytest.param(gcrs.TransverseMercator(), marks=pytest.mark.xfail),
-    gcrs.LambertAzimuthalEqualArea()
+    gcrs.LambertAzimuthalEqualArea(),
+    gcrs.WebMercator()
 ])
 def test_basic_global_projections(proj, countries):
     gplt.polyplot(countries, proj)
     ax = plt.gca()
     ax.set_global()
-
     return plt.gcf()
 
 
@@ -51,8 +51,9 @@ def test_basic_global_projections(proj, countries):
     gcrs.OSGB(),
 ])
 def test_basic_non_global_projections(proj, countries):
-    gplt.polyplot(gpd.GeoDataFrame(geometry=[]), proj)
-    # TODO: gplt.polyplot(countries, proj)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        gplt.polyplot(countries, proj)
     return plt.gcf()
 
 
@@ -79,13 +80,12 @@ def test_basic_non_global_projections(proj, countries):
         gcrs.TransverseMercator(central_longitude=45, central_latitude=45),
         marks=pytest.mark.xfail
     ),
-    gcrs.LambertAzimuthalEqualArea(central_longitude=45, central_latitude=45)
+    gcrs.LambertAzimuthalEqualArea(central_longitude=45, central_latitude=45),
 ])
 def test_fully_parameterized_global_projections(proj, countries):
     gplt.polyplot(countries, proj)
     ax = plt.gca()
     ax.set_global()
-
     return plt.gcf()
 
 
@@ -104,7 +104,7 @@ def test_fully_parameterized_global_projections(proj, countries):
     pytest.param(gcrs.TransverseMercator(central_longitude=45), marks=pytest.mark.xfail),
     pytest.param(gcrs.TransverseMercator(central_latitude=45), marks=pytest.mark.xfail),
     pytest.param(gcrs.LambertAzimuthalEqualArea(central_longitude=45), marks=pytest.mark.xfail),
-    gcrs.LambertAzimuthalEqualArea(central_latitude=45)
+    gcrs.LambertAzimuthalEqualArea(central_latitude=45),
 ])
 def test_partially_parameterized_global_projections(proj, countries):
     gplt.polyplot(countries, proj)
@@ -133,8 +133,8 @@ def test_partially_parameterized_global_projections(proj, countries):
     pytest.param(gcrs.Orthographic(), marks=pytest.mark.xfail),
     gcrs.Stereographic(),
     pytest.param(gcrs.TransverseMercator(), marks=pytest.mark.xfail),
-    gcrs.LambertAzimuthalEqualArea()
-    # # TODO: Include other new ones.
+    gcrs.LambertAzimuthalEqualArea(),
+    gcrs.WebMercator()
 ])
 def test_subplots_global_projections(proj, countries):
     gplt.polyplot(countries, proj, ax=plt.subplot(2, 1, 1, projection=proj)).set_global()

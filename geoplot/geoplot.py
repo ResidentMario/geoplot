@@ -31,8 +31,7 @@ class HueMixin:
     """
     def set_hue_values(
         self, color_kwarg='color', default_color='steelblue',
-        supports_continuous=True, supports_categorical=True,
-        verify_input=True
+        supports_categorical=True, verify_input=True
     ):
         hue = self.kwargs.pop('hue', None)
         cmap = self.kwargs.pop('cmap', 'viridis')
@@ -41,6 +40,9 @@ class HueMixin:
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
             k = self.kwargs.pop('k')
+
+            if k is None and scheme is not None:
+                raise ValueError(f'Cannot specify "scheme" with "k" set to None.')
         else:
             scheme = None
             k = None
@@ -104,10 +106,16 @@ class HueMixin:
                 cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
                 colors = [cmap.to_rgba(v) for v in values]
 
+        # categories will differ in length from the input k if k > len(set(df)). All function
+        # calls after the HueMixin initializer should see the "true" value for k, so we modify
+        # k if needed in this case.
+        if categories is not None:
+            self.k = min(k, len(categories))
+        else:
+            self.k = k
         self.colors = colors
         self.hue = hue
         self.scheme = scheme
-        self.k = k
         self.cmap = cmap
         self.categorical = categorical
         self.categories = categories
@@ -154,10 +162,10 @@ class ScaleMixin:
 
             if hasattr(self, 'colors') and self.colors is not None:
                 self.colors = np.array(self.colors)[sorted_indices]
-            if hasattr(self, 'partitions') and self.partitions is not None:
-                raise NotImplementedError  # quadtree does not support scale param
 
         else:
+            # Theoretically we should validate limits as well, but since the default limits value
+            # is not None this can't be done completely reliably.
             if self.scale_func is not None:
                 raise ValueError(
                     f'Cannot specify "scale_func" without specifying "scale".'
@@ -212,7 +220,14 @@ class LegendMixin:
                 len(legend_labels) != len(legend_values)
             ):
                 raise ValueError(
-                    'The "legend_labels" and "legend_values" parameters have diferent lengths.'
+                    'The "legend_labels" and "legend_values" parameters have different lengths.'
+                )
+            if (not legend and (
+                'legend_var' in self.kwargs and self.kwargs['legend_var'] is not None
+            )):
+                raise ValueError(
+                    'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                    'when "legend" is set to False.'
                 )
 
         # Mutate matplotlib defaults
@@ -535,16 +550,38 @@ class QuadtreeHueMixin(HueMixin):
 
 class Plot:
     def __init__(self, df, **kwargs):
+        if not hasattr(df, 'geometry'):
+            # The two valid df types are GeoDataFrame and GeoSeries. The former may be missing
+            # a geometry column, depending on how it was initialzied. The latter always returns
+            # self when it is asked for its geometry property, and so it will never be the source
+            # of this error.
+            raise ValueError(
+                'The input GeoDataFrame does not have a "geometry" column set.'
+            )
         self.df = df
-        self.figsize = kwargs.pop('figsize')
+
+        if kwargs['ax'] is None:
+            # a default figsize is always set and passed into the initializer
+            self.figsize = kwargs.pop('figsize')
+        else:
+            if kwargs['figsize'] != (8, 6):  # non-default user setting
+                warnings.warn(
+                    'Cannot set "figsize" when passing an "ax" to the plot. To remove this '
+                    'warning omit the "figsize" parameter.'
+                )
+                pass
+
+            self.figsize = tuple(kwargs['ax'].get_figure().get_size_inches())
+
         self.ax = kwargs.pop('ax')
         self.extent = kwargs.pop('extent')
         self.projection = kwargs.pop('projection')
-
+        # TODO: init_axis() -> init_axis(ax)
         self.init_axis()
         self.kwargs = kwargs
 
     def init_axis(self):
+
         if not self.ax:
             plt.figure(figsize=self.figsize)
 
@@ -1781,8 +1818,22 @@ def _validate_buckets(df, hue, k, scheme):
         categorical = False
     # if the data is non-categorical, but there are fewer to equal numbers of bins and
     # observations, treat it as categorical, as doing so will make the legend cleaner
-    elif k is not None and len(hue) <= k:
+    elif k is not None and len(hue) == k:
         categorical = True
+    elif k is not None and len(hue) < k:
+        warnings.warn(
+            f'There are just {len(hue)} observations in the "hue" data, but "k" is set to {k}. '
+            f'"k" will be set to the number of categories of observations in the dataset.'
+        )
+        categorical = True
+    elif k is not None and len(hue) > k and (hue.dtype != np.dtype('object')):
+        categorical = False
+    # TODO: add this error to the mixin checks.
+    elif k is not None and len(hue) > k and (hue.dtype == np.dtype('object')):
+        raise ValueError(
+            f'"k" is set to {k}, but "hue" is a column of data of type "object", which cannot be'
+            f'bucketized discretely. Try setting "k" to None instead.'
+        )
     else:
         categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
