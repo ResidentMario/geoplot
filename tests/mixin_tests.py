@@ -1,4 +1,4 @@
-from geoplot.geoplot import (Plot, HueMixin, ScaleMixin, ClipMixin, LegendMixin)
+from geoplot.geoplot import (Plot, HueMixin, ScaleMixin, ClipMixin, LegendMixin, webmap)
 import geoplot.utils as utils
 
 import pandas as pd
@@ -15,18 +15,13 @@ import geoplot.crs as gcrs
 from shapely.geometry import Point, Polygon
 import numpy as np
 
-# import matplotlib.pyplot as plt
-# from shapely.geometry import Point, LineString
-# import numpy as np
-# import geoplot.crs as gcrs
-
 
 def axis_initializer(f):
     def wrapped(_self):
         try:
             f(_self)
         finally:
-            plt.close()
+            plt.close('all')
     return wrapped
 
 
@@ -213,7 +208,19 @@ class TestHue(unittest.TestCase):
         huemixin.set_hue_values(supports_categorical=False)
         assert(huemixin.hue == hue).all()
 
-        # TODO: more input types
+        # hue is initialized as a list: transform that into a GeoSeries
+        huemixin = self.create_huemixin()
+        hue = list(np.random.random(100))
+        huemixin.kwargs['hue'] = hue
+        huemixin.set_hue_values(supports_categorical=False)
+        assert(huemixin.hue == hue).all()
+
+        # hue is initialized as an array: transform that into a GeoSeries
+        huemixin = self.create_huemixin()
+        hue = np.random.random(100)
+        huemixin.kwargs['hue'] = hue
+        huemixin.set_hue_values(supports_categorical=False)
+        assert(huemixin.hue == hue).all()
 
     def test_hue_init_cmap(self):
         # cmap is None: 'viridis' is used
@@ -340,6 +347,14 @@ class TestHue(unittest.TestCase):
         assert huemixin.k == 5
         assert huemixin.hue == None
 
+        # k is not None, hue is an object-type (unbucketizable) variable: raise
+        huemixin = self.create_huemixin()
+        huemixin.kwargs['k'] = 5
+        huemixin.kwargs['scheme'] = 'fisher_jenks'
+        huemixin.kwargs['hue'] = huemixin.df.assign(foo=huemixin.df.foo.astype(str))
+        with pytest.raises(ValueError):
+            huemixin.set_hue_values(supports_categorical=True)
+
     def test_hue_init_scheme_kwarg(self):
         # k is not None, scheme is not None, hue is None: raise
         huemixin = self.create_huemixin()
@@ -410,6 +425,35 @@ class TestScale(unittest.TestCase):
         assert (scalemixin.sizes >= 1).all()
         assert scalemixin.scale_func == None
         assert scalemixin.dscale is not None  # dscale is the calibrated internal scale
+
+    def test_scale_init_scale_dtypes(self):
+        # scale is initialized as a str: transform to GeoSeries
+        scalemixin = self.create_scalemixin()
+        scale = np.random.random(100)
+        scalemixin.kwargs['scale'] = scale
+        scalemixin.set_scale_values()
+        assert(scalemixin.scale == scale).all()
+
+        # scale is initialized as a GeoSeries: set as-is
+        scalemixin = self.create_scalemixin()
+        scale = gpd.GeoSeries(np.random.random(100))
+        scalemixin.kwargs['scale'] = scale
+        scalemixin.set_scale_values()
+        assert(scalemixin.scale == scale).all()
+
+        # scale is initialized as a list: transform to GeoSeries
+        scalemixin = self.create_scalemixin()
+        scale = gpd.GeoSeries(np.random.random(100))
+        scalemixin.kwargs['scale'] = scale
+        scalemixin.set_scale_values()
+        assert(scalemixin.scale == scale).all()
+
+        # scale is initialized as an array: transform to GeoSeries
+        scalemixin = self.create_scalemixin()
+        scale = np.random.random(100)
+        scalemixin.kwargs['scale'] = scale
+        scalemixin.set_scale_values()
+        assert(scalemixin.scale == scale).all()
 
     def test_scale_init_scale_func(self):
         # if scale is None and scale_func is not None, raise
@@ -625,10 +669,37 @@ class TestClip(unittest.TestCase):
         self.create_clipmixin = create_clipmixin
 
     def test_clip_init_default(self):
-        # TODO: ensure that the gaussian input is staticly seeded properly, otherwise the bounds
-        # check can theoretically fail.
         clipmixin = self.create_clipmixin()
-        df_result = clipmixin.set_clip(clipmixin.df)
+
+        # UserWarning because we have a narrow clip
+        with pytest.warns(UserWarning):
+            df_result = clipmixin.set_clip(clipmixin.df)
         expected = Polygon([[0, 0], [0, 100], [100, 100], [100, 0]])
         result = df_result.geometry.unary_union.envelope
         assert expected.contains(result)
+
+
+class TestWebmapInput(unittest.TestCase):
+    # TODO: stub out network requests to the tile service
+
+    def setUp(self):
+        np.random.seed(42)
+        p_srs = gpd.GeoSeries(utils.gaussian_points(n=100))
+        self.p_df = gpd.GeoDataFrame(geometry=p_srs)
+
+    @axis_initializer
+    def test_webmap_input_restrictions(self):
+        """Test webmap-specific plot restrictions."""
+        with pytest.raises(ValueError):
+            webmap(self.p_df, projection=gcrs.AlbersEqualArea())
+
+        _, ax = plt.subplots(figsize=(2, 2))
+        with pytest.raises(ValueError):
+            webmap(self.p_df, ax=ax)
+
+        ax = plt.axes(projection=ccrs.PlateCarree())
+        with pytest.raises(ValueError):
+            webmap(self.p_df, ax=ax)
+
+        with pytest.warns(UserWarning):
+            webmap(self.p_df)

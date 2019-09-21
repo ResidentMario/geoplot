@@ -43,7 +43,7 @@ def gaussian_polygons(points, n=10):
     )
     polygons = []
     for i in range(n):
-        sel_points = gdf[gdf['cluster_number'] == i].geometry
+        sel_points = gdf[gdf['cluster_number'] == i].dropna().geometry
         polygons.append(shapely.geometry.MultiPoint([(p.x, p.y) for p in sel_points]).convex_hull)
     polygons = [
         p for p in polygons if (
@@ -64,6 +64,20 @@ def gaussian_multi_polygons(points, n=10):
         shapely.geometry.MultiPolygon(list(pair)) for pair in np.array_split(polygons.values, n)
     ]
     return gpd.GeoSeries(polygon_pairs)
+
+
+def gaussian_linestrings(points):
+    """
+    Returns a GeoSeries of len(points) / 2 `shapely.geometry.LineString` objects for an array of
+    `shapely.geometry.Point` objects.
+    """
+    polys = [poly for _, poly in gaussian_polygons(points).iteritems()]
+    linestrings = []
+    for poly in polys:
+        start_point = shapely.geometry.Point(poly.exterior.coords[0])
+        end_point = shapely.geometry.Point(poly.exterior.coords[1])
+        linestrings.append(shapely.geometry.LineString([start_point, end_point]))
+    return linestrings
 
 
 def uniform_random_global_points(n=100):
