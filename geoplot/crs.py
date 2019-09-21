@@ -137,7 +137,7 @@ class LatitudeCentering(Filtering):
 
 class LongitudeLatitudeCentering(Filtering):
     """Form a CRS that accepts neither longitude or latitude centering."""
-    filter_ = {'central_longitude', 'central_latitude'}
+    filter_ = {}
 
 
 PlateCarree,\
@@ -167,7 +167,12 @@ PlateCarree,\
 
 Gnomonic = type('Gnomonic', (LatitudeCentering,), {})
 
-WebMercator = type('WebMercator', (LongitudeLatitudeCentering,), {})
+EuroPP,\
+    OSGB,\
+    WebMercator = tuple(
+        type(name, (LongitudeLatitudeCentering,), {})
+        for name in ('EuroPP', 'OSGB', 'WebMercator')
+    )
 
 AlbersEqualArea,\
     AzimuthalEquidistant,\
@@ -177,9 +182,8 @@ AlbersEqualArea,\
     TransverseMercator,\
     LambertAzimuthalEqualArea,\
     UTM,\
-    OSGB,\
-    EuroPP,\
-    OSNI = tuple(
+    OSNI,\
+    WebMercator = tuple(
         type(name, (Base,), {})
         for name in ('AlbersEqualArea',
                      'AzimuthalEquidistant',
@@ -189,7 +193,6 @@ AlbersEqualArea,\
                      'TransverseMercator',
                      'LambertAzimuthalEqualArea',
                      'UTM',
-                     'OSGB',
-                     'EuroPP',
-                     'OSNI')
+                     'OSNI',
+                     'WebMercator')
     )

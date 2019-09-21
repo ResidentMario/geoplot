@@ -31,8 +31,7 @@ class HueMixin:
     """
     def set_hue_values(
         self, color_kwarg='color', default_color='steelblue',
-        supports_continuous=True, supports_categorical=True,
-        verify_input=True
+        supports_categorical=True, verify_input=True
     ):
         hue = self.kwargs.pop('hue', None)
         cmap = self.kwargs.pop('cmap', 'viridis')
@@ -41,6 +40,9 @@ class HueMixin:
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
             k = self.kwargs.pop('k')
+
+            if k is None and scheme is not None:
+                raise ValueError(f'Cannot specify "scheme" with "k" set to None.')
         else:
             scheme = None
             k = None
@@ -67,36 +69,13 @@ class HueMixin:
             colors = [color] * len(self.df)
             categorical = False
             categories = None
-        elif k is None:  # continuous colormap
-            if norm is None:
-                norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
-
-            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-            colors = [cmap.to_rgba(v) for v in hue]
-            categorical = False
-            categories = None
-        else:  # categorical colormap
+        else:
             categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
-            categories = None
-            if hue is not None:
-                # self.categorical is passed to ax.legend in paint_legend when legend_labels is
-                # null and the legend is in hue mode (meaning hue is specified, legend is True, and
-                # either legend_var is set to hue OR hue is the only valid legend variable in the
-                # plot). ax.legend sorts the patch-label tuples by patch value in ascending order
-                # internally. This obviates the need for sorting it ourselves here, but also forces
-                # us to also use ascending (not descending) order on the scale legend also.
-                if not categorical:
-                    binning = _mapclassify_choro(hue, scheme, k=k)
-                    values = binning.yb
-                    binedges = [binning.yb.min()] + binning.bins.tolist()
-                    categories = [
-                        '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
-                        for i in range(len(binedges) - 1)
-                    ]
-                else:
-                    categories = np.unique(hue)
-                    value_map = {v: i for i, v in enumerate(categories)}
-                    values = [value_map[d] for d in hue]
+
+            if categorical:
+                categories = np.unique(hue)
+                value_map = {v: i for i, v in enumerate(categories)}
+                values = [value_map[d] for d in hue]
 
                 if norm is None:
                     norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
@@ -104,10 +83,37 @@ class HueMixin:
                 cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
                 colors = [cmap.to_rgba(v) for v in values]
 
+            elif k is None:
+                if norm is None:
+                    norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
+
+                cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+                colors = [cmap.to_rgba(v) for v in hue]
+                categories = None
+            else:  # k is not None
+                binning = _mapclassify_choro(hue, scheme, k=k)
+                values = binning.yb
+                if norm is None:
+                    norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
+
+                binedges = [binning.yb.min()] + binning.bins.tolist()
+                categories = [
+                    '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+                    for i in range(len(binedges) - 1)
+                ]
+                cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+                colors = [cmap.to_rgba(v) for v in values]
+
+        # categories will differ in length from the input k if k > len(set(df)). All function
+        # calls after the HueMixin initializer should see the "true" value for k, so we modify
+        # k if needed in this case.
+        if categories is not None and k is not None:
+            self.k = min(k, len(categories))
+        else:
+            self.k = k
         self.colors = colors
         self.hue = hue
-        self.scheme = scheme
-        self.k = k
+        self.scheme = scheme if categorical else None
         self.cmap = cmap
         self.categorical = categorical
         self.categories = categories
@@ -154,10 +160,10 @@ class ScaleMixin:
 
             if hasattr(self, 'colors') and self.colors is not None:
                 self.colors = np.array(self.colors)[sorted_indices]
-            if hasattr(self, 'partitions') and self.partitions is not None:
-                raise NotImplementedError  # quadtree does not support scale param
 
         else:
+            # Theoretically we should validate limits as well, but since the default limits value
+            # is not None this can't be done completely reliably.
             if self.scale_func is not None:
                 raise ValueError(
                     f'Cannot specify "scale_func" without specifying "scale".'
@@ -212,7 +218,14 @@ class LegendMixin:
                 len(legend_labels) != len(legend_values)
             ):
                 raise ValueError(
-                    'The "legend_labels" and "legend_values" parameters have diferent lengths.'
+                    'The "legend_labels" and "legend_values" parameters have different lengths.'
+                )
+            if (not legend and (
+                'legend_var' in self.kwargs and self.kwargs['legend_var'] is not None
+            )):
+                raise ValueError(
+                    'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                    'when "legend" is set to False.'
                 )
 
         # Mutate matplotlib defaults
@@ -427,6 +440,14 @@ class ClipMixin:
             gdf = gdf.assign(
                 geometry=gdf.geometry.intersection(clip_shp)
             )
+            null_geoms = gdf.geometry.isnull()
+            # Clipping may result in null geometries. We warn about this here, but it is = the
+            # responsibility of the plot draw procedure to perform the actual plot exclusion.
+            if null_geoms.any():
+                warnings.warn(
+                    f'The input data contains {null_geoms.sum()} data points that do not '
+                    f'intersect with "clip". These data points will not appear in the plot.'
+                )
         return gdf
 
     @staticmethod
@@ -447,14 +468,18 @@ class ClipMixin:
         clip = _to_geom_geoseries(self.df, clip, "clip")
         if clip is not None:
             if self.projection is not None:
-                clip_geom = self._get_clip(self.ax.get_extent(crs=ccrs.PlateCarree()), clip)
+                xmin, xmax, ymin, ymax = self.ax.get_extent(crs=ccrs.PlateCarree())
+                extent = (xmin, ymin, xmax, ymax)
+                clip_geom = self._get_clip(extent, clip)
                 feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
                 self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
             else:
-                clip_geom = self._get_clip(self.ax.get_xlim() + self.ax.get_ylim(), clip)
                 xmin, xmax = self.ax.get_xlim()
                 ymin, ymax = self.ax.get_ylim()
                 extent = (xmin, ymin, xmax, ymax)
+                clip_geom = self._get_clip(extent, clip)
+                xmin, xmax = self.ax.get_xlim()
+                ymin, ymax = self.ax.get_ylim()
                 polyplot(
                     gpd.GeoSeries(clip_geom), facecolor='white', linewidth=0, zorder=2,
                     extent=extent, ax=self.ax
@@ -535,16 +560,38 @@ class QuadtreeHueMixin(HueMixin):
 
 class Plot:
     def __init__(self, df, **kwargs):
+        if not hasattr(df, 'geometry'):
+            # The two valid df types are GeoDataFrame and GeoSeries. The former may be missing
+            # a geometry column, depending on how it was initialzied. The latter always returns
+            # self when it is asked for its geometry property, and so it will never be the source
+            # of this error.
+            raise ValueError(
+                'The input GeoDataFrame does not have a "geometry" column set.'
+            )
         self.df = df
-        self.figsize = kwargs.pop('figsize')
+
+        if kwargs['ax'] is None:
+            # a default figsize is always set and passed into the initializer
+            self.figsize = kwargs.pop('figsize')
+        else:
+            if kwargs['figsize'] != (8, 6):  # non-default user setting
+                warnings.warn(
+                    'Cannot set "figsize" when passing an "ax" to the plot. To remove this '
+                    'warning omit the "figsize" parameter.'
+                )
+                pass
+
+            self.figsize = tuple(kwargs['ax'].get_figure().get_size_inches())
+
         self.ax = kwargs.pop('ax')
         self.extent = kwargs.pop('extent')
         self.projection = kwargs.pop('projection')
-
+        # TODO: init_axis() -> init_axis(ax)
         self.init_axis()
         self.kwargs = kwargs
 
     def init_axis(self):
+
         if not self.ax:
             plt.figure(figsize=self.figsize)
 
@@ -636,7 +683,7 @@ class Plot:
 
 def pointplot(
     df, projection=None,
-    hue=None, cmap=None, norm=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=None, scheme=None,
     scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
@@ -736,7 +783,7 @@ def pointplot(
                     **plot.kwargs
                 )
             else:
-                ax.scatter(xs, ys, c=plot.colors, s=plot.sizes, **plot.kwargs)
+                ax.scatter(xs, ys, c=plot.colors, s=[s**2 for s in plot.sizes], **plot.kwargs)
             return ax
 
     plot = PointPlot(
@@ -824,7 +871,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
 
 def choropleth(
     df, projection=None,
-    hue=None, cmap=None, norm=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -931,7 +978,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap=None, norm=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=None, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None, legend_values=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -1067,7 +1114,7 @@ def quadtree(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
-    hue=None, cmap=None, norm=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=None, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1243,7 +1290,8 @@ def kdeplot(
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
             self.set_hue_values(
-                color_kwarg=None, default_color=None, supports_categorical=False, verify_input=False
+                color_kwarg=None, default_color=None, supports_categorical=False,
+                verify_input=False
             )
             self.paint_legend(supports_hue=True, supports_scale=False, verify_input=False)
             self.paint_clip()
@@ -1265,7 +1313,7 @@ def kdeplot(
                 sns.kdeplot(
                     pd.Series([p.x for p in self.df.geometry]),
                     pd.Series([p.y for p in self.df.geometry]),
-                    ax=ax, shade_lowest=shade_lowest, **self.kwargs
+                    ax=ax, shade_lowest=shade_lowest, cmap=self.cmap, **self.kwargs
                 )
             return ax
 
@@ -1279,7 +1327,7 @@ def kdeplot(
 
 def sankey(
     df, projection=None,
-    hue=None, norm=None, cmap=None, k=5, scheme=None,
+    hue=None, norm=None, cmap=None, k=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
     scale=None, scale_func=None, limits=(1, 5),
@@ -1447,7 +1495,7 @@ def sankey(
 
 def voronoi(
     df, projection=None, clip=None,
-    hue=None, cmap=None, norm=None, k=5, scheme=None,
+    hue=None, cmap=None, norm=None, k=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1545,12 +1593,16 @@ def voronoi(
             self.df = self.df.assign(
                 geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms)).values
             )
-            if self.projection:
-                for color, geom in zip(self.colors, self.df.geometry):
-                    features = ShapelyFeature([geom], ccrs.PlateCarree())
-                    ax.add_feature(features, facecolor=color, edgecolor=edgecolor, **self.kwargs)
-            else:
-                for color, geom in zip(self.colors, self.df.geometry):
+            for color, geom in zip(self.colors, self.df.geometry):
+                if geom.is_empty:  # do not plot data points that return empty due to clipping
+                    continue
+
+                if self.projection:
+                    feature = ShapelyFeature([geom], ccrs.PlateCarree())
+                    ax.add_feature(
+                        feature, facecolor=color, edgecolor=edgecolor, **self.kwargs
+                    )
+                else:
                     feature = descartes.PolygonPatch(
                         geom, facecolor=color, edgecolor=edgecolor, **self.kwargs
                     )
@@ -1614,8 +1666,8 @@ def webmap(
         The plot axis.
     """
     class WebmapPlot(Plot):
-        # webmap is restricted to the WebMercator projection and no projection, which requires
-        # special axis and projection initialization rules to get right.
+        # webmap is restricted to the WebMercator projection, which requires special axis and
+        # projection initialization rules to get right.
         def __init__(self, df, **kwargs):
             if isinstance(ax, GeoAxesSubplot):
                 proj_name = ax.projection.__class__.__name__
@@ -1781,8 +1833,21 @@ def _validate_buckets(df, hue, k, scheme):
         categorical = False
     # if the data is non-categorical, but there are fewer to equal numbers of bins and
     # observations, treat it as categorical, as doing so will make the legend cleaner
-    elif k is not None and len(hue) <= k:
+    elif k is not None and len(hue) == k:
         categorical = True
+    elif k is not None and len(hue) < k:
+        warnings.warn(
+            f'There are just {len(hue)} observations in the "hue" data, but "k" is set to {k}. '
+            f'"k" will be set to the number of categories of observations in the dataset.'
+        )
+        categorical = True
+    elif k is not None and len(hue) > k and (hue.dtype != np.dtype('object')):
+        categorical = False
+    elif k is not None and len(hue) > k and (hue.dtype == np.dtype('object')):
+        raise ValueError(
+            f'"k" is set to {k}, but "hue" is a column of data of type "object", which cannot be'
+            f'bucketized discretely. Try setting "k" to None instead.'
+        )
     else:
         categorical = (hue.dtype == np.dtype('object'))
     scheme = scheme if scheme else 'Quantiles'
