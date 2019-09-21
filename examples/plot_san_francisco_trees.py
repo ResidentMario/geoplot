@@ -28,9 +28,9 @@ sf = gpd.read_file(gplt.datasets.get_path('san_francisco'))
 ax = gplt.quadtree(
     trees.assign(nullity=trees['Species'].notnull().astype(int)),
     projection=gcrs.AlbersEqualArea(),
-    hue='nullity', nmax=1, cmap='Greens', legend=True,
+    hue='nullity', nmax=1, cmap='Greens', k=5, legend=True,
     clip=sf, edgecolor='white', linewidth=1
 )
 gplt.polyplot(sf, facecolor='None', edgecolor='gray', linewidth=1, zorder=2, ax=ax)
 
-plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)
+plt.savefig("san-francisco-street-trees.png", bbox_inches='tight', pad_inches=0)

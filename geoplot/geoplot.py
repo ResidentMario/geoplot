@@ -22,7 +22,7 @@ try:
 except ImportError:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 
 class HueMixin:
@@ -582,6 +582,7 @@ class Plot:
                 pass
 
             self.figsize = tuple(kwargs['ax'].get_figure().get_size_inches())
+            kwargs.pop('figsize')
 
         self.ax = kwargs.pop('ax')
         self.extent = kwargs.pop('extent')
@@ -1115,7 +1116,7 @@ def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
     hue=None, cmap=None, norm=None, k=None, scheme=None,
-    legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var="scale",
+    legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
     """
@@ -1829,6 +1830,8 @@ def _validate_buckets(df, hue, k, scheme):
     """
     if isinstance(hue, str):
         hue = df[hue]
+    count_unique = len(np.unique(hue))
+
     if hue is None:
         categorical = False
     # if the data is non-categorical, but there are fewer to equal numbers of bins and
@@ -1841,11 +1844,11 @@ def _validate_buckets(df, hue, k, scheme):
             f'"k" will be set to the number of categories of observations in the dataset.'
         )
         categorical = True
-    elif k is not None and len(hue) > k and (hue.dtype != np.dtype('object')):
+    elif k is not None and count_unique > k and (hue.dtype != np.dtype('object')):
         categorical = False
-    elif k is not None and len(hue) > k and (hue.dtype == np.dtype('object')):
+    elif k is not None and count_unique > k and (hue.dtype == np.dtype('object')):
         raise ValueError(
-            f'"k" is set to {k}, but "hue" is a column of data of type "object", which cannot be'
+            f'"k" is set to {k}, but "hue" is a column of data of type "object", which cannot be '
             f'bucketized discretely. Try setting "k" to None instead.'
         )
     else:

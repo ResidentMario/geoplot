@@ -40,7 +40,7 @@ variable that every map has in common is **position**.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12402b438>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12591a940>
 
 
 
@@ -66,7 +66,7 @@ in your plot.
 .. code:: ipython3
 
     ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
-    gplt.pointplot(continental_usa_cities, hue='POP_2010', cmap='Blues', ax=ax)
+    gplt.pointplot(continental_usa_cities, hue='POP_2010', k=5, cmap='Blues', ax=ax)
 
 
 .. parsed-literal::
@@ -79,7 +79,7 @@ in your plot.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1241044a8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x126222198>
 
 
 
@@ -101,17 +101,17 @@ which determines which ``matplotlib`` colormap is used:
     fig, axarr = plt.subplots(2, 3, figsize=(14, 8), subplot_kw={'projection': proj})
     pointplot_kwargs = {'hue': 'POP_2010'}
     
-    gplt.pointplot(continental_usa_cities, ax=axarr[0][0], cmap='Blues', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[0][0], cmap='Blues', k=5, **pointplot_kwargs)
     axarr[0][0].set_title("cmap='Blues'")
-    gplt.pointplot(continental_usa_cities, ax=axarr[0][1], cmap='Reds', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[0][1], cmap='Reds', k=5, **pointplot_kwargs)
     axarr[0][1].set_title("cmap='Reds'")
-    gplt.pointplot(continental_usa_cities, ax=axarr[0][2], cmap='Greens', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[0][2], cmap='Greens', k=5, **pointplot_kwargs)
     axarr[0][2].set_title("cmap='Greens'")
-    gplt.pointplot(continental_usa_cities, ax=axarr[1][0], cmap='viridis', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[1][0], cmap='viridis', k=5, **pointplot_kwargs)
     axarr[1][0].set_title("cmap='viridis'")
-    gplt.pointplot(continental_usa_cities, ax=axarr[1][1], cmap='summer', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[1][1], cmap='summer', k=5, **pointplot_kwargs)
     axarr[1][1].set_title("cmap='summer'")
-    gplt.pointplot(continental_usa_cities, ax=axarr[1][2], cmap='coolwarm', **pointplot_kwargs)
+    gplt.pointplot(continental_usa_cities, ax=axarr[1][2], cmap='coolwarm', k=5, **pointplot_kwargs)
     axarr[1][2].set_title("cmap='coolwarm'")
 
 
@@ -221,7 +221,7 @@ of each county in New York which is white):
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12809d5f8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12b0c04e0>
 
 
 
@@ -345,7 +345,7 @@ Another visual variable present in some plots in ``geoplot`` is
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129e81080>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12acaaba8>
 
 
 
@@ -389,8 +389,8 @@ To add a legend to your plot, set ``legend=True``.
     ax = gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples',
-        legend=True
+        hue='POP_2010', cmap='Purples', k=5,
+        legend=True, legend_var='hue'
     )
     gplt.polyplot(contiguous_usa, ax=ax)
 
@@ -399,15 +399,13 @@ To add a legend to your plot, set ``legend=True``.
 
     /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
       return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:237: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
-      f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129d32ef0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12ac69518>
 
 
 
@@ -426,7 +424,7 @@ To switch to a scale-based legend instead of a color-based one, set
     ax = gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples',
+        hue='POP_2010', cmap='Purples',  k=5,
         legend=True, legend_var='scale'
     )
     gplt.polyplot(contiguous_usa, ax=ax)
@@ -442,7 +440,7 @@ To switch to a scale-based legend instead of a color-based one, set
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129e61390>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12ad0aeb8>
 
 
 
@@ -458,7 +456,7 @@ labels in the legend, respectively:
     ax = gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples',
+        hue='POP_2010', cmap='Purples', k=5,
         legend=True, legend_var='scale',
         legend_kwargs={'bbox_to_anchor': (0.92, 0.9), 'frameon': False},
         legend_values=[8000000, 6000000, 4000000, 2000000, 100000],
@@ -477,7 +475,7 @@ labels in the legend, respectively:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129a2e6d8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12a61c4a8>
 
 
 
@@ -524,15 +522,17 @@ here’s a map of just populous cities in the state of California.
 
 .. code:: ipython3
 
+    extent = contiguous_usa.query('state == "California"').total_bounds
+    extent = extent + [-0.5, -0.5, 0.5, 0.5]
+    
     proj = gcrs.AlbersEqualArea(central_longitude=-119.1786315, central_latitude=37.0486535)
     ax = gplt.pointplot(
         large_continental_usa_cities, projection=proj,
         scale='POP_2010', limits=(5, 100),
-        hue='POP_2010', cmap='Wistia'
+        hue='POP_2010', k=5, cmap='Purples'
     )
     gplt.polyplot(
-        contiguous_usa, ax=ax,
-        extent=contiguous_usa.query('state == "California"').total_bounds
+        contiguous_usa, ax=ax, extent=extent
     )
 
 
@@ -546,7 +546,7 @@ here’s a map of just populous cities in the state of California.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129dff550>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12b15e908>
 
 
 
