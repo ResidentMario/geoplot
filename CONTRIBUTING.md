@@ -29,7 +29,9 @@ pip install -e .[develop]
 
 `geoplot` tests are located in the `tests` folder. Any PRs you submit should eventually pass all of the tests located in this folder.
 
-There are three sets of tests. `input_tests.py` and `kwarg_tests.py` are smoke tests that can be run using `pytest`. The last test-set, `proj_tests.py`, requires the `pytest-mpl` plugin to be run; see the simple instructions [here](https://github.com/matplotlib/pytest-mpl#using) to see how to use it.
+`mixin_tests.py` are static unit tests which can be run via `pytest` the usual way (by running `pytest mixin_tests.py` from the command line).
+
+`proj_tests.py` and `viz_tests.py` are visual tests run via the `pytest-mpl` plugin to be run: [see here](https://github.com/matplotlib/pytest-mpl#using) for instructions on how it's used. These tests are passed by visual inspection: e.g. does the output figure look the way it _should_ look, given the inputs?
 
 ## Documentation
 
@@ -49,11 +51,11 @@ The gallery is generated using `sphinx-gallery`, and use the `examples/` folder 
 
 ### Quickstart
 
-The Quickstart is a Jupyter notebook in the `notebooks/` directory. To rebuild the quickstart, edit the notebook, then `cd notebooks/; jupyter nbconvert --to rst --output-dir ../../docs/quickstart/`. Then run `make html` again.
+The Quickstart is a Jupyter notebook in the `notebooks/` directory. To rebuild the quickstart, edit the notebook, then `cd notebooks/; jupyter nbconvert --to rst --output-dir ../../docs/quickstart/ Quickstart.ipynb`. Then run `make html` again.
 
 ### Tutorials
 
-The tutorials are Jupyter notebooks the `notebooks/` directory. To rebuild the tutorials, edit the notebook(s), then `cd notebooks/tutorials/; jupyter nbconvert --to rst --output-dir ../../docs/user_guide/`. Then run `make html` again.
+The tutorials are Jupyter notebooks the `notebooks/` directory. To rebuild the tutorials, edit the notebook(s), then `cd notebooks/tutorials/; jupyter nbconvert --to rst --output-dir ../../docs/user_guide/ $NOTEBOOK_NAME.ipynb`. Then run `make html` again.
 
 ### Example data
 
