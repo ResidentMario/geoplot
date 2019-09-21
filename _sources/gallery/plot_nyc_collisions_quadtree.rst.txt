@@ -20,7 +20,20 @@ accident frequency in different parts of New York City.
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
 
+ Out:
+
+ .. code-block:: none
+
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:448: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
+      f'The input data contains {null_geoms.sum()} data points that do not '
+
+
+
+
+
+|
 
 
 .. code-block:: default
@@ -48,7 +61,7 @@ accident frequency in different parts of New York City.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  33.717 seconds)
+   **Total running time of the script:** ( 0 minutes  46.409 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:

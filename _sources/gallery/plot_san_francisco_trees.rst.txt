@@ -36,6 +36,8 @@ For more tools for visualizing data nullity, `check out the missingno library
 
     /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
       return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:448: UserWarning: The input data contains 1 data points that do not intersect with "clip". These data points will not appear in the plot.
+      f'The input data contains {null_geoms.sum()} data points that do not '
 
 
 
@@ -60,17 +62,17 @@ For more tools for visualizing data nullity, `check out the missingno library
     ax = gplt.quadtree(
         trees.assign(nullity=trees['Species'].notnull().astype(int)),
         projection=gcrs.AlbersEqualArea(),
-        hue='nullity', nmax=1, cmap='Greens', legend=True,
+        hue='nullity', nmax=1, cmap='Greens', k=5, legend=True,
         clip=sf, edgecolor='white', linewidth=1
     )
     gplt.polyplot(sf, facecolor='None', edgecolor='gray', linewidth=1, zorder=2, ax=ax)
 
-    plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)
+    plt.savefig("san-francisco-street-trees.png", bbox_inches='tight', pad_inches=0)
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.816 seconds)
+   **Total running time of the script:** ( 0 minutes  28.412 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_san_francisco_trees.py:
