@@ -159,7 +159,7 @@ using ``pointplot``.
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x129d16da0>
+    <matplotlib.axes._subplots.AxesSubplot at 0x127f3eba8>
 
 
 
@@ -183,7 +183,7 @@ If you have polygonal data instead, you can plot that using a
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x129d55198>
+    <matplotlib.axes._subplots.AxesSubplot at 0x127f7aa20>
 
 
 
@@ -205,7 +205,7 @@ useful for providing additional context for our plots:
 
 .. parsed-literal::
 
-    <matplotlib.axes._subplots.AxesSubplot at 0x12a60f828>
+    <matplotlib.axes._subplots.AxesSubplot at 0x128822c50>
 
 
 
@@ -236,7 +236,7 @@ States. Here’s how you use it with ``geoplot``:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12a6963c8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12889e080>
 
 
 
@@ -264,7 +264,7 @@ do.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12e32ccf8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x128928588>
 
 
 
@@ -290,7 +290,7 @@ We’ll start with ``hue``.
 .. code:: ipython3
 
     ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
-    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', legend=True)
+    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', k=5, legend=True)
 
 
 .. parsed-literal::
@@ -303,7 +303,7 @@ We’ll start with ``hue``.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12eb383c8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1289d99b0>
 
 
 
@@ -327,7 +327,7 @@ choose:
 .. code:: ipython3
 
     ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
-    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues', legend=True)
+    gplt.pointplot(continental_usa_cities, ax=ax, hue='ELEV_IN_FT', k=5, cmap='Blues', legend=True)
 
 
 .. parsed-literal::
@@ -340,7 +340,7 @@ choose:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12e9d9ef0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12d44d470>
 
 
 
@@ -358,7 +358,7 @@ and ``legend_var``, which specifies which visual variable (``scale`` or
 
     ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
     gplt.pointplot(
-        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues',
+        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', k=5, cmap='Blues',
         scale='ELEV_IN_FT', limits=(1, 10),    
         legend=True, legend_var='scale'
     )
@@ -374,7 +374,7 @@ and ``legend_var``, which specifies which visual variable (``scale`` or
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12f742550>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12cd5e208>
 
 
 
@@ -405,7 +405,7 @@ of the plot.
         figsize=(12, 8)
     )
     gplt.pointplot(
-        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues',
+        continental_usa_cities, ax=ax, hue='ELEV_IN_FT', cmap='Blues', k=5,
         scale='ELEV_IN_FT', limits=(1, 10),    
         legend=True, legend_var='scale',
         legend_kwargs={'frameon': False},
@@ -446,7 +446,7 @@ Reference <https://residentmario.github.io/geoplot/plot_references/plot_referenc
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', legend=True,
+        cmap='Greens', k=5, legend=True,
         scheme='fisher_jenks',
         legend_labels=[
             '<3 million', '3-6.7 million', '6.7-12.8 million',
@@ -459,7 +459,7 @@ Reference <https://residentmario.github.io/geoplot/plot_references/plot_referenc
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12ea7f940>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12bae7320>
 
 
 
@@ -491,7 +491,7 @@ information about areas because it’s easy to make and interpret.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1314cff98>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12f1ae828>
 
 
 

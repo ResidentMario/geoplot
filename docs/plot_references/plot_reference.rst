@@ -7,9 +7,8 @@ Pointplot
 
 The ``pointplot`` is a `geospatial scatter plot 
 <https://en.wikipedia.org/wiki/Scatter_plot>`_ that represents each observation in your dataset
-as a single point on a map. It is simple and easily interpretable plot that is universally
-understood, making it an ideal choice for showing simple pointwise relationships between
-observations.
+as a single point on a map. It is simple and easily interpretable plot, making it an ideal
+choice for showing simple pointwise relationships between observations.
 
 ``pointplot`` requires, at a minimum, some points for plotting:
 
@@ -24,14 +23,27 @@ observations.
 .. image:: ../figures/pointplot/pointplot-initial.png
 
 
-The ``hue`` parameter accepts applies a colormap to a data column. The ``legend`` parameter
-toggles a legend.
+The ``hue`` parameter applies a colormap to a data column. The ``legend`` parameter toggles a
+legend.
 
 .. code-block:: python
 
     gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT', legend=True)
 
 .. image:: ../figures/pointplot/pointplot-legend.png
+
+Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
+continuous colormap (the default), set ``k=None``.
+
+.. code-block:: python
+
+    gplt.pointplot(
+        cities, projection=gcrs.AlbersEqualArea(),
+        hue='ELEV_IN_FT', k=8, cmap='inferno_r',
+        legend=True
+    )
+
+.. image:: ../figures/pointplot/pointplot-k.png
 
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 `matplotlib.pyplot.scatter instance 
@@ -44,24 +56,11 @@ plot. To pass keyword argument to the legend, use the ``legend_kwargs`` argument
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(), 
         hue='ELEV_IN_FT',
-        legend=True, legend_kwargs={'loc': 'upper left'},
+        legend=True, legend_kwargs={'orientation': 'horizontal'},
         edgecolor='lightgray', linewidth=0.5
     )
 
 .. image:: ../figures/pointplot/pointplot-kwargs.png
-
-Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
-continuous colormap, set ``k=None``.
-
-.. code-block:: python
-
-    gplt.pointplot(
-        cities, projection=gcrs.AlbersEqualArea(),
-        hue='ELEV_IN_FT', k=8, cmap='inferno_r',
-        legend=True
-    )
-
-.. image:: ../figures/pointplot/pointplot-k.png
 
 ``scale`` provides an alternative or additional visual variable. The minimum and maximum size
 of the points can be adjusted to fit your data using the ``limits`` parameter. It is often
@@ -72,10 +71,9 @@ the ``legend_var`` variable to control which visual variable the legend is keyed
 
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(), 
-        hue='ELEV_IN_FT', scale='ELEV_IN_FT', limits=(0.1, 3), cmap='inferno_r',
+        hue='ELEV_IN_FT', scale='ELEV_IN_FT', limits=(1, 10), cmap='inferno_r',
         legend=True, legend_var='scale'
     )
-
 .. image:: ../figures/pointplot/pointplot-scale.png
 
 Polyplot
@@ -97,9 +95,13 @@ The polyplot draws polygons on a map.
 
 .. code-block:: python
 
-    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+    ax = gplt.polyplot(
+        boroughs, projection=gcrs.AlbersEqualArea(),
+        edgecolor='None', facecolor='lightgray'
+    )
     gplt.pointplot(
-        collisions[collisions['BOROUGH'].notnull()], hue='BOROUGH', ax=ax, legend=True
+        collisions[collisions['BOROUGH'].notnull()],
+        hue='BOROUGH', ax=ax, legend=True, k=5
     )
 
 .. image:: ../figures/polyplot/polyplot-stacked.png
@@ -125,7 +127,8 @@ The webmap creates a static webmap.
 
     ax = gplt.webmap(boroughs, projection=gcrs.WebMercator())
     gplt.pointplot(
-        collisions[collisions['BOROUGH'].notnull()], hue='BOROUGH', ax=ax, legend=True
+        collisions[collisions['BOROUGH'].notnull()],
+        hue='BOROUGH', ax=ax, legend=True, k=5
     )
 
 .. image:: ../figures/webmap/webmap-stacked.png
@@ -158,7 +161,7 @@ continuous colormap, set ``k=None``. The ``legend`` parameter toggles the legend
 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
-        cmap='Greens', k=None, legend=True
+        cmap='Greens', k=5, legend=True
     )
 
 .. image:: ../figures/choropleth/choropleth-cmap.png
@@ -172,7 +175,7 @@ keyword argument to the ``matplotlib.legend.Legend``, use the ``legend_kwargs`` 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'}
+        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'}
     )
 
 .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
@@ -187,7 +190,7 @@ per bin, whereas ``equal_interval`` creates bins equal in size. The more complic
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'},
+        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'},
         scheme='fisher_jenks'
     )
 
@@ -201,7 +204,7 @@ in the legend.
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'},
+        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'},
         scheme='fisher_jenks',
         legend_labels=[
             '<3 million', '3-6.7 million', '6.7-12.8 million',
@@ -303,7 +306,7 @@ of the original state shapes, for better geospatial context.
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', cmap='Greens'
+        hue='population', k=5, cmap='Greens'
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
@@ -317,7 +320,7 @@ in the legend.
     gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', cmap='Greens',
+        hue='population', k=5, cmap='Greens',
         legend_labels=[
             '<1.4 million', '1.4-3.2 million', '3.2-5.6 million',
             '5.6-9 million', '9-37 million'
@@ -336,7 +339,7 @@ default scaling function is linear); see the `USA City Elevations demo
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', cmap='Greens',
+        hue='population', k=5, cmap='Greens',
         limits=(0.5, 1)
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
@@ -375,7 +378,7 @@ to control the number of color bins. ``legend`` toggles a legend.
 
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
-        scale='Passengers', hue='Passengers', cmap='Greens', legend=True
+        scale='Passengers', hue='Passengers', k=5, cmap='Greens', legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
@@ -392,7 +395,7 @@ and maximum line width.
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
         scale='Passengers', limits=(1, 10),
-        hue='Passengers', cmap='Greens', legend=True
+        hue='Passengers', k=5, cmap='Greens', legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
@@ -409,7 +412,7 @@ arguments will be passed to the underlying legend.
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
         scale='Passengers', limits=(1, 10),
-        hue='Passengers', cmap='Greens',
+        hue='Passengers', k=5, cmap='Greens',
         legend=True, legend_kwargs={'loc': 'lower left'}
     )
     gplt.polyplot(
@@ -492,7 +495,7 @@ by passing a different function to ``agg``.
     gplt.quadtree(
         collisions, nmax=1,
         projection=gcrs.AlbersEqualArea(), clip=boroughs,
-        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
+        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=5,
         edgecolor='white', legend=True
     )
 
@@ -575,7 +578,7 @@ or the number of color bins using ``k``. To use a continuous colormap, set ``k=N
     ax = gplt.voronoi(
         injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
         clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+        hue='NUMBER OF PERSONS INJURED', k=3, cmap='Reds',
         legend=True
     )
     gplt.polyplot(boroughs, ax=ax)
@@ -593,7 +596,7 @@ legend, use the ``legend_kwargs`` argument.
     ax = gplt.voronoi(
         injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
         clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', cmap='Reds',
+        hue='NUMBER OF PERSONS INJURED', k=3, cmap='Reds',
         legend=True,
         edgecolor='white', legend_kwargs={'loc': 'upper left'}
     )
@@ -612,7 +615,7 @@ same size, but potentially containing different numbers of observations. The mor
     ax = gplt.voronoi(
         injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
         clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', cmap='Reds', k=None,
+        hue='NUMBER OF PERSONS INJURED', k=5, cmap='Reds', k=None,
         legend=True,
         edgecolor='white'
     )
