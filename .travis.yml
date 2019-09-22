@@ -15,8 +15,7 @@ install:
   - conda info -a
 
   # Use conda for the requirements that are flaky using pip
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION \
-        geopandas cartopy matplotlib scikit-learn
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION geopandas cartopy matplotlib scikit-learn
   - conda activate test-environment
   # And then pip for everything else
   - pip install .[develop]
