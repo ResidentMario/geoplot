@@ -1,0 +1,23 @@
+.vscode/
+.idea/
+.ipynb_checkpoints/
+.cache/
+.DS_Store
+*.pyc
+__pycache__/
+build/
+docs/_build/
+_build/
+bin/
+dist/
+geoplot.egg-info/
+tests/baseline/
+quilt_packages/
+.pytest_cache/
+Untitled.ipynb
+
+# sphinx-gallery
+*.md5
+docs/gallery/
+*.zip
+examples/*.png
