@@ -64,11 +64,12 @@ def test_hue_params(kwargs):
     return pointplot(p_df, **kwargs).get_figure()
 
 
+# xfail due to seaborn#1773
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
-    {'cmap': 'Reds'},
-    {'cmap': 'Blues', 'shade': True},
-    {'cmap': 'Greens', 'shade': True, 'shade_lowest': True},
+    pytest.param({'cmap': 'Reds'}, marks=pytest.mark.xfail),
+    pytest.param({'cmap': 'Blues', 'shade': True}, marks=pytest.mark.xfail),
+    pytest.param({'cmap': 'Greens', 'shade': True, 'shade_lowest': True}, marks=pytest.mark.xfail)
 ])
 def test_hue_params_kdeplot(kwargs):
     return kdeplot(p_df, **kwargs).get_figure()
@@ -96,19 +97,18 @@ def test_clip_params_geometric(kwargs):
     return voronoi(p_df, **kwargs).get_figure()
 
 
+# xfail due to seaborn#1773
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
-    {'clip': clip_geom},
-    {'clip': non_clip_geom},
-    {'clip': clip_geom, 'projection': AlbersEqualArea()},
-    {'clip': non_clip_geom, 'projection': AlbersEqualArea()}
+    pytest.param({'clip': clip_geom}, marks=pytest.mark.xfail),
+    pytest.param({'clip': non_clip_geom}, marks=pytest.mark.xfail),
+    pytest.param({'clip': clip_geom, 'projection': AlbersEqualArea()}, marks=pytest.mark.xfail),
+    pytest.param({'clip': non_clip_geom, 'projection': AlbersEqualArea()}, marks=pytest.mark.xfail)
 ])
 def test_clip_params_overlay(kwargs):
     return kdeplot(p_df, **kwargs).get_figure()
 
 
-# TODO: scale legend default point sizing
-# TODO: hue legend legend_labels/legend_var interaction
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
     {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True},
@@ -156,8 +156,9 @@ def test_legend_params(kwargs):
     [pointplot, p_df,
      {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True,
       'projection': AlbersEqualArea()}],
-    [kdeplot, p_df, {}],
-    [kdeplot, p_df, {'projection': AlbersEqualArea()}],
+    # xfail due to seaborn#1773
+    pytest.param(*[kdeplot, p_df, {}], marks=pytest.mark.xfail),
+    pytest.param(*[kdeplot, p_df, {'projection': AlbersEqualArea()}], marks=pytest.mark.xfail),
     [polyplot, poly_df, {}],
     [polyplot, poly_df, {'projection': AlbersEqualArea()}],
     [webmap, p_df, {'projection': WebMercator()}],
