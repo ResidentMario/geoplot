@@ -20,10 +20,9 @@ install:
   # And then pip for everything else
   - pip install .[develop]
 script:
-  - cd tests; pytest mixin_tests.py
-  - cd tests; mkdir baseline && \
-    git clone https://github.com/ResidentMario/geoplot-images.git baseline && \
-    pytest --mpl viz_tests.py
-  - cd tests; mkdir baseline 2>/dev/null && \
-    git clone https://github.com/ResidentMario/geoplot-images.git baseline && \
-    pytest --mpl proj_tests.py
+  - cd tests
+  - pytest mixin_tests.py
+  - mkdir baseline
+  - git clone https://github.com/ResidentMario/geoplot-images.git baseline
+  - pytest --mpl viz_tests.py
+  - pytest --mpl proj_tests.py
