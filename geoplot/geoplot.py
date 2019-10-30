@@ -81,7 +81,7 @@ class HueMixin:
             cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             colors = [cmap.to_rgba(v) for v in hue]
             categories = None
-            sekf.k = None
+            self.k = None
         else:  # scheme is not None
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=scheme.yb.min(), vmax=scheme.yb.max())
@@ -104,9 +104,6 @@ class HueMixin:
         self.categories = categories
         self.color_kwarg = color_kwarg
         self.default_color = default_color
-
-        # TODO: remove these shims
-        self.kwargs.pop('k', None)
 
 
 class ScaleMixin:
@@ -672,7 +669,7 @@ class Plot:
 
 def pointplot(
     df, projection=None,
-    hue=None, cmap=None, norm=None, k=None, scheme=None,
+    hue=None, cmap=None, norm=None, scheme=None,
     scale=None, limits=(1, 5), scale_func=None,
     legend=False, legend_var=None, legend_values=None, legend_labels=None, legend_kwargs=None,
     figsize=(8, 6), extent=None, ax=None, **kwargs
@@ -699,9 +696,6 @@ def pointplot(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        If ``hue`` is specified, the number of color categories to split the data into. For a
-        continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
@@ -777,7 +771,7 @@ def pointplot(
 
     plot = PointPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         scale=scale, limits=limits, scale_func=scale_func,
         legend=legend, legend_var=legend_var, legend_values=legend_values,
         legend_labels=legend_labels, legend_kwargs=legend_kwargs,
@@ -860,7 +854,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
 
 def choropleth(
     df, projection=None,
-    hue=None, cmap=None, norm=None, k=None, scheme=None,
+    hue=None, cmap=None, norm=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -887,9 +881,6 @@ def choropleth(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        The number of color categories to split the data into. For a continuous colormap, set this
-        value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         The categorical binning scheme to use.
     legend : boolean, optional
@@ -958,7 +949,7 @@ def choropleth(
 
     plot = ChoroplethPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, **kwargs
     )
@@ -967,7 +958,7 @@ def choropleth(
 
 def quadtree(
     df, projection=None, clip=None,
-    hue=None, cmap=None, norm=None, k=None, scheme=None,
+    hue=None, cmap=None, norm=None, scheme=None,
     nmax=None, nmin=None, nsig=0, agg=np.mean,
     legend=False, legend_kwargs=None, legend_values=None, legend_labels=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
@@ -996,9 +987,6 @@ def quadtree(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        The number of color categories to split the data into. For a continuous colormap, set this
-        value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         The categorical binning scheme to use.
     nmax : int or None, optional
@@ -1090,7 +1078,7 @@ def quadtree(
     plot = QuadtreePlot(
         df, projection=projection,
         clip=clip,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         nmax=nmax, nmin=nmin, nsig=nsig, agg=agg,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
@@ -1103,7 +1091,7 @@ def quadtree(
 def cartogram(
     df, projection=None,
     scale=None, limits=(0.2, 1), scale_func=None,
-    hue=None, cmap=None, norm=None, k=None, scheme=None,
+    hue=None, cmap=None, norm=None, scheme=None,
     legend=False, legend_values=None, legend_labels=None, legend_kwargs=None, legend_var=None,
     extent=None, figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1142,9 +1130,6 @@ def cartogram(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        If ``hue`` is specified, the number of color categories to split the data into. For a
-        continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     legend : boolean, optional
@@ -1229,7 +1214,7 @@ def cartogram(
         df, projection=projection,
         figsize=figsize, ax=ax, extent=extent,
         scale=scale, limits=limits, scale_func=scale_func,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
@@ -1316,7 +1301,7 @@ def kdeplot(
 
 def sankey(
     df, projection=None,
-    hue=None, norm=None, cmap=None, k=None, scheme=None,
+    hue=None, norm=None, cmap=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None, legend_var=None,
     extent=None, figsize=(8, 6),
     scale=None, scale_func=None, limits=(1, 5),
@@ -1344,9 +1329,6 @@ def sankey(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        If ``hue`` is specified, the number of color categories to split the data into. For a
-        continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
@@ -1474,7 +1456,7 @@ def sankey(
     plot = SankeyPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
         scale=scale, limits=limits, scale_func=scale_func,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs, legend_var=legend_var,
         **kwargs
@@ -1484,7 +1466,7 @@ def sankey(
 
 def voronoi(
     df, projection=None, clip=None,
-    hue=None, cmap=None, norm=None, k=None, scheme=None,
+    hue=None, cmap=None, norm=None, scheme=None,
     legend=False, legend_kwargs=None, legend_labels=None, legend_values=None,
     extent=None, edgecolor='black', figsize=(8, 6), ax=None, **kwargs
 ):
@@ -1512,9 +1494,6 @@ def voronoi(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    k : int or None, optional
-        If ``hue`` is specified, the number of color categories to split the data into. For a
-        continuous colormap, set this value to ``None``.
     scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
@@ -1601,7 +1580,7 @@ def voronoi(
 
     plot = VoronoiPlot(
         df, figsize=figsize, ax=ax, extent=extent, projection=projection,
-        hue=hue, scheme=scheme, k=k, cmap=cmap, norm=norm,
+        hue=hue, scheme=scheme, cmap=cmap, norm=norm,
         legend=legend, legend_values=legend_values, legend_labels=legend_labels,
         legend_kwargs=legend_kwargs,
         clip=clip,
