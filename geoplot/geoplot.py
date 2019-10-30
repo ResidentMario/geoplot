@@ -39,13 +39,8 @@ class HueMixin:
 
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
-            k = self.kwargs.pop('k')
-
-            if k is None and scheme is not None:
-                raise ValueError(f'Cannot specify "scheme" with "k" set to None.')
         else:
             scheme = None
-            k = None
 
         # kdeplot is special: it has a 'cmap' parameter but no 'hue' or 'scheme' parameters,
         # merely passing those parameters to `seaborn.kdeplot`. So for these plots we don't
@@ -67,58 +62,51 @@ class HueMixin:
         if hue is None:  # no colormap
             color = self.kwargs.pop(color_kwarg, default_color)
             colors = [color] * len(self.df)
-            categorical = False
             categories = None
-        else:
-            categorical, scheme = _validate_buckets(self.df, hue, k, scheme)
+            self.k = None
+        elif ((scheme == 'categorical') or
+              (scheme is None and hue.dtype == np.dtype('object'))):
+            categories = np.unique(hue)
+            value_map = {v: i for i, v in enumerate(categories)}
+            values = [value_map[d] for d in hue]
 
-            if categorical:
-                categories = np.unique(hue)
-                value_map = {v: i for i, v in enumerate(categories)}
-                values = [value_map[d] for d in hue]
+            if norm is None:
+                norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
+            cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+            colors = [cmap.to_rgba(v) for v in values]
+            self.k = len(value_map)
+        elif scheme is None:
+            if norm is None:
+                norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
+            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+            colors = [cmap.to_rgba(v) for v in hue]
+            categories = None
+            sekf.k = None
+        else:  # scheme is not None
+            if norm is None:
+                norm = mpl.colors.Normalize(vmin=scheme.yb.min(), vmax=scheme.yb.max())
+            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+            # TODO: report the weird bug in PySAL necesitating the following
+            # The first bin is not actually <= clf.bins[0], but < clf.bins[0].
+            values = scheme(hue  - 0.001)
+            binedges = [scheme.yb.min()] + scheme.bins.tolist()
+            categories = [
+                '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
+                for i in range(len(binedges) - 1)
+            ]
+            colors = [cmap.to_rgba(v) for v in values]
+            self.k = len(scheme.bins)
 
-                if norm is None:
-                    norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
-
-                cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-                colors = [cmap.to_rgba(v) for v in values]
-
-            elif k is None:
-                if norm is None:
-                    norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
-
-                cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-                colors = [cmap.to_rgba(v) for v in hue]
-                categories = None
-            else:  # k is not None
-                binning = _mapclassify_choro(hue, scheme, k=k)
-                values = binning.yb
-                if norm is None:
-                    norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
-
-                binedges = [binning.yb.min()] + binning.bins.tolist()
-                categories = [
-                    '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
-                    for i in range(len(binedges) - 1)
-                ]
-                cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-                colors = [cmap.to_rgba(v) for v in values]
-
-        # categories will differ in length from the input k if k > len(set(df)). All function
-        # calls after the HueMixin initializer should see the "true" value for k, so we modify
-        # k if needed in this case.
-        if categories is not None and k is not None:
-            self.k = min(k, len(categories))
-        else:
-            self.k = k
         self.colors = colors
         self.hue = hue
-        self.scheme = scheme if categorical else None
+        self.scheme = scheme
         self.cmap = cmap
-        self.categorical = categorical
         self.categories = categories
         self.color_kwarg = color_kwarg
         self.default_color = default_color
+
+        # TODO: remove these shims
+        self.kwargs.pop('k', None)
 
 
 class ScaleMixin:
