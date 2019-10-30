@@ -15,7 +15,7 @@ import shapely.geometry
 import pandas as pd
 import descartes
 import contextily as ctx
-import pysal.esda.mapclassify as clf
+import mapclassify as mc
 
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
@@ -87,9 +87,9 @@ class HueMixin:
         else:  # scheme is not None
             if isinstance(scheme, str):
                 try:
-                    scheme = getattr(clf, scheme.title())(hue)
+                    scheme = getattr(mc, scheme.title())(hue)
                 except AttributeError:
-                    opts = tuple(list(clf.CLASSIFIERS) + ['Categorical'])
+                    opts = tuple(list(mc.CLASSIFIERS) + ['Categorical'])
                     raise ValueError(
                         f'Invalid scheme {scheme!r}. If specified as a string, scheme must be one '
                         f'of {opts}.'
@@ -99,9 +99,7 @@ class HueMixin:
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=scheme.yb.min(), vmax=scheme.yb.max())
             cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-            # TODO: report the weird bug in PySAL necesitating the following
-            # The first bin is not actually <= clf.bins[0], but < clf.bins[0].
-            values = scheme(hue  - 0.001)
+            values = scheme(hue)
             binedges = [scheme.yb.min()] + scheme.bins.tolist()
             categories = [
                 '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
