@@ -22,7 +22,7 @@ gplt.choropleth(
     ny_census_tracts,
     hue='percent_white',
     cmap='Purples', linewidth=0.5,
-    edgecolor='white', k=None,
+    edgecolor='white',
     legend=True,
     projection=gcrs.AlbersEqualArea()
 )

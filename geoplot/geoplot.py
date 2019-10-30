@@ -87,7 +87,10 @@ class HueMixin:
         else:  # scheme is not None
             if isinstance(scheme, str):
                 try:
-                    scheme = getattr(mc, scheme.title())(hue)
+                    if scheme == scheme.lower():
+                        scheme = scheme.title()
+                    
+                    scheme = getattr(mc, scheme)(hue)
                 except AttributeError:
                     opts = tuple(list(mc.CLASSIFIERS) + ['Categorical'])
                     raise ValueError(
@@ -713,7 +716,7 @@ def pointplot(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
@@ -898,7 +901,7 @@ def choropleth(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         The categorical binning scheme to use.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other 
@@ -1004,7 +1007,7 @@ def quadtree(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         The categorical binning scheme to use.
     nmax : int or None, optional
         The maximum number of observations in a quadrangle.
@@ -1147,7 +1150,7 @@ def cartogram(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other 
@@ -1346,7 +1349,7 @@ def sankey(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
@@ -1511,7 +1514,7 @@ def voronoi(
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
-    scheme : None or {"quantiles"|"equal_interval"|"fisher_jenks"}, optional
+    scheme : None or mapclassify object, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output

@@ -51,7 +51,7 @@ The gallery is generated using `sphinx-gallery`, and use the `examples/` folder 
 
 ### Quickstart
 
-The Quickstart is a Jupyter notebook in the `notebooks/` directory. To rebuild the quickstart, edit the notebook, then `cd notebooks/; jupyter nbconvert --to rst --output-dir ../../docs/quickstart/ Quickstart.ipynb`. Then run `make html` again.
+The Quickstart is a Jupyter notebook in the `notebooks/` directory. To rebuild the quickstart, edit the notebook, then `cd notebooks/tutorials; jupyter nbconvert --to rst --output-dir ../../docs/quickstart/ Quickstart.ipynb`. Then run `make html` again.
 
 ### Tutorials
 
