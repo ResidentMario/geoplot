@@ -190,7 +190,6 @@ class TestHue(unittest.TestCase):
         assert huemixin.k is None
         assert isinstance(huemixin.cmap, ScalarMappable)
         assert huemixin.k is None
-        assert huemixin.categorical is False
         assert huemixin.categories is None
         assert huemixin.color_kwarg == 'color'
         assert huemixin.default_color == 'steelblue'
@@ -300,61 +299,6 @@ class TestHue(unittest.TestCase):
         huemixin.set_hue_values(supports_categorical=False, default_color='black')
         huemixin.colors == ['black'] * 100
 
-    def test_hue_init_k_kwarg(self):
-        # k is not None, hue is not None, k > len(df): bucketize colors
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = None
-        huemixin.set_hue_values(supports_categorical=True)
-        assert huemixin.k == 5
-        assert len(huemixin.categories) == 5
-        assert len(huemixin.colors) == 100
-        assert len(set(huemixin.colors)) == 5
-        assert huemixin.categorical == False
-
-        # k is not None, hue is not None, k == len(df): paint categorically
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = None
-        huemixin.df = huemixin.df.head(5)
-        huemixin.set_hue_values(supports_categorical=True)
-        assert huemixin.k == 5
-        assert len(huemixin.categories) == 5
-        assert len(huemixin.colors) == 5
-        assert len(set(huemixin.colors)) == 5
-        assert huemixin.categorical == True
-
-        # k is not None, hue is not None, k > len(df): decrease k, paint categorically
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = None
-        huemixin.df = huemixin.df.head(3)
-        with pytest.warns(UserWarning):
-            huemixin.set_hue_values(supports_categorical=True)
-        assert huemixin.k == 3
-        assert len(huemixin.categories) == 3
-        assert len(huemixin.colors) == 3
-        assert len(set(huemixin.colors)) == 3
-        assert huemixin.categorical == True
-
-        # k is not None, hue is None: do not set hue
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = None
-        huemixin.kwargs['hue'] = None
-        huemixin.kwargs['cmap'] = None
-        huemixin.set_hue_values(supports_categorical=True)
-        assert huemixin.k == 5
-        assert huemixin.hue == None
-
-        # k is not None, hue is an object-type (unbucketizable) variable: raise
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = 'fisher_jenks'
-        huemixin.kwargs['hue'] = huemixin.df.assign(foo=huemixin.df.foo.astype(str))
-        with pytest.raises(ValueError):
-            huemixin.set_hue_values(supports_categorical=True)
-
     def test_hue_init_scheme_kwarg(self):
         # k is not None, scheme is not None, hue is None: raise
         huemixin = self.create_huemixin()
@@ -362,13 +306,6 @@ class TestHue(unittest.TestCase):
         huemixin.kwargs['scheme'] = 'fisher_jenks'
         huemixin.kwargs['hue'] = None
         huemixin.kwargs['cmap'] = None
-        with pytest.raises(ValueError):
-            huemixin.set_hue_values(supports_categorical=True)
-
-        # k is None, scheme is not None, hue is not None: raise
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['k'] = None
-        huemixin.kwargs['scheme'] = 'fisher_jenks'
         with pytest.raises(ValueError):
             huemixin.set_hue_values(supports_categorical=True)
 

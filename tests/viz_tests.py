@@ -48,17 +48,17 @@ def axis_initializer(f):
 
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'scheme': 'fisher_jenks'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'scheme': 'quantiles'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'scheme': 'equal_interval'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': None},
-    {'hue': 'var_cat', 'linewidth': 0, 's': 10, 'k': None},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'cmap': 'Greens'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': None, 'cmap': 'Greens'},
-    {'hue': p_df['var'], 'linewidth': 0, 's': 10, 'k': 5},
-    {'hue': np.array(p_df['var']), 'linewidth': 0, 's': 10, 'k': 5},
-    {'hue': list(p_df['var']), 'linewidth': 0, 's': 10, 'k': 5}
+    {'hue': 'var', 'linewidth': 0, 's': 10},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'fisher_jenks'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'equal_interval'},
+    {'hue': 'var_cat', 'linewidth': 0, 's': 10},
+    {'hue': 'var_cat', 'linewidth': 0, 's': 10, 'scheme': 'categorical'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'cmap': 'Greens', 'scheme': 'quantiles'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'cmap': 'Greens'},
+    {'hue': p_df['var'], 'linewidth': 0, 's': 10},
+    {'hue': np.array(p_df['var']), 'linewidth': 0, 's': 10},
+    {'hue': list(p_df['var']), 'linewidth': 0, 's': 10}
 ])
 def test_hue_params(kwargs):
     return pointplot(p_df, **kwargs).get_figure()
@@ -112,7 +112,7 @@ def test_clip_params_overlay(kwargs):
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
     {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'legend': True},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles', 'legend': True},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': False},
     {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True},
     {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': False},
@@ -121,27 +121,29 @@ def test_clip_params_overlay(kwargs):
     {'hue': 'var', 'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
      'legend_var': 'hue'},
     {'hue': 'var', 'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
-     'legend_var': 'hue', 'k': 5},
+     'legend_var': 'hue', 'scheme': 'quantiles'},
     {'hue': 'var', 'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
      'legend_var': 'scale'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'legend': True,
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles', 'legend': True,
      'legend_labels': list('ABCDE')},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'legend': True,
+    # kwargs[10], this one is broken (below)
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles', 'legend': True,
      'legend_values': [1, 1, 2, 4, 4]},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'k': 5, 'legend': True,
+    # kwargs[11], this one is also broken
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles', 'legend': True,
      'legend_labels': list('ABCDE'), 'legend_values': [1, 1, 2, 4, 4]},
-    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'k': 5, 'legend': True,
+    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
      'legend_labels': list('ABCDE')},
-    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'k': 5, 'legend': True,
+    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
      'legend_values': [1, 1, 2, 4, 4]},
-    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'k': 5, 'legend': True,
+    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10), 'legend': True,
      'legend_labels': list('ABCDE'), 'legend_values': [1, 1, 2, 4, 4]},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'norm': Normalize(vmin=0, vmax=10), 'legend': True},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True,
      'legend_kwargs': {'orientation': 'horizontal'}},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True, 'k': 5,
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True, 'scheme': 'quantiles',
      'legend_kwargs': {'bbox_to_anchor': (1.0, 1.2)}},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True, 'k': 5,
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True, 'scheme': 'quantiles',
      'legend_kwargs': {'markeredgecolor': 'purple', 'markeredgewidth': 5}},
     {'scale': 'var', 'linewidth': 0,'limits': (5, 10),
      'legend': True, 'legend_kwargs': {'markerfacecolor': 'purple'}}

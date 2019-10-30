@@ -15,6 +15,8 @@ import shapely.geometry
 import pandas as pd
 import descartes
 import contextily as ctx
+import pysal.esda.mapclassify as clf
+
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
 try:
@@ -83,6 +85,17 @@ class HueMixin:
             categories = None
             self.k = None
         else:  # scheme is not None
+            if isinstance(scheme, str):
+                try:
+                    scheme = getattr(clf, scheme.title())(hue)
+                except AttributeError:
+                    opts = tuple(list(clf.CLASSIFIERS) + ['Categorical'])
+                    raise ValueError(
+                        f'Invalid scheme {scheme!r}. If specified as a string, scheme must be one '
+                        f'of {opts}.'
+                    )
+            self.k = len(scheme.bins)
+
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=scheme.yb.min(), vmax=scheme.yb.max())
             cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
@@ -267,12 +280,18 @@ class LegendMixin:
                 }
                 marker_kwargs.update(legend_marker_kwargs)
 
+                if legend_values is None:
+                    markerfacecolors = [self.cmap.to_rgba(value) for (value, _)
+                                        in enumerate(self.categories)]
+                else:
+                    markerfacecolors = [self.cmap.to_rgba(value) for value in legend_values]
+
                 patches = []
-                for value, _ in enumerate(self.categories):
+                for markerfacecolor in markerfacecolors:
                     patches.append(
                         mpl.lines.Line2D(
                             [0], [0], linestyle='None',
-                            markerfacecolor=self.cmap.to_rgba(value),
+                            markerfacecolor=markerfacecolor,
                             **marker_kwargs
                         )
                     )
