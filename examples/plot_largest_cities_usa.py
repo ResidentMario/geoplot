@@ -25,7 +25,7 @@ ax = gplt.polyplot(
     projection=gcrs.AlbersEqualArea(),
     edgecolor='white',
     facecolor='lightgray',
-    figsize=(12, 12)
+    figsize=(8, 12)
 )
 gplt.pointplot(
     continental_usa_cities, 

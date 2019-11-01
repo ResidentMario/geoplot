@@ -2,7 +2,7 @@
 Choropleth of parking tickets issued to state by precinct in NYC
 ================================================================
 
-This example ``choropleth`` plots a subset of parking tickets issued to drivers in New York City.
+This example plots a subset of parking tickets issued to drivers in New York City.
 Specifically, it plots the subset of tickets issued in the city which are more common than average
 for that state than the average. This difference between "expected tickets issued" and "actual
 tickets issued" is interesting because it shows which areas visitors driving into the city
@@ -11,12 +11,9 @@ from a specific state are more likely visit than their peers from other states.
 Observations that can be made based on this plot include:
 
 * Only New Yorkers visit Staten Island.
-* Drivers from New Jersey, many of whom likely work in New York City, mostly stay in Manhattan.
-* Drivers from Pennsylvania and Conneticut are likliest to visit the boroughs that are closest
-  to their states: there is strong northward trend for Conneticut, which is located north of NYC,
-  and a strong westward trend for Pennsylvania, which is located west of NYC.
-* The northern corridor of Brooklyn (containing the ever-popular Williamsburg and Bushwick, among
-  other neighborhoods) is popular with out-of-staters...but not as popular as Manhattan, of course.
+* Drivers from New Jersey, many of whom likely work in New York City, bias towards Manhattan.
+* Drivers from Pennsylvania and Connecticut bias towards the borough closest to their state:
+  The Bronx for Connecticut, Brooklyn for Pennsylvania.
 
 This example was inspired by the blog post `"Californians love Brooklyn, New Jerseyans love
 Midtown: Mapping NYC’s Visitors Through Parking Tickets"

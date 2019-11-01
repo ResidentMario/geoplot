@@ -33,7 +33,7 @@ ax = gplt.cartogram(
     hue='Obesity Rate', cmap='Reds', scheme=scheme,
     linewidth=0.5,
     legend=True, legend_kwargs={'loc': 'lower right'}, legend_var='hue',
-    figsize=(12, 12)
+    figsize=(8, 12)
 )
 gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='None', ax=ax)
 

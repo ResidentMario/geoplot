@@ -2,12 +2,10 @@
 Sankey of Los Angeles flight volumes with Cartopy globes
 ========================================================
 
-This example plots passenger volumes for the most important flight routes out of Los Angeles
-Interational Airport. It demonstrates some of the globe setup options available in ``geoplot`` by
-way of ``cartopy``.
-
-For more information visit `the cartopy docs
-<http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html>`_.
+This example plots passenger volumes for commercial flights out of Los Angeles International
+Airport. Some globe-modification options available in ``cartopy`` are demonstrated. Visit
+`the cartopy docs <http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html>`_
+for more information.
 """
 
 import geopandas as gpd
