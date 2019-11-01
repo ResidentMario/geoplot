@@ -11,7 +11,7 @@ This plot demonstrates building and using a custom ``matplotlib`` colormap. To l
 
 `Click here <http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_ to see an 
 interactive scrolly-panny version of this webmap built with ``mplleaflet``. To learn more about
-``mplleaflet``, refer to `the ``mplleaflet`` GitHub repo <https://github.com/jwass/mplleaflet>`_.
+``mplleaflet``, refer to `the mplleaflet GitHub repo <https://github.com/jwass/mplleaflet>`_.
 """
 
 import geopandas as gpd
