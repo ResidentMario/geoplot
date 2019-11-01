@@ -2,9 +2,8 @@
 Pointplot of NYC fatal and injurious traffic collisions
 =======================================================
 
-The example ``pointplot`` of fatal (>1 fatality) and injurious (>1 injury requiring
-a hospital visit) collisions demonstrates the difference in volume between the two types of
-accident outcomes: injuries are much, much more common than fatalities.
+The example plots fatal (>=1 fatality) and injurious (>=1 injury requiring hospitalization)
+vehicle collisions in New York City. Injuries are far more common than fatalities.
 """
 
 

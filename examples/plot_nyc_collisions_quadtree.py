@@ -2,9 +2,9 @@
 Quadtree of NYC traffic collisions
 ==================================
 
-This example shows a ``pointplot`` overlayed on a ``quadtree`` mapping traffic accident collisions
-in New York City. Together these two plots combine texture with density in communicating relative
-accident frequency in different parts of New York City.
+This example plots traffic collisions in New York City. Overlaying a ``pointplot`` on a
+``quadtree`` like this communicates information on two visual channels, position and texture,
+simultaneously.
 """
 
 

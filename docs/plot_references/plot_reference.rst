@@ -32,14 +32,15 @@ legend.
 
 .. image:: ../figures/pointplot/pointplot-legend.png
 
-Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
-continuous colormap (the default), set ``k=None``.
+Change the colormap using ``cmap``. For a categorical colormap, use ``scheme``.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.Quantiles(cities['ELEV_IN_FT'], k=5)
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(),
-        hue='ELEV_IN_FT', k=8, cmap='inferno_r',
+        hue='ELEV_IN_FT', scheme=scheme, cmap='inferno_r',
         legend=True
     )
 
@@ -101,7 +102,7 @@ The polyplot draws polygons on a map.
     )
     gplt.pointplot(
         collisions[collisions['BOROUGH'].notnull()],
-        hue='BOROUGH', ax=ax, legend=True, k=5
+        hue='BOROUGH', ax=ax, legend=True
     )
 
 .. image:: ../figures/polyplot/polyplot-stacked.png
@@ -128,7 +129,7 @@ The webmap creates a static webmap.
     ax = gplt.webmap(boroughs, projection=gcrs.WebMercator())
     gplt.pointplot(
         collisions[collisions['BOROUGH'].notnull()],
-        hue='BOROUGH', ax=ax, legend=True, k=5
+        hue='BOROUGH', ax=ax, legend=True
     )
 
 .. image:: ../figures/webmap/webmap-stacked.png
@@ -154,44 +155,43 @@ A basic choropleth requires polygonal geometries and a ``hue`` variable.
 
 .. image:: ../figures/choropleth/choropleth-initial.png
 
-Change the colormap using ``cmap``, or the number of color bins using ``k``. To use a
-continuous colormap, set ``k=None``. The ``legend`` parameter toggles the legend.
+Change the colormap using ``cmap``. The ``legend`` parameter toggles the legend.
 
 .. code-block:: python
 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
-        cmap='Greens', k=5, legend=True
+        cmap='Greens', legend=True
     )
 
 .. image:: ../figures/choropleth/choropleth-cmap.png
 
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 ``matplotlib.patches.Polygon`` objects; this can be used to control plot aesthetics. To pass
-keyword argument to the ``matplotlib.legend.Legend``, use the ``legend_kwargs`` argument.
+keyword argument to the legend, use the ``legend_kwargs`` argument.
 
 .. code-block:: python
 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'}
+        cmap='Greens', legend=True, legend_kwargs={'orientation': 'horizontal'}
     )
 
 .. image:: ../figures/choropleth/choropleth-legend-kwargs.png
 
-Plots with a categorical colormap can use the ``scheme`` parameter to control how the data gets
-sorted into the ``k`` bins. The default ``quantile`` sorts into an equal number of observations
-per bin, whereas ``equal_interval`` creates bins equal in size. The more complicated
-``fisher_jenks`` scheme is an intermediate between the two.
+To specify a categorical colormap, use ``scheme``.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.FisherJenks(contiguous_usa['population'], k=5)
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'},
-        scheme='fisher_jenks'
+        cmap='Greens',
+        legend=True, legend_kwargs={'loc': 'lower left'},
+        scheme=scheme
     )
 
 .. image:: ../figures/choropleth/choropleth-scheme.png
@@ -201,11 +201,13 @@ in the legend.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.FisherJenks(contiguous_usa['population'], k=5)
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         edgecolor='white', linewidth=1,
-        cmap='Greens', k=5, legend=True, legend_kwargs={'loc': 'lower left'},
-        scheme='fisher_jenks',
+        cmap='Greens', legend=True, legend_kwargs={'loc': 'lower left'},
+        scheme=scheme,
         legend_labels=[
             '<3 million', '3-6.7 million', '6.7-12.8 million',
             '12.8-25 million', '25-37 million'
@@ -272,8 +274,7 @@ Cartogram
 ---------
 
 A cartogram distorts (grows or shrinks) polygons on a map according to the magnitude of some
-input data. They are a less common but more visually "poppy" alternative to a choropleth.
-A basic cartogram specifies data, a projection, and a ``scale`` parameter.
+input data. A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
 .. code-block:: python
 
@@ -297,16 +298,18 @@ Toggle the legend with ``legend``. Keyword arguments can be passed to the legend
 
 .. image:: ../figures/cartogram/cartogram-trace-legend.png
 
-To add a colormap to the plot, specify ``hue``. Use ``cmap`` to control the colormap used
-and ``k`` to control the number of color bins. In this plot we also add a backing outline
-of the original state shapes, for better geospatial context.
+To add a colormap to the plot, specify ``hue``. Use ``cmap`` to control the colormap. For a
+categorical colormap, specify a ``scheme``. In this plot we also add a backing outline of the
+original state shapes, for better geospatial context.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.Quantiles(contiguous_usa['population'], k=5)
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', k=5, cmap='Greens'
+        hue='population', scheme=scheme, cmap='Greens'
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
@@ -371,14 +374,16 @@ For interpretability, these examples also include world geometry.
 
 .. image:: ../figures/sankey/sankey-geospatial-context.png
 
-``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap used and ``k``
-to control the number of color bins. ``legend`` toggles a legend.
+``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap. For a categorical
+colormap, specify ``scheme``. ``legend`` toggles a legend.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
-        scale='Passengers', hue='Passengers', k=5, cmap='Greens', legend=True
+        scale='Passengers', hue='Passengers', scheme=scheme, cmap='Greens', legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
@@ -392,10 +397,12 @@ and maximum line width.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
         scale='Passengers', limits=(1, 10),
-        hue='Passengers', k=5, cmap='Greens', legend=True
+        hue='Passengers', scheme=scheme, cmap='Greens', legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
@@ -409,10 +416,12 @@ arguments will be passed to the underlying legend.
 
 .. code-block:: python
 
+    import mapclassify as mc
+    scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
         scale='Passengers', limits=(1, 10),
-        hue='Passengers', k=5, cmap='Greens',
+        hue='Passengers', scheme=scheme, cmap='Greens',
         legend=True, legend_kwargs={'loc': 'lower left'}
     )
     gplt.polyplot(
@@ -421,6 +430,78 @@ arguments will be passed to the underlying legend.
     ax.set_global(); ax.outline_patch.set_visible(True)
 
 .. image:: ../figures/sankey/sankey-legend-kwargs.png
+
+Voronoi
+-------
+
+The `Voronoi region <https://en.wikipedia.org/wiki/Voronoi_diagram>`_ of an point is the set
+of points which is closer to that point than to any other observation in a dataset. A Voronoi
+diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
+plots them.
+
+Voronoi plots are efficient for judging point density and, combined with colormap, can be used
+to infer regional trends in a set of data.
+
+A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
+
+.. code-block:: python
+
+    ax = gplt.voronoi(injurious_collisions.head(1000))
+    gplt.polyplot(boroughs, ax=ax)
+
+.. image:: ../figures/voronoi/voronoi-simple.png
+
+Use ``clip`` to clip the result to surrounding geometry. This is recommended in most cases.
+Note that if the clip geometry is complicated, this operation will take a long time; consider
+simplifying complex geometries with ``simplify`` to speed it up.
+
+.. code-block:: python
+
+    ax = gplt.voronoi(
+        injurious_collisions.head(100),
+        clip=boroughs.simplify(0.001), projection=gcrs.AlbersEqualArea()
+    )
+    gplt.polyplot(boroughs, ax=ax)
+
+.. image:: ../figures/voronoi/voronoi-clip.png
+
+Use ``hue`` to add color as a visual variable to the plot. Change the colormap using ``cmap``. To
+use a categorical colormap, set ``scheme``. ``legend`` toggles the legend.
+
+.. code-block:: python
+
+    import mapclassify as mc
+    scheme = mc.NaturalBreaks(injurious_collisions['NUMBER OF PERSONS INJURED'], k=3)
+    ax = gplt.voronoi(
+        injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
+        clip=boroughs.simplify(0.001),
+        hue='NUMBER OF PERSONS INJURED', scheme=scheme, cmap='Reds',
+        legend=True
+    )
+    gplt.polyplot(boroughs, ax=ax)
+
+.. image:: ../figures/voronoi/voronoi-cmap.png
+
+Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
+``matplotlib``
+`Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
+which can be used to customize the appearance of the plot. To pass keyword argument to the
+legend, use the ``legend_kwargs`` argument.
+
+.. code-block:: python
+
+    import mapclassify as mc
+    scheme = mc.NaturalBreaks(injurious_collisions['NUMBER OF PERSONS INJURED'], k=3)
+    ax = gplt.voronoi(
+        injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
+        clip=boroughs.simplify(0.001),
+        hue='NUMBER OF PERSONS INJURED', scheme=scheme, cmap='Reds',
+        legend=True,
+        edgecolor='white', legend_kwargs={'loc': 'upper left'}
+    )
+    gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
+
+.. image:: ../figures/voronoi/voronoi-kwargs.png
 
 Quadtree
 --------
@@ -481,8 +562,9 @@ a basemap.
 .. image:: ../figures/quadtree/quadtree-basemap.png
 
 Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
-used. ``legend`` toggles the legend. The individual values of the points included in the
-partitions are aggregated, and each partition is colormapped based on this aggregate value.
+used. ``legend`` toggles the legend. The individual
+values of the points included in the partitions are aggregated, and each partition is colormapped
+based on this aggregate value.
 
 This type of plot is an effective gauge of distribution: the less random the plot output, the
 more spatially correlated the variable.
@@ -495,29 +577,24 @@ by passing a different function to ``agg``.
     gplt.quadtree(
         collisions, nmax=1,
         projection=gcrs.AlbersEqualArea(), clip=boroughs,
-        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=5,
-        edgecolor='white', legend=True
+        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None,
+        edgecolor='white', legend=True,
     )
 
-.. image:: ../figures/quadtree/quadtree-hue.png
+.. image:: ../figures/quadtree/quadtree-k.png
 
-Change the number of bins by specifying an alternative ``k`` value. To use a continuous
-colormap, explicitly specify ``k=None``.  You can change the binning sceme with ``scheme``.
-The default is ``quantile``, which bins observations into classes of different sizes but the
-same numbers of observations. ``equal_interval`` will creates bins that are the same size, but
-potentially containing different numbers of observations. The more complicated ``fisher_jenks``
-scheme is an intermediate between the two.
+To use a categorical colormap, set ``scheme``.
 
 .. code-block:: python
 
     gplt.quadtree(
         collisions, nmax=1,
         projection=gcrs.AlbersEqualArea(), clip=boroughs,
-        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None,
-        edgecolor='white', legend=True,
+        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', scheme='Quantiles',
+        edgecolor='white', legend=True
     )
 
-.. image:: ../figures/quadtree/quadtree-k.png
+.. image:: ../figures/quadtree/quadtree-hue.png
 
 Here is a demo of an alternative aggregation function.
 
@@ -526,99 +603,8 @@ Here is a demo of an alternative aggregation function.
     gplt.quadtree(
         collisions, nmax=1, agg=np.max,
         projection=gcrs.AlbersEqualArea(), clip=boroughs,
-        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None
+        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
         edgecolor='white', legend=True
     )
 
 .. image:: ../figures/quadtree/quadtree-agg.png
-
-Voronoi
--------
-
-The `Voronoi region <https://en.wikipedia.org/wiki/Voronoi_diagram>`_ of an point is the set
-of points which is closer to that point than to any other observation in a dataset. A Voronoi
-diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
-plots them.
-
-Voronoi plots are efficient for judging point density and, combined with colormap, can be used
-to infer regional trends in a set of data.
-
-Due to limitations with ``matplotlib``, ``voronoi`` diagrams in ``geoplot`` are limited in size
-to a few thousand polygons.
-
-A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
-
-.. code-block:: python
-
-    ax = gplt.voronoi(injurious_collisions.head(1000))
-    gplt.polyplot(boroughs, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-simple.png
-
-Use ``clip`` to clip the result to surrounding geometry. This is recommended in most cases.
-Note that if the clip geometry is complicated, this operation will take a long time; consider
-simplifying complex geometries with ``simplify`` to speed it up.
-
-.. code-block:: python
-
-    ax = gplt.voronoi(
-        injurious_collisions.head(100),
-        clip=boroughs.simplify(0.001), projection=gcrs.AlbersEqualArea()
-    )
-    gplt.polyplot(boroughs, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-clip.png
-
-Use ``hue`` to add color as a visual variable to the plot. Change the colormap using ``cmap``,
-or the number of color bins using ``k``. To use a continuous colormap, set ``k=None``.
-``legend`` toggles the legend.
-
-.. code-block:: python
-
-    ax = gplt.voronoi(
-        injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
-        clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', k=3, cmap='Reds',
-        legend=True
-    )
-    gplt.polyplot(boroughs, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-cmap.png
-
-Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
-``matplotlib``
-`Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
-which can be used to customize the appearance of the plot. To pass keyword argument to the
-legend, use the ``legend_kwargs`` argument.
-
-.. code-block:: python
-
-    ax = gplt.voronoi(
-        injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
-        clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', k=3, cmap='Reds',
-        legend=True,
-        edgecolor='white', legend_kwargs={'loc': 'upper left'}
-    )
-    gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-kwargs.png
-
-To use a continuous colormap, explicitly specify ``k=None``.  You can change the binning sceme
-with ``scheme``. The default is ``quantile``, which bins observations into classes of different
-sizes but the same numbers of observations. ``equal_interval`` will creates bins that are the
-same size, but potentially containing different numbers of observations. The more complicated
-``fisher_jenks`` scheme is an intermediate between the two.
-
-.. code-block:: python
-
-    ax = gplt.voronoi(
-        injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
-        clip=boroughs.simplify(0.001),
-        hue='NUMBER OF PERSONS INJURED', k=5, cmap='Reds', k=None,
-        legend=True,
-        edgecolor='white'
-    )
-    gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-scheme.png
