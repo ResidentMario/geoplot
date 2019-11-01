@@ -24,7 +24,7 @@ try:
 except ImportError:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
-__version__ = "0.3.2"
+__version__ = "0.4.0"
 
 
 class HueMixin:
@@ -38,6 +38,14 @@ class HueMixin:
         hue = self.kwargs.pop('hue', None)
         cmap = self.kwargs.pop('cmap', 'viridis')
         norm = self.kwargs.pop('norm', None)
+
+        if 'k' in self.kwargs:
+            raise ValueError(
+                f"The 'k' parameter was removed in geoplot version 0.4.0. To set a specific "
+                f"categorical bin count, pass a mapclassify object to 'scheme' instead. For "
+                f'further information refer to the release notes at '
+                f'https://github.com/ResidentMario/geoplot/releases/tag/0.4.0'
+            )
 
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
