@@ -8,7 +8,7 @@ setup(
     ],
     extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy']},
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
-    version='0.4.2',
+    version='0.4.0',
     python_requires='>=3.6.0',
     description='High-level geospatial plotting for Python.',
     author='Aleksey Bilogur',
