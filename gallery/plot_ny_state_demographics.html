@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quadtree of San Francisco street trees" href="plot_san_francisco_trees.html" />
+    <link rel="next" title="KDEPlot of Boston AirBnB Locations" href="plot_boston_airbnb_kde.html" />
     <link rel="prev" title="Quadtree of NYC traffic collisions" href="plot_nyc_collisions_quadtree.html" /> 
 </head>
 
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,9 +189,9 @@
 </div>
 <div class="sphx-glr-example-title section" id="choropleth-of-new-york-state-population-demographics">
 <span id="sphx-glr-gallery-plot-ny-state-demographics-py"></span><h1>Choropleth of New York State population demographics<a class="headerlink" href="#choropleth-of-new-york-state-population-demographics" title="Permalink to this headline">¶</a></h1>
-<p>This example shows a <code class="docutils literal notranslate"><span class="pre">choropleth</span></code> of the percentage of residents in New York State by county
-who self-identified as “white” in the 2000 census. It mainly communicates New York City’s
-vastly higher ethnical diversity as compared to the rest of the state.</p>
+<p>This example plots the percentage of residents in New York State by county who self-identified as
+“white” in the 2000 census. New York City is far more ethnically diversity than the rest of the
+state.</p>
 <img alt="../_images/sphx_glr_plot_ny_state_demographics_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_ny_state_demographics_001.png" />
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
@@ -206,7 +207,7 @@ vastly higher ethnical diversity as compared to the rest of the state.</p>
     <span class="n">ny_census_tracts</span><span class="p">,</span>
     <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;percent_white&#39;</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
 <span class="p">)</span>
@@ -214,7 +215,7 @@ vastly higher ethnical diversity as compared to the rest of the state.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ny-state-demographics.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.195 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.604 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-ny-state-demographics-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/9c9ecca147d521f1f706cd62c090584f/plot_ny_state_demographics.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_ny_state_demographics.py</span></code></a></p>
@@ -234,7 +235,7 @@ vastly higher ethnical diversity as compared to the rest of the state.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_san_francisco_trees.html" class="btn btn-neutral float-right" title="Quadtree of San Francisco street trees" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_boston_airbnb_kde.html" class="btn btn-neutral float-right" title="KDEPlot of Boston AirBnB Locations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plot_nyc_collisions_quadtree.html" class="btn btn-neutral float-left" title="Quadtree of NYC traffic collisions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

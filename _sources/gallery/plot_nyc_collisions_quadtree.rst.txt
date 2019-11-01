@@ -10,9 +10,9 @@
 Quadtree of NYC traffic collisions
 ==================================
 
-This example shows a ``pointplot`` overlayed on a ``quadtree`` mapping traffic accident collisions
-in New York City. Together these two plots combine texture with density in communicating relative
-accident frequency in different parts of New York City.
+This example plots traffic collisions in New York City. Overlaying a ``pointplot`` on a
+``quadtree`` like this communicates information on two visual channels, position and texture,
+simultaneously.
 
 
 
@@ -26,7 +26,7 @@ accident frequency in different parts of New York City.
 
  .. code-block:: none
 
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:448: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:461: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
       f'The input data contains {null_geoms.sum()} data points that do not '
 
 
@@ -61,7 +61,7 @@ accident frequency in different parts of New York City.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  37.038 seconds)
+   **Total running time of the script:** ( 0 minutes  29.423 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:

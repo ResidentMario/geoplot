@@ -178,6 +178,8 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">descartes</span>
 <span class="kn">import</span> <span class="nn">contextily</span> <span class="k">as</span> <span class="nn">ctx</span>
+<span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="kn">from</span> <span class="nn">.ops</span> <span class="k">import</span> <span class="n">QuadTree</span><span class="p">,</span> <span class="n">build_voronoi_polygons</span><span class="p">,</span> <span class="n">jitter_points</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -185,7 +187,7 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">geopandas.plotting</span> <span class="k">import</span> <span class="n">__pysal_choro</span> <span class="k">as</span> <span class="n">_mapclassify_choro</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.3.2&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.4.0&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">HueMixin</span><span class="p">:</span>
@@ -200,15 +202,18 @@
         <span class="n">cmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cmap&#39;</span><span class="p">,</span> <span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="s1">&#39;k&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;The &#39;k&#39; parameter was removed in geoplot version 0.4.0. To set a specific &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;categorical bin count, pass a mapclassify object to &#39;scheme&#39; instead. For &quot;</span>
+                <span class="n">f</span><span class="s1">&#39;further information refer to the release notes at &#39;</span>
+                <span class="n">f</span><span class="s1">&#39;https://github.com/ResidentMario/geoplot/releases/tag/0.4.0&#39;</span>
+            <span class="p">)</span>
+
         <span class="k">if</span> <span class="n">supports_categorical</span><span class="p">:</span>
             <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;scheme&#39;</span><span class="p">)</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">scheme</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Cannot specify &quot;scheme&quot; with &quot;k&quot; set to None.&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">scheme</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># kdeplot is special: it has a &#39;cmap&#39; parameter but no &#39;hue&#39; or &#39;scheme&#39; parameters,</span>
         <span class="c1"># merely passing those parameters to `seaborn.kdeplot`. So for these plots we don&#39;t</span>
@@ -230,55 +235,57 @@
         <span class="k">if</span> <span class="n">hue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># no colormap</span>
             <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">color_kwarg</span><span class="p">,</span> <span class="n">default_color</span><span class="p">)</span>
             <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">color</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
-            <span class="n">categorical</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">categories</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">categorical</span><span class="p">,</span> <span class="n">scheme</span> <span class="o">=</span> <span class="n">_validate_buckets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">scheme</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="p">((</span><span class="n">scheme</span> <span class="o">==</span> <span class="s1">&#39;categorical&#39;</span><span class="p">)</span> <span class="ow">or</span>
+              <span class="p">(</span><span class="n">scheme</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hue</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;object&#39;</span><span class="p">))):</span>
+            <span class="n">categories</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">hue</span><span class="p">)</span>
+            <span class="n">value_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">categories</span><span class="p">)}</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_map</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">categorical</span><span class="p">:</span>
-                <span class="n">categories</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">hue</span><span class="p">)</span>
-                <span class="n">value_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">categories</span><span class="p">)}</span>
-                <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_map</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value_map</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">scheme</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
+            <span class="n">categories</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># scheme is not None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">scheme</span> <span class="o">==</span> <span class="n">scheme</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                    
+                    <span class="n">scheme</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">scheme</span><span class="p">)(</span><span class="n">hue</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="n">opts</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">CLASSIFIERS</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Categorical&#39;</span><span class="p">])</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s1">&#39;Invalid scheme </span><span class="si">{scheme!r}</span><span class="s1">. If specified as a string, scheme must be one &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;of </span><span class="si">{opts}</span><span class="s1">.&#39;</span>
+                    <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">bins</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">scheme</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">scheme</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+            <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">scheme</span><span class="p">(</span><span class="n">hue</span><span class="p">)</span>
+            <span class="n">binedges</span> <span class="o">=</span> <span class="p">[</span><span class="n">scheme</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span> <span class="o">+</span> <span class="n">scheme</span><span class="o">.</span><span class="n">bins</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;</span><span class="si">{0:g}</span><span class="s1"> - </span><span class="si">{1:g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binedges</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">binedges</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">binedges</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">bins</span><span class="p">)</span>
 
-                <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
-
-            <span class="k">elif</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">vmax</span><span class="o">=</span><span class="n">hue</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-
-                <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hue</span><span class="p">]</span>
-                <span class="n">categories</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># k is not None</span>
-                <span class="n">binning</span> <span class="o">=</span> <span class="n">_mapclassify_choro</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
-                <span class="n">values</span> <span class="o">=</span> <span class="n">binning</span><span class="o">.</span><span class="n">yb</span>
-                <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
-
-                <span class="n">binedges</span> <span class="o">=</span> <span class="p">[</span><span class="n">binning</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span> <span class="o">+</span> <span class="n">binning</span><span class="o">.</span><span class="n">bins</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-                <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;</span><span class="si">{0:g}</span><span class="s1"> - </span><span class="si">{1:g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">binedges</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">binedges</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">binedges</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="p">]</span>
-                <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
-
-        <span class="c1"># categories will differ in length from the input k if k &gt; len(set(df)). All function</span>
-        <span class="c1"># calls after the HueMixin initializer should see the &quot;true&quot; value for k, so we modify</span>
-        <span class="c1"># k if needed in this case.</span>
-        <span class="k">if</span> <span class="n">categories</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">colors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hue</span> <span class="o">=</span> <span class="n">hue</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span> <span class="k">if</span> <span class="n">categorical</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">categorical</span> <span class="o">=</span> <span class="n">categorical</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_kwarg</span> <span class="o">=</span> <span class="n">color_kwarg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default_color</span> <span class="o">=</span> <span class="n">default_color</span>
@@ -445,12 +452,18 @@
                 <span class="p">}</span>
                 <span class="n">marker_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">legend_marker_kwargs</span><span class="p">)</span>
 
+                <span class="k">if</span> <span class="n">legend_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">markerfacecolors</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span>
+                                        <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">markerfacecolors</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">legend_values</span><span class="p">]</span>
+
                 <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">markerfacecolor</span> <span class="ow">in</span> <span class="n">markerfacecolors</span><span class="p">:</span>
                     <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="n">mpl</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
                             <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
-                            <span class="n">markerfacecolor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                            <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">markerfacecolor</span><span class="p">,</span>
                             <span class="o">**</span><span class="n">marker_kwargs</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
@@ -847,7 +860,7 @@
 
 <span class="k">def</span> <span class="nf">pointplot</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -874,10 +887,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
-<span class="sd">        continuous colormap, set this value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        If ``hue`` is specified, the categorical binning scheme to use.</span>
 <span class="sd">    scale : str or iterable, optional</span>
 <span class="sd">        The column in the dataset (or an iterable of some other data) with which to scale output</span>
@@ -952,7 +962,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">PointPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span>
         <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
@@ -1035,7 +1045,7 @@
 
 <span class="k">def</span> <span class="nf">choropleth</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1062,10 +1072,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        The number of color categories to split the data into. For a continuous colormap, set this</span>
-<span class="sd">        value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        The categorical binning scheme to use.</span>
 <span class="sd">    legend : boolean, optional</span>
 <span class="sd">        Whether or not to include a map legend. For a reference on this and the other </span>
@@ -1133,7 +1140,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">ChoroplethPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
@@ -1142,7 +1149,7 @@
 
 <span class="k">def</span> <span class="nf">quadtree</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -1171,10 +1178,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        The number of color categories to split the data into. For a continuous colormap, set this</span>
-<span class="sd">        value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        The categorical binning scheme to use.</span>
 <span class="sd">    nmax : int or None, optional</span>
 <span class="sd">        The maximum number of observations in a quadrangle.</span>
@@ -1265,7 +1269,7 @@
     <span class="n">plot</span> <span class="o">=</span> <span class="n">QuadtreePlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">nmax</span><span class="o">=</span><span class="n">nmax</span><span class="p">,</span> <span class="n">nmin</span><span class="o">=</span><span class="n">nmin</span><span class="p">,</span> <span class="n">nsig</span><span class="o">=</span><span class="n">nsig</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">agg</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
@@ -1278,7 +1282,7 @@
 <span class="k">def</span> <span class="nf">cartogram</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1317,10 +1321,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
-<span class="sd">        continuous colormap, set this value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        If ``hue`` is specified, the categorical binning scheme to use.</span>
 <span class="sd">    legend : boolean, optional</span>
 <span class="sd">        Whether or not to include a map legend. For a reference on this and the other </span>
@@ -1404,7 +1405,7 @@
         <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
@@ -1491,7 +1492,7 @@
 
 <span class="k">def</span> <span class="nf">sankey</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
     <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -1519,10 +1520,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
-<span class="sd">        continuous colormap, set this value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        If ``hue`` is specified, the categorical binning scheme to use.</span>
 <span class="sd">    scale : str or iterable, optional</span>
 <span class="sd">        The column in the dataset (or an iterable of some other data) with which to scale output</span>
@@ -1649,7 +1647,7 @@
     <span class="n">plot</span> <span class="o">=</span> <span class="n">SankeyPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span><span class="p">,</span> <span class="n">scale_func</span><span class="o">=</span><span class="n">scale_func</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="n">legend_var</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
@@ -1659,7 +1657,7 @@
 
 <span class="k">def</span> <span class="nf">voronoi</span><span class="p">(</span>
     <span class="n">df</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -1687,10 +1685,7 @@
 <span class="sd">    norm: function, optional</span>
 <span class="sd">        A `colormap normalization function &lt;https://matplotlib.org/users/colormapnorms.html&gt;`_</span>
 <span class="sd">        which will be applied to the data before plotting.</span>
-<span class="sd">    k : int or None, optional</span>
-<span class="sd">        If ``hue`` is specified, the number of color categories to split the data into. For a</span>
-<span class="sd">        continuous colormap, set this value to ``None``.</span>
-<span class="sd">    scheme : None or {&quot;quantiles&quot;|&quot;equal_interval&quot;|&quot;fisher_jenks&quot;}, optional</span>
+<span class="sd">    scheme : None or mapclassify object, optional</span>
 <span class="sd">        If ``hue`` is specified, the categorical binning scheme to use.</span>
 <span class="sd">    scale : str or iterable, optional</span>
 <span class="sd">        The column in the dataset (or an iterable of some other data) with which to scale output</span>
@@ -1776,7 +1771,7 @@
 
     <span class="n">plot</span> <span class="o">=</span> <span class="n">VoronoiPlot</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">hue</span><span class="o">=</span><span class="n">hue</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
         <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">legend_values</span><span class="o">=</span><span class="n">legend_values</span><span class="p">,</span> <span class="n">legend_labels</span><span class="o">=</span><span class="n">legend_labels</span><span class="p">,</span>
         <span class="n">legend_kwargs</span><span class="o">=</span><span class="n">legend_kwargs</span><span class="p">,</span>
         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>

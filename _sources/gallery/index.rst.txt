@@ -10,7 +10,7 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates an application of the sankey plot type to a geospatial dataset of `an...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots  `annual average daily traffic volume &lt;https://en.wikipedia.org/wiki/Annual_...">
 
 .. only:: html
 
@@ -27,6 +27,46 @@ Gallery
    :hidden:
 
    /gallery/plot_dc_street_network
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots traffic collisions in New York City. Overlaying a pointplot on a quadtree li...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_nyc_collisions_quadtree
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots the percentage of residents in New York State by county who self-identified ...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_ny_state_demographics_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_ny_state_demographics.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_ny_state_demographics
 
 .. raw:: html
 
@@ -50,47 +90,7 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot overlayed on a quadtree mapping traffic accident collisions in N...">
-
-.. only:: html
-
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
-
-        :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /gallery/plot_nyc_collisions_quadtree
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a choropleth of the percentage of residents in New York State by county who ...">
-
-.. only:: html
-
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_ny_state_demographics_thumb.png
-
-        :ref:`sphx_glr_gallery_plot_ny_state_demographics.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /gallery/plot_ny_state_demographics
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="San Francisco maintains data about city-maintained street trees in the city. Most trees are ide...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows the geospatial nullity pattern (whether records are more or less likely to b...">
 
 .. only:: html
 
@@ -190,7 +190,7 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example choropleth plots a subset of parking tickets issued to drivers in New York City. S...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots a subset of parking tickets issued to drivers in New York City. Specifically...">
 
 .. only:: html
 
@@ -210,7 +210,7 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a kdeplot of traffic accident densities for two common contributing factors:...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows traffic accident densities for two common contributing factors: loss of cons...">
 
 .. only:: html
 
@@ -230,7 +230,27 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example plots passenger volumes for the most important flight routes out of Los Angeles In...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates the continuous and categorical binning schemes available in geoplot o...">
+
+.. only:: html
+
+    .. figure:: /gallery/images/thumb/sphx_glr_plot_california_districts_thumb.png
+
+        :ref:`sphx_glr_gallery_plot_california_districts.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_california_districts
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots passenger volumes for commercial flights out of Los Angeles International Ai...">
 
 .. only:: html
 
@@ -250,7 +270,7 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The example pointplot of fatal (&gt;1 fatality) and injurious (&gt;1 injury requiring a hospital visi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="The example plots fatal (&gt;=1 fatality) and injurious (&gt;=1 injury requiring hospitalization) veh...">
 
 .. only:: html
 

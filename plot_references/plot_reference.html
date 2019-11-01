@@ -99,8 +99,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#kdeplot">KDEPlot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cartogram">Cartogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sankey">Sankey</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#quadtree">Quadtree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#voronoi">Voronoi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quadtree">Quadtree</a></li>
 </ul>
 </li>
 </ul>
@@ -197,11 +197,12 @@ legend.</p>
 </pre></div>
 </div>
 <img alt="../_images/pointplot-legend.png" src="../_images/pointplot-legend.png" />
-<p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>, or the number of color bins using <code class="docutils literal notranslate"><span class="pre">k</span></code>. To use a
-continuous colormap (the default), set <code class="docutils literal notranslate"><span class="pre">k=None</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+<p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. For a categorical colormap, use <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">cities</span><span class="p">[</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno_r&#39;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno_r&#39;</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
@@ -251,7 +252,7 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -272,7 +273,7 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -293,46 +294,47 @@ the specifically spatial plot types.</p>
 </pre></div>
 </div>
 <img alt="../_images/choropleth-initial.png" src="../_images/choropleth-initial.png" />
-<p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>, or the number of color bins using <code class="docutils literal notranslate"><span class="pre">k</span></code>. To use a
-continuous colormap, set <code class="docutils literal notranslate"><span class="pre">k=None</span></code>. The <code class="docutils literal notranslate"><span class="pre">legend</span></code> parameter toggles the legend.</p>
+<p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. The <code class="docutils literal notranslate"><span class="pre">legend</span></code> parameter toggles the legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/choropleth-cmap.png" src="../_images/choropleth-cmap.png" />
 <p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
 <code class="docutils literal notranslate"><span class="pre">matplotlib.patches.Polygon</span></code> objects; this can be used to control plot aesthetics. To pass
-keyword argument to the <code class="docutils literal notranslate"><span class="pre">matplotlib.legend.Legend</span></code>, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
+keyword argument to the legend, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">}</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">}</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/choropleth-legend-kwargs.png" src="../_images/choropleth-legend-kwargs.png" />
-<p>Plots with a categorical colormap can use the <code class="docutils literal notranslate"><span class="pre">scheme</span></code> parameter to control how the data gets
-sorted into the <code class="docutils literal notranslate"><span class="pre">k</span></code> bins. The default <code class="docutils literal notranslate"><span class="pre">quantile</span></code> sorts into an equal number of observations
-per bin, whereas <code class="docutils literal notranslate"><span class="pre">equal_interval</span></code> creates bins equal in size. The more complicated
-<code class="docutils literal notranslate"><span class="pre">fisher_jenks</span></code> scheme is an intermediate between the two.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+<p>To specify a categorical colormap, use <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">FisherJenks</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">},</span>
-    <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;fisher_jenks&#39;</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">},</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/choropleth-scheme.png" src="../_images/choropleth-scheme.png" />
 <p>Use <code class="docutils literal notranslate"><span class="pre">legend_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">legend_values</span></code> to customize the labels and values that appear
 in the legend.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">FisherJenks</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">},</span>
-    <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;fisher_jenks&#39;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">},</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
     <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;&lt;3 million&#39;</span><span class="p">,</span> <span class="s1">&#39;3-6.7 million&#39;</span><span class="p">,</span> <span class="s1">&#39;6.7-12.8 million&#39;</span><span class="p">,</span>
         <span class="s1">&#39;12.8-25 million&#39;</span><span class="p">,</span> <span class="s1">&#39;25-37 million&#39;</span>
@@ -386,8 +388,7 @@ lowest (basal) layer of the kernel density estimate.</p>
 <div class="section" id="cartogram">
 <h2>Cartogram<a class="headerlink" href="#cartogram" title="Permalink to this headline">¶</a></h2>
 <p>A cartogram distorts (grows or shrinks) polygons on a map according to the magnitude of some
-input data. They are a less common but more visually “poppy” alternative to a choropleth.
-A basic cartogram specifies data, a projection, and a <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameter.</p>
+input data. A basic cartogram specifies data, a projection, and a <code class="docutils literal notranslate"><span class="pre">scale</span></code> parameter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="kn">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="kn">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="kn">as</span> <span class="nn">gpd</span>
@@ -405,13 +406,15 @@ A basic cartogram specifies data, a projection, and a <code class="docutils lite
 </pre></div>
 </div>
 <img alt="../_images/cartogram-trace-legend.png" src="../_images/cartogram-trace-legend.png" />
-<p>To add a colormap to the plot, specify <code class="docutils literal notranslate"><span class="pre">hue</span></code>. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap used
-and <code class="docutils literal notranslate"><span class="pre">k</span></code> to control the number of color bins. In this plot we also add a backing outline
-of the original state shapes, for better geospatial context.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
+<p>To add a colormap to the plot, specify <code class="docutils literal notranslate"><span class="pre">hue</span></code>. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap. For a
+categorical colormap, specify a <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. In this plot we also add a backing outline of the
+original state shapes, for better geospatial context.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)},</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
@@ -465,11 +468,13 @@ For interpretability, these examples also include world geometry.</p>
 </pre></div>
 </div>
 <img alt="../_images/sankey-geospatial-context.png" src="../_images/sankey-geospatial-context.png" />
-<p><code class="docutils literal notranslate"><span class="pre">hue</span></code> adds color gradation to the map. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap used and <code class="docutils literal notranslate"><span class="pre">k</span></code>
-to control the number of color bins. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles a legend.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
+<p><code class="docutils literal notranslate"><span class="pre">hue</span></code> adds color gradation to the map. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap. For a categorical
+colormap, specify <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles a legend.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
-    <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">world</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
@@ -480,10 +485,12 @@ to control the number of color bins. <code class="docutils literal notranslate">
 <img alt="../_images/sankey-cmap.png" src="../_images/sankey-cmap.png" />
 <p><code class="docutils literal notranslate"><span class="pre">scale</span></code> adds volumetric scaling to the plot. <code class="docutils literal notranslate"><span class="pre">limits</span></code> can be used to control the minimum
 and maximum line width.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">world</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
@@ -494,10 +501,12 @@ and maximum line width.</p>
 <img alt="../_images/sankey-scale.png" src="../_images/sankey-scale.png" />
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument. These
 arguments will be passed to the underlying legend.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;lower left&#39;</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
@@ -507,6 +516,64 @@ arguments will be passed to the underlying legend.</p>
 </pre></div>
 </div>
 <img alt="../_images/sankey-legend-kwargs.png" src="../_images/sankey-legend-kwargs.png" />
+</div>
+<div class="section" id="voronoi">
+<h2>Voronoi<a class="headerlink" href="#voronoi" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi region</a> of an point is the set
+of points which is closer to that point than to any other observation in a dataset. A Voronoi
+diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
+plots them.</p>
+<p>Voronoi plots are efficient for judging point density and, combined with colormap, can be used
+to infer regional trends in a set of data.</p>
+<p>A basic <code class="docutils literal notranslate"><span class="pre">voronoi</span></code> specifies some point data. We overlay geometry to aid interpretability.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/voronoi-simple.png" src="../_images/voronoi-simple.png" />
+<p>Use <code class="docutils literal notranslate"><span class="pre">clip</span></code> to clip the result to surrounding geometry. This is recommended in most cases.
+Note that if the clip geometry is complicated, this operation will take a long time; consider
+simplifying complex geometries with <code class="docutils literal notranslate"><span class="pre">simplify</span></code> to speed it up.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
+    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/voronoi-clip.png" src="../_images/voronoi-clip.png" />
+<p>Use <code class="docutils literal notranslate"><span class="pre">hue</span></code> to add color as a visual variable to the plot. Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. To
+use a categorical colormap, set <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">NaturalBreaks</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="p">[</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
+    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/voronoi-cmap.png" src="../_images/voronoi-cmap.png" />
+<p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>
+<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>,
+which can be used to customize the appearance of the plot. To pass keyword argument to the
+legend, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">NaturalBreaks</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="p">[</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
+    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
+    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/voronoi-kwargs.png" src="../_images/voronoi-kwargs.png" />
 </div>
 <div class="section" id="quadtree">
 <h2>Quadtree<a class="headerlink" href="#quadtree" title="Permalink to this headline">¶</a></h2>
@@ -553,27 +620,13 @@ a basemap.</p>
 </div>
 <img alt="../_images/quadtree-basemap.png" src="../_images/quadtree-basemap.png" />
 <p>Use <code class="docutils literal notranslate"><span class="pre">hue</span></code> to add color as a visual variable to the plot. <code class="docutils literal notranslate"><span class="pre">cmap</span></code> controls the colormap
-used. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend. The individual values of the points included in the
-partitions are aggregated, and each partition is colormapped based on this aggregate value.</p>
+used. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend. The individual
+values of the points included in the partitions are aggregated, and each partition is colormapped
+based on this aggregate value.</p>
 <p>This type of plot is an effective gauge of distribution: the less random the plot output, the
 more spatially correlated the variable.</p>
 <p>The default aggregation function is <code class="docutils literal notranslate"><span class="pre">np.mean</span></code>, but you can configure the aggregation
 by passing a different function to <code class="docutils literal notranslate"><span class="pre">agg</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
-    <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/quadtree-hue.png" src="../_images/quadtree-hue.png" />
-<p>Change the number of bins by specifying an alternative <code class="docutils literal notranslate"><span class="pre">k</span></code> value. To use a continuous
-colormap, explicitly specify <code class="docutils literal notranslate"><span class="pre">k=None</span></code>.  You can change the binning sceme with <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.
-The default is <code class="docutils literal notranslate"><span class="pre">quantile</span></code>, which bins observations into classes of different sizes but the
-same numbers of observations. <code class="docutils literal notranslate"><span class="pre">equal_interval</span></code> will creates bins that are the same size, but
-potentially containing different numbers of observations. The more complicated <code class="docutils literal notranslate"><span class="pre">fisher_jenks</span></code>
-scheme is an intermediate between the two.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
@@ -583,89 +636,26 @@ scheme is an intermediate between the two.</p>
 </pre></div>
 </div>
 <img alt="../_images/quadtree-k.png" src="../_images/quadtree-k.png" />
+<p>To use a categorical colormap, set <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
+    <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;Quantiles&#39;</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/quadtree-hue.png" src="../_images/quadtree-hue.png" />
 <p>Here is a demo of an alternative aggregation function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/quadtree-agg.png" src="../_images/quadtree-agg.png" />
-</div>
-<div class="section" id="voronoi">
-<h2>Voronoi<a class="headerlink" href="#voronoi" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi region</a> of an point is the set
-of points which is closer to that point than to any other observation in a dataset. A Voronoi
-diagram is a space-filling diagram that constructs all of the Voronoi regions of a dataset and
-plots them.</p>
-<p>Voronoi plots are efficient for judging point density and, combined with colormap, can be used
-to infer regional trends in a set of data.</p>
-<p>Due to limitations with <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">voronoi</span></code> diagrams in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> are limited in size
-to a few thousand polygons.</p>
-<p>A basic <code class="docutils literal notranslate"><span class="pre">voronoi</span></code> specifies some point data. We overlay geometry to aid interpretability.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/voronoi-simple.png" src="../_images/voronoi-simple.png" />
-<p>Use <code class="docutils literal notranslate"><span class="pre">clip</span></code> to clip the result to surrounding geometry. This is recommended in most cases.
-Note that if the clip geometry is complicated, this operation will take a long time; consider
-simplifying complex geometries with <code class="docutils literal notranslate"><span class="pre">simplify</span></code> to speed it up.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
-    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/voronoi-clip.png" src="../_images/voronoi-clip.png" />
-<p>Use <code class="docutils literal notranslate"><span class="pre">hue</span></code> to add color as a visual variable to the plot. Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>,
-or the number of color bins using <code class="docutils literal notranslate"><span class="pre">k</span></code>. To use a continuous colormap, set <code class="docutils literal notranslate"><span class="pre">k=None</span></code>.
-<code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
-    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
-    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/voronoi-cmap.png" src="../_images/voronoi-cmap.png" />
-<p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
-<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>
-<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>,
-which can be used to customize the appearance of the plot. To pass keyword argument to the
-legend, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
-    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
-    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;loc&#39;</span><span class="p">:</span> <span class="s1">&#39;upper left&#39;</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/voronoi-kwargs.png" src="../_images/voronoi-kwargs.png" />
-<p>To use a continuous colormap, explicitly specify <code class="docutils literal notranslate"><span class="pre">k=None</span></code>.  You can change the binning sceme
-with <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">quantile</span></code>, which bins observations into classes of different
-sizes but the same numbers of observations. <code class="docutils literal notranslate"><span class="pre">equal_interval</span></code> will creates bins that are the
-same size, but potentially containing different numbers of observations. The more complicated
-<code class="docutils literal notranslate"><span class="pre">fisher_jenks</span></code> scheme is an intermediate between the two.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
-    <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-    <span class="n">legend</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/voronoi-scheme.png" src="../_images/voronoi-scheme.png" />
 </div>
 </div>
 

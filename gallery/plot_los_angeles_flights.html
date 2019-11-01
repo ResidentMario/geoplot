@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pointplot of NYC fatal and injurious traffic collisions" href="plot_nyc_collisions_map.html" />
-    <link rel="prev" title="KDEPlot of two NYC traffic accident contributing factors" href="plot_nyc_collision_factors.html" /> 
+    <link rel="prev" title="Choropleth of California districts with alternative binning schemes" href="plot_california_districts.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,10 +189,10 @@
 </div>
 <div class="sphx-glr-example-title section" id="sankey-of-los-angeles-flight-volumes-with-cartopy-globes">
 <span id="sphx-glr-gallery-plot-los-angeles-flights-py"></span><h1>Sankey of Los Angeles flight volumes with Cartopy globes<a class="headerlink" href="#sankey-of-los-angeles-flight-volumes-with-cartopy-globes" title="Permalink to this headline">¶</a></h1>
-<p>This example plots passenger volumes for the most important flight routes out of Los Angeles
-Interational Airport. It demonstrates some of the globe setup options available in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> by
-way of <code class="docutils literal notranslate"><span class="pre">cartopy</span></code>.</p>
-<p>For more information visit <a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html">the cartopy docs</a>.</p>
+<p>This example plots passenger volumes for commercial flights out of Los Angeles International
+Airport. Some globe-modification options available in <code class="docutils literal notranslate"><span class="pre">cartopy</span></code> are demonstrated. Visit
+<a class="reference external" href="http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html">the cartopy docs</a>
+for more information.</p>
 <img alt="../_images/sphx_glr_plot_los_angeles_flights_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_los_angeles_flights_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
@@ -206,9 +207,10 @@ way of <code class="docutils literal notranslate"><span class="pre">cartopy</spa
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">cartopy</span>
+<span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
 
 <span class="n">la_flights</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;la_flights&#39;</span><span class="p">))</span>
-
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="n">f</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span>
     <span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">Orthographic</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><span class="mf">40.7128</span><span class="p">,</span> <span class="n">central_longitude</span><span class="o">=-</span><span class="mf">74.0059</span><span class="p">)</span>
@@ -217,21 +219,21 @@ way of <code class="docutils literal notranslate"><span class="pre">cartopy</spa
 <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
-    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
-    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">stock_img</span><span class="p">()</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
-    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -240,7 +242,7 @@ way of <code class="docutils literal notranslate"><span class="pre">cartopy</spa
 <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">BORDERS</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
-    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">la_flights</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">()</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -253,7 +255,7 @@ way of <code class="docutils literal notranslate"><span class="pre">cartopy</spa
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;los-angeles-flights.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.163 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.966 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-los-angeles-flights-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8efa1a8bcdf03742257042ac84c2cdce/plot_los_angeles_flights.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_los_angeles_flights.py</span></code></a></p>
@@ -276,7 +278,7 @@ way of <code class="docutils literal notranslate"><span class="pre">cartopy</spa
         <a href="plot_nyc_collisions_map.html" class="btn btn-neutral float-right" title="Pointplot of NYC fatal and injurious traffic collisions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_nyc_collision_factors.html" class="btn btn-neutral float-left" title="KDEPlot of two NYC traffic accident contributing factors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_california_districts.html" class="btn btn-neutral float-left" title="Choropleth of California districts with alternative binning schemes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

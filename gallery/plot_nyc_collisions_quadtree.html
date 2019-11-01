@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Choropleth of New York State population demographics" href="plot_ny_state_demographics.html" />
-    <link rel="prev" title="KDEPlot of Boston AirBnB Locations" href="plot_boston_airbnb_kde.html" /> 
+    <link rel="prev" title="Sankey of traffic volumes in Washington DC" href="plot_dc_street_network.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,12 +189,12 @@
 </div>
 <div class="sphx-glr-example-title section" id="quadtree-of-nyc-traffic-collisions">
 <span id="sphx-glr-gallery-plot-nyc-collisions-quadtree-py"></span><h1>Quadtree of NYC traffic collisions<a class="headerlink" href="#quadtree-of-nyc-traffic-collisions" title="Permalink to this headline">¶</a></h1>
-<p>This example shows a <code class="docutils literal notranslate"><span class="pre">pointplot</span></code> overlayed on a <code class="docutils literal notranslate"><span class="pre">quadtree</span></code> mapping traffic accident collisions
-in New York City. Together these two plots combine texture with density in communicating relative
-accident frequency in different parts of New York City.</p>
+<p>This example plots traffic collisions in New York City. Overlaying a <code class="docutils literal notranslate"><span class="pre">pointplot</span></code> on a
+<code class="docutils literal notranslate"><span class="pre">quadtree</span></code> like this communicates information on two visual channels, position and texture,
+simultaneously.</p>
 <img alt="../_images/sphx_glr_plot_nyc_collisions_quadtree_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_nyc_collisions_quadtree_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alex/Desktop/geoplot/geoplot/geoplot.py:448: UserWarning: The input data contains 9 data points that do not intersect with &quot;clip&quot;. These data points will not appear in the plot.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alex/Desktop/geoplot/geoplot/geoplot.py:461: UserWarning: The input data contains 9 data points that do not intersect with &quot;clip&quot;. These data points will not appear in the plot.
   f&#39;The input data contains {null_geoms.sum()} data points that do not &#39;
 </pre></div>
 </div>
@@ -219,7 +220,7 @@ accident frequency in different parts of New York City.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nyc-collisions-quadtree.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  37.038 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  29.423 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-nyc-collisions-quadtree-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/89201104fd84ea520eb8956c2822a07a/plot_nyc_collisions_quadtree.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nyc_collisions_quadtree.py</span></code></a></p>
@@ -242,7 +243,7 @@ accident frequency in different parts of New York City.</p>
         <a href="plot_ny_state_demographics.html" class="btn btn-neutral float-right" title="Choropleth of New York State population demographics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_boston_airbnb_kde.html" class="btn btn-neutral float-left" title="KDEPlot of Boston AirBnB Locations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_dc_street_network.html" class="btn btn-neutral float-left" title="Sankey of traffic volumes in Washington DC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -11,10 +11,12 @@ import geopandas as gpd
 import geoplot as gplt
 import geoplot.crs as gcrs
 import matplotlib.pyplot as plt
+import mapclassify as mc
 
 continental_usa_cities = gpd.read_file(gplt.datasets.get_path('usa_cities'))
 continental_usa_cities = continental_usa_cities.query('STATE not in ["AK", "HI", "PR"]')
 contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
+scheme = mc.Quantiles(continental_usa_cities['POP_2010'], k=5)
 
 ax = gplt.polyplot(
     contiguous_usa, 
@@ -23,7 +25,7 @@ ax = gplt.polyplot(
     projection=gcrs.AlbersEqualArea(),
     edgecolor='white',
     facecolor='lightgray',
-    figsize=(12, 12)
+    figsize=(8, 12)
 )
 gplt.pointplot(
     continental_usa_cities, 
@@ -31,7 +33,7 @@ gplt.pointplot(
     limits=(2, 30),
     hue='POP_2010',
     cmap='Blues',
-    k=5,
+    scheme=scheme,
     legend=True,
     legend_var='scale',
     legend_values=[8000000, 2000000, 1000000, 100000],

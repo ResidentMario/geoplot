@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Sankey of Napoleon’s disastarous march on Moscow &mdash; geoplot 0.3.1 documentation</title>
+  <title>Sankey of Napoleon’s march on Moscow with custom colormap &mdash; geoplot 0.3.1 documentation</title>
   
 
   
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -163,7 +164,7 @@
         
           <li><a href="index.html">Gallery</a> &raquo;</li>
         
-      <li>Sankey of Napoleon’s disastarous march on Moscow</li>
+      <li>Sankey of Napoleon’s march on Moscow with custom colormap</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -186,14 +187,15 @@
 <p class="admonition-title">Note</p>
 <p>Click <a class="reference internal" href="#sphx-glr-download-gallery-plot-minard-napoleon-russia-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="sankey-of-napoleon-s-disastarous-march-on-moscow">
-<span id="sphx-glr-gallery-plot-minard-napoleon-russia-py"></span><h1>Sankey of Napoleon’s disastarous march on Moscow<a class="headerlink" href="#sankey-of-napoleon-s-disastarous-march-on-moscow" title="Permalink to this headline">¶</a></h1>
+<div class="sphx-glr-example-title section" id="sankey-of-napoleon-s-march-on-moscow-with-custom-colormap">
+<span id="sphx-glr-gallery-plot-minard-napoleon-russia-py"></span><h1>Sankey of Napoleon’s march on Moscow with custom colormap<a class="headerlink" href="#sankey-of-napoleon-s-march-on-moscow-with-custom-colormap" title="Permalink to this headline">¶</a></h1>
 <p>This example reproduces a famous historical flow map: Charles Joseph Minard’s map depicting
 Napoleon’s disastrously costly 1812 march on Russia during the Napoleonic Wars.</p>
-<p>This <code class="docutils literal notranslate"><span class="pre">sankey</span></code> demonstrates how to build and use a custom <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> colormap. It also
-demonstrates using the <code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code> library to quickly and easily transform the resulting plot
-into an scrolly-panny webmap.</p>
-<p><a class="reference external" href="http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746">Click here to see the interactive webmap version.</a></p>
+<p>This plot demonstrates building and using a custom <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> colormap. To learn more refer to
+<a class="reference external" href="https://matplotlib.org/gallery/images_contours_and_fields/custom_cmap.html">the matplotlib documentation</a>.</p>
+<p><a class="reference external" href="http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746">Click here</a> to see an
+interactive scrolly-panny version of this webmap built with <code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code>. To learn more about
+<code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code>, refer to <a class="reference external" href="https://github.com/jwass/mplleaflet">the mplleaflet GitHub repo</a>.</p>
 <img alt="../_images/sphx_glr_plot_minard_napoleon_russia_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_minard_napoleon_russia_001.png" />
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
@@ -215,11 +217,11 @@ into an scrolly-panny webmap.</p>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;minard-napoelon-russia.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
-<span class="c1"># Uncomment and run the following line of code to save an interactive webmap.</span>
+<span class="c1"># Uncomment and run the following line of code to save as an interactive webmap.</span>
 <span class="c1"># mplleaflet.save_html(fig, fileobj=&#39;minard-napoleon-russia.html&#39;)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.851 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.443 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-minard-napoleon-russia-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/5d13b326f967da9566d46f6ce15750f9/plot_minard_napoleon_russia.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_minard_napoleon_russia.py</span></code></a></p>

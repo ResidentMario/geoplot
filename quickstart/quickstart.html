@@ -84,15 +84,7 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#getting-geospatial-data">Getting geospatial data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plotting-points-and-polygons">Plotting points and polygons</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-visual-parameters">Adding visual parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#making-the-plot-pretty">Making the plot pretty</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#some-other-plot-types">Some other plot types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next steps</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul>
@@ -187,8 +179,6 @@ used.</p>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span><span class="p">;</span> <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;max_columns&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="getting-geospatial-data">
-<h2>Getting geospatial data<a class="headerlink" href="#getting-geospatial-data" title="Permalink to this headline">¶</a></h2>
 <p>The starting point for geospatial analysis is geospatial data. The
 standard way of dealing with such data in Python using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>—a
 geospatial data parsing library over the well-known <code class="docutils literal notranslate"><span class="pre">pandas</span></code> library.</p>
@@ -273,21 +263,10 @@ and so on.</p>
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>All functions in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> take a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> as input.</p>
-<blockquote>
-<div><p>Note that <code class="docutils literal notranslate"><span class="pre">shapely</span></code>, the library <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> uses to store its
-geometries, uses “modern” longitude-latitude <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinate
-order. This differs from the “historical” latitude-longitude
-<code class="docutils literal notranslate"><span class="pre">(y,</span> <span class="pre">x)</span></code> coordinate order. Datasets “in the wild” may be in either
-format, so after reading in some data make sure to verify that your
-coordinates are in the right order!</p>
-</div></blockquote>
-<p>To learn more about manipulating geospatial data, check out the section
-of the tutorial on <a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Geospatial_Data.html">Working with Geospatial
+</div><p>All functions in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> take a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> as input. To learn
+more about manipulating geospatial data, see the section <a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Geospatial_Data.html">Working with
+Geospatial
 Data</a>.</p>
-</div></div>
-<div class="section" id="plotting-points-and-polygons">
-<h2>Plotting points and polygons<a class="headerlink" href="#plotting-points-and-polygons" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 </pre></div>
 </div>
@@ -297,22 +276,20 @@ using <code class="docutils literal notranslate"><span class="pre">pointplot</sp
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x127f3eba8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x1290c9320</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_10_1.png" src="../_images/Quickstart_10_1.png" />
+<img alt="../_images/Quickstart_9_1.png" src="../_images/Quickstart_9_1.png" />
 <p>If you have polygonal data instead, you can plot that using a
 <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> <code class="docutils literal notranslate"><span class="pre">polyplot</span></code>.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x1291c7128</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x127f7aa20</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<img alt="../_images/Quickstart_13_1.png" src="../_images/Quickstart_13_1.png" />
+<img alt="../_images/Quickstart_11_1.png" src="../_images/Quickstart_11_1.png" />
 <p>We can combine the these two plots using overplotting. <strong>Overplotting</strong>
 is the act of stacking several different plots on top of one another,
 useful for providing additional context for our plots:</p>
@@ -320,10 +297,10 @@ useful for providing additional context for our plots:</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x128822c50</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x129a73eb8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_15_1.png" src="../_images/Quickstart_15_1.png" />
+<img alt="../_images/Quickstart_13_1.png" src="../_images/Quickstart_13_1.png" />
 <p>You might notice that this map of the United States looks very strange.
 The Earth, being a sphere, is impossible to potray in two dimensionals.
 Hence, whenever we take data off the sphere and place it onto a map, we
@@ -339,106 +316,65 @@ States. Here’s how you use it with <code class="docutils literal notranslate">
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12889e080</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x129aec6a0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_17_1.png" src="../_images/Quickstart_17_1.png" />
-<p>This looks much better than our first plot! In fact, this is the version
-of the United States that you’ll probably most often see in maps.</p>
-<p>To learn more about projections check out the section of the tutorial on
-<a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with
+<img alt="../_images/Quickstart_15_1.png" src="../_images/Quickstart_15_1.png" />
+<p>Much better! To learn more about projections check out the section of
+the tutorial on <a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html">Working with
 Projections</a>.</p>
-<p>What if you want to create a <strong>webmap</strong> instead? This is also easy to
-do.</p>
+<p>What if you want to create a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Web_mapping">webmap</a> instead? This is
+also easy to do.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x128928588</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x129b80c18</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_19_1.png" src="../_images/Quickstart_19_1.png" />
-<p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> can even be used with <code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code> to create animated
-scrolly-panny webmaps. <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_boston_airbnb_kde.html">Click
-here</a>
-for a demo.</p>
-</div>
-<div class="section" id="adding-visual-parameters">
-<h2>Adding visual parameters<a class="headerlink" href="#adding-visual-parameters" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/Quickstart_17_1.png" src="../_images/Quickstart_17_1.png" />
+<p>This is a static webmap. Interactive (scrolly-panny) webmaps are also
+possible: <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_boston_airbnb_kde.html">see the
+demo</a>
+for an example of one.</p>
 <p>This map tells us that there are more cities on either coast than there
 are in and around the Rocky Mountains, but it doesn’t tell us anything
 about the cities themselves. We can make an informative plot by adding
-more <strong>visual parameters</strong> to our plot.</p>
-<p>We’ll start with <code class="docutils literal notranslate"><span class="pre">hue</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">hue</span></code> to the plot:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1289d99b0</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x129c42c88</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_21_2.png" src="../_images/Quickstart_21_2.png" />
+<img alt="../_images/Quickstart_19_1.png" src="../_images/Quickstart_19_1.png" />
 <p>This map tells a clear story: that cities in the central United States
 have a higher <code class="docutils literal notranslate"><span class="pre">ELEV_IN_FT</span></code> then most other cities in the United
 States, especially those on the coast. Toggling the legend on helps make
 this result more interpretable.</p>
-<p>Which colors get assigned to which category are controlled by a
-<a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">colormap</a>
-(or <code class="docutils literal notranslate"><span class="pre">cmap</span></code>). There are over fifty visually distinct colormaps in
-<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>; it’s also possible to create your own on the fly. This
-plot uses the default <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> <code class="docutils literal notranslate"><span class="pre">cmap</span></code>, <code class="docutils literal notranslate"><span class="pre">viridis</span></code>, but we can
-pick a different one that perhaps better suites our data if we so
-choose:</p>
+<p>To use a different
+<a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">colormap</a>,
+use the <code class="docutils literal notranslate"><span class="pre">cmap</span></code> parameter:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;terrain&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12d44d470</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12c8642b0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_23_2.png" src="../_images/Quickstart_23_2.png" />
-<p>Next, let’s try adding still another visual variable to our plot:
-<code class="docutils literal notranslate"><span class="pre">scale</span></code>. We’ll also specify two other new parameters: <code class="docutils literal notranslate"><span class="pre">limits</span></code>,
-which controls the maximum and minimum sizes of the scaled-out points;
-and <code class="docutils literal notranslate"><span class="pre">legend_var</span></code>, which specifies which visual variable (<code class="docutils literal notranslate"><span class="pre">scale</span></code> or
-<code class="docutils literal notranslate"><span class="pre">hue</span></code>) will appear in the legend.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
-    <span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-    <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12cd5e208</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<img alt="../_images/Quickstart_25_2.png" src="../_images/Quickstart_25_2.png" />
-<p>This new plot shows more clearly than the previous one the difference in
-height between cities in the Rocky Mountain states like Colorado, Utah,
-and Wyoming, and those elsewhere in the United States.</p>
-</div>
-<div class="section" id="making-the-plot-pretty">
-<h2>Making the plot pretty<a class="headerlink" href="#making-the-plot-pretty" title="Permalink to this headline">¶</a></h2>
-<p>Ugly maps distract the reader from the story you want to tell. Once
-you’ve got the basic outline ready, it’s handy to be able to tweak your
-plot a bit to “prettify” it.</p>
-<p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> comes equipped with a variety of visual parameters (many of
-them from <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>) that can be used to adjust the look and feel
-of the plot.</p>
+<img alt="../_images/Quickstart_21_1.png" src="../_images/Quickstart_21_1.png" />
+<p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> comes equipped with a broad variety of visual options which
+can be tuned to your liking.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
-    <span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>
     <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
@@ -453,19 +389,15 @@ of the plot.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Cities in the Continental United States by Elevation&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_28_2.png" src="../_images/Quickstart_28_2.png" />
-</div>
-<div class="section" id="some-other-plot-types">
-<h2>Some other plot types<a class="headerlink" href="#some-other-plot-types" title="Permalink to this headline">¶</a></h2>
-<p>So far we’ve worked with <code class="docutils literal notranslate"><span class="pre">pointplot</span></code> and <code class="docutils literal notranslate"><span class="pre">polyplot</span></code>. <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> has
-a variety of other plot types available as well. We’ll take a brief look
-at just two of them; the full list is covered in detail in the <a class="reference external" href="https://residentmario.github.io/geoplot/plot_references/plot_reference.html">Plot
-Reference</a>.</p>
+<img alt="../_images/Quickstart_23_2.png" src="../_images/Quickstart_23_2.png" />
+<p>Let’s look at a couple of other plot types available in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> (for
+the full list, see the <a class="reference external" href="https://residentmario.github.io/geoplot/plot_references/plot_reference.html">Plot
+Reference</a>).</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;fisher_jenks&#39;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;FisherJenks&#39;</span><span class="p">,</span>
     <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;&lt;3 million&#39;</span><span class="p">,</span> <span class="s1">&#39;3-6.7 million&#39;</span><span class="p">,</span> <span class="s1">&#39;6.7-12.8 million&#39;</span><span class="p">,</span>
         <span class="s1">&#39;12.8-25 million&#39;</span><span class="p">,</span> <span class="s1">&#39;25-37 million&#39;</span>
@@ -473,10 +405,10 @@ Reference</a>.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12bae7320</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12cb5e128</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_31_1.png" src="../_images/Quickstart_31_1.png" />
+<img alt="../_images/Quickstart_25_1.png" src="../_images/Quickstart_25_1.png" />
 <p>This <code class="docutils literal notranslate"><span class="pre">choropleth</span></code> of population by state shows how much larger certain
 coastal states are than their peers in the central United States. A
 <code class="docutils literal notranslate"><span class="pre">choropleth</span></code> is the standard-bearer in cartography for showing
@@ -490,23 +422,19 @@ information about areas because it’s easy to make and interpret.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12f1ae828</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12f173ac8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Quickstart_33_2.png" src="../_images/Quickstart_33_2.png" />
+<img alt="../_images/Quickstart_27_2.png" src="../_images/Quickstart_27_2.png" />
 <p>A <code class="docutils literal notranslate"><span class="pre">kdeplot</span></code> smoothes point data out into a heatmap. This makes it easy
 to spot regional trends in your input data. The <code class="docutils literal notranslate"><span class="pre">clip</span></code> parameter can
 be used to clip the resulting plot to the surrounding geometry—in this
 case, the outline of New York City.</p>
-</div>
-<div class="section" id="next-steps">
-<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
 <p>You should now know enough <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> to try it out in your own
 projects!</p>
 <p>To install <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>, run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span></code>. To see more
 examples using <code class="docutils literal notranslate"><span class="pre">geoplot</span></code>, check out the
 <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/index.html">Gallery</a>.</p>
-</div>
 </div>
 
 

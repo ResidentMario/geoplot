@@ -201,7 +201,7 @@ variable that every map has in common is <strong>position</strong>.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12591a940</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12117b358</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_3_1.png" src="../_images/Customizing_Plots_3_1.png" />
@@ -220,186 +220,74 @@ in your plot.</p>
 reserved keyword in the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> API.</p>
 </div></blockquote>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+    <span class="n">continental_usa_cities</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x126222198</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x121c342b0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_7_2.png" src="../_images/Customizing_Plots_7_2.png" />
-<p>In this case we set <code class="docutils literal notranslate"><span class="pre">hue='POP_2010'</span></code>, telling <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> to color the
-points based on population as of the 2010 census. In this new map, the
-darker the point, the more populous the city.</p>
-<p>There are a number of variables for controlling colors. One is <code class="docutils literal notranslate"><span class="pre">cmap</span></code>,
-which determines which <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> colormap is used:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">proj</span><span class="p">})</span>
-<span class="n">pointplot_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;hue&#39;</span><span class="p">:</span> <span class="s1">&#39;POP_2010&#39;</span><span class="p">}</span>
+<img alt="../_images/Customizing_Plots_7_1.png" src="../_images/Customizing_Plots_7_1.png" />
+<p>In this case we set <code class="docutils literal notranslate"><span class="pre">hue='ELEV_IN_FT'</span></code>, telling <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> to color
+the points based on mean elevation.</p>
+<p>There are two ways of assigning colors to geometries: a continuous
+colormap, which just applies colors on a spectrum of data; or a
+categorical colormap, which buckets data and applies colors not to those
+buckets.</p>
+<p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> uses a continuous colormap by default. To switch to a
+categorical colormap, use the <code class="docutils literal notranslate"><span class="pre">scheme</span></code> parameter:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">[</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;Blues&#39;&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;Reds&#39;&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;Greens&#39;&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;viridis&#39;&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;summer&#39;&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;cmap=&#39;coolwarm&#39;&quot;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+    <span class="n">continental_usa_cities</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;cmap=&#39;coolwarm&#39;&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x121c5d898</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="../_images/Customizing_Plots_9_2.png" src="../_images/Customizing_Plots_9_2.png" />
-<p>The <strong>colormap</strong> is the color scale of your plot, and it has big visual
-impact on your plot. There are over fifty named colormaps in
-<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>—<a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">the reference page has the full
-list</a>.
-Naturally it is also possible to <a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormap-manipulation.html">create your own
-colormap</a>;
-there is an
-<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html">example</a>
-of this in the Gallery.</p>
-<p>The <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.361.6082&amp;rep=rep1&amp;type=pdf">ColorBrewer
-paper</a>
-is a great summary of color theory as it pertains to mapmaking, and is a
-recommended read if you want to learn more about picking a color scale.</p>
-<p>Suppose we’ve picked a colormap. The next choice we have to make is how
-to assign colors. There are two ways of assigning colors to geometries:
-a continuous colormap, which just applies colors on a spectrum of data;
-or a categorical colormap, which buckets data and applies colors not to
-those buckets.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mi">98</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">39.5</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">proj</span><span class="p">})</span>
-<span class="n">pointplot_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;hue&#39;</span><span class="p">:</span> <span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="s1">&#39;cmap&#39;</span><span class="p">:</span> <span class="s1">&#39;Purples&#39;</span><span class="p">}</span>
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=None&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=2&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=3&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=4&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=5&quot;</span><span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">pointplot_kwargs</span><span class="p">)</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=10&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;k=10&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/Customizing_Plots_11_2.png" src="../_images/Customizing_Plots_11_2.png" />
-<p>The <code class="docutils literal notranslate"><span class="pre">k</span></code> parameter controls how many colors are used. If it is set to
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, as in the first plot, a continuous colormap is used. Otherwise
-as many colors are used as are set.</p>
-<p>This dataset happens to be an example of a poor choice for a continuous
-colormap because there are outlier observations, like New York City,
-which are orders of magnitude larger than the mean value, rendering the
-(linear) color scale ineffectual. Here is an example where it is a more
-appropriate choice (in a plot measuring the percentage of the population
-of each county in New York which is white):</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ny_census_tracts</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;ny_census&#39;</span><span class="p">))</span>
-<span class="n">ny_census_tracts</span> <span class="o">=</span> <span class="n">ny_census_tracts</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-    <span class="n">percent_white</span><span class="o">=</span><span class="n">ny_census_tracts</span><span class="p">[</span><span class="s1">&#39;WHITE&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">ny_census_tracts</span><span class="p">[</span><span class="s1">&#39;POP2000&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
-    <span class="n">ny_census_tracts</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;percent_white&#39;</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">()</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12b0c04e0</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<img alt="../_images/Customizing_Plots_13_1.png" src="../_images/Customizing_Plots_13_1.png" />
-<p>Another good example is the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_nyc_parking_tickets.html">Parking
-Tickets</a>
-demo in the Gallery.</p>
-<p>If you are using a categorical colormap, there is one last consideration
-you need to make: what <a class="reference external" href="https://en.wikipedia.org/wiki/Data_binning">binning
-scheme</a> to use.</p>
-<p>A binning scheme is a methodology for splitting a continuous dataset
-into discrete bins (which the colormap will then be applied to). The
-default binning scheme in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> is <code class="docutils literal notranslate"><span class="pre">quantiles</span></code>, which bins
-observations into classes of different sizes but the same numbers of
-observations. <code class="docutils literal notranslate"><span class="pre">equal_interval</span></code> will creates bins that are the same
-size, but potentially containing different numbers of observations.
-Finally, the more complicated <code class="docutils literal notranslate"><span class="pre">fisher_jenks</span></code> scheme is an intermediate
-between the two; you can read about it <a class="reference external" href="https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization">on
-Wikipedia</a>.</p>
-<p>To use a non-default binning scheme, pass its name to the <code class="docutils literal notranslate"><span class="pre">scheme</span></code>
-parameter. The following plot of collisions in New York City by number
-of injuries demonstrates.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
-<span class="n">nyc_fatal_collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_fatal_collisions&#39;</span><span class="p">))</span>
-<span class="n">nyc_injurious_collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_injurious_collisions&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">polyplot_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">}</span>
-<span class="n">pointplot_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;hue&#39;</span><span class="p">:</span> <span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;zorder&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;legend&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;cmap&#39;</span><span class="p">:</span> <span class="s1">&#39;OrRd&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="mi">5</span>
-<span class="p">}</span>
-
-<span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><span class="mf">40.7128</span><span class="p">,</span> <span class="n">central_longitude</span><span class="o">=-</span><span class="mf">74.0059</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axarr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">proj</span><span class="p">})</span>
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
-    <span class="n">nyc_injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;quantiles&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">pointplot_kwargs</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="p">,</span> <span class="o">**</span><span class="n">polyplot_kwargs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;scheme=&quot;quantiles&quot;&#39;</span><span class="p">)</span>
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
-    <span class="n">nyc_injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;equal_interval&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">pointplot_kwargs</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="p">,</span> <span class="o">**</span><span class="n">polyplot_kwargs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;scheme=&quot;equal_interval&quot;&#39;</span><span class="p">)</span>
-
-<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
-    <span class="n">nyc_injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;fisher_jenks&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">**</span><span class="n">pointplot_kwargs</span>
-<span class="p">)</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="p">,</span> <span class="o">**</span><span class="n">polyplot_kwargs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">axarr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;scheme=&quot;fisher_jenks&quot;&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;scheme=&quot;fisher_jenks&quot;&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/Customizing_Plots_16_2.png" src="../_images/Customizing_Plots_16_2.png" />
-<p>As you can see, which binning scheme you choose has a major visual
-impact on the result that you get. Which binning scheme works best is
-dependent both on the shape of the data and the insight you are trying
-to communicate in the plot.</p>
-<p><strong>Power User Feature: Colormap Normalization</strong></p>
-<p>Passing a <a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">colormap
-normalizer</a> to the
-<code class="docutils literal notranslate"><span class="pre">norm</span></code> parameter will allow you to modify the colormap fitted to your
-dataset to suit your needs. Alternatively, you can assume full control
-of your colormap by constructing your own. See the section of the
-<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> documentation on <a class="reference external" href="https://matplotlib.org/3.1.1/tutorials/colors/colormap-manipulation.html">colormap
-manipulation</a>
-to learn more, and see the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html">Napoleon sankey
+<p>The <a class="reference external" href="https://pysal.org/mapclassify/">mapclassify</a> library has a rich
+list of categorical colormaps to choose from. it is also possible to
+specify your own custom classification scheme. Refer to the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_california_districts.html">California
+districts
 demo</a>
-in the Gallery for an example application.</p>
+in the Gallery for more information.</p>
+<p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> uses the <code class="docutils literal notranslate"><span class="pre">viridis</span></code> colormap by default. To specify an
+alternative colormap, use the <code class="docutils literal notranslate"><span class="pre">cmap</span></code> parameter:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+    <span class="n">continental_usa_cities</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;terrain&#39;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x126c0ba58</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<img alt="../_images/Customizing_Plots_11_1.png" src="../_images/Customizing_Plots_11_1.png" />
+<p>There are <a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">over fifty named
+colormaps</a>
+in <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>—<a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">the reference page has the full
+list</a>.
+It is also possible to create your own colormap. Refer to the
+<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html">Napoleon’s march on
+Moscow</a>
+example in the Gallery for an example.</p>
+<p><strong>Power User Feature: Colormap Normalization</strong></p>
+<p><a class="reference external" href="https://matplotlib.org/users/colormapnorms.html">Colormap
+normalization</a> is
+supported in <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> via the <code class="docutils literal notranslate"><span class="pre">norm</span></code> parameter.</p>
 </div>
 <div class="section" id="scale">
 <h2>Scale<a class="headerlink" href="#scale" title="Permalink to this headline">¶</a></h2>
@@ -413,10 +301,10 @@ in the Gallery for an example application.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12acaaba8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x126bfb908</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_19_1.png" src="../_images/Customizing_Plots_19_1.png" />
+<img alt="../_images/Customizing_Plots_15_1.png" src="../_images/Customizing_Plots_15_1.png" />
 <p>Scale uses the size of the feature to communication information about
 its magnitude. For example in this plot we can see more easily than in
 the <code class="docutils literal notranslate"><span class="pre">hue</span></code>-based plots how much larger certain cities (like New York
@@ -427,11 +315,9 @@ to your liking using the <code class="docutils literal notranslate"><span class=
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> uses a linear scale by default. To use a different scale,
 like e.g. logarithmic, pass a scaling function to the <code class="docutils literal notranslate"><span class="pre">scale_func</span></code>
-parameter. The <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html">Pointplot Scale
-Functions</a>
-demo in the
-<a class="reference external" href="https://residentmario.github.io/geoplot/gallery/index.html">Gallery</a>
-demonstrates how this works.</p>
+parameter. Refer to the <a class="reference external" href="https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html">USA city
+elevations</a>
+demo in the Gallery for an example.</p>
 </div></blockquote>
 </div>
 <div class="section" id="legend">
@@ -444,10 +330,13 @@ relative magnitudes (e.g. you know which of two cities is bigger in the
 map above). With a legend, you can also map them to actual ranges of
 values as well.</p>
 <p>To add a legend to your plot, set <code class="docutils literal notranslate"><span class="pre">legend=True</span></code>.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">large_continental_usa_cities</span><span class="p">[</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">large_continental_usa_cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;hue&#39;</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -455,10 +344,10 @@ values as well.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12ac69518</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x129fc3588</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_22_2.png" src="../_images/Customizing_Plots_22_2.png" />
+<img alt="../_images/Customizing_Plots_18_2.png" src="../_images/Customizing_Plots_18_2.png" />
 <p>With the addition of the legend we can now do things like pick out which
 are &gt;3.4 million in population.</p>
 <p>To switch to a scale-based legend instead of a color-based one, set
@@ -466,24 +355,22 @@ are &gt;3.4 million in population.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">large_continental_usa_cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span>  <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span>  <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12ad0aeb8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12adc6710</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_24_2.png" src="../_images/Customizing_Plots_24_2.png" />
+<img alt="../_images/Customizing_Plots_20_1.png" src="../_images/Customizing_Plots_20_1.png" />
 <p>Use <code class="docutils literal notranslate"><span class="pre">legend_values</span></code> and <code class="docutils literal notranslate"><span class="pre">legend_labels</span></code> to customize the markers and
 labels in the legend, respectively:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">large_continental_usa_cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>
     <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span> <span class="s1">&#39;frameon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
     <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mi">8000000</span><span class="p">,</span> <span class="mi">6000000</span><span class="p">,</span> <span class="mi">4000000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">],</span>
@@ -492,12 +379,10 @@ labels in the legend, respectively:</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
-  return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12a61c4a8</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x129fcf3c8</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_26_2.png" src="../_images/Customizing_Plots_26_2.png" />
+<img alt="../_images/Customizing_Plots_22_1.png" src="../_images/Customizing_Plots_22_1.png" />
 <p><strong>Power User Feature: Custom Legends</strong></p>
 <blockquote>
 <div><p>You can fine-tune the appearance of the legend even further using
@@ -531,14 +416,17 @@ example, a plot covering the entire world would have a span of
 <p>The <code class="docutils literal notranslate"><span class="pre">extent</span></code> argument can be used to set the extent of a plot
 manually. This can be used to change the focus of a map. For example,
 here’s a map of just populous cities in the state of California.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">extent</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;state == &quot;California&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">total_bounds</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">large_continental_usa_cities</span><span class="p">[</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">extent</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;state == &quot;California&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">total_bounds</span>
 <span class="n">extent</span> <span class="o">=</span> <span class="n">extent</span> <span class="o">+</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
 
 <span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span><span class="n">central_longitude</span><span class="o">=-</span><span class="mf">119.1786315</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="mf">37.0486535</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">large_continental_usa_cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Purples&#39;</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span>
@@ -547,10 +435,10 @@ here’s a map of just populous cities in the state of California.</p>
 </div>
 <pre class="literal-block">/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use <cite>arr[tuple(seq)]</cite> instead of <cite>arr[seq]</cite>. In the future this will be interpreted as an array index, <cite>arr[np.array(seq)]</cite>, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval</pre>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12b15e908</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x12b702940</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_29_2.png" src="../_images/Customizing_Plots_29_2.png" />
+<img alt="../_images/Customizing_Plots_25_2.png" src="../_images/Customizing_Plots_25_2.png" />
 <p>The
 <a class="reference external" href="http://geopandas.org/reference.html#geopandas.GeoSeries.total_bounds">total_bounds</a>
 property on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, which returns the extent bounding box
@@ -562,9 +450,8 @@ values for a given chunk of data, is extremely useful for this purpose.</p>
 are instead passed directly to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> chart
 instance. This means that all of the usual <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> plot
 customization options are there.</p>
-<p>While it’s out of the scope of this guide to go through these options
-comprehensively, here are the most common parameters you will want to
-tweak:</p>
+<p>We won’t go over every single possible option here, but we will mention
+the most common parameters you will want to tweak:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">edgecolor</span></code>—Controls the color of the border lines.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">linewidth</span></code>—Controls the width of the border lines.</p></li>
@@ -573,8 +460,11 @@ tweak:</p>
 <p>By combining all of the things we’ve learned thus far in this guide with
 a few <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> customizations we can generate some very
 pretty-looking plots:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
 
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">continental_usa_cities</span><span class="p">[</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">proj</span> <span class="o">=</span> <span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">()</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
@@ -593,7 +483,7 @@ pretty-looking plots:</p>
     <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
     <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;POP_2010&#39;</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
-    <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>
     <span class="n">legend_values</span><span class="o">=</span><span class="p">[</span><span class="mi">8000000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">],</span>
@@ -610,11 +500,7 @@ pretty-looking plots:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Cities in the contiguous United States, 2010&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/Customizing_Plots_32_2.png" src="../_images/Customizing_Plots_32_2.png" />
-<p>The <a class="reference external" href="https://www.kaggle.com/residentmario/styling-your-plots">“Styling your
-plots”</a>
-guide on Kaggle documents some other common <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> styling
-options.</p>
+<img alt="../_images/Customizing_Plots_28_2.png" src="../_images/Customizing_Plots_28_2.png" />
 </div>
 </div>
 

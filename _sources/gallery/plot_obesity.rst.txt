@@ -47,6 +47,7 @@ example in the D3.JS example gallery.
     import geoplot as gplt
     import geoplot.crs as gcrs
     import matplotlib.pyplot as plt
+    import mapclassify as mc
 
     # load the data
     obesity_by_state = pd.read_csv(gplt.datasets.get_path('obesity_by_state'), sep='\t')
@@ -54,16 +55,17 @@ example in the D3.JS example gallery.
     contiguous_usa['Obesity Rate'] = contiguous_usa['state'].map(
         lambda state: obesity_by_state.query("State == @state").iloc[0]['Percent']
     )
+    scheme = mc.Quantiles(contiguous_usa['Obesity Rate'], k=5)
 
 
     ax = gplt.cartogram(
         contiguous_usa,
         scale='Obesity Rate', limits=(0.75, 1),
         projection=gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5),
-        hue='Obesity Rate', cmap='Reds', k=5,
+        hue='Obesity Rate', cmap='Reds', scheme=scheme,
         linewidth=0.5,
         legend=True, legend_kwargs={'loc': 'lower right'}, legend_var='hue',
-        figsize=(12, 12)
+        figsize=(8, 12)
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='None', ax=ax)
 
@@ -73,7 +75,7 @@ example in the D3.JS example gallery.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.825 seconds)
+   **Total running time of the script:** ( 0 minutes  2.313 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_obesity.py:

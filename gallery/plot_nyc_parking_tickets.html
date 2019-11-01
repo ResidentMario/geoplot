@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,7 +189,7 @@
 </div>
 <div class="sphx-glr-example-title section" id="choropleth-of-parking-tickets-issued-to-state-by-precinct-in-nyc">
 <span id="sphx-glr-gallery-plot-nyc-parking-tickets-py"></span><h1>Choropleth of parking tickets issued to state by precinct in NYC<a class="headerlink" href="#choropleth-of-parking-tickets-issued-to-state-by-precinct-in-nyc" title="Permalink to this headline">¶</a></h1>
-<p>This example <code class="docutils literal notranslate"><span class="pre">choropleth</span></code> plots a subset of parking tickets issued to drivers in New York City.
+<p>This example plots a subset of parking tickets issued to drivers in New York City.
 Specifically, it plots the subset of tickets issued in the city which are more common than average
 for that state than the average. This difference between “expected tickets issued” and “actual
 tickets issued” is interesting because it shows which areas visitors driving into the city
@@ -196,12 +197,9 @@ from a specific state are more likely visit than their peers from other states.<
 <p>Observations that can be made based on this plot include:</p>
 <ul class="simple">
 <li><p>Only New Yorkers visit Staten Island.</p></li>
-<li><p>Drivers from New Jersey, many of whom likely work in New York City, mostly stay in Manhattan.</p></li>
-<li><p>Drivers from Pennsylvania and Conneticut are likliest to visit the boroughs that are closest
-to their states: there is strong northward trend for Conneticut, which is located north of NYC,
-and a strong westward trend for Pennsylvania, which is located west of NYC.</p></li>
-<li><p>The northern corridor of Brooklyn (containing the ever-popular Williamsburg and Bushwick, among
-other neighborhoods) is popular with out-of-staters…but not as popular as Manhattan, of course.</p></li>
+<li><p>Drivers from New Jersey, many of whom likely work in New York City, bias towards Manhattan.</p></li>
+<li><p>Drivers from Pennsylvania and Connecticut bias towards the borough closest to their state:
+The Bronx for Connecticut, Brooklyn for Pennsylvania.</p></li>
 </ul>
 <p>This example was inspired by the blog post <a class="reference external" href="http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love">“Californians love Brooklyn, New Jerseyans love
 Midtown: Mapping NYC’s Visitors Through Parking Tickets”</a>.</p>
@@ -246,7 +244,7 @@ Midtown: Mapping NYC’s Visitors Through Parking Tickets”</a>.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nyc-parking-tickets.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  12.869 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  19.797 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-nyc-parking-tickets-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3dcded7153c2dd631cf592a948363b12/plot_nyc_parking_tickets.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nyc_parking_tickets.py</span></code></a></p>

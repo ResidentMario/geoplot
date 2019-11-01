@@ -2,9 +2,9 @@
 KDEPlot of two NYC traffic accident contributing factors
 ========================================================
 
-This example shows a ``kdeplot`` of traffic accident densities for two common contributing factors:
-loss of consciousness and failure to yield right-of-way. It shows how the geospatial incidence
-pattern differs between the two: lost consciousness crashes are more localized to Manhattan.
+This example shows traffic accident densities for two common contributing factors: loss of
+consciousness and failure to yield right-of-way. These factors have very different geospatial
+distributions: loss of consciousness crashes are more localized to Manhattan.
 """
 
 
@@ -33,7 +33,7 @@ gplt.kdeplot(
     ax=ax1
 )
 gplt.polyplot(nyc_boroughs, zorder=1, ax=ax1)
-plt.title("Failure to Yield Right-of-Way Crashes, 2016")
+ax1.set_title("Failure to Yield Right-of-Way Crashes, 2016")
 
 gplt.kdeplot(
     nyc_collision_factors[
@@ -46,6 +46,6 @@ gplt.kdeplot(
     ax=ax2
 )
 gplt.polyplot(nyc_boroughs, zorder=1, ax=ax2)
-plt.title("Loss of Consciousness Crashes, 2016")
+ax2.set_title("Loss of Consciousness Crashes, 2016")
 
 plt.savefig("nyc-collision-factors.png", bbox_inches='tight', pad_inches=0.1)

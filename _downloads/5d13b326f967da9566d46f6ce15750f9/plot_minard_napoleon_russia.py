@@ -1,16 +1,17 @@
 """
-Sankey of Napoleon's disastarous march on Moscow
-================================================
+Sankey of Napoleon's march on Moscow with custom colormap
+=========================================================
 
 This example reproduces a famous historical flow map: Charles Joseph Minard's map depicting
 Napoleon's disastrously costly 1812 march on Russia during the Napoleonic Wars.
 
-This ``sankey`` demonstrates how to build and use a custom ``matplotlib`` colormap. It also
-demonstrates using the ``mplleaflet`` library to quickly and easily transform the resulting plot
-into an scrolly-panny webmap.
+This plot demonstrates building and using a custom ``matplotlib`` colormap. To learn more refer to
+`the matplotlib documentation
+<https://matplotlib.org/gallery/images_contours_and_fields/custom_cmap.html>`_.
 
-`Click here to see the interactive webmap version. 
-<http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_
+`Click here <http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_ to see an 
+interactive scrolly-panny version of this webmap built with ``mplleaflet``. To learn more about
+``mplleaflet``, refer to `the mplleaflet GitHub repo <https://github.com/jwass/mplleaflet>`_.
 """
 
 import geopandas as gpd
@@ -33,5 +34,5 @@ gplt.sankey(
 fig = plt.gcf()
 plt.savefig("minard-napoelon-russia.png", bbox_inches='tight', pad_inches=0.1)
 
-# Uncomment and run the following line of code to save an interactive webmap.
+# Uncomment and run the following line of code to save as an interactive webmap.
 # mplleaflet.save_html(fig, fileobj='minard-napoleon-russia.html')

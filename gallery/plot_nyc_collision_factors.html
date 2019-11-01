@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Sankey of Los Angeles flight volumes with Cartopy globes" href="plot_los_angeles_flights.html" />
+    <link rel="next" title="Choropleth of California districts with alternative binning schemes" href="plot_california_districts.html" />
     <link rel="prev" title="Choropleth of parking tickets issued to state by precinct in NYC" href="plot_nyc_parking_tickets.html" /> 
 </head>
 
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,9 +189,9 @@
 </div>
 <div class="sphx-glr-example-title section" id="kdeplot-of-two-nyc-traffic-accident-contributing-factors">
 <span id="sphx-glr-gallery-plot-nyc-collision-factors-py"></span><h1>KDEPlot of two NYC traffic accident contributing factors<a class="headerlink" href="#kdeplot-of-two-nyc-traffic-accident-contributing-factors" title="Permalink to this headline">¶</a></h1>
-<p>This example shows a <code class="docutils literal notranslate"><span class="pre">kdeplot</span></code> of traffic accident densities for two common contributing factors:
-loss of consciousness and failure to yield right-of-way. It shows how the geospatial incidence
-pattern differs between the two: lost consciousness crashes are more localized to Manhattan.</p>
+<p>This example shows traffic accident densities for two common contributing factors: loss of
+consciousness and failure to yield right-of-way. These factors have very different geospatial
+distributions: loss of consciousness crashes are more localized to Manhattan.</p>
 <img alt="../_images/sphx_glr_plot_nyc_collision_factors_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_nyc_collision_factors_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
@@ -225,7 +226,7 @@ pattern differs between the two: lost consciousness crashes are more localized t
     <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Failure to Yield Right-of-Way Crashes, 2016&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Failure to Yield Right-of-Way Crashes, 2016&quot;</span><span class="p">)</span>
 
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span>
     <span class="n">nyc_collision_factors</span><span class="p">[</span>
@@ -238,12 +239,12 @@ pattern differs between the two: lost consciousness crashes are more localized t
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Loss of Consciousness Crashes, 2016&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Loss of Consciousness Crashes, 2016&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;nyc-collision-factors.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  26.073 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  30.572 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-nyc-collision-factors-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0d35ad441e6a0be48c94af89c0647593/plot_nyc_collision_factors.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nyc_collision_factors.py</span></code></a></p>
@@ -263,7 +264,7 @@ pattern differs between the two: lost consciousness crashes are more localized t
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_los_angeles_flights.html" class="btn btn-neutral float-right" title="Sankey of Los Angeles flight volumes with Cartopy globes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_california_districts.html" class="btn btn-neutral float-right" title="Choropleth of California districts with alternative binning schemes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plot_nyc_parking_tickets.html" class="btn btn-neutral float-left" title="Choropleth of parking tickets issued to state by precinct in NYC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

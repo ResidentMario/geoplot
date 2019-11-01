@@ -10,9 +10,9 @@
 Choropleth of New York State population demographics
 ====================================================
 
-This example shows a ``choropleth`` of the percentage of residents in New York State by county
-who self-identified as "white" in the 2000 census. It mainly communicates New York City's
-vastly higher ethnical diversity as compared to the rest of the state.
+This example plots the percentage of residents in New York State by county who self-identified as
+"white" in the 2000 census. New York City is far more ethnically diversity than the rest of the
+state.
 
 
 
@@ -41,7 +41,7 @@ vastly higher ethnical diversity as compared to the rest of the state.
         ny_census_tracts,
         hue='percent_white',
         cmap='Purples', linewidth=0.5,
-        edgecolor='white', k=None,
+        edgecolor='white',
         legend=True,
         projection=gcrs.AlbersEqualArea()
     )
@@ -51,7 +51,7 @@ vastly higher ethnical diversity as compared to the rest of the state.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.195 seconds)
+   **Total running time of the script:** ( 0 minutes  1.604 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_ny_state_demographics.py:

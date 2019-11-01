@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Sankey of Napoleon’s disastarous march on Moscow" href="plot_minard_napoleon_russia.html" />
-    <link rel="prev" title="Choropleth of New York State population demographics" href="plot_ny_state_demographics.html" /> 
+    <link rel="next" title="Sankey of Napoleon’s march on Moscow with custom colormap" href="plot_minard_napoleon_russia.html" />
+    <link rel="prev" title="KDEPlot of Boston AirBnB Locations" href="plot_boston_airbnb_kde.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,16 +97,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Quadtree of San Francisco street trees</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s disastarous march on Moscow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_minard_napoleon_russia.html">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_obesity.html">Cartogram of US states by obesity rate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_largest_cities_usa.html">Pointplot of US cities by population</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_parking_tickets.html">Choropleth of parking tickets issued to state by precinct in NYC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collision_factors.html">KDEPlot of two NYC traffic accident contributing factors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_california_districts.html">Choropleth of California districts with alternative binning schemes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_los_angeles_flights.html">Sankey of Los Angeles flight volumes with Cartopy globes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_map.html">Pointplot of NYC fatal and injurious traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_usa_city_elevations.html">Pointplot of US city elevations with custom scale functions</a></li>
@@ -188,19 +189,18 @@
 </div>
 <div class="sphx-glr-example-title section" id="quadtree-of-san-francisco-street-trees">
 <span id="sphx-glr-gallery-plot-san-francisco-trees-py"></span><h1>Quadtree of San Francisco street trees<a class="headerlink" href="#quadtree-of-san-francisco-street-trees" title="Permalink to this headline">¶</a></h1>
-<p>San Francisco maintains data about city-maintained street trees in the city. Most trees are
-identified by their species, but some trees lack this information. This example is a recipe
-demonstrating how a <code class="docutils literal notranslate"><span class="pre">quadtree</span></code> plot can be used to inspect the geospatial nullity pattern
-of a dataset: e.g. whether or not trees in certain areas of the city are less likely to be
-classified into a specific species than others.</p>
+<p>This example shows the geospatial nullity pattern (whether records are more or less likely to be
+null in one region versus another) of a dataset on city-maintained street trees by species in San
+Francisco.</p>
 <p>In this case we see that there is small but significant amount of variation in the percentage
 of trees classified per area, which ranges from 88% to 98%.</p>
-<p>For more tools for visualizing data nullity, <a class="reference external" href="https://github.com/ResidentMario/missingno">check out the missingno library</a>.</p>
+<p>For more tools for visualizing data nullity, <cite>check out the ``missingno`</cite> library
+&lt;<a class="reference external" href="https://github.com/ResidentMario/missingno">https://github.com/ResidentMario/missingno</a>&gt;`_.</p>
 <img alt="../_images/sphx_glr_plot_san_francisco_trees_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_san_francisco_trees_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
   return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-/Users/alex/Desktop/geoplot/geoplot/geoplot.py:448: UserWarning: The input data contains 1 data points that do not intersect with &quot;clip&quot;. These data points will not appear in the plot.
+/Users/alex/Desktop/geoplot/geoplot/geoplot.py:461: UserWarning: The input data contains 1 data points that do not intersect with &quot;clip&quot;. These data points will not appear in the plot.
   f&#39;The input data contains {null_geoms.sum()} data points that do not &#39;
 </pre></div>
 </div>
@@ -220,7 +220,7 @@ of trees classified per area, which ranges from 88% to 98%.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">trees</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">nullity</span><span class="o">=</span><span class="n">trees</span><span class="p">[</span><span class="s1">&#39;Species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)),</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;nullity&#39;</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;nullity&#39;</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;Quantiles&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">clip</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -228,7 +228,7 @@ of trees classified per area, which ranges from 88% to 98%.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;san-francisco-street-trees.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  24.761 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  17.366 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-san-francisco-trees-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/f6bf1ef6711c3f7ae36b4a966ee6ef89/plot_san_francisco_trees.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_san_francisco_trees.py</span></code></a></p>
@@ -248,10 +248,10 @@ of trees classified per area, which ranges from 88% to 98%.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_minard_napoleon_russia.html" class="btn btn-neutral float-right" title="Sankey of Napoleon’s disastarous march on Moscow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_minard_napoleon_russia.html" class="btn btn-neutral float-right" title="Sankey of Napoleon’s march on Moscow with custom colormap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_ny_state_demographics.html" class="btn btn-neutral float-left" title="Choropleth of New York State population demographics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_boston_airbnb_kde.html" class="btn btn-neutral float-left" title="KDEPlot of Boston AirBnB Locations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
