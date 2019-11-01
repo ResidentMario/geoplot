@@ -129,8 +129,10 @@ categorical colormap, use the ``scheme`` parameter:
 
 The `mapclassify <https://pysal.org/mapclassify/>`__ library has a rich
 list of categorical colormaps to choose from. it is also possible to
-specify your own custom classification scheme. Refer to the
-$TODO_GALLERY_EXAMPLE for more information.
+specify your own custom classification scheme. Refer to the `California
+districts
+demo <https://residentmario.github.io/geoplot/gallery/plot_california_districts.html>`__
+in the Gallery for more information.
 
 ``geoplot`` uses the ``viridis`` colormap by default. To specify an
 alternative colormap, use the ``cmap`` parameter:
@@ -161,22 +163,16 @@ There are `over fifty named
 colormaps <https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html>`__
 in ``matplotlib``—`the reference page has the full
 list <https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html>`__.
-It is also possible to create your own colormap: there is an
-`example <https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html>`__
-of this in the Gallery.
+It is also possible to create your own colormap. Refer to the
+`Napoleon’s march on
+Moscow <https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html>`__
+example in the Gallery for an example.
 
 **Power User Feature: Colormap Normalization**
 
-Passing a `colormap
-normalizer <https://matplotlib.org/users/colormapnorms.html>`__ to the
-``norm`` parameter will allow you to modify the colormap fitted to your
-dataset to suit your needs. Alternatively, you can assume full control
-of your colormap by constructing your own. See the section of the
-``matplotlib`` documentation on `colormap
-manipulation <https://matplotlib.org/3.1.1/tutorials/colors/colormap-manipulation.html>`__
-to learn more, and see the `Napoleon sankey
-demo <https://residentmario.github.io/geoplot/gallery/plot_minard_napoleon_russia.html>`__
-in the Gallery for an example application.
+`Colormap
+normalization <https://matplotlib.org/users/colormapnorms.html>`__ is
+supported in ``geoplot`` via the ``norm`` parameter.
 
 Scale
 -----
@@ -218,11 +214,9 @@ to your liking using the ``limits`` parameter.
 
    ``geoplot`` uses a linear scale by default. To use a different scale,
    like e.g. logarithmic, pass a scaling function to the ``scale_func``
-   parameter. The `Pointplot Scale
-   Functions <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>`__
-   demo in the
-   `Gallery <https://residentmario.github.io/geoplot/gallery/index.html>`__
-   demonstrates how this works.
+   parameter. Refer to the `USA city
+   elevations <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>`__
+   demo in the Gallery for an example.
 
 Legend
 ------
