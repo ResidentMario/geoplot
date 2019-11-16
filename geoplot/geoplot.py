@@ -622,7 +622,7 @@ class Plot:
             # ignore this problem here, for simplicity's sake.
             extrema = relax_bounds(xmin, ymin, xmax, ymax)
 
-        extent = gpd.GeoSeries(self.extent) if self.extent is not None else None
+        extent = pd.Series(self.extent) if self.extent is not None else None
         central_longitude = np.mean(extent[[0, 2]]) if extent is not None\
             else np.mean(extrema[[0, 2]])
         central_latitude = np.mean(extent[[1, 3]]) if extent is not None\
