@@ -25,6 +25,7 @@ except ImportError:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
 __version__ = "0.4.0"
+MATPLOTLIB_DOCS_VERSION = "3.1.1"  # used in some docstrings
 
 
 class HueMixin:
@@ -310,15 +311,31 @@ class LegendMixin:
                             f'The list of legend values is length {len(patches)}, but the list of '
                             f'legend_labels is length {len(legend_labels)}.'
                         )
+                else:
+                    legend_labels = self.categories
+                try:
                     self.ax.legend(
                         patches, legend_labels, numpoints=1,
                         **legend_kwargs, **addtl_legend_kwargs
                     )
-                else:
-                    self.ax.legend(
-                        patches, self.categories, numpoints=1,
-                        **legend_kwargs, **addtl_legend_kwargs
+                except TypeError:
+                    raise ValueError(
+                        f'The plot is in categorical legend mode, implying a '
+                        f'"matplotlib.legend.Legend" legend object. However, "legend_kwarg" '
+                        f'contains unexpected keyword arguments not supported by this legend type.'
+                        f' Are you sure you are not accidentally passing continuous '
+                        f'"matplotlib.colorbar.Colorbar" legend parameters instead?'
+                        f'\n\n'
+                        f'For a '
+                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'documentation at '
+                        f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/legend_api.html#'
+                        f'matplotlib.legend.Legend . To learn more about the difference '
+                        f'between these two legend modes, refer to the geoplot documentation '
+                        f'at https://residentmario.github.io/geoplot/user_guide/'
+                        f'Customizing_Plots.html#legend .'
                     )
+
             else:  # self.k is None
                 if len(legend_marker_kwargs) > 0:
                     raise ValueError(
@@ -337,7 +354,25 @@ class LegendMixin:
                     )
 
                 self.cmap.set_array(self.hue)
-                plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
+                try:
+                    plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
+                except TypeError:
+                    raise ValueError(
+                        f'The plot is in continuous legend mode, implying a '
+                        f'"matplotlib.colorbar.Colorbar" legend object. However, "legend_kwarg" '
+                        f'contains unexpected keyword arguments not supported by this legend type.'
+                        f' Are you sure you are not accidentally passing categorical '
+                        f'"matplotlib.legend.Legend" legend parameters instead?'
+                        f'\n\n'
+                        f'For a '
+                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'documentation at '
+                        f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/colorbar_api.html#'
+                        f'matplotlib.colorbar.Colorbar . To learn more about the difference '
+                        f'between these two legend modes, refer to the geoplot documentation '
+                        f'at https://residentmario.github.io/geoplot/user_guide/'
+                        f'Customizing_Plots.html#legend .'
+                    )
 
         elif legend and legend_var == 'scale':
             if legend_values is None:
