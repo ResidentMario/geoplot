@@ -188,6 +188,7 @@
     <span class="kn">from</span> <span class="nn">geopandas.plotting</span> <span class="k">import</span> <span class="n">__pysal_choro</span> <span class="k">as</span> <span class="n">_mapclassify_choro</span>
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.4.0&quot;</span>
+<span class="n">MATPLOTLIB_DOCS_VERSION</span> <span class="o">=</span> <span class="s2">&quot;3.1.1&quot;</span>  <span class="c1"># used in some docstrings</span>
 
 
 <span class="k">class</span> <span class="nc">HueMixin</span><span class="p">:</span>
@@ -473,15 +474,31 @@
                             <span class="n">f</span><span class="s1">&#39;The list of legend values is length {len(patches)}, but the list of &#39;</span>
                             <span class="n">f</span><span class="s1">&#39;legend_labels is length {len(legend_labels)}.&#39;</span>
                         <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">legend_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categories</span>
+                <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
                         <span class="n">patches</span><span class="p">,</span> <span class="n">legend_labels</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                         <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">addtl_legend_kwargs</span>
                     <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
-                        <span class="n">patches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                        <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">addtl_legend_kwargs</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s1">&#39;The plot is in categorical legend mode, implying a &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;&quot;matplotlib.legend.Legend&quot; legend object. However, &quot;legend_kwarg&quot; &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;contains unexpected keyword arguments not supported by this legend type.&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39; Are you sure you are not accidentally passing continuous &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;&quot;matplotlib.colorbar.Colorbar&quot; legend parameters instead?&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;For a &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;reference on the valid keyword parameters, see the matplotlib &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;documentation at &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;https://matplotlib.org/</span><span class="si">{MATPLOTLIB_DOCS_VERSION}</span><span class="s1">/api/legend_api.html#&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;matplotlib.legend.Legend . To learn more about the difference &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;between these two legend modes, refer to the geoplot documentation &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;at https://residentmario.github.io/geoplot/user_guide/&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;Customizing_Plots.html#legend .&#39;</span>
                     <span class="p">)</span>
+
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># self.k is None</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_marker_kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -500,7 +517,25 @@
                     <span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hue</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">legend_kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s1">&#39;The plot is in continuous legend mode, implying a &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;&quot;matplotlib.colorbar.Colorbar&quot; legend object. However, &quot;legend_kwarg&quot; &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;contains unexpected keyword arguments not supported by this legend type.&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39; Are you sure you are not accidentally passing categorical &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;&quot;matplotlib.legend.Legend&quot; legend parameters instead?&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;For a &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;reference on the valid keyword parameters, see the matplotlib &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;documentation at &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;https://matplotlib.org/</span><span class="si">{MATPLOTLIB_DOCS_VERSION}</span><span class="s1">/api/colorbar_api.html#&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;matplotlib.colorbar.Colorbar . To learn more about the difference &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;between these two legend modes, refer to the geoplot documentation &#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;at https://residentmario.github.io/geoplot/user_guide/&#39;</span>
+                        <span class="n">f</span><span class="s1">&#39;Customizing_Plots.html#legend .&#39;</span>
+                    <span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">legend</span> <span class="ow">and</span> <span class="n">legend_var</span> <span class="o">==</span> <span class="s1">&#39;scale&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">legend_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -785,7 +820,7 @@
             <span class="c1"># ignore this problem here, for simplicity&#39;s sake.</span>
             <span class="n">extrema</span> <span class="o">=</span> <span class="n">relax_bounds</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
 
-        <span class="n">extent</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">central_longitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extent</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span> <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>\
             <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extrema</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
         <span class="n">central_latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">extent</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span> <span class="k">if</span> <span class="n">extent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>\

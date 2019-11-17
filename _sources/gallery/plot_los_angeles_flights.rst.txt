@@ -95,7 +95,7 @@ for more information.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.966 seconds)
+   **Total running time of the script:** ( 0 minutes  4.441 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_los_angeles_flights.py:

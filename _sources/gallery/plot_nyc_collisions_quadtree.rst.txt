@@ -26,7 +26,7 @@ simultaneously.
 
  .. code-block:: none
 
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:461: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:496: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
       f'The input data contains {null_geoms.sum()} data points that do not '
 
 
@@ -61,7 +61,7 @@ simultaneously.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  29.423 seconds)
+   **Total running time of the script:** ( 0 minutes  33.282 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:
