@@ -7,7 +7,7 @@ cosmetic (for example, the colors of the map borders) and informative
 (for example, the choice of colormap). This section of the tutorial
 explains how these work.
 
-I recommend following along with this tutorial interactively using
+You may follow along with this tutorial interactively using
 `Binder <https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Customizing_Plots.ipynb>`__.
 
 Position
@@ -40,7 +40,7 @@ variable that every map has in common is **position**.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12117b358>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12beeeda0>
 
 
 
@@ -77,7 +77,7 @@ in your plot.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121c342b0>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12bfb88d0>
 
 
 
@@ -119,7 +119,7 @@ categorical colormap, use the ``scheme`` parameter:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x121c5d898>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12bfddeb8>
 
 
 
@@ -151,7 +151,7 @@ alternative colormap, use the ``cmap`` parameter:
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x126c0ba58>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12c832d30>
 
 
 
@@ -184,17 +184,19 @@ Another visual variable present in some plots in ``geoplot`` is
 
     large_continental_usa_cities = continental_usa_cities.query('POP_2010 > 100000')
     
-    ax = gplt.pointplot(
-        large_continental_usa_cities, projection=gcrs.AlbersEqualArea(), scale='POP_2010', limits=(2, 30)
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
+    gplt.pointplot(
+        large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
+        scale='POP_2010', limits=(4, 50),
+        ax=ax
     )
-    gplt.polyplot(contiguous_usa, ax=ax)
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x126bfb908>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12dd552b0>
 
 
 
@@ -222,12 +224,11 @@ Legend
 ------
 
 A `legend <http://wiki.gis.com/wiki/index.php/Map_legend>`__ provides a
-reference on the values that correspond to th visual variables in your
+reference on the values that correspond to the visual variables in your
 plot. Legends are an important feature because they make your map
 interpretable. Without a legend, you can only map visual variables to
-relative magnitudes (e.g. you know which of two cities is bigger in the
-map above). With a legend, you can also map them to actual ranges of
-values as well.
+relative magnitudes. With a legend, you can further map them to actual
+ranges of values.
 
 To add a legend to your plot, set ``legend=True``.
 
@@ -236,13 +237,14 @@ To add a legend to your plot, set ``legend=True``.
     import mapclassify as mc
     scheme = mc.Quantiles(large_continental_usa_cities['POP_2010'], k=5)
     
-    ax = gplt.pointplot(
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
+    gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
-        scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples', scheme=scheme,
-        legend=True, legend_var='hue'
+        scale='POP_2010', limits=(4, 50),
+        hue='POP_2010', cmap='viridis', scheme=scheme,
+        legend=True, legend_var='hue',
+        ax=ax
     )
-    gplt.polyplot(contiguous_usa, ax=ax)
 
 
 .. parsed-literal::
@@ -255,7 +257,7 @@ To add a legend to your plot, set ``legend=True``.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129fc3588>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x135c57e80>
 
 
 
@@ -263,57 +265,62 @@ To add a legend to your plot, set ``legend=True``.
 .. image:: Customizing_Plots_files/Customizing_Plots_18_2.png
 
 
-With the addition of the legend we can now do things like pick out which
-are >3.4 million in population.
-
-To switch to a scale-based legend instead of a color-based one, set
-``legend_var``:
+The type of legend you will get depends on your configuration options.
+There are three different kinds. This example demonstrates a
+**categorical colormap legend**. If your colormap is continuous (e.g.
+``scheme=None``; see `the section on Hue <#Hue>`__), a **continuous
+colorbar** will be used instead:
 
 .. code:: ipython3
 
-    ax = gplt.pointplot(
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
+    gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples',  scheme=scheme,
-        legend=True, legend_var='scale'
+        hue='POP_2010', cmap='viridis',
+        legend=True,
+        ax=ax
     )
-    gplt.polyplot(contiguous_usa, ax=ax)
+
+
+.. parsed-literal::
+
+    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:258: UserWarning: Please specify "legend_var" explicitly when both "hue" and "scale" are specified. Defaulting to "legend_var='hue'".
+      f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12adc6710>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x1347b5d30>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_20_1.png
+.. image:: Customizing_Plots_files/Customizing_Plots_20_2.png
 
 
-Use ``legend_values`` and ``legend_labels`` to customize the markers and
-labels in the legend, respectively:
+Alternatively, set ``legend_var='scale'`` to use a **scale legend**
+instead:
 
 .. code:: ipython3
 
-    ax = gplt.pointplot(
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
+    gplt.pointplot(
         large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
         scale='POP_2010', limits=(2, 30),
-        hue='POP_2010', cmap='Purples', scheme=scheme,
+        hue='POP_2010', cmap='viridis', scheme=scheme,
         legend=True, legend_var='scale',
-        legend_kwargs={'bbox_to_anchor': (0.92, 0.9), 'frameon': False},
-        legend_values=[8000000, 6000000, 4000000, 2000000, 100000],
-        legend_labels=['8 million', '6 million', '4 million', '2 million', '100 thousand']
+        ax=ax
     )
-    gplt.polyplot(contiguous_usa, ax=ax)
 
 
 
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x129fcf3c8>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x13755dda0>
 
 
 
@@ -321,28 +328,56 @@ labels in the legend, respectively:
 .. image:: Customizing_Plots_files/Customizing_Plots_22_1.png
 
 
-**Power User Feature: Custom Legends**
+You can fine-tune the appearance of the legend using ``legend_kwargs``
+parameter. **The list of values this parameter accepts depends on the
+legend type**. In the case of a categorical colormap legend or a scale
+legend, a ``matplotlib`` ``Legend`` is used, whose keyword options are
+listed in `the matplotlib
+documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.legend.html>`__.
+In the case of a colorbar legend, the keyword parameters allowed are
+listed in a different page in `the matplotlib
+documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.colorbar.html>`__.
 
-   You can fine-tune the appearance of the legend even further using
-   ``legend_kwargs`` parameter. This is demonstrated in the plot above,
-   which uses
-   ``legend_kwargs={'bbox_to_anchor': (0.92, 0.9), 'frameon': False}``
-   to move the legend to a specific location on the plot and to remove
-   the default legend box frame.
+Here is an example using ``legend_kwargs`` parameters to reposition the
+legend:
 
-   If you specify a ``hue`` legend, and ``k != None``, then a
-   ``matplotlib`` ``Legend`` will be used. A reference to the parameters
-   available is in `the matplotlib
-   documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.legend.html>`__.
-   If you specify a ``hue`` legend, and ``k == None``, then a
-   ``matplotlib`` ``colorbar`` will be used instead. This legend has
-   different parameters; a reference to the parameters available is on a
-   different page in `the matplotlib
-   documentation <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.colorbar.html>`__.
+.. code:: ipython3
 
-   Keywords starting with ``marker`` (e.g. ``marker``,
-   ``markeredgecolor``, ``markeredgewidth``, ``markerfacecolor``, and
-   ``markersize``) `will be passed through the legend down to the legend
+    ax = gplt.webmap(contiguous_usa, projection=gcrs.WebMercator())
+    gplt.pointplot(
+        large_continental_usa_cities, projection=gcrs.AlbersEqualArea(),
+        scale='POP_2010', limits=(2, 30),
+        hue='POP_2010', cmap='viridis', scheme=scheme,
+        legend=True, legend_var='scale',
+        legend_kwargs={'bbox_to_anchor': (1, 0.35), 'frameon': False},
+        legend_values=[8000000, 6000000, 4000000, 2000000, 100000],
+        legend_labels=['8 million', '6 million', '4 million', '2 million', '100 thousand'],
+        ax=ax
+    )
+
+
+
+
+.. parsed-literal::
+
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x13969c4a8>
+
+
+
+
+.. image:: Customizing_Plots_files/Customizing_Plots_24_1.png
+
+
+This example also demonstrates the use of the ``legend_values`` and
+``legend_labels`` parameters to customize the markers and labels in the
+legend, respectively.
+
+**Power User Feature: Custom Legend Markers**
+
+   Keyword arguments to ``legend_kwargs`` that start with ``marker``
+   (e.g. ``marker``, ``markeredgecolor``, ``markeredgewidth``,
+   ``markerfacecolor``, and ``markersize``) `will be passed through the
+   legend down to the legend
    markers <https://github.com/ResidentMario/geoplot/issues/35#issuecomment-507196579>`__.
 
 Extent
@@ -364,15 +399,12 @@ here’s a map of just populous cities in the state of California.
     scheme = mc.Quantiles(large_continental_usa_cities['POP_2010'], k=5)
     
     extent = contiguous_usa.query('state == "California"').total_bounds
-    extent = extent + [-0.5, -0.5, 0.5, 0.5]
-    
-    proj = gcrs.AlbersEqualArea(central_longitude=-119.1786315, central_latitude=37.0486535)
     ax = gplt.pointplot(
-        large_continental_usa_cities, projection=proj,
+        large_continental_usa_cities, projection=gcrs.WebMercator(),
         scale='POP_2010', limits=(5, 100),
-        hue='POP_2010', scheme=scheme, cmap='Purples'
+        hue='POP_2010', scheme=scheme, cmap='viridis'
     )
-    gplt.polyplot(
+    gplt.webmap(
         contiguous_usa, ax=ax, extent=extent
     )
 
@@ -387,12 +419,12 @@ here’s a map of just populous cities in the state of California.
 
 .. parsed-literal::
 
-    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x12b702940>
+    <cartopy.mpl.geoaxes.GeoAxesSubplot at 0x13edeb550>
 
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_25_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_28_2.png
 
 
 The
@@ -471,5 +503,5 @@ pretty-looking plots:
 
 
 
-.. image:: Customizing_Plots_files/Customizing_Plots_28_2.png
+.. image:: Customizing_Plots_files/Customizing_Plots_31_2.png
 

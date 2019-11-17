@@ -163,7 +163,8 @@ def test_legend_params(kwargs):
     pytest.param(*[kdeplot, p_df, {'projection': AlbersEqualArea()}], marks=pytest.mark.xfail),
     [polyplot, poly_df, {}],
     [polyplot, poly_df, {'projection': AlbersEqualArea()}],
-    [webmap, p_df, {'projection': WebMercator()}],
+    # xfail because webmap tiles are subject to remote change
+    pytest.param(*[webmap, p_df, {'projection': WebMercator()}], marks=pytest.mark.xfail),
     [choropleth, poly_df, {'hue': 'var', 'linewidth': 0, 'legend': True}],
     [choropleth, poly_df, 
      {'hue': 'var', 'linewidth': 0, 'legend': True,
