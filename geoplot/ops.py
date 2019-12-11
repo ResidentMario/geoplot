@@ -184,6 +184,15 @@ def build_voronoi_polygons(df):
     except ImportError:
         raise ImportError("Install scipy >= 0.12.0 for Voronoi support")
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
+
+    # Voronoi diagram is not applicable to input data containing duplicate points. See GH 192.
+    if len(geom) != len(np.unique(geom, axis=0)):
+        raise ValueError(
+            f'The input data contains duplicate coordinates, which Voronoi tessellation does not '
+            f'support. To fix this error, make sure that ever record in your dataset has a unique '
+            f'coordinate value.'
+        )
+
     vor = Voronoi(geom)
 
     polygons = []
