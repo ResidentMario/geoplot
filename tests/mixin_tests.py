@@ -600,7 +600,10 @@ class TestClip(unittest.TestCase):
             geoms = np.hstack([
                 utils.gaussian_polygons(points, n=50), utils.gaussian_multi_polygons(points, n=50)
             ])
-            clipmixin.df = gpd.GeoDataFrame({'foo': np.random.random(100), 'geometry': geoms})
+            clipmixin.df = gpd.GeoDataFrame({
+                'foo': np.random.random(len(geoms)),
+                'geometry': geoms,
+            })
             return clipmixin
 
         self.create_clipmixin = create_clipmixin
