@@ -6,7 +6,7 @@ setup(
         'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes',
         'mapclassify>=2.1', 'contextily>=1.0rc2'
     ],
-    extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy']},
+    extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy', 'pylint']},
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
     version='0.4.0',
     python_requires='>=3.6.0',

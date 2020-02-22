@@ -202,7 +202,7 @@ class TestHue(unittest.TestCase):
         
         # hue is initialized as a GeoSeries: pass that directly to the param
         huemixin = self.create_huemixin()
-        hue = gpd.GeoSeries(np.random.random(100))
+        hue = gpd.GeoSeries(pd.Series(np.random.random(100)))
         huemixin.kwargs['hue'] = hue
         huemixin.set_hue_values(supports_categorical=False)
         assert(huemixin.hue == hue).all()
