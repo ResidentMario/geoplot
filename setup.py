@@ -3,8 +3,8 @@ setup(
     name='geoplot',
     packages=['geoplot'],
     install_requires=[
-        'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes', 'mapclassify',
-        'contextily>=1.0rc2'
+        'matplotlib', 'seaborn', 'pandas', 'geopandas', 'cartopy', 'descartes',
+        'mapclassify>=2.1', 'contextily>=1.0rc2'
     ],
     extras_require={'develop': ['pytest', 'pytest-mpl', 'scipy']},
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
