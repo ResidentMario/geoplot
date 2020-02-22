@@ -49,9 +49,9 @@ def axis_initializer(f):
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
     {'hue': 'var', 'linewidth': 0, 's': 10},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'fisher_jenks'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'FisherJenks'},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'quantiles'},
-    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'equal_interval'},
+    {'hue': 'var', 'linewidth': 0, 's': 10, 'scheme': 'EqualInterval'},
     {'hue': 'var_cat', 'linewidth': 0, 's': 10},
     {'hue': 'var_cat', 'linewidth': 0, 's': 10, 'scheme': 'categorical'},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'cmap': 'Greens', 'scheme': 'quantiles'},
