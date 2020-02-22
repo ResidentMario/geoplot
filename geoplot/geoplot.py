@@ -721,7 +721,12 @@ class Plot:
                             'Try setting extent manually. Defaulting to a global extent.'
                         )
 
-                ax.outline_patch.set_visible(False)
+                try:
+                    # Cartopy 0.18+
+                    outline = ax.spines['geo']
+                except KeyError:
+                    outline = ax.outline_patch
+                outline.set_visible(False)
             else:
                 ax.axison = False
                 ax.set_xlim((xmin, xmax))
