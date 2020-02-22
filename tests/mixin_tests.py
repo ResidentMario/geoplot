@@ -303,7 +303,7 @@ class TestHue(unittest.TestCase):
         # k is not None, scheme is not None, hue is None: raise
         huemixin = self.create_huemixin()
         huemixin.kwargs['k'] = 5
-        huemixin.kwargs['scheme'] = 'fisher_jenks'
+        huemixin.kwargs['scheme'] = 'FisherJenks'
         huemixin.kwargs['hue'] = None
         huemixin.kwargs['cmap'] = None
         with pytest.raises(ValueError):
@@ -328,7 +328,7 @@ class TestHue(unittest.TestCase):
         # skip validating scheme against hue
         huemixin = self.create_huemixin()
         huemixin.kwargs['hue'] = None
-        huemixin.kwargs['scheme'] = 'fisher_jenks'
+        huemixin.kwargs['scheme'] = 'FisherJenks'
         huemixin.set_hue_values(supports_categorical=False, verify_input=False)
 
 
