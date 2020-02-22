@@ -1486,9 +1486,8 @@ def sankey(
                     )
             path_geoms = self.df.geometry.map(parse_geom)
 
-            if 'linestyle' in self.kwargs and 'linestyle' is not None:
-                linestyle = kwargs.pop('linestyle')
-            else:
+            linestyle = kwargs.pop('linestyle', None)
+            if linestyle is None:
                 linestyle = '-'
 
             if self.projection:
