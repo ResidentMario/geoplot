@@ -1,10 +1,8 @@
-dist: xenial
-language: python
-python:
-  - "3.8"
+language: generic
+os:
+  - osx
 install:
-  - sudo apt-get update
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
   - hash -r
@@ -12,11 +10,15 @@ install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
+  # Envfile via: 
+  # `conda env export --no-builds | sed -E "s/name: [a-z-]*/name: test-environment/" | `
+  # `sed -E "s/prefix: [\/a-zA-Z0-9-]*//" > tests/environment.yml`
+  # For reference see GH#216.
+  - conda env create -f tests/environment.yml
+  - conda info --envs
+  - conda activate test-environment
 
-  # Envfile via `conda env export | sed -E "s/name: [a-z-]*/name: test-environment/" > tests/environment.yml`
-  # TODO: re-enable testing across Python versions using $TRAVIS_PYTHON_VERSION
-  - conda env create -f environment.yml && conda activate test-environment
-  script:
+script:
   - cd tests && mkdir baseline && git clone --depth=1 https://github.com/ResidentMario/geoplot-images.git baseline
   - pytest mixin_tests.py
   - pytest --mpl viz_tests.py
