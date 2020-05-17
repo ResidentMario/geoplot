@@ -1657,8 +1657,8 @@ def voronoi(
 
 
 def webmap(
-    df, extent=None, figsize=(8, 6), projection=None, zoom=None, provider='OSM_A',
-    ax=None, **kwargs
+    df, extent=None, figsize=(8, 6), projection=None, zoom=None,
+    provider=ctx.providers.OpenStreetMap.Mapnik, ax=None, **kwargs
 ):
     """
     A webmap.
@@ -1779,7 +1779,7 @@ def webmap(
 
             basemap, extent = ctx.bounds2img(
                 *self._webmap_extent, zoom=self.zoom, 
-                url=getattr(ctx.sources, provider), ll=True
+                source=provider, ll=True
             )
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
             return ax
@@ -1828,7 +1828,7 @@ def _to_geoseries(df, var, var_name, validate=True):
                 f"{len(var)} values were passed to {var_name!r}, but {len(df)} were expected."
             )
         try:
-            return gpd.GeoSeries(var, index=df.index)
+            return pd.Series(var, index=df.index)
         except TypeError:
             raise ValueError(
                 f"{var_name!r} expects a GeoSeries, str, or list-like object as input, but a "

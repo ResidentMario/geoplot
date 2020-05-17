@@ -200,9 +200,9 @@ class TestHue(unittest.TestCase):
         huemixin.set_hue_values(supports_categorical=False)
         assert (huemixin.hue == huemixin.df['foo']).all()
         
-        # hue is initialized as a GeoSeries: pass that directly to the param
+        # hue is initialized as a Series: pass that directly to the param
         huemixin = self.create_huemixin()
-        hue = gpd.GeoSeries(pd.Series(np.random.random(100)))
+        hue = pd.Series(np.random.random(100))
         huemixin.kwargs['hue'] = hue
         huemixin.set_hue_values(supports_categorical=False)
         assert(huemixin.hue == hue).all()
@@ -373,14 +373,14 @@ class TestScale(unittest.TestCase):
 
         # scale is initialized as a GeoSeries: set as-is
         scalemixin = self.create_scalemixin()
-        scale = gpd.GeoSeries(np.random.random(100))
+        scale = pd.Series(np.random.random(100))
         scalemixin.kwargs['scale'] = scale
         scalemixin.set_scale_values()
         assert(scalemixin.scale == scale).all()
 
         # scale is initialized as a list: transform to GeoSeries
         scalemixin = self.create_scalemixin()
-        scale = gpd.GeoSeries(np.random.random(100))
+        scale = pd.Series(np.random.random(100))
         scalemixin.kwargs['scale'] = scale
         scalemixin.set_scale_values()
         assert(scalemixin.scale == scale).all()
