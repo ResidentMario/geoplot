@@ -1,4 +1,3 @@
-
 Customizing Plots
 =================
 
@@ -267,9 +266,9 @@ To add a legend to your plot, set ``legend=True``.
 
 The type of legend you will get depends on your configuration options.
 There are three different kinds. This example demonstrates a
-**categorical colormap legend**. If your colormap is continuous (e.g.
-``scheme=None``; see `the section on Hue <#Hue>`__), a **continuous
-colorbar** will be used instead:
+**categorical colormap legend**. If your colormap is continuous
+(e.g. ``scheme=None``; see `the section on Hue <#Hue>`__), a
+**continuous colorbar** will be used instead:
 
 .. code:: ipython3
 
@@ -375,7 +374,7 @@ legend, respectively.
 **Power User Feature: Custom Legend Markers**
 
    Keyword arguments to ``legend_kwargs`` that start with ``marker``
-   (e.g. ``marker``, ``markeredgecolor``, ``markeredgewidth``,
+   (e.g. ``marker``, ``markeredgecolor``, ``markeredgewidth``,
    ``markerfacecolor``, and ``markersize``) `will be passed through the
    legend down to the legend
    markers <https://github.com/ResidentMario/geoplot/issues/35#issuecomment-507196579>`__.

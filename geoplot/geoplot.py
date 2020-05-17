@@ -1682,10 +1682,10 @@ def webmap(
         only two or three zoom levels that are appropriate for any given area. For reference
         see the OpenStreetMaps reference on 
         `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
-    provider: str
+    provider: contextily.providers object
         The tile provider. If no provider is set, the default OpenStreetMap tile service,
-        "OSM_A", will be used. For reference see `the contextily documentation 
-        <https://github.com/darribas/contextily>`_.
+        contextily.providers.OpenStreetMap.Mapnik, will be used. For reference see `the contextily
+        documentation <https://github.com/darribas/contextily>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
