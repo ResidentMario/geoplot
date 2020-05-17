@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'geoplot'
-copyright = '2016-2019, Aleksey Bilogur'
+copyright = '2016-2020, Aleksey Bilogur'
 author = 'Aleksey Bilogur'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.3.1'
+release = '0.4.1'
 
 
 # -- General configuration ---------------------------------------------------
