@@ -94,7 +94,11 @@ def test_scale_params(kwargs):
      'projection': AlbersEqualArea()}
 ])
 def test_clip_params_geometric(kwargs):
-    return voronoi(p_df, **kwargs).get_figure()
+    # ignore warning from changed GeoSeries.isna behavior
+    import warnings
+    with warnings.catch_warnings():    
+        warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
+        return voronoi(p_df, **kwargs).get_figure()
 
 
 # xfail due to seaborn#1773

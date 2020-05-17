@@ -1,4 +1,3 @@
-
 Working with Geospatial Data
 ============================
 
@@ -103,19 +102,13 @@ The ``GeoDataFrame`` is an augmented version of a ``pandas``
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
-
-Most operations that will work on a ``pandas`` ``DataFrame`` will work
-on a ``GeoDataFrame``, but the latter adds a few additional methods and
-features for dealing with geometry not present in the former. The most
-obvious of these is the addition of a column for storing geometries,
-accessible using the ``geometry`` attribute:
-
-.. raw:: html
-
-   </div>
+   Most operations that will work on a ``pandas`` ``DataFrame`` will
+   work on a ``GeoDataFrame``, but the latter adds a few additional
+   methods and features for dealing with geometry not present in the
+   former. The most obvious of these is the addition of a column for
+   storing geometries, accessible using the ``geometry`` attribute:
 
 .. code:: ipython3
 
@@ -671,21 +664,15 @@ file, which read into an ordinary ``pandas`` ``DataFrame``?
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
+   It is extremely common for datasets containing light geospatial data
+   (e.g. points, maybe line segments, but usually not whole polygons) to
+   be saved in a non-geospatial formats.
 
-It is extremely common for datasets containing light geospatial data
-(e.g. points, maybe line segments, but usually not whole polygons) to be
-saved in a non-geospatial formats.
-
-In this case can import ``shapely`` directly, use it to define our own
-geometries, then initialize a ``GeoDataFrame``. The ``pandas`` ``apply``
-function is the best to do this:
-
-.. raw:: html
-
-   </div>
+   In this case can import ``shapely`` directly, use it to define our
+   own geometries, then initialize a ``GeoDataFrame``. The ``pandas``
+   ``apply`` function is the best to do this:
 
 .. code:: ipython3
 
@@ -797,21 +784,15 @@ property of the ``GeoDataFrame`` initializer:
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
-
-In most cases, data with geospatial information provided in a CSV will
-be point data corresponding with individual coordinates. Sometimes,
-however, one may wish to define more complex geometry: square areas, for
-example, and *maybe* even complex polygons. While we won’t cover these
-cases, they’re quite similar to the extremely simple point case we’ve
-shown here. For further reference on such a task, refer to the
-``shapely`` documentation.
-
-.. raw:: html
-
-   </div>
+   In most cases, data with geospatial information provided in a CSV
+   will be point data corresponding with individual coordinates.
+   Sometimes, however, one may wish to define more complex geometry:
+   square areas, for example, and *maybe* even complex polygons. While
+   we won’t cover these cases, they’re quite similar to the extremely
+   simple point case we’ve shown here. For further reference on such a
+   task, refer to the ``shapely`` documentation.
 
 Joining on existing geometries
 ------------------------------
@@ -884,22 +865,16 @@ Suppose now that we have information on obesity by state.
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
+   We’d like to put this information on a map. But we don’t have any
+   geometry!
 
-We’d like to put this information on a map. But we don’t have any
-geometry!
-
-We will once again have to define a geometry. Except that this time,
-instead of writing our own, we will need to find data with state shapes,
-and join that data against this data. In other cases there may be other
-shapes: police precincts, survey zones, and so on. Here is just such a
-dataset:
-
-.. raw:: html
-
-   </div>
+   We will once again have to define a geometry. Except that this time,
+   instead of writing our own, we will need to find data with state
+   shapes, and join that data against this data. In other cases there
+   may be other shapes: police precincts, survey zones, and so on. Here
+   is just such a dataset:
 
 .. code:: ipython3
 
@@ -977,15 +952,9 @@ dataset:
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
-
-A simple ``join`` solves the problem:
-
-.. raw:: html
-
-   </div>
+   A simple ``join`` solves the problem:
 
 .. code:: ipython3
 
@@ -1070,15 +1039,9 @@ A simple ``join`` solves the problem:
 
 
 
-.. raw:: html
+.. container::
 
-   <div style="margin-top:2em">
-
-Now we can plot it:
-
-.. raw:: html
-
-   </div>
+   Now we can plot it:
 
 .. code:: ipython3
 

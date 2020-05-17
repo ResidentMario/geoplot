@@ -1657,8 +1657,8 @@ def voronoi(
 
 
 def webmap(
-    df, extent=None, figsize=(8, 6), projection=None, zoom=None, provider='OSM_A',
-    ax=None, **kwargs
+    df, extent=None, figsize=(8, 6), projection=None, zoom=None,
+    provider=ctx.providers.OpenStreetMap.Mapnik, ax=None, **kwargs
 ):
     """
     A webmap.
@@ -1682,10 +1682,10 @@ def webmap(
         only two or three zoom levels that are appropriate for any given area. For reference
         see the OpenStreetMaps reference on 
         `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
-    provider: str
+    provider: contextily.providers object
         The tile provider. If no provider is set, the default OpenStreetMap tile service,
-        "OSM_A", will be used. For reference see `the contextily documentation 
-        <https://github.com/darribas/contextily>`_.
+        contextily.providers.OpenStreetMap.Mapnik, will be used. For reference see `the contextily
+        documentation <https://github.com/darribas/contextily>`_.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1779,7 +1779,7 @@ def webmap(
 
             basemap, extent = ctx.bounds2img(
                 *self._webmap_extent, zoom=self.zoom, 
-                url=getattr(ctx.sources, provider), ll=True
+                source=provider, ll=True
             )
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
             return ax
@@ -1828,7 +1828,7 @@ def _to_geoseries(df, var, var_name, validate=True):
                 f"{len(var)} values were passed to {var_name!r}, but {len(df)} were expected."
             )
         try:
-            return gpd.GeoSeries(var, index=df.index)
+            return pd.Series(var, index=df.index)
         except TypeError:
             raise ValueError(
                 f"{var_name!r} expects a GeoSeries, str, or list-like object as input, but a "
