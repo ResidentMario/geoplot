@@ -1,8 +1,7 @@
 dist: xenial
 language: python
 python:
-  - "3.6"
-  - "3.7"
+  - "3.8"
 install:
   - sudo apt-get update
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -14,13 +13,11 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
 
-  # Use conda for the requirements that are flaky using pip
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION geopandas cartopy matplotlib scikit-learn
-  - conda activate test-environment
-  # And then pip for everything else
-  - pip install .[develop]
-script:
-  - cd tests && mkdir baseline && git clone https://github.com/ResidentMario/geoplot-images.git baseline
+  # Envfile via `conda env export | sed -E "s/name: [a-z-]*/name: test-environment/" > tests/environment.yml`
+  # TODO: re-enable testing across Python versions using $TRAVIS_PYTHON_VERSION
+  - conda env create -f environment.yml && conda activate test-environment
+  script:
+  - cd tests && mkdir baseline && git clone --depth=1 https://github.com/ResidentMario/geoplot-images.git baseline
   - pytest mixin_tests.py
   - pytest --mpl viz_tests.py
   - pytest --mpl proj_tests.py
