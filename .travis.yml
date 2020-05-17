@@ -16,7 +16,7 @@ install:
   # For reference see GH#216.
   - conda env create -f tests/environment.yml && conda activate test-environment
   # Conda does not support local install and clobbers it using the version string.
-  - pip uninstall geoplot && pip install .[develop]
+  - pip uninstall -y geoplot && pip install .[develop]
 
 script:
   - cd tests && mkdir baseline && git clone --depth=1 https://github.com/ResidentMario/geoplot-images.git baseline
