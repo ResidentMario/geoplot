@@ -1781,7 +1781,6 @@ def webmap(
                 *self._webmap_extent, zoom=self.zoom, 
                 url=getattr(ctx.sources, provider), ll=True
             )
-            extent = (extent[0], extent[1], extent[3], extent[2])
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
             return ax
 
