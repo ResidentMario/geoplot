@@ -24,8 +24,8 @@ try:
 except ImportError:
     from geopandas.plotting import __pysal_choro as _mapclassify_choro
 
-__version__ = "0.4.0"
-MATPLOTLIB_DOCS_VERSION = "3.1.1"  # used in some docstrings
+__version__ = "0.4.1"
+MATPLOTLIB_DOCS_VERSION = "3.2.1"  # used in some docstrings
 
 
 class HueMixin:
