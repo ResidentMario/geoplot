@@ -1,4 +1,4 @@
-language: generic
+language: minimal
 os:
   - osx
 install:
@@ -14,9 +14,7 @@ install:
   # `conda env export --no-builds | sed -E "s/name: [a-z-]*/name: test-environment/" | `
   # `sed -E "s/prefix: [\/a-zA-Z0-9-]*//" > tests/environment.yml`
   # For reference see GH#216.
-  - conda env create -f tests/environment.yml
-  - conda info --envs
-  - conda activate test-environment
+  - conda env create -f tests/environment.yml && conda activate test-environment
 
 script:
   - cd tests && mkdir baseline && git clone --depth=1 https://github.com/ResidentMario/geoplot-images.git baseline
