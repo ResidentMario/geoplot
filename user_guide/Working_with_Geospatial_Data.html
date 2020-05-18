@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Working with Geospatial Data &mdash; geoplot 0.3.1 documentation</title>
+  <title>Working with Geospatial Data &mdash; geoplot 0.4.1 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Projections" href="Working_with_Projections.html" />
@@ -262,12 +264,14 @@ work, this page is for you!</p>
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>Most operations that will work on a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> will work
-on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, but the latter adds a few additional methods and
-features for dealing with geometry not present in the former. The most
-obvious of these is the addition of a column for storing geometries,
-accessible using the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> attribute:</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span>
+</div><div class="docutils container">
+<p>Most operations that will work on a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> will
+work on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, but the latter adds a few additional
+methods and features for dealing with geometry not present in the
+former. The most obvious of these is the addition of a column for
+storing geometries, accessible using the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> attribute:</p>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.05050806403247</span> <span class="mf">40.5664220341608</span><span class="o">...</span>
@@ -715,13 +719,15 @@ file, which read into an ordinary <code class="docutils literal notranslate"><sp
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>It is extremely common for datasets containing light geospatial data
-(e.g. points, maybe line segments, but usually not whole polygons) to be
-saved in a non-geospatial formats.</p>
-<p>In this case can import <code class="docutils literal notranslate"><span class="pre">shapely</span></code> directly, use it to define our own
-geometries, then initialize a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>. The <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">apply</span></code>
-function is the best to do this:</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span class="n">Point</span>
+</div><div class="docutils container">
+<p>It is extremely common for datasets containing light geospatial data
+(e.g. points, maybe line segments, but usually not whole polygons) to
+be saved in a non-geospatial formats.</p>
+<p>In this case can import <code class="docutils literal notranslate"><span class="pre">shapely</span></code> directly, use it to define our
+own geometries, then initialize a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>. The <code class="docutils literal notranslate"><span class="pre">pandas</span></code>
+<code class="docutils literal notranslate"><span class="pre">apply</span></code> function is the best to do this:</p>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 
 <span class="n">collision_points</span> <span class="o">=</span> <span class="n">nyc_collisions_sample</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
     <span class="k">lambda</span> <span class="n">srs</span><span class="p">:</span> <span class="n">Point</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LONGITUDE&#39;</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">])),</span>
@@ -813,14 +819,16 @@ property of the <code class="docutils literal notranslate"><span class="pre">Geo
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>In most cases, data with geospatial information provided in a CSV will
-be point data corresponding with individual coordinates. Sometimes,
-however, one may wish to define more complex geometry: square areas, for
-example, and <em>maybe</em> even complex polygons. While we won’t cover these
-cases, they’re quite similar to the extremely simple point case we’ve
-shown here. For further reference on such a task, refer to the
-<code class="docutils literal notranslate"><span class="pre">shapely</span></code> documentation.</p>
-</div></div>
+</div><div class="docutils container">
+<p>In most cases, data with geospatial information provided in a CSV
+will be point data corresponding with individual coordinates.
+Sometimes, however, one may wish to define more complex geometry:
+square areas, for example, and <em>maybe</em> even complex polygons. While
+we won’t cover these cases, they’re quite similar to the extremely
+simple point case we’ve shown here. For further reference on such a
+task, refer to the <code class="docutils literal notranslate"><span class="pre">shapely</span></code> documentation.</p>
+</div>
+</div>
 <div class="section" id="joining-on-existing-geometries">
 <h2>Joining on existing geometries<a class="headerlink" href="#joining-on-existing-geometries" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes the necessary geospatial data is elsewhere entirely.</p>
@@ -879,14 +887,16 @@ shown here. For further reference on such a task, refer to the
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>We’d like to put this information on a map. But we don’t have any
+</div><div class="docutils container">
+<p>We’d like to put this information on a map. But we don’t have any
 geometry!</p>
 <p>We will once again have to define a geometry. Except that this time,
-instead of writing our own, we will need to find data with state shapes,
-and join that data against this data. In other cases there may be other
-shapes: police precincts, survey zones, and so on. Here is just such a
-dataset:</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+instead of writing our own, we will need to find data with state
+shapes, and join that data against this data. In other cases there
+may be other shapes: police precincts, survey zones, and so on. Here
+is just such a dataset:</p>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
 <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -952,8 +962,10 @@ dataset:</p>
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>A simple <code class="docutils literal notranslate"><span class="pre">join</span></code> solves the problem:</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obesity</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">))</span>
+</div><div class="docutils container">
+<p>A simple <code class="docutils literal notranslate"><span class="pre">join</span></code> solves the problem:</p>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obesity</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">))</span>
 <span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1026,8 +1038,10 @@ dataset:</p>
     </tr>
   </tbody>
 </table>
-</div><div style="margin-top:2em"><p>Now we can plot it:</p>
-</div><div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+</div><div class="docutils container">
+<p>Now we can plot it:</p>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Percent&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -1098,7 +1112,7 @@ manual</a>.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2019, Aleksey Bilogur
+        &copy; Copyright 2016-2020, Aleksey Bilogur
 
     </p>
   </div>

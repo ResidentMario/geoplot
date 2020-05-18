@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_obesity.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_obesity.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_obesity.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_obesity.py:
 
 
 Cartogram of US states by obesity rate
@@ -22,20 +24,8 @@ example in the D3.JS example gallery.
     :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
 
 
-
-
-
-|
 
 
 .. code-block:: default
@@ -75,7 +65,7 @@ example in the D3.JS example gallery.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.906 seconds)
+   **Total running time of the script:** ( 0 minutes  2.243 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_obesity.py:
@@ -88,13 +78,13 @@ example in the D3.JS example gallery.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_obesity.py <plot_obesity.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_obesity.ipynb <plot_obesity.ipynb>`
 

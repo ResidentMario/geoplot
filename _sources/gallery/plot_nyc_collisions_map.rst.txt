@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_nyc_collisions_map.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_nyc_collisions_map.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_nyc_collisions_map.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_nyc_collisions_map.py:
 
 
 Pointplot of NYC fatal and injurious traffic collisions
@@ -17,6 +19,7 @@ vehicle collisions in New York City. Injuries are far more common than fatalitie
 
 .. image:: /gallery/images/sphx_glr_plot_nyc_collisions_map_001.png
     :class: sphx-glr-single-img
+
 
 
 
@@ -73,7 +76,7 @@ vehicle collisions in New York City. Injuries are far more common than fatalitie
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  15.663 seconds)
+   **Total running time of the script:** ( 0 minutes  10.916 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_map.py:
@@ -86,13 +89,13 @@ vehicle collisions in New York City. Injuries are far more common than fatalitie
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_nyc_collisions_map.py <plot_nyc_collisions_map.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_nyc_collisions_map.ipynb <plot_nyc_collisions_map.ipynb>`
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>geoplot.datasets &mdash; geoplot 0.3.1 documentation</title>
+  <title>geoplot.datasets &mdash; geoplot 0.4.1 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -173,54 +175,54 @@
 <span class="sd">    Returns the URL path to an example dataset suitable for reading into ``geopandas``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;usa_cities&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/usa-cities.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/usa-cities.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;contiguous_usa&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/contiguous-usa.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/contiguous-usa.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_collision_factors&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-collision-factors.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-collision-factors.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-boroughs.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-boroughs.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;ny_census&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/ny-census-partial.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/ny-census-partial.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;obesity_by_state&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/obesity-by-state.tsv&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/obesity-by-state.tsv&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;la_flights&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/la-flights.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/la-flights.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;dc_roads&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/dc-roads.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/dc-roads.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_map_pluto_sample&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-map-pluto-sample.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-map-pluto-sample.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_collisions_sample&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-collisions-sample.csv&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-collisions-sample.csv&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;boston_zip_codes&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/boston-zip-codes.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/boston-zip-codes.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;boston_airbnb_listings&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/boston-airbnb-listings.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/boston-airbnb-listings.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;napoleon_troop_movements&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/napoleon-troop-movements.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/napoleon-troop-movements.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_fatal_collisions&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-fatal-collisions.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-fatal-collisions.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_injurious_collisions&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-injurious-collisions.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-injurious-collisions.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_police_precincts&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-police-precincts.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-police-precincts.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;nyc_parking_tickets&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/nyc-parking-tickets-sample.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/nyc-parking-tickets-sample.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;world&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/world.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/world.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;melbourne&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/melbourne.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/melbourne.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;melbourne_schools&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/melbourne-schools.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/melbourne-schools.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;san_francisco&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/san-francisco.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/san-francisco.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;san_francisco_street_trees_sample&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/san-francisco-street-trees-sample.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/san-francisco-street-trees-sample.geojson&#39;</span>
     <span class="k">elif</span> <span class="n">dataset_name</span> <span class="o">==</span> <span class="s1">&#39;california_congressional_districts&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{src}</span><span class="s1">/california-congressional-districts.geojson&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s1">/california-congressional-districts.geojson&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="n">f</span><span class="s1">&#39;The dataset_name value </span><span class="si">{dataset_name!r}</span><span class="s1"> is not in the list of valid names.&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39;The dataset_name value </span><span class="si">{</span><span class="n">dataset_name</span><span class="si">!r}</span><span class="s1"> is not in the list of valid names.&#39;</span>
         <span class="p">)</span>
 </pre></div>
 
@@ -234,7 +236,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2019, Aleksey Bilogur
+        &copy; Copyright 2016-2020, Aleksey Bilogur
 
     </p>
   </div>

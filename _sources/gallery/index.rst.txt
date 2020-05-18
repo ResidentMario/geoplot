@@ -14,9 +14,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_dc_street_network_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_dc_street_network_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_dc_street_network.py`
+     :ref:`sphx_glr_gallery_plot_dc_street_network.py`
 
 .. raw:: html
 
@@ -34,9 +34,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
+     :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
 
 .. raw:: html
 
@@ -54,9 +54,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_ny_state_demographics_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_ny_state_demographics_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_ny_state_demographics.py`
+     :ref:`sphx_glr_gallery_plot_ny_state_demographics.py`
 
 .. raw:: html
 
@@ -74,9 +74,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_boston_airbnb_kde_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_boston_airbnb_kde_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py`
+     :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py`
 
 .. raw:: html
 
@@ -94,9 +94,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_san_francisco_trees_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_san_francisco_trees_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_san_francisco_trees.py`
+     :ref:`sphx_glr_gallery_plot_san_francisco_trees.py`
 
 .. raw:: html
 
@@ -114,9 +114,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
+     :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
 
 .. raw:: html
 
@@ -134,9 +134,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_melbourne_schools_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_melbourne_schools_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_melbourne_schools.py`
+     :ref:`sphx_glr_gallery_plot_melbourne_schools.py`
 
 .. raw:: html
 
@@ -154,9 +154,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_obesity_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_obesity_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_obesity.py`
+     :ref:`sphx_glr_gallery_plot_obesity.py`
 
 .. raw:: html
 
@@ -174,9 +174,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_largest_cities_usa_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_largest_cities_usa_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_largest_cities_usa.py`
+     :ref:`sphx_glr_gallery_plot_largest_cities_usa.py`
 
 .. raw:: html
 
@@ -194,9 +194,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_parking_tickets_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_parking_tickets_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py`
+     :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py`
 
 .. raw:: html
 
@@ -214,9 +214,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collision_factors_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collision_factors_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py`
+     :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py`
 
 .. raw:: html
 
@@ -234,9 +234,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_california_districts_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_california_districts_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_california_districts.py`
+     :ref:`sphx_glr_gallery_plot_california_districts.py`
 
 .. raw:: html
 
@@ -254,9 +254,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_los_angeles_flights_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_los_angeles_flights_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_los_angeles_flights.py`
+     :ref:`sphx_glr_gallery_plot_los_angeles_flights.py`
 
 .. raw:: html
 
@@ -274,9 +274,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_map_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_map_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py`
+     :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py`
 
 .. raw:: html
 
@@ -294,9 +294,9 @@ Gallery
 
 .. only:: html
 
-    .. figure:: /gallery/images/thumb/sphx_glr_plot_usa_city_elevations_thumb.png
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_usa_city_elevations_thumb.png
 
-        :ref:`sphx_glr_gallery_plot_usa_city_elevations.py`
+     :ref:`sphx_glr_gallery_plot_usa_city_elevations.py`
 
 .. raw:: html
 
@@ -309,7 +309,7 @@ Gallery
    /gallery/plot_usa_city_elevations
 .. raw:: html
 
-    <div style='clear:both'></div>
+    <div class="sphx-glr-clear"></div>
 
 
 
@@ -319,15 +319,15 @@ Gallery
     :class: sphx-glr-footer-gallery
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: gallery_python.zip <//Users/alex/Desktop/geoplot/docs/gallery/gallery_python.zip>`
+    :download:`Download all examples in Python source code: gallery_python.zip <//Users/alekseybilogur/Desktop/geoplot/docs/gallery/gallery_python.zip>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: gallery_jupyter.zip <//Users/alex/Desktop/geoplot/docs/gallery/gallery_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: gallery_jupyter.zip <//Users/alekseybilogur/Desktop/geoplot/docs/gallery/gallery_jupyter.zip>`
 
 
 .. only:: html

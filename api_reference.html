@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; geoplot 0.3.1 documentation</title>
+  <title>API Reference &mdash; geoplot 0.4.1 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Pointplot of US city elevations with custom scale functions" href="gallery/plot_usa_city_elevations.html" /> 
@@ -172,9 +174,9 @@
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="plots">
 <h2>Plots<a class="headerlink" href="#plots" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.pointplot">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">pointplot</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">pointplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">limits</span><span class="o">=</span><span class="default_value">1, 5</span></em>, <em class="sig-param"><span class="n">scale_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_var</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.pointplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial scatter plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,9 +224,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.polyplot">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">polyplot</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.polyplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">polyplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.polyplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A trivial polygonal plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -251,9 +253,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.webmap">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">webmap</code><span class="sig-paren">(</span><em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">projection=None</em>, <em class="sig-param">zoom=None</em>, <em class="sig-param">provider='OSM_A'</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.webmap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">webmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">provider</span><span class="o">=</span><span class="default_value">{'attribution': '(C) OpenStreetMap contributors', 'max_zoom': 19, 'name': 'OpenStreetMap.Mapnik', 'url': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.webmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>A webmap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -271,8 +273,9 @@ but will also take longer to generate and will have more clutter. There are gene
 only two or three zoom levels that are appropriate for any given area. For reference
 see the OpenStreetMaps reference on
 <a class="reference external" href="https://wiki.openstreetmap.org/wiki/Zoom_levels">zoom levels</a>.</p></li>
-<li><p><strong>provider</strong> (<em>str</em>) – The tile provider. If no provider is set, the default OpenStreetMap tile service,
-“OSM_A”, will be used. For reference see <a class="reference external" href="https://github.com/darribas/contextily">the contextily documentation</a>.</p></li>
+<li><p><strong>provider</strong> (<em>contextily.providers object</em>) – The tile provider. If no provider is set, the default OpenStreetMap tile service,
+contextily.providers.OpenStreetMap.Mapnik, will be used. For reference see <a class="reference external" href="https://github.com/darribas/contextily">the contextily
+documentation</a>.</p></li>
 <li><p><strong>figsize</strong> (<em>(</em><em>x</em><em>, </em><em>y</em><em>) </em><em>tuple</em><em>, </em><em>optional</em>) – Sets the size of the plot figure (in inches).</p></li>
 <li><p><strong>ax</strong> (<em>AxesSubplot</em><em> or </em><em>GeoAxesSubplot instance</em><em>, </em><em>optional</em>) – If set, the <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.AxesSubplot</span></code> or <code class="docutils literal notranslate"><span class="pre">cartopy.mpl.geoaxes.GeoAxesSubplot</span></code>
 instance to paint the plot on. Defaults to a new axis.</p></li>
@@ -289,9 +292,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.choropleth">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">choropleth</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">choropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.choropleth" title="Permalink to this definition">¶</a></dt>
 <dd><p>A color-mapped area plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -337,9 +340,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.kdeplot">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">kdeplot</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">shade_lowest=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.kdeplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">kdeplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">clip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shade_lowest</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.kdeplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A kernel density estimate isochrone plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -370,9 +373,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.cartogram">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">cartogram</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">limits=(0.2</em>, <em class="sig-param">1)</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">cartogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">limits</span><span class="o">=</span><span class="default_value">0.2, 1</span></em>, <em class="sig-param"><span class="n">scale_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_var</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.cartogram" title="Permalink to this definition">¶</a></dt>
 <dd><p>A scaling area plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -429,9 +432,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.sankey">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">sankey</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_var=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">scale=None</em>, <em class="sig-param">scale_func=None</em>, <em class="sig-param">limits=(1</em>, <em class="sig-param">5)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">sankey</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_var</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale_func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">limits</span><span class="o">=</span><span class="default_value">1, 5</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.sankey" title="Permalink to this definition">¶</a></dt>
 <dd><p>A spatial Sankey or flow map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -489,7 +492,7 @@ instances.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.quadtree">
 <code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">quadtree</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">nmax=None</em>, <em class="sig-param">nmin=None</em>, <em class="sig-param">nsig=0</em>, <em class="sig-param">agg=&lt;function mean&gt;</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.quadtree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A choropleth with point aggregate neighborhoods.</p>
@@ -543,9 +546,9 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.geoplot.voronoi">
-<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">voronoi</code><span class="sig-paren">(</span><em class="sig-param">projection=None</em>, <em class="sig-param">clip=None</em>, <em class="sig-param">hue=None</em>, <em class="sig-param">cmap=None</em>, <em class="sig-param">norm=None</em>, <em class="sig-param">scheme=None</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">legend_kwargs=None</em>, <em class="sig-param">legend_labels=None</em>, <em class="sig-param">legend_values=None</em>, <em class="sig-param">extent=None</em>, <em class="sig-param">edgecolor='black'</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">6)</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.voronoi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">geoplot.</code><code class="sig-name descname">voronoi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">projection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">clip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">norm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheme</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">edgecolor</span><span class="o">=</span><span class="default_value">'black'</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">8, 6</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.geoplot.voronoi" title="Permalink to this definition">¶</a></dt>
 <dd><p>A geospatial Voronoi diagram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -605,25 +608,25 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </div>
 <div class="section" id="projections">
 <h2>Projections<a class="headerlink" href="#projections" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.PlateCarree">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">PlateCarree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.PlateCarree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.LambertCylindrical">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">LambertCylindrical</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertCylindrical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Mercator">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Mercator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mercator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.WebMercator">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">WebMercator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.WebMercator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -639,55 +642,55 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Miller">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Miller</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Miller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Mollweide">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Mollweide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Mollweide" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Robinson">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Robinson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Robinson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Sinusoidal">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Sinusoidal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Sinusoidal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.InterruptedGoodeHomolosine">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">InterruptedGoodeHomolosine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.InterruptedGoodeHomolosine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Geostationary">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Geostationary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Geostationary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.NorthPolarStereo">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">NorthPolarStereo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.NorthPolarStereo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.SouthPolarStereo">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">SouthPolarStereo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.SouthPolarStereo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that centers by longitude.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.AlbersEqualArea">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">AlbersEqualArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AlbersEqualArea" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -703,7 +706,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.AzimuthalEquidistant">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">AzimuthalEquidistant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.AzimuthalEquidistant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -719,7 +722,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.LambertConformal">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">LambertConformal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertConformal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -735,7 +738,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Orthographic">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Orthographic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Orthographic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -751,7 +754,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.Stereographic">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">Stereographic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.Stereographic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -767,7 +770,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.TransverseMercator">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">TransverseMercator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.TransverseMercator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -783,7 +786,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.LambertAzimuthalEqualArea">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">LambertAzimuthalEqualArea</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.LambertAzimuthalEqualArea" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -799,7 +802,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.UTM">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">UTM</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.UTM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -815,19 +818,19 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.OSGB">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">OSGB</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSGB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that accepts neither longitude or latitude centering.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.EuroPP">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">EuroPP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.EuroPP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form a CRS that accepts neither longitude or latitude centering.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.crs.OSNI">
 <code class="sig-prename descclassname">crs.</code><code class="sig-name descname">OSNI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.crs.OSNI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate instances of <code class="docutils literal notranslate"><span class="pre">cartopy.crs</span></code>.*name* where <em>name</em> matches the instance’s class name.</p>
@@ -846,7 +849,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 </div>
 <div class="section" id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
+<dl class="py method">
 <dt id="geoplot.datasets.get_path">
 <code class="sig-prename descclassname">datasets.</code><code class="sig-name descname">get_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geoplot.datasets.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the URL path to an example dataset suitable for reading into <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
@@ -873,7 +876,7 @@ instance to paint the plot on. Defaults to a new axis.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2019, Aleksey Bilogur
+        &copy; Copyright 2016-2020, Aleksey Bilogur
 
     </p>
   </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Customizing Plots &mdash; geoplot 0.3.1 documentation</title>
+  <title>Customizing Plots &mdash; geoplot 0.4.1 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Plot Reference" href="../plot_references/plot_reference.html" />
@@ -352,9 +354,9 @@ ranges of values.</p>
 <img alt="../_images/Customizing_Plots_18_2.png" src="../_images/Customizing_Plots_18_2.png" />
 <p>The type of legend you will get depends on your configuration options.
 There are three different kinds. This example demonstrates a
-<strong>categorical colormap legend</strong>. If your colormap is continuous (e.g.
-<code class="docutils literal notranslate"><span class="pre">scheme=None</span></code>; see <a class="reference external" href="#Hue">the section on Hue</a>), a <strong>continuous
-colorbar</strong> will be used instead:</p>
+<strong>categorical colormap legend</strong>. If your colormap is continuous
+(e.g. <code class="docutils literal notranslate"><span class="pre">scheme=None</span></code>; see <a class="reference external" href="#Hue">the section on Hue</a>), a
+<strong>continuous colorbar</strong> will be used instead:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">large_continental_usa_cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -366,7 +368,7 @@ colorbar</strong> will be used instead:</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">alex</span><span class="o">/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">geoplot</span><span class="o">/</span><span class="n">geoplot</span><span class="o">/</span><span class="n">geoplot</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">258</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">Please</span> <span class="n">specify</span> <span class="s2">&quot;legend_var&quot;</span> <span class="n">explicitly</span> <span class="n">when</span> <span class="n">both</span> <span class="s2">&quot;hue&quot;</span> <span class="ow">and</span> <span class="s2">&quot;scale&quot;</span> <span class="n">are</span> <span class="n">specified</span><span class="o">.</span> <span class="n">Defaulting</span> <span class="n">to</span> <span class="s2">&quot;legend_var=&#39;hue&#39;&quot;</span><span class="o">.</span>
-  <span class="n">f</span><span class="s1">&#39;Please specify &quot;legend_var&quot; explicitly when both &quot;hue&quot; and &quot;scale&quot; are &#39;</span>
+  <span class="sa">f</span><span class="s1">&#39;Please specify &quot;legend_var&quot; explicitly when both &quot;hue&quot; and &quot;scale&quot; are &#39;</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x1347b5d30</span><span class="o">&gt;</span>
@@ -423,7 +425,7 @@ legend, respectively.</p>
 <p><strong>Power User Feature: Custom Legend Markers</strong></p>
 <blockquote>
 <div><p>Keyword arguments to <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> that start with <code class="docutils literal notranslate"><span class="pre">marker</span></code>
-(e.g. <code class="docutils literal notranslate"><span class="pre">marker</span></code>, <code class="docutils literal notranslate"><span class="pre">markeredgecolor</span></code>, <code class="docutils literal notranslate"><span class="pre">markeredgewidth</span></code>,
+(e.g. <code class="docutils literal notranslate"><span class="pre">marker</span></code>, <code class="docutils literal notranslate"><span class="pre">markeredgecolor</span></code>, <code class="docutils literal notranslate"><span class="pre">markeredgewidth</span></code>,
 <code class="docutils literal notranslate"><span class="pre">markerfacecolor</span></code>, and <code class="docutils literal notranslate"><span class="pre">markersize</span></code>) <a class="reference external" href="https://github.com/ResidentMario/geoplot/issues/35#issuecomment-507196579">will be passed through the
 legend down to the legend
 markers</a>.</p>
@@ -544,7 +546,7 @@ pretty-looking plots:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2019, Aleksey Bilogur
+        &copy; Copyright 2016-2020, Aleksey Bilogur
 
     </p>
   </div>

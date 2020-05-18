@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_melbourne_schools.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_melbourne_schools.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_melbourne_schools.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_melbourne_schools.py:
 
 
 Voronoi of Melbourne primary schools
@@ -20,6 +22,7 @@ This example inspired by the `Melbourne Schools Zones Webmap <http://melbournesc
 
 .. image:: /gallery/images/sphx_glr_plot_melbourne_schools_001.png
     :class: sphx-glr-single-img
+
 
 
 
@@ -51,7 +54,7 @@ This example inspired by the `Melbourne Schools Zones Webmap <http://melbournesc
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.722 seconds)
+   **Total running time of the script:** ( 0 minutes  14.813 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_melbourne_schools.py:
@@ -64,13 +67,13 @@ This example inspired by the `Melbourne Schools Zones Webmap <http://melbournesc
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_melbourne_schools.py <plot_melbourne_schools.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_melbourne_schools.ipynb <plot_melbourne_schools.ipynb>`
 

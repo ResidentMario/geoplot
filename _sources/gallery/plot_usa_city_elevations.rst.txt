@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_usa_city_elevations.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_usa_city_elevations.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_usa_city_elevations.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_usa_city_elevations.py:
 
 
 Pointplot of US city elevations with custom scale functions
@@ -31,6 +33,7 @@ of some kind. Again, this doesn't work too well in our case.
 
 .. image:: /gallery/images/sphx_glr_plot_usa_city_elevations_001.png
     :class: sphx-glr-single-img
+
 
 
 
@@ -121,7 +124,7 @@ of some kind. Again, this doesn't work too well in our case.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.612 seconds)
+   **Total running time of the script:** ( 0 minutes  4.375 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_usa_city_elevations.py:
@@ -134,13 +137,13 @@ of some kind. Again, this doesn't work too well in our case.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_usa_city_elevations.py <plot_usa_city_elevations.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_usa_city_elevations.ipynb <plot_usa_city_elevations.ipynb>`
 

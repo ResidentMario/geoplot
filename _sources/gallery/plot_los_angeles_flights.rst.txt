@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_los_angeles_flights.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_los_angeles_flights.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_los_angeles_flights.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_los_angeles_flights.py:
 
 
 Sankey of Los Angeles flight volumes with Cartopy globes
@@ -27,8 +29,15 @@ for more information.
 
  .. code-block:: none
 
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_los_angeles_flights.py:31: DeprecationWarning: The outline_patch property is deprecated. Use GeoAxes.spines['geo'] or the default Axes properties instead.
+      ax.outline_patch.set_visible(True)
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_los_angeles_flights.py:38: DeprecationWarning: The outline_patch property is deprecated. Use GeoAxes.spines['geo'] or the default Axes properties instead.
+      ax.outline_patch.set_visible(True)
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_los_angeles_flights.py:45: DeprecationWarning: The outline_patch property is deprecated. Use GeoAxes.spines['geo'] or the default Axes properties instead.
+      ax.outline_patch.set_visible(True)
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_los_angeles_flights.py:54: DeprecationWarning: The outline_patch property is deprecated. Use GeoAxes.spines['geo'] or the default Axes properties instead.
+      ax.outline_patch.set_visible(True)
+
 
 
 
@@ -95,7 +104,7 @@ for more information.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.441 seconds)
+   **Total running time of the script:** ( 0 minutes  6.299 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_los_angeles_flights.py:
@@ -108,13 +117,13 @@ for more information.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_los_angeles_flights.py <plot_los_angeles_flights.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_los_angeles_flights.ipynb <plot_los_angeles_flights.ipynb>`
 

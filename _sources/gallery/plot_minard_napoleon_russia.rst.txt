@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_minard_napoleon_russia.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_minard_napoleon_russia.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_minard_napoleon_russia.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_minard_napoleon_russia.py:
 
 
 Sankey of Napoleon's march on Moscow with custom colormap
@@ -25,6 +27,7 @@ interactive scrolly-panny version of this webmap built with ``mplleaflet``. To l
 
 .. image:: /gallery/images/sphx_glr_plot_minard_napoleon_russia_001.png
     :class: sphx-glr-single-img
+
 
 
 
@@ -59,7 +62,7 @@ interactive scrolly-panny version of this webmap built with ``mplleaflet``. To l
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.496 seconds)
+   **Total running time of the script:** ( 0 minutes  0.622 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_minard_napoleon_russia.py:
@@ -72,13 +75,13 @@ interactive scrolly-panny version of this webmap built with ``mplleaflet``. To l
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_minard_napoleon_russia.py <plot_minard_napoleon_russia.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_minard_napoleon_russia.ipynb <plot_minard_napoleon_russia.ipynb>`
 

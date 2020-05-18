@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_nyc_collisions_quadtree.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_nyc_collisions_quadtree.py:
 
 
 Quadtree of NYC traffic collisions
@@ -26,8 +28,13 @@ simultaneously.
 
  .. code-block:: none
 
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:496: UserWarning: The input data contains 9 data points that do not intersect with "clip". These data points will not appear in the plot.
-      f'The input data contains {null_geoms.sum()} data points that do not '
+    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/geopandas/geoseries.py:318: UserWarning: GeoSeries.isna() previously returned True for both missing (None) and empty geometries. Now, it only returns True for missing values. Since the calling GeoSeries contains empty geometries, the result has changed compared to previous versions of GeoPandas.
+    Given a GeoSeries 's', you can use 's.is_empty | s.isna()' to get back the old behaviour.
+
+    To further ignore this warning, you can do: 
+    import warnings; warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
+      return self.isna()
+
 
 
 
@@ -61,7 +68,7 @@ simultaneously.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  33.282 seconds)
+   **Total running time of the script:** ( 0 minutes  23.188 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:
@@ -74,13 +81,13 @@ simultaneously.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_nyc_collisions_quadtree.py <plot_nyc_collisions_quadtree.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_nyc_collisions_quadtree.ipynb <plot_nyc_collisions_quadtree.ipynb>`
 

@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_san_francisco_trees.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_san_francisco_trees.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_san_francisco_trees.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_san_francisco_trees.py:
 
 
 Quadtree of San Francisco street trees
@@ -32,10 +34,13 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
 
  .. code-block:: none
 
-    /Users/alex/miniconda3/envs/geoplot-dev/lib/python3.6/site-packages/scipy/stats/stats.py:1633: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-      return np.add.reduce(sorted[indexer] * weights, axis=axis) / sumval
-    /Users/alex/Desktop/geoplot/geoplot/geoplot.py:496: UserWarning: The input data contains 1 data points that do not intersect with "clip". These data points will not appear in the plot.
-      f'The input data contains {null_geoms.sum()} data points that do not '
+    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/geopandas/geoseries.py:318: UserWarning: GeoSeries.isna() previously returned True for both missing (None) and empty geometries. Now, it only returns True for missing values. Since the calling GeoSeries contains empty geometries, the result has changed compared to previous versions of GeoPandas.
+    Given a GeoSeries 's', you can use 's.is_empty | s.isna()' to get back the old behaviour.
+
+    To further ignore this warning, you can do: 
+    import warnings; warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
+      return self.isna()
+
 
 
 
@@ -70,7 +75,7 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.194 seconds)
+   **Total running time of the script:** ( 0 minutes  16.598 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_san_francisco_trees.py:
@@ -83,13 +88,13 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_san_francisco_trees.py <plot_san_francisco_trees.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_san_francisco_trees.ipynb <plot_san_francisco_trees.ipynb>`
 

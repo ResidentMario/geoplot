@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_gallery_plot_dc_street_network.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_gallery_plot_dc_street_network.py:
+        Click :ref:`here <sphx_glr_download_gallery_plot_dc_street_network.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_gallery_plot_dc_street_network.py:
 
 
 Sankey of traffic volumes in Washington DC
@@ -18,6 +20,7 @@ in Washington DC.
 
 .. image:: /gallery/images/sphx_glr_plot_dc_street_network_001.png
     :class: sphx-glr-single-img
+
 
 
 
@@ -44,7 +47,7 @@ in Washington DC.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.565 seconds)
+   **Total running time of the script:** ( 0 minutes  22.067 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dc_street_network.py:
@@ -57,13 +60,13 @@ in Washington DC.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_dc_street_network.py <plot_dc_street_network.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_dc_street_network.ipynb <plot_dc_street_network.ipynb>`
 
