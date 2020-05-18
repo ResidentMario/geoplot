@@ -22,5 +22,5 @@ setup(
         'data', 'data visualization', 'data analysis', 'data science', 'pandas', 'geospatial data',
         'geospatial analytics'
     ],
-    classifiers=['Framework::Matplotlib'],
+    classifiers=['Framework :: Matplotlib'],
 )
