@@ -1328,14 +1328,13 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    class KDEPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+    class KDEPlot(Plot, HueMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
             self.set_hue_values(
                 color_kwarg=None, default_color=None, supports_categorical=False,
                 verify_input=False
             )
-            self.paint_legend(supports_hue=True, supports_scale=False, verify_input=False)
             self.paint_clip()
 
         def draw(self):
