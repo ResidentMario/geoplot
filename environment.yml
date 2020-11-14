@@ -11,3 +11,4 @@ dependencies:
   - seaborn
   - cartopy
   - descartes
+  - jupyterlab
