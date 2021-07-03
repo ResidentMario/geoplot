@@ -19,11 +19,6 @@ import mapclassify as mc
 
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
-try:
-    from geopandas.plotting import _mapclassify_choro
-except ImportError:
-    from geopandas.plotting import __pysal_choro as _mapclassify_choro
-
 __version__ = "0.4.1"
 MATPLOTLIB_DOCS_VERSION = "3.2.1"  # used in some docstrings
 
@@ -42,10 +37,10 @@ class HueMixin:
 
         if 'k' in self.kwargs:
             raise ValueError(
-                f"The 'k' parameter was removed in geoplot version 0.4.0. To set a specific "
-                f"categorical bin count, pass a mapclassify object to 'scheme' instead. For "
-                f'further information refer to the release notes at '
-                f'https://github.com/ResidentMario/geoplot/releases/tag/0.4.0'
+                "The 'k' parameter was removed in geoplot version 0.4.0. To set a specific "
+                "categorical bin count, pass a mapclassify object to 'scheme' instead. For "
+                'further information refer to the release notes at '
+                'https://github.com/ResidentMario/geoplot/releases/tag/0.4.0'
             )
 
         if supports_categorical:
@@ -61,12 +56,9 @@ class HueMixin:
                 raise ValueError(
                     f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
                 )
-            # in theory we should also vet k, but since None is a meaningful value for this
-            # variable it's not possible to know definitively if k was set as a default or by the
-            # user.
             if (cmap is not None or scheme is not None) and hue is None:
                 raise ValueError(
-                    f'Cannot specify "cmap" or "scheme" without specifying "hue".'
+                    'Cannot specify "cmap" or "scheme" without specifying "hue".'
                 )
 
         hue = _to_geoseries(self.df, hue, "hue")
@@ -75,8 +67,7 @@ class HueMixin:
             colors = [color] * len(self.df)
             categories = None
             self.k = None
-        elif ((scheme == 'categorical') or
-              (scheme is None and hue.dtype == np.dtype('object'))):
+        elif ((scheme == 'categorical') or (scheme is None and hue.dtype == np.dtype('object'))):
             categories = np.unique(hue)
             value_map = {v: i for i, v in enumerate(categories)}
             values = [value_map[d] for d in hue]
@@ -98,7 +89,7 @@ class HueMixin:
                 try:
                     if scheme == scheme.lower():
                         scheme = scheme.title()
-                    
+
                     scheme = getattr(mc, scheme)(hue)
                 except AttributeError:
                     opts = tuple(list(mc.CLASSIFIERS) + ['Categorical'])
@@ -144,7 +135,7 @@ class ScaleMixin:
             if self.scale_func is None:
                 dslope = (self.limits[1] - self.limits[0]) / (dmax - dmin)
                 # edge case: if dmax, dmin are <=10**-30 or so, will overflow and eval to infinity
-                if np.isinf(dslope): 
+                if np.isinf(dslope):
                     raise ValueError(
                         "The data range provided to the 'scale' variable is too small for the "
                         "default scaling function. Normalize your data or provide a custom "
@@ -162,7 +153,7 @@ class ScaleMixin:
             # clean the plot up a bit.
             sorted_indices = np.array(
                 sorted(enumerate(self.sizes), key=lambda tup: tup[1])[::-1]
-            )[:,0].astype(int)
+            )[:, 0].astype(int)
             self.sizes = np.array(self.sizes)[sorted_indices]
             self.df = self.df.iloc[sorted_indices]
 
@@ -174,7 +165,7 @@ class ScaleMixin:
             # is not None this can't be done completely reliably.
             if self.scale_func is not None:
                 raise ValueError(
-                    f'Cannot specify "scale_func" without specifying "scale".'
+                    'Cannot specify "scale_func" without specifying "scale".'
                 )
             size = self.kwargs.pop(size_kwarg, default_size)
             self.sizes = [size] * len(self.df)
@@ -206,24 +197,24 @@ class LegendMixin:
         # we do not verify inputs.
         if verify_input:
             if legend and (
-                (not supports_hue or self.hue is None) and
-                (not supports_scale or self.scale is None)
+                (not supports_hue or self.hue is None)
+                and (not supports_scale or self.scale is None)
             ):
                 raise ValueError(
                     '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
                     'variable.'
                 )
             if not legend and (
-                legend_labels is not None or legend_values is not None or
-                legend_kwargs != dict()
+                legend_labels is not None or legend_values is not None
+                or legend_kwargs != dict()
             ):
                 raise ValueError(
                     'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
                     'when "legend" is set to False.'
                 )
             if (
-                legend_labels is not None and legend_values is not None and
-                len(legend_labels) != len(legend_values)
+                legend_labels is not None and legend_values is not None
+                and len(legend_labels) != len(legend_values)
             ):
                 raise ValueError(
                     'The "legend_labels" and "legend_values" parameters have different lengths.'
@@ -245,7 +236,7 @@ class LegendMixin:
                 legend_var = self.kwargs['legend_var']
                 if legend_var not in ['scale', 'hue']:
                     raise ValueError(
-                        f'"legend_var", if specified, must be set to one of "hue" or "scale".'
+                        '"legend_var", if specified, must be set to one of "hue" or "scale".'
                     )
                 elif getattr(self, legend_var) is None:
                     raise ValueError(
@@ -255,8 +246,8 @@ class LegendMixin:
             else:
                 if legend and self.hue is not None and self.scale is not None:
                     warnings.warn(
-                        f'Please specify "legend_var" explicitly when both "hue" and "scale" are '
-                        f'specified. Defaulting to "legend_var=\'hue\'".'
+                        'Please specify "legend_var" explicitly when both "hue" and "scale" are '
+                        'specified. Defaulting to "legend_var=\'hue\'".'
                     )
                 legend_var = 'hue' if self.hue is not None else 'scale'
             self.kwargs.pop('legend_var')
@@ -280,9 +271,9 @@ class LegendMixin:
                 # utility of the legend.
                 if 'markerfacecolor' in legend_marker_kwargs:
                     raise ValueError(
-                        f'Cannot set a "markerfacecolor" when the "legend_var" is set to "hue". '
-                        f'Doing so would remove the color reference, rendering the legend '
-                        f'useless. Are you sure you didn\'t mean to set "markeredgecolor" instead?'
+                        'Cannot set a "markerfacecolor" when the "legend_var" is set to "hue". '
+                        'Doing so would remove the color reference, rendering the legend '
+                        'useless. Are you sure you didn\'t mean to set "markeredgecolor" instead?'
                     )
 
                 marker_kwargs = {
@@ -339,18 +330,18 @@ class LegendMixin:
             else:  # self.k is None
                 if len(legend_marker_kwargs) > 0:
                     raise ValueError(
-                        f'"k" is set to "None", implying a colorbar legend, but "legend_kwargs" '
-                        f'includes marker parameters that can only be applied to a patch legend. '
-                        f'Remove these parameters or convert to a categorical colormap by '
-                        f'specifying a "k" value.'
+                        '"k" is set to "None", implying a colorbar legend, but "legend_kwargs" '
+                        'includes marker parameters that can only be applied to a patch legend. '
+                        'Remove these parameters or convert to a categorical colormap by '
+                        'specifying a "k" value.'
                     )
 
                 if legend_labels is not None or legend_values is not None:
                     # TODO: implement this feature
                     raise NotImplementedError(
-                        f'"k" is set to "None", implying a colorbar legend, but "legend_labels" '
-                        f'and/or "legend_values" are also specified. These parameters do not '
-                        f'apply in the case of a colorbar legend and should be removed.'
+                        '"k" is set to "None", implying a colorbar legend, but "legend_labels" '
+                        'and/or "legend_values" are also specified. These parameters do not '
+                        'apply in the case of a colorbar legend and should be removed.'
                     )
 
                 self.cmap.set_array(self.hue)
@@ -430,9 +421,9 @@ class LegendMixin:
             # utility of the legend.
             if 'markersize' in legend_marker_kwargs:
                 raise ValueError(
-                    f'Cannot set a "markersize" when the "legend_var" is set to "scale". '
-                    f'Doing so would remove the scale reference, rendering the legend '
-                    f'useless.'
+                    'Cannot set a "markersize" when the "legend_var" is set to "scale". '
+                    'Doing so would remove the scale reference, rendering the legend '
+                    'useless.'
                 )
 
             marker_kwargs = {
@@ -520,7 +511,7 @@ class ClipMixin:
                 extent = (xmin, ymin, xmax, ymax)
                 clip_geom = self._get_clip(extent, clip)
                 feature = ShapelyFeature([clip_geom], ccrs.PlateCarree())
-                self.ax.add_feature(feature, facecolor=(1,1,1), linewidth=0, zorder=2)
+                self.ax.add_feature(feature, facecolor=(1, 1, 1), linewidth=0, zorder=2)
             else:
                 xmin, xmax = self.ax.get_xlim()
                 ymin, ymax = self.ax.get_ylim()
@@ -690,10 +681,10 @@ class Plot:
 
             if xmin < -180 or xmax > 180 or ymin < -90 or ymax > 90:
                 raise ValueError(
-                    f'geoplot expects input geometries to be in latitude-longitude coordinates, '
-                    f'but the values provided include points whose values exceed the maximum '
-                    f'or minimum possible longitude or latitude values (-180, -90, 180, 90), '
-                    f'indicating that the input data is not in proper latitude-longitude format.'
+                    'geoplot expects input geometries to be in latitude-longitude coordinates, '
+                    'but the values provided include points whose values exceed the maximum '
+                    'or minimum possible longitude or latitude values (-180, -90, 180, 90), '
+                    'indicating that the input data is not in proper latitude-longitude format.'
                 )
 
             if self.projection is not None:
@@ -769,7 +760,7 @@ def pointplot(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale 
+        `Customizing Plots#Scale
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
@@ -780,7 +771,7 @@ def pointplot(
         <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
         demo.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -793,7 +784,7 @@ def pointplot(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -861,7 +852,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         `Working with Projections
         <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -931,7 +922,7 @@ def choropleth(
 
     Parameters
     ----------
-    
+
     df : GeoDataFrame
         The data being plotted.
     projection : geoplot.crs object instance, optional
@@ -952,7 +943,7 @@ def choropleth(
     scheme : None or mapclassify object, optional
         The categorical binning scheme to use.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -963,7 +954,7 @@ def choropleth(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1067,7 +1058,7 @@ def quadtree(
     agg : function, optional
         The aggregation func used for the colormap. Defaults to ``np.mean``.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -1078,7 +1069,7 @@ def quadtree(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1125,8 +1116,8 @@ def quadtree(
                 # GeometryCollection objects, even empty ones, and will raise an error when passed
                 # one, so we have to exclude these bad partitions ourselves.
                 if (
-                    isinstance(geom, shapely.geometry.GeometryCollection) and
-                    len(geom) == 0
+                    isinstance(geom, shapely.geometry.GeometryCollection)
+                    and len(geom) == 0
                 ):
                     continue
 
@@ -1177,7 +1168,7 @@ def cartogram(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale 
+        `Customizing Plots#Scale
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
@@ -1201,7 +1192,7 @@ def cartogram(
     scheme : None or mapclassify object, optional
         If ``hue`` is specified, the categorical binning scheme to use.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -1214,7 +1205,7 @@ def cartogram(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1310,7 +1301,7 @@ def kdeplot(
     clip : None or iterable or GeoSeries, optional
         If specified, isochrones will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1319,8 +1310,9 @@ def kdeplot(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to 
-        `the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+        Keyword arguments to be passed to
+        `the underlying seaborn.kdeplot instance
+        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
@@ -1402,7 +1394,7 @@ def sankey(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale 
+        `Customizing Plots#Scale
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
@@ -1413,7 +1405,7 @@ def sankey(
         <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
         demo.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -1426,7 +1418,7 @@ def sankey(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1435,8 +1427,9 @@ def sankey(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to 
-        `the underlying matplotlib.lines.Line2D <https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D>`_
+        Keyword arguments to be passed to
+        `the underlying matplotlib.lines.Line2D
+        <https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D>`_
         instances.
 
     Returns
@@ -1452,13 +1445,13 @@ def sankey(
             # matplotlib Line2D marker uses 'color' (it also has an 'markeredgecolor', but this
             # parameter doesn't perform exactly like the 'edgecolor' elsewhere in the API). The
             # descartes feature uses 'edgecolor'.
-            # 
+            #
             # This complicates keywords in the Sankey API (the only plot type so far that uses a
             # line marker). For code cleanliness, we choose to support "color" and not
             # "edgecolor", and to raise if an "edgecolor" is set.
             if 'edgecolor' in kwargs:
                 raise ValueError(
-                    f'Invalid parameter "edgecolor". To control line color, use "color".'
+                    'Invalid parameter "edgecolor". To control line color, use "color".'
                 )
 
             super().__init__(df, **kwargs)
@@ -1566,7 +1559,7 @@ def voronoi(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale 
+        `Customizing Plots#Scale
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
@@ -1577,7 +1570,7 @@ def voronoi(
         <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
         demo.
     legend : boolean, optional
-        Whether or not to include a map legend. For a reference on this and the other 
+        Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
         `Customizing Plots#Legend
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
@@ -1590,7 +1583,7 @@ def voronoi(
     legend_kwargs : dict, optional
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     figsize : (x, y) tuple, optional
@@ -1673,14 +1666,14 @@ def webmap(
         <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
         ``webmap`` only supports a single projection: ``WebMercator``.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
-        Controls the plot extents. For reference see 
+        Controls the plot extents. For reference see
         `Customizing Plots#Extent
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
     zoom: None or int
         The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,
         but will also take longer to generate and will have more clutter. There are generally
         only two or three zoom levels that are appropriate for any given area. For reference
-        see the OpenStreetMaps reference on 
+        see the OpenStreetMaps reference on
         `zoom levels <https://wiki.openstreetmap.org/wiki/Zoom_levels>`_.
     provider: contextily.providers object
         The tile provider. If no provider is set, the default OpenStreetMap tile service,
@@ -1715,29 +1708,29 @@ def webmap(
                 super().__init__(df, projection=projection, **kwargs)
             elif isinstance(ax, mpl.axes.Axes):
                 raise ValueError(
-                    f'"webmap" is only compatible with the "WebMercator" projection, but '
-                    f'the input axis is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
-                    f'to the axis initializer.'
+                    '"webmap" is only compatible with the "WebMercator" projection, but '
+                    'the input axis is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
+                    'to the axis initializer.'
                 )
             elif ax is None and projection is None:
                 warnings.warn(
-                    f'"webmap" is only compatible with the "WebMercator" projection, but the '
-                    f'input projection is unspecified. Reprojecting the data to "WebMercator" '
-                    f'automatically. To suppress this warning, set '
-                    f'"projection=gcrs.WebMercator()" explicitly.'
+                    '"webmap" is only compatible with the "WebMercator" projection, but the '
+                    'input projection is unspecified. Reprojecting the data to "WebMercator" '
+                    'automatically. To suppress this warning, set '
+                    '"projection=gcrs.WebMercator()" explicitly.'
                 )
                 super().__init__(df, projection=gcrs.WebMercator(), **kwargs)
-            elif (ax is None and
-                  projection is not None and
-                  projection.__class__.__name__ != 'WebMercator'):
+            elif (ax is None
+                  and projection is not None
+                  and projection.__class__.__name__ != 'WebMercator'):
                 raise ValueError(
                     f'"webmap" is only compatible with the "WebMercator" projection, but '
                     f'the input projection is set to {projection.__class__.__name__!r}. Set '
                     f'projection=gcrs.WebMercator() instead.'
                 )
-            elif (ax is None and
-                  projection is not None and
-                  projection.__class__.__name__ == 'WebMercator'):
+            elif (ax is None
+                  and projection is not None
+                  and projection.__class__.__name__ == 'WebMercator'):
                 super().__init__(df, projection=projection, **kwargs)
 
             zoom = kwargs.pop('zoom', None)
@@ -1778,7 +1771,7 @@ def webmap(
                 return ax
 
             basemap, extent = ctx.bounds2img(
-                *self._webmap_extent, zoom=self.zoom, 
+                *self._webmap_extent, zoom=self.zoom,
                 source=provider, ll=True
             )
             ax.imshow(basemap, extent=extent, interpolation='bilinear')
@@ -1798,6 +1791,7 @@ def _to_geom_geoseries(df, var, var_name):
     else:
         s = _to_geoseries(df, var, var_name, validate=False)
     return s
+
 
 def _to_geoseries(df, var, var_name, validate=True):
     """
@@ -1856,6 +1850,7 @@ def _to_geoseries(df, var, var_name, validate=True):
     else:
         return s
 
+
 def _validate_buckets(df, hue, k, scheme):
     """
     This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
@@ -1889,9 +1884,10 @@ def _validate_buckets(df, hue, k, scheme):
     scheme = scheme if scheme else 'Quantiles'
     return categorical, scheme
 
+
 def relax_bounds(xmin, ymin, xmax, ymax):
     """
-    Increases the viewport slightly. Used to ameliorate plot featurs that fall out of bounds.
+    Increases the viewport slightly. Used to ameliorate plot features that fall out of bounds.
     """
     window_resize_val_x = 0.1 * (xmax - xmin)
     window_resize_val_y = 0.1 * (ymax - ymin)

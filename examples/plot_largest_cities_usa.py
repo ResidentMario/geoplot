@@ -19,7 +19,7 @@ contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
 scheme = mc.Quantiles(continental_usa_cities['POP_2010'], k=5)
 
 ax = gplt.polyplot(
-    contiguous_usa, 
+    contiguous_usa,
     zorder=-1,
     linewidth=1,
     projection=gcrs.AlbersEqualArea(),
@@ -28,7 +28,7 @@ ax = gplt.polyplot(
     figsize=(8, 12)
 )
 gplt.pointplot(
-    continental_usa_cities, 
+    continental_usa_cities,
     scale='POP_2010',
     limits=(2, 30),
     hue='POP_2010',

@@ -36,7 +36,7 @@ cali = gpd.read_file(gplt.datasets.get_path('california_congressional_districts'
 cali = cali.assign(area=cali.geometry.area)
 
 
-proj=gcrs.AlbersEqualArea(central_latitude=37.16611, central_longitude=-119.44944)
+proj = gcrs.AlbersEqualArea(central_latitude=37.16611, central_longitude=-119.44944)
 fig, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': proj})
 
 gplt.choropleth(
@@ -44,7 +44,6 @@ gplt.choropleth(
 )
 axarr[0][0].set_title('scheme=None', fontsize=18)
 
-import mapclassify as mc
 scheme = mc.Quantiles(cali.area, k=5)
 gplt.choropleth(
     cali, hue='area', linewidth=0, scheme=scheme, ax=axarr[0][1]

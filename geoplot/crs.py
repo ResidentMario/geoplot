@@ -8,6 +8,7 @@ refer to http://scitools.org.uk/cartopy/docs/latest/crs/projections.html.
 import cartopy.crs as ccrs
 import geopandas as gpd
 
+
 class Base:
     # TODO: RotatedPole
     """
@@ -163,7 +164,7 @@ PlateCarree,\
                      'Geostationary',
                      'NorthPolarStereo',
                      'SouthPolarStereo')
-)
+    )
 
 Gnomonic = type('Gnomonic', (LatitudeCentering,), {})
 
