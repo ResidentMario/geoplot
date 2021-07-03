@@ -1,6 +1,6 @@
 ## geoplot: geospatial data visualization
 
-[![](https://img.shields.io/conda/v/conda-forge/geoplot.svg)](https://github.com/conda-forge/geoplot-feedstock) ![](https://img.shields.io/badge/python-3.6+-blue.svg) [![Gitter](https://img.shields.io/gitter/room/ResidentMario/geoplot)](https://gitter.im/geoplot/community) [![](https://zenodo.org/badge/DOI/10.5281/zenodo.3475569.svg)](https://zenodo.org/record/3475569)
+[![](https://img.shields.io/conda/v/conda-forge/geoplot.svg)](https://github.com/conda-forge/geoplot-feedstock) ![](https://img.shields.io/badge/python-3.6+-blue.svg) [![](https://zenodo.org/badge/DOI/10.5281/zenodo.3475569.svg)](https://zenodo.org/record/3475569)
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_collision_factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
