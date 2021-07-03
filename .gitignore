@@ -15,6 +15,7 @@ tests/baseline/
 quilt_packages/
 .pytest_cache/
 Untitled.ipynb
+dev.ipynb
 
 # sphinx-gallery
 *.md5
