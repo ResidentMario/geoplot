@@ -10,4 +10,3 @@ dependencies:
   - matplotlib
   - seaborn
   - cartopy
-  - descartes

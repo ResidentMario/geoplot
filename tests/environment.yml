@@ -21,7 +21,6 @@ dependencies:
   - curl=7.69.1
   - cycler=0.10.0
   - deprecated=1.2.10
-  - descartes=1.1.0
   - expat=2.2.9
   - fiona=1.8.13
   - fontconfig=2.13.1
