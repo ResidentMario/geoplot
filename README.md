@@ -4,27 +4,27 @@
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_collision_factors.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-collision-factors.png"
- height="120" width="120">
+ height="130" width="130">
 </a>
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_los_angeles_flights.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/los-angeles-flights.png"
- height="120" width="120">
+ height="130" width="130">
 </a>
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/usa-city-elevations.png"
- height="120">
+ height="130">
 </a>
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_nyc_parking_tickets.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/nyc-parking-tickets.png"
- height="120" width="120">
+ height="130" width="130">
 </a>
 
 <a href=https://residentmario.github.io/geoplot/gallery/plot_dc_street_network.html>
 <img src="https://raw.githubusercontent.com/ResidentMario/geoplot/master/figures/dc-street-network.png"
-height="120" width="120">
+height="130" width="130">
 </a>
 
 ``geoplot`` is a high-level Python geospatial plotting library. It's an extension to `cartopy` and `matplotlib` which makes mapping easy: like `seaborn` for geospatial. It comes with the following features:
