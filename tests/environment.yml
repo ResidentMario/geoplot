@@ -1,145 +1,214 @@
 name: test-environment
 channels:
+  - nvidia
+  - rapidsai
   - conda-forge
   - defaults
 dependencies:
-  - attrs=19.3.0
-  - boost-cpp=1.72.0
-  - brotlipy=0.7.0
+  - attrs=21.2.0
+  - boost-cpp=1.74.0
   - bzip2=1.0.8
-  - ca-certificates=2020.4.5.1
+  - c-ares=1.17.1
+  - ca-certificates=2021.5.30
   - cairo=1.16.0
   - cartopy=0.18.0
-  - certifi=2020.4.5.1
-  - cffi=1.14.0
+  - certifi=2021.5.30
   - cfitsio=3.470
-  - chardet=3.0.4
   - click=7.1.2
   - click-plugins=1.1.1
-  - cligj=0.5.0
-  - cryptography=2.9.2
-  - curl=7.69.1
+  - cligj=0.7.2
+  - curl=7.76.1
   - cycler=0.10.0
-  - deprecated=1.2.10
-  - expat=2.2.9
-  - fiona=1.8.13
+  - decorator=5.0.9
+  - expat=2.4.1
+  - fiona=1.8.18
   - fontconfig=2.13.1
-  - freetype=2.10.2
-  - freexl=1.0.5
-  - gdal=3.0.4
-  - geopandas=0.7.0
+  - freetype=2.10.4
+  - freexl=1.0.6
+  - gdal=3.2.1
+  - geopandas=0.9.0
+  - geopandas-base=0.9.0
   - geos=3.8.1
   - geotiff=1.6.0
   - gettext=0.19.8.1
   - giflib=5.2.1
-  - glib=2.64.2
-  - hdf4=4.2.13
+  - glib=2.66.3
+  - hdf4=4.2.15
   - hdf5=1.10.6
-  - icu=64.2
-  - idna=2.9
-  - joblib=0.15.0
-  - jpeg=9c
+  - icu=67.1
+  - joblib=1.0.1
+  - jpeg=9d
   - json-c=0.13.1
-  - kealib=1.4.13
-  - kiwisolver=1.2.0
-  - krb5=1.17.1
-  - libblas=3.8.0
-  - libcblas=3.8.0
-  - libcurl=7.69.1
-  - libcxx=10.0.0
+  - kealib=1.4.14
+  - kiwisolver=1.3.1
+  - krb5=1.17.2
+  - lcms2=2.12
+  - libblas=3.9.0
+  - libcblas=3.9.0
+  - libcurl=7.76.1
+  - libcxx=11.1.0
   - libdap4=3.20.6
-  - libedit=3.1.20170329
+  - libedit=3.1.20191231
+  - libev=4.33
   - libffi=3.2.1
-  - libgdal=3.0.4
-  - libgfortran=4.0.0
-  - libiconv=1.15
+  - libgdal=3.2.1
+  - libgfortran=5.0.0
+  - libgfortran5=9.3.0
+  - libglib=2.66.3
+  - libiconv=1.16
   - libkml=1.3.0
-  - liblapack=3.8.0
+  - liblapack=3.9.0
   - libnetcdf=4.7.4
-  - libopenblas=0.3.9
+  - libnghttp2=1.43.0
+  - libopenblas=0.3.15
   - libpng=1.6.37
-  - libpq=12.2
+  - libpq=12.3
+  - librttopo=1.1.0
   - libspatialindex=1.9.3
-  - libspatialite=4.3.0a
-  - libssh2=1.8.2
-  - libtiff=4.1.0
-  - libwebp-base=1.1.0
+  - libspatialite=5.0.1
+  - libssh2=1.9.0
+  - libtiff=4.2.0
+  - libwebp-base=1.2.0
   - libxml2=2.9.10
-  - llvm-openmp=10.0.0
-  - lz4-c=1.9.2
-  - mapclassify=2.2.0
-  - matplotlib=3.2.1
-  - matplotlib-base=3.2.1
+  - llvm-openmp=11.1.0
+  - lz4-c=1.9.3
+  - mapclassify=2.4.2
+  - matplotlib=3.4.2
+  - matplotlib-base=3.4.2
   - munch=2.5.0
-  - ncurses=6.1
-  - numpy=1.18.4
+  - ncurses=6.2
+  - networkx=2.5
+  - numpy=1.21.0
   - olefile=0.46
   - openjpeg=2.3.1
-  - openssl=1.1.1g
-  - owslib=0.19.2
-  - pandas=1.0.3
+  - openssl=1.1.1k
+  - pandas=1.3.0
   - patsy=0.5.1
-  - pcre=8.44
-  - pillow=7.1.2
-  - pip=20.1
-  - pixman=0.38.0
-  - poppler=0.87.0
-  - poppler-data=0.4.9
-  - postgresql=12.2
-  - proj=7.0.0
-  - pycparser=2.20
-  - pyepsg=0.4.0
-  - pyopenssl=19.1.0
+  - pcre=8.45
+  - pillow=8.1.2
+  - pip=21.1.3
+  - pixman=0.40.0
+  - poppler=0.89.0
+  - poppler-data=0.4.10
+  - postgresql=12.3
+  - proj=7.1.1
   - pyparsing=2.4.7
   - pyproj=2.6.1.post1
-  - pyshp=2.1.0
-  - pysocks=1.7.1
+  - pyshp=2.1.3
   - python=3.8.0
   - python-dateutil=2.8.1
   - python_abi=3.8
-  - pytz=2020.1
-  - pyyaml=5.3.1
-  - readline=8.0
-  - requests=2.23.0
-  - rtree=0.9.4
-  - scikit-learn=0.23.0
-  - scipy=1.4.1
-  - seaborn=0.10.1
-  - setuptools=46.3.1
-  - shapely=1.7.0
-  - six=1.14.0
-  - sqlite=3.30.1
-  - statsmodels=0.11.1
-  - tbb=2018.0.5
-  - threadpoolctl=2.0.0
-  - tiledb=1.7.7
+  - pytz=2021.1
+  - readline=8.1
+  - rtree=0.9.7
+  - scikit-learn=0.24.2
+  - scipy=1.7.0
+  - seaborn=0.11.1
+  - seaborn-base=0.11.1
+  - setuptools=49.6.0
+  - shapely=1.7.1
+  - six=1.16.0
+  - sqlite=3.36.0
+  - statsmodels=0.12.2
+  - threadpoolctl=2.1.0
+  - tiledb=2.1.6
   - tk=8.6.10
-  - tornado=6.0.4
-  - tzcode=2020a
-  - urllib3=1.25.9
-  - wheel=0.34.2
-  - wrapt=1.12.1
-  - xerces-c=3.2.2
+  - tornado=6.1
+  - tzcode=2021a
+  - wheel=0.36.2
+  - xerces-c=3.2.3
   - xz=5.2.5
-  - yaml=0.2.4
   - zlib=1.2.11
-  - zstd=1.4.4
+  - zstd=1.4.9
   - pip:
     - affine==2.3.0
-    - contextily==1.0.0
-    - geographiclib==1.50
-    - geoplot==0.4.0
-    - geopy==1.22.0
-    - mercantile==1.1.4
-    - more-itertools==8.3.0
-    - nose==1.3.7
-    - packaging==20.3
+    - alabaster==0.7.12
+    - appnope==0.1.2
+    - argon2-cffi==20.1.0
+    - astroid==2.6.2
+    - async-generator==1.10
+    - babel==2.9.1
+    - backcall==0.2.0
+    - bleach==3.3.0
+    - cffi==1.14.5
+    - chardet==4.0.0
+    - contextily==1.1.0
+    - debugpy==1.3.0
+    - defusedxml==0.7.1
+    - docutils==0.16
+    - entrypoints==0.3
+    - geographiclib==1.52
+    - geopy==2.1.0
+    - idna==2.10
+    - imagesize==1.2.0
+    - iniconfig==1.1.1
+    - ipykernel==6.0.1
+    - ipython==7.25.0
+    - ipython-genutils==0.2.0
+    - ipywidgets==7.6.3
+    - isort==5.9.1
+    - jedi==0.18.0
+    - jinja2==3.0.1
+    - jsonschema==3.2.0
+    - jupyter==1.0.0
+    - jupyter-client==6.1.12
+    - jupyter-console==6.4.0
+    - jupyter-core==4.7.1
+    - jupyterlab-pygments==0.1.2
+    - jupyterlab-widgets==1.0.0
+    - lazy-object-proxy==1.6.0
+    - markupsafe==2.0.1
+    - matplotlib-inline==0.1.2
+    - mccabe==0.6.1
+    - mercantile==1.2.1
+    - mistune==0.8.4
+    - mplleaflet==0.0.5
+    - nbclient==0.5.3
+    - nbconvert==6.1.0
+    - nbformat==5.1.3
+    - nest-asyncio==1.5.1
+    - notebook==6.4.0
+    - packaging==21.0
+    - pandocfilters==1.4.3
+    - parso==0.8.2
+    - pexpect==4.8.0
+    - pickleshare==0.7.5
     - pluggy==0.13.1
-    - py==1.8.1
-    - pytest==5.4.2
-    - pytest-mpl==0.11
-    - rasterio==1.1.4
+    - prometheus-client==0.11.0
+    - prompt-toolkit==3.0.19
+    - ptyprocess==0.7.0
+    - py==1.10.0
+    - pycparser==2.20
+    - pygments==2.9.0
+    - pylint==2.9.3
+    - pyrsistent==0.18.0
+    - pytest==6.2.4
+    - pytest-mpl==0.13
+    - pyzmq==22.1.0
+    - qtconsole==5.1.1
+    - qtpy==1.9.0
+    - rasterio==1.2.6
+    - requests==2.25.1
+    - send2trash==1.7.1
+    - snowballstemmer==2.1.0
     - snuggs==1.4.7
-    - wcwidth==0.1.9
+    - sphinx==4.0.2
+    - sphinx-gallery==0.9.0
+    - sphinx-rtd-theme==0.5.2
+    - sphinxcontrib-applehelp==1.0.2
+    - sphinxcontrib-devhelp==1.0.2
+    - sphinxcontrib-htmlhelp==2.0.0
+    - sphinxcontrib-jsmath==1.0.1
+    - sphinxcontrib-qthelp==1.0.3
+    - sphinxcontrib-serializinghtml==1.1.5
+    - terminado==0.10.1
+    - testpath==0.5.0
+    - toml==0.10.2
+    - traitlets==5.0.5
+    - urllib3==1.26.6
+    - wcwidth==0.2.5
+    - webencodings==0.5.1
+    - widgetsnbextension==3.5.1
+    - wrapt==1.12.1
 
 
