@@ -13,7 +13,7 @@ from cartopy.mpl.geoaxes import GeoAxesSubplot
 import warnings
 import shapely.geometry
 import pandas as pd
-import descartes
+from geopandas.plotting import _PolygonPatch as GeopandasPolygonPatch
 import contextily as ctx
 import mapclassify as mc
 
@@ -893,13 +893,13 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
                 for geom in df.geometry:
                     try:  # Duck test for MultiPolygon.
                         for subgeom in geom:
-                            feature = descartes.PolygonPatch(
+                            feature = GeopandasPolygonPatch(
                                 subgeom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
                                 **kwargs
                             )
                             ax.add_patch(feature)
                     except (TypeError, AssertionError):  # Shapely Polygon.
-                        feature = descartes.PolygonPatch(
+                        feature = GeopandasPolygonPatch(
                             geom, facecolor=facecolor, edgecolor=edgecolor, zorder=zorder,
                             **kwargs
                         )
@@ -994,12 +994,12 @@ def choropleth(
                 for color, geom in zip(self.colors, df.geometry):
                     try:  # Duck test for MultiPolygon.
                         for subgeom in geom:
-                            feature = descartes.PolygonPatch(
+                            feature = GeopandasPolygonPatch(
                                 subgeom, facecolor=color, **self.kwargs
                             )
                             ax.add_patch(feature)
                     except (TypeError, AssertionError):  # Shapely Polygon.
-                        feature = descartes.PolygonPatch(
+                        feature = GeopandasPolygonPatch(
                             geom, facecolor=color, **self.kwargs
                         )
                         ax.add_patch(feature)
@@ -1127,7 +1127,7 @@ def quadtree(
                         feature, facecolor=color, **self.kwargs
                     )
                 else:
-                    feature = descartes.PolygonPatch(
+                    feature = GeopandasPolygonPatch(
                         geom, facecolor=color, **self.kwargs
                     )
                     ax.add_patch(feature)
@@ -1257,12 +1257,12 @@ def cartogram(
                 else:
                     try:  # Duck test for MultiPolygon.
                         for subgeom in scaled_polygon:
-                            feature = descartes.PolygonPatch(
+                            feature = GeopandasPolygonPatch(
                                 subgeom, facecolor=color, **self.kwargs
                             )
                             ax.add_patch(feature)
                     except (TypeError, AssertionError):  # Shapely Polygon.
-                        feature = descartes.PolygonPatch(
+                        feature = GeopandasPolygonPatch(
                             scaled_polygon, facecolor=color, **self.kwargs
                         )
                         ax.add_patch(feature)
@@ -1631,7 +1631,7 @@ def voronoi(
                         feature, facecolor=color, edgecolor=edgecolor, **self.kwargs
                     )
                 else:
-                    feature = descartes.PolygonPatch(
+                    feature = GeopandasPolygonPatch(
                         geom, facecolor=color, edgecolor=edgecolor, **self.kwargs
                     )
                     ax.add_patch(feature)
