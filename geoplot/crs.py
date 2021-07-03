@@ -151,7 +151,14 @@ PlateCarree,\
     InterruptedGoodeHomolosine,\
     Geostationary,\
     NorthPolarStereo,\
-    SouthPolarStereo = tuple(
+    SouthPolarStereo,\
+    EckertI,\
+    EckertII,\
+    EckertIII,\
+    EckertIV,\
+    EckertV,\
+    EckertVI,\
+    EqualEarth = tuple(
         type(name, (LongitudeCentering,), {})
         for name in ('PlateCarree',
                      'LambertCylindrical',
@@ -163,16 +170,24 @@ PlateCarree,\
                      'InterruptedGoodeHomolosine',
                      'Geostationary',
                      'NorthPolarStereo',
-                     'SouthPolarStereo')
+                     'SouthPolarStereo',
+                     'EckertI',
+                     'EckertII',
+                     'EckertIII',
+                     'EckertIV',
+                     'EckertV',
+                     'EckertVI',
+                     'EqualEarth')
     )
 
 Gnomonic = type('Gnomonic', (LatitudeCentering,), {})
 
 EuroPP,\
     OSGB,\
+    NearsidePerspective,\
     WebMercator = tuple(
         type(name, (LongitudeLatitudeCentering,), {})
-        for name in ('EuroPP', 'OSGB', 'WebMercator')
+        for name in ('EuroPP', 'OSGB', 'NearsidePerspective', 'WebMercator')
     )
 
 AlbersEqualArea,\
@@ -182,7 +197,6 @@ AlbersEqualArea,\
     Stereographic,\
     TransverseMercator,\
     LambertAzimuthalEqualArea,\
-    UTM,\
     OSNI,\
     WebMercator = tuple(
         type(name, (Base,), {})
@@ -193,7 +207,6 @@ AlbersEqualArea,\
                      'Stereographic',
                      'TransverseMercator',
                      'LambertAzimuthalEqualArea',
-                     'UTM',
                      'OSNI',
                      'WebMercator')
     )
