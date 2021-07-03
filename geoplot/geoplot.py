@@ -880,6 +880,8 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
 
             edgecolor = kwargs.pop('edgecolor', 'black')
             facecolor = kwargs.pop('facecolor', 'None')
+            # Regular plots have zorder 0, polyplot has zorder -1, webmap has zorder -2.
+            # This reflects the order we usually want these plot elements to appear in.
             zorder = kwargs.pop('zorder', -1)
 
             if self.projection:
@@ -1764,6 +1766,9 @@ def webmap(
                     )
             self.zoom = zoom
             self._webmap_extent = extent
+            # Regular plots have zorder 0, polyplot has zorder -1, webmap has zorder -2.
+            # This reflects the order we usually want these plot elements to appear in.
+            self.zorder = kwargs.pop('zorder', -2)
 
         def draw(self):
             ax = plot.ax
@@ -1774,7 +1779,7 @@ def webmap(
                 *self._webmap_extent, zoom=self.zoom,
                 source=provider, ll=True
             )
-            ax.imshow(basemap, extent=extent, interpolation='bilinear')
+            ax.imshow(basemap, extent=extent, interpolation='bilinear', zorder=self.zorder)
             return ax
 
     plot = WebmapPlot(df, figsize=figsize, ax=ax, extent=extent, zoom=zoom, **kwargs)
