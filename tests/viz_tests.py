@@ -1,4 +1,3 @@
-import unittest
 import pytest
 import numpy as np
 import geopandas as gpd
@@ -30,6 +29,7 @@ ls_df = ls_df.assign(var=ls_df.geometry.centroid.x.abs() + ls_df.geometry.centro
 
 clip_geom = gpd.GeoSeries(Polygon([[-10, -10], [10, -10], [10, 10], [-10, 10]]))
 non_clip_geom = gpd.GeoSeries(Polygon([[-30, -30], [30, -30], [30, 30], [-30, 30]]))
+
 
 def identity_scale(minval, maxval):
     def scalar(val):
@@ -96,7 +96,7 @@ def test_scale_params(kwargs):
 def test_clip_params_geometric(kwargs):
     # ignore warning from changed GeoSeries.isna behavior
     import warnings
-    with warnings.catch_warnings():    
+    with warnings.catch_warnings():
         warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
         return voronoi(p_df, **kwargs).get_figure()
 
@@ -149,7 +149,7 @@ def test_clip_params_overlay(kwargs):
      'legend_kwargs': {'bbox_to_anchor': (1.0, 1.2)}},
     {'hue': 'var', 'linewidth': 0, 's': 10, 'legend': True, 'scheme': 'quantiles',
      'legend_kwargs': {'markeredgecolor': 'purple', 'markeredgewidth': 5}},
-    {'scale': 'var', 'linewidth': 0,'limits': (5, 10),
+    {'scale': 'var', 'linewidth': 0, 'limits': (5, 10),
      'legend': True, 'legend_kwargs': {'markerfacecolor': 'purple'}}
 ])
 def test_legend_params(kwargs):
@@ -170,7 +170,7 @@ def test_legend_params(kwargs):
     # xfail because webmap tiles are subject to remote change
     pytest.param(*[webmap, p_df, {'projection': WebMercator()}], marks=pytest.mark.xfail),
     [choropleth, poly_df, {'hue': 'var', 'linewidth': 0, 'legend': True}],
-    [choropleth, poly_df, 
+    [choropleth, poly_df,
      {'hue': 'var', 'linewidth': 0, 'legend': True,
       'projection': AlbersEqualArea()}],
     [cartogram, poly_df, {'scale': 'var', 'linewidth': 0, 'legend': True}],
@@ -178,11 +178,11 @@ def test_legend_params(kwargs):
      {'scale': 'var', 'linewidth': 0, 'legend': True,
       'projection': AlbersEqualArea()}],
     [voronoi, p_df, {'facecolor': 'lightgray', 'edgecolor': 'white'}],
-    [voronoi, p_df, 
+    [voronoi, p_df,
      {'facecolor': 'lightgray', 'edgecolor': 'white',
       'projection': AlbersEqualArea()}],
     [quadtree, p_df, {'facecolor': 'lightgray', 'edgecolor': 'white'}],
-    [quadtree, p_df, 
+    [quadtree, p_df,
      {'facecolor': 'lightgray', 'edgecolor': 'white', 'projection': AlbersEqualArea()}],
     [sankey, ls_df, {'scale': 'var', 'legend': True}],
     [sankey, ls_df, {'scale': 'var', 'legend': True, 'projection': AlbersEqualArea()}]
@@ -204,7 +204,7 @@ def test_param_extent_unproj():
         pointplot(p_df, extent=(0, 0, 1, 91))
 
     # valid extent: set
-    return pointplot(p_df, hue='var', linewidth= 0, s=10, extent=(-10, -10, 10, 10)).get_figure()
+    return pointplot(p_df, hue='var', linewidth=0, s=10, extent=(-10, -10, 10, 10)).get_figure()
 
 
 @pytest.mark.mpl_image_compare
@@ -221,6 +221,6 @@ def test_param_extent_proj():
 
     # valid extent: set
     return pointplot(
-        p_df, hue='var', linewidth= 0, s=10, extent=(-10, -10, 10, 10),
+        p_df, hue='var', linewidth=0, s=10, extent=(-10, -10, 10, 10),
         projection=AlbersEqualArea()
     ).get_figure()

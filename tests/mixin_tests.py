@@ -37,13 +37,13 @@ class TestPlot(unittest.TestCase):
         plot = Plot(self.gdf, **self.kwargs)
         assert plot.figsize == (8, 6)
         assert isinstance(plot.ax, SubplotBase)  # SO 11690597
-        assert plot.extent == None
-        assert plot.projection == None
+        assert plot.extent is None
+        assert plot.projection is None
 
         plot = Plot(self.gdf, **{**self.kwargs, **{'projection': gcrs.PlateCarree()}})
         assert plot.figsize == (8, 6)
         assert isinstance(plot.ax, GeoAxesSubplot)
-        assert plot.extent == None
+        assert plot.extent is None
         assert isinstance(plot.projection, ccrs.PlateCarree)
 
     @axis_initializer
@@ -125,7 +125,7 @@ class TestPlot(unittest.TestCase):
 
         # default, non-empty geometry case: use a (relaxed) geometry envelope
         plot = Plot(
-            gpd.GeoDataFrame(geometry=[Point(-1, -1), Point(1, 1)]), 
+            gpd.GeoDataFrame(geometry=[Point(-1, -1), Point(1, 1)]),
             **{**self.kwargs, **{'projection': gcrs.PlateCarree()}}
         )
         xmin, xmax = plot.ax.get_xlim()
@@ -199,7 +199,7 @@ class TestHue(unittest.TestCase):
         huemixin = self.create_huemixin()
         huemixin.set_hue_values(supports_categorical=False)
         assert (huemixin.hue == huemixin.df['foo']).all()
-        
+
         # hue is initialized as a Series: pass that directly to the param
         huemixin = self.create_huemixin()
         hue = pd.Series(np.random.random(100))
@@ -238,9 +238,9 @@ class TestHue(unittest.TestCase):
         assert huemixin.cmap.cmap.name == 'jet'
 
         # cmap is a Colormap instance: it is propogated
-        # Colormap is an abstract class, LinearSegmentedColormap stands in as a test object 
+        # Colormap is an abstract class, LinearSegmentedColormap stands in as a test object
         huemixin = self.create_huemixin()
-        colors = [(215/255, 193/255, 126/255), (37/255, 37/255, 37/255)]
+        colors = [(215 / 255, 193 / 255, 126 / 255), (37 / 255, 37 / 255, 37 / 255)]
         cm = LinearSegmentedColormap.from_list('test_colormap', colors)
         huemixin.kwargs['cmap'] = cm
         huemixin.set_hue_values(supports_categorical=False)
@@ -274,7 +274,7 @@ class TestHue(unittest.TestCase):
         huemixin.kwargs['hue'] = 'viridis'
         with pytest.raises(ValueError):
             huemixin.set_hue_values(supports_categorical=False)
-        
+
         # color_kwarg in keyword arguments and hue is None: set color
         huemixin = self.create_huemixin()
         huemixin.kwargs['color'] = 'black'
@@ -288,7 +288,7 @@ class TestHue(unittest.TestCase):
         huemixin.color_kwarg = 'foofacecolor'
         huemixin.kwargs['foofacecolor'] = 'black'
         huemixin.kwargs['hue'] = None
-        huemixin.kwargs['cmap'] = None        
+        huemixin.kwargs['cmap'] = None
         huemixin.set_hue_values(supports_categorical=False)
         huemixin.colors == ['black'] * 100
 
@@ -351,7 +351,7 @@ class TestScale(unittest.TestCase):
             return scalemixin
 
         self.create_scalemixin = create_scalemixin
-    
+
     def test_scale_init_defaults(self):
         scalemixin = self.create_scalemixin()
         scalemixin.set_scale_values()
@@ -360,7 +360,7 @@ class TestScale(unittest.TestCase):
         assert len(scalemixin.sizes) == 100
         assert (scalemixin.sizes <= 5).all()
         assert (scalemixin.sizes >= 1).all()
-        assert scalemixin.scale_func == None
+        assert scalemixin.scale_func is None
         assert scalemixin.dscale is not None  # dscale is the calibrated internal scale
 
     def test_scale_init_scale_dtypes(self):
@@ -486,7 +486,7 @@ class TestLegend(unittest.TestCase):
         legendmixin.scale = None
         with pytest.raises(ValueError):
             legendmixin.paint_legend(supports_scale=True, supports_hue=True)
-        
+
         # only hue, but legend_var is scale: raise
         legendmixin = self.create_legendmixin(['hue', 'scale'])
         legendmixin.scale = None

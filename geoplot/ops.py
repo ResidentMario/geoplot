@@ -1,5 +1,5 @@
 """
-This module implements a naive equal-split four-way quadtree algorithm 
+This module implements a naive equal-split four-way quadtree algorithm
 (https://en.wikipedia.org/wiki/Quadtree). It has been written in way meant to make it convenient
 to use for splitting and aggregating rectangular geometries up to a certain guaranteed minimum
 instance threshold.
@@ -31,9 +31,9 @@ class QuadTree:
         initialization input via ``bounds`` or left to the ``QuadTree`` instance to compute for
         itself.
     agg : dict
-        An aggregated dictionary whose keys consist of coordinates within the instance's 
+        An aggregated dictionary whose keys consist of coordinates within the instance's
         ``bounds`` and whose values consist of the indices of rows in the ``data`` property
-        corresponding with those points. This additional bookkeeping is necessary because a 
+        corresponding with those points. This additional bookkeeping is necessary because a
         single coordinate may contain many individual data points.
     n : int
         The number of points contained in the current QuadTree instance.
@@ -98,7 +98,7 @@ class QuadTree:
         q4 = (mid_x, max_x, min_y, mid_y)
         return [
             QuadTree(self.data, bounds=q1),
-            QuadTree(self.data, bounds=q2), 
+            QuadTree(self.data, bounds=q2),
             QuadTree(self.data, bounds=q3),
             QuadTree(self.data, bounds=q4)
         ]
@@ -188,9 +188,9 @@ def build_voronoi_polygons(df):
     # Voronoi diagram is not applicable to input data containing duplicate points. See GH 192.
     if len(geom) != len(np.unique(geom, axis=0)):
         raise ValueError(
-            f'The input data contains duplicate coordinates, which Voronoi tessellation does not '
-            f'support. To fix this error, make sure that ever record in your dataset has a unique '
-            f'coordinate value.'
+            'The input data contains duplicate coordinates, which Voronoi tessellation does not '
+            'support. To fix this error, make sure that ever record in your dataset has a unique '
+            'coordinate value.'
         )
 
     vor = Voronoi(geom)
@@ -248,7 +248,7 @@ def build_voronoi_polygons(df):
 
                     infinite_segments.append(np.asarray([vor.vertices[i], far_point]))
 
-            finite_segments = finite_segments if finite_segments else np.zeros(shape=(0,2,2))
+            finite_segments = finite_segments if finite_segments else np.zeros(shape=(0, 2, 2))
             ls = np.vstack([np.asarray(infinite_segments), np.asarray(finite_segments)])
 
             # We have to trivially sort the line segments into polygonal order. The algorithm that
@@ -259,7 +259,7 @@ def build_voronoi_polygons(df):
                 l1 = ls[0] if len(ls_sorted) == 0 else ls_sorted[-1]
                 matches = []
 
-                for l2 in [l for l in ls if not (l == l1).all()]:
+                for l2 in [ln for ln in ls if not (ln == l1).all()]:
                     if np.any(l1 == l2):
                         matches.append(l2)
                     elif np.any(l1 == l2[::-1]):
@@ -305,18 +305,18 @@ def jitter_points(geoms):
             jitter_indices += group_indices[group_key_of_interest].tolist()
 
         _x_jitter = (
-            pd.Series([0] * len(working_df)) +
-            pd.Series(
-                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
+            pd.Series([0] * len(working_df))
+            + pd.Series(
+                ((np.random.random(len(jitter_indices)) - 0.5) * 10**(-5)),
                 index=jitter_indices
             )
         )
         _x_jitter = _x_jitter.fillna(0)
 
         _y_jitter = (
-            pd.Series([0] * len(working_df)) +
-            pd.Series(
-                ((np.random.random(len(jitter_indices)) - 0.5)  * 10**(-5)),
+            pd.Series([0] * len(working_df))
+            + pd.Series(
+                ((np.random.random(len(jitter_indices)) - 0.5) * 10**(-5)),
                 index=jitter_indices
             )
         )

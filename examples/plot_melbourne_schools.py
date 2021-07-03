@@ -12,7 +12,6 @@ This example inspired by the `Melbourne Schools Zones Webmap <http://melbournesc
 import geopandas as gpd
 import geoplot as gplt
 import geoplot.crs as gcrs
-import pandas as pd
 import matplotlib.pyplot as plt
 
 melbourne = gpd.read_file(gplt.datasets.get_path('melbourne'))

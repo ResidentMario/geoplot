@@ -47,8 +47,8 @@ def gaussian_polygons(points, n=10):
         polygons.append(shapely.geometry.MultiPoint([(p.x, p.y) for p in sel_points]).convex_hull)
     polygons = [
         p for p in polygons if (
-            (not isinstance(p, shapely.geometry.Point)) and
-            (not isinstance(p, shapely.geometry.LineString)))
+            (not isinstance(p, shapely.geometry.Point))
+            and (not isinstance(p, shapely.geometry.LineString)))
     ]
     return gpd.GeoSeries(polygons)
 
@@ -58,7 +58,7 @@ def gaussian_multi_polygons(points, n=10):
     Returns an array of approximately `n` `shapely.geometry.MultiPolygon` objects for an array of
     `shapely.geometry.Point` objects.
     """
-    polygons = gaussian_polygons(points, n*2)
+    polygons = gaussian_polygons(points, n * 2)
     # Randomly stitch them together.
     polygon_pairs = [
         shapely.geometry.MultiPolygon(list(pair)) for pair in np.array_split(polygons.values, n)
