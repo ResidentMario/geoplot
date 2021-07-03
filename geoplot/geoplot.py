@@ -62,6 +62,11 @@ class HueMixin:
                 )
 
         hue = _to_geoseries(self.df, hue, "hue")
+        if hue.isnull().any():
+            warnings.warn(
+                'The data being passed to "hue" includes null values. You probably want to remove '
+                'these before plotting this data with geoplot.'
+            )
         if hue is None:  # no colormap
             color = self.kwargs.pop(color_kwarg, default_color)
             colors = [color] * len(self.df)
