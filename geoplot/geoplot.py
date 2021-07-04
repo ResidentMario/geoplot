@@ -19,7 +19,7 @@ import mapclassify as mc
 
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 MATPLOTLIB_DOCS_VERSION = "3.2.1"  # used in some docstrings
 
 
