@@ -19,7 +19,7 @@ import mapclassify as mc
 
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 MATPLOTLIB_DOCS_VERSION = "3.2.1"  # used in some docstrings
 
 
@@ -714,7 +714,7 @@ class Plot:
                         )
                     else:
                         warnings.warn(
-                            'Cound not set plot extent successfully due to numerical instability. '
+                            'Could not set plot extent successfully due to numerical instability. '
                             'Try setting extent manually. Defaulting to a global extent.'
                         )
 
