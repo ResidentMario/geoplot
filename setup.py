@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 doc_requires = [
-    'sphinx', 'sphinx-gallery', 'sphinx_rtd_theme', 'jupyter',
+    'sphinx', 'sphinx-gallery', 'sphinx_rtd_theme', 'nbsphinx', 'ipython',
     'mplleaflet', 'scipy',
 ]
 test_requires = ['pytest', 'pytest-mpl', 'scipy']

@@ -35,7 +35,7 @@ pip install -e .[develop]
 
 ## Documentation
 
-Documentation is provided via `sphinx`. To regenerate the documentation from the current source in one shot, navigate to the `docs` folder and run `make docs`. Alternatively, to regenerate a single specific section, see the following section.
+Documentation is provided via `sphinx`. To regenerate the documentation from the current source in one shot, navigate to the `docs` folder and run `make html`. Alternatively, to regenerate a single specific section, see the following section.
 
 ### Static example images
 
@@ -51,11 +51,11 @@ The gallery is generated using `sphinx-gallery`, and use the `examples/` folder 
 
 ### Quickstart
 
-The Quickstart is a Jupyter notebook in the `notebooks/` directory. To rebuild the quickstart, edit the notebook, then `cd notebooks/tutorials; jupyter nbconvert --to rst --output-dir ../../docs/quickstart/ Quickstart.ipynb`. Then run `make html` again.
+The Quickstart is a Jupyter notebook in the `docs/quickstart/` directory. To rebuild the quickstart, edit the notebook, then run `make html` again.
 
 ### Tutorials
 
-The tutorials are Jupyter notebooks the `notebooks/` directory. To rebuild the tutorials, edit the notebook(s), then `cd notebooks/tutorials/; jupyter nbconvert --to rst --output-dir ../../docs/user_guide/ $NOTEBOOK_NAME.ipynb`. Then run `make html` again.
+The tutorials are Jupyter notebooks in the `docs/user_guide/` directory. To rebuild the tutorials, edit the notebook(s), then run `make html` again.
 
 ### Example data
 
