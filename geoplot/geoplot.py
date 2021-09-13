@@ -1625,9 +1625,9 @@ def voronoi(
             # descending (1..N) index. If self.df doesn't also have a 1..N index, the join will
             # be misaligned and/or nan values will be inserted. The easiest way to assign in an
             # index-naive (e.g. index-based) manner is to provide a numpy array instead of a
-            # GeoSeries by taking .values.
+            # GeoSeries as input.
             self.df = self.df.assign(
-                geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms)).values
+                geometry=self.set_clip(gpd.GeoDataFrame(geometry=geoms)).to_numpy()[:, 0]
             )
             for color, geom in zip(self.colors, self.df.geometry):
                 if geom.is_empty:  # do not plot data points that return empty due to clipping
