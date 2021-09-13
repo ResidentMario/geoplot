@@ -159,7 +159,7 @@ class QuadTree:
         """
         Yield items from any nested iterable. Used by ``QuadTree.flatten`` to one-dimensionalize a
         list of sublists. cf.
-        http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+        https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
         """
         for x in items:
             if isinstance(x, Iterable):

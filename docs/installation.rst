@@ -7,7 +7,7 @@ Installation
 With Conda (Recommended)
 ------------------------
 
-If you haven't already, `install conda <http://conda.pydata.org/docs/>`_. Then run
+If you haven't already, `install conda <https://conda.pydata.org/docs/>`_. Then run
 ``conda install geoplot -c conda-forge`` and you're done. This works on all platforms (Linux, macOS, and Windows).
 
 Without Conda

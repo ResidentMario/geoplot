@@ -9,7 +9,7 @@ This plot demonstrates building and using a custom ``matplotlib`` colormap. To l
 `the matplotlib documentation
 <https://matplotlib.org/gallery/images_contours_and_fields/custom_cmap.html>`_.
 
-`Click here <http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_ to see an
+`Click here <https://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746>`_ to see an
 interactive scrolly-panny version of this webmap built with ``mplleaflet``. To learn more about
 ``mplleaflet``, refer to `the mplleaflet GitHub repo <https://github.com/jwass/mplleaflet>`_.
 """

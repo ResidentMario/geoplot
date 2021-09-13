@@ -757,7 +757,7 @@ def pointplot(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -800,7 +800,7 @@ def pointplot(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying `matplotlib.pyplot.scatter instance
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        <https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
@@ -868,7 +868,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
@@ -944,7 +944,7 @@ def choropleth(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         The
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -972,7 +972,7 @@ def choropleth(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
@@ -1050,7 +1050,7 @@ def quadtree(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1087,7 +1087,7 @@ def quadtree(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
@@ -1193,7 +1193,7 @@ def cartogram(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1223,7 +1223,7 @@ def cartogram(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
@@ -1305,7 +1305,7 @@ def kdeplot(
         `Working with Projections
         <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
     cmap : matplotlib color, optional
-        The `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        The `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     clip : None or iterable or GeoSeries, optional
         If specified, isochrones will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
@@ -1320,7 +1320,8 @@ def kdeplot(
     kwargs: dict, optional
         Keyword arguments to be passed to
         `the underlying seaborn.kdeplot instance
-        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+        <https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
@@ -1393,7 +1394,7 @@ def sankey(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1558,7 +1559,7 @@ def voronoi(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1601,7 +1602,7 @@ def voronoi(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Line2D objects
-        <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
+        <https://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
 
     Returns
     -------
@@ -1694,7 +1695,7 @@ def webmap(
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------

@@ -259,7 +259,7 @@ geometry.
 .. image:: ../figures/kdeplot/kdeplot-clip.png
 
 Additional keyword arguments that are not part of the ``geoplot`` API are passed to
-`the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+`the underlying seaborn.kdeplot instance <https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
 One of the most useful of these parameters is ``shade_lowest``, which toggles shading on the
 lowest (basal) layer of the kernel density estimate.
 
@@ -484,7 +484,7 @@ use a categorical colormap, set ``scheme``. ``legend`` toggles the legend.
 
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 ``matplotlib``
-`Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
+`Polygon patches <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
 which can be used to customize the appearance of the plot. To pass keyword argument to the
 legend, use the ``legend_kwargs`` argument.
 
