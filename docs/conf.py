@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
+    'matplotlib.sphinxext.plot_directive',
     'sphinx_gallery.gen_gallery'
 ]
 
@@ -50,6 +51,13 @@ extensions = [
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',   # path to scripts
     'gallery_dirs': 'gallery',  # path to save generated examples to
+}
+
+# Plot directive configuration
+plot_include_source = True
+plot_rcparams = {
+    'savefig.bbox': 'tight',
+    'savefig.pad_inches': 0.25,
 }
 
 # Add any paths that contain templates here, relative to this directory.
