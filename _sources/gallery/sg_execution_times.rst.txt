@@ -5,36 +5,36 @@
 
 Computation times
 =================
-**01:41.348** total execution time for **gallery** files:
+**01:42.056** total execution time for **gallery** files:
 
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_dc_street_network.py` (``plot_dc_street_network.py``)             | 00:21.717 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_dc_street_network.py` (``plot_dc_street_network.py``)             | 00:23.639 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py` (``plot_nyc_collisions_quadtree.py``) | 00:14.428 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py` (``plot_nyc_collisions_quadtree.py``) | 00:15.172 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_melbourne_schools.py` (``plot_melbourne_schools.py``)             | 00:11.096 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_melbourne_schools.py` (``plot_melbourne_schools.py``)             | 00:10.002 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py` (``plot_nyc_collision_factors.py``)     | 00:08.997 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_san_francisco_trees.py` (``plot_san_francisco_trees.py``)         | 00:08.619 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_san_francisco_trees.py` (``plot_san_francisco_trees.py``)         | 00:08.679 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py` (``plot_nyc_collision_factors.py``)     | 00:08.439 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py` (``plot_nyc_collisions_map.py``)           | 00:07.876 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py` (``plot_nyc_collisions_map.py``)           | 00:07.903 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py` (``plot_boston_airbnb_kde.py``)             | 00:07.656 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py` (``plot_boston_airbnb_kde.py``)             | 00:07.702 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py` (``plot_nyc_parking_tickets.py``)         | 00:06.048 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py` (``plot_nyc_parking_tickets.py``)         | 00:06.215 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_los_angeles_flights.py` (``plot_los_angeles_flights.py``)         | 00:04.233 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_los_angeles_flights.py` (``plot_los_angeles_flights.py``)         | 00:04.207 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_california_districts.py` (``plot_california_districts.py``)       | 00:03.396 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_california_districts.py` (``plot_california_districts.py``)       | 00:03.097 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_usa_city_elevations.py` (``plot_usa_city_elevations.py``)         | 00:02.959 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_usa_city_elevations.py` (``plot_usa_city_elevations.py``)         | 00:02.820 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)           | 00:01.738 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_largest_cities_usa.py` (``plot_largest_cities_usa.py``)           | 00:01.684 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_obesity.py` (``plot_obesity.py``)                                 | 00:01.241 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_obesity.py` (``plot_obesity.py``)                                 | 00:01.194 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_ny_state_demographics.py` (``plot_ny_state_demographics.py``)     | 00:01.037 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_ny_state_demographics.py` (``plot_ny_state_demographics.py``)     | 00:01.077 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py` (``plot_minard_napoleon_russia.py``)   | 00:00.247 | 0.0 MB |
+| :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py` (``plot_minard_napoleon_russia.py``)   | 00:00.285 | 0.0 MB |
 +-----------------------------------------------------------------------------------------------+-----------+--------+

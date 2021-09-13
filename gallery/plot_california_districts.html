@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Choropleth of California districts with alternative binning schemes &mdash; geoplot 0.4.1 documentation</title>
+  <title>Choropleth of California districts with alternative binning schemes &mdash; geoplot 0.4.4 documentation</title>
   
 
   
@@ -241,23 +241,23 @@ possible to have no binning scheme, in which case the data is passed through to 
 <li><p>scheme=”FisherJenks”—Bins the data using the Fisher natural breaks optimization
 procedure.</p></li>
 </ul>
-<p>To learn more about colormaps in general, refer to the <a class="reference external" href="https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue">Customizing Plots</a> reference in the
-documentation.</p>
+<p>To learn more about colormaps in general, refer to the
+<a class="reference internal" href="../user_guide/Customizing_Plots.html#Hue"><span class="std std-ref">Hue</span></a> reference in the documentation.</p>
 <p>This demo showcases a small subset of the classifiers available in <code class="docutils literal notranslate"><span class="pre">mapclassify</span></code>, the library
 that <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> relies on for this feature. To learn more about <code class="docutils literal notranslate"><span class="pre">mapclassify</span></code>, including how
 you can build your own custom <code class="docutils literal notranslate"><span class="pre">UserDefined</span></code> classifier, refer to <a class="reference external" href="https://pysal.org/mapclassify/index.html">the mapclassify docs</a>.</p>
 <img alt="California State Districts by Area, 2010, scheme=None, scheme=&quot;Quantiles&quot;, scheme=&quot;EqualInterval&quot;, scheme=&quot;FisherJenks&quot;" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_california_districts_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:36: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:35: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
 
   cali = cali.assign(area=cali.geometry.area)
-/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:47: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
+/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:46: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
 
   scheme = mc.Quantiles(cali.area, k=5)
-/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:53: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
+/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:52: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
 
   scheme = mc.EqualInterval(cali.area, k=5)
-/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:59: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
+/Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:58: UserWarning: Geometry is in a geographic CRS. Results from &#39;area&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
 
   scheme = mc.FisherJenks(cali.area, k=5)
 </pre></div>
@@ -308,7 +308,7 @@ you can build your own custom <code class="docutils literal notranslate"><span c
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;boston-airbnb-kde.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.396 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.097 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-california-districts-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/1e7e76a09c42e123e7f8c9e590e7bd5c/plot_california_districts.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_california_districts.py</span></code></a></p>

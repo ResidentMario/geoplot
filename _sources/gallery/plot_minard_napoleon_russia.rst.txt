@@ -72,7 +72,7 @@ interactive scrolly-panny version of this webmap built with ``mplleaflet``. To l
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.247 seconds)
+   **Total running time of the script:** ( 0 minutes  0.285 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_minard_napoleon_russia.py:

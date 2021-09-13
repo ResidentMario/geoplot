@@ -34,16 +34,15 @@ The options demonstrated are:
 * scheme="FisherJenks"—Bins the data using the Fisher natural breaks optimization
   procedure.
 
-To learn more about colormaps in general, refer to the `Customizing Plots
-<https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_ reference in the
-documentation.
+To learn more about colormaps in general, refer to the
+:ref:`/user_guide/Customizing_Plots.ipynb#hue` reference in the documentation.
 
 This demo showcases a small subset of the classifiers available in ``mapclassify``, the library
 that ``geoplot`` relies on for this feature. To learn more about ``mapclassify``, including how
 you can build your own custom ``UserDefined`` classifier, refer to `the mapclassify docs
 <https://pysal.org/mapclassify/index.html>`_.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-70
+.. GENERATED FROM PYTHON SOURCE LINES 26-69
 
 
 
@@ -58,16 +57,16 @@ you can build your own custom ``UserDefined`` classifier, refer to `the mapclass
 
  .. code-block:: none
 
-    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:36: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:35: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
 
       cali = cali.assign(area=cali.geometry.area)
-    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:47: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:46: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
 
       scheme = mc.Quantiles(cali.area, k=5)
-    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:53: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:52: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
 
       scheme = mc.EqualInterval(cali.area, k=5)
-    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:59: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+    /Users/alekseybilogur/Desktop/geoplot/examples/plot_california_districts.py:58: UserWarning: Geometry is in a geographic CRS. Results from 'area' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
 
       scheme = mc.FisherJenks(cali.area, k=5)
 
@@ -127,7 +126,7 @@ you can build your own custom ``UserDefined`` classifier, refer to `the mapclass
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.396 seconds)
+   **Total running time of the script:** ( 0 minutes  3.097 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_california_districts.py:
