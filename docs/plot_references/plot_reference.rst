@@ -445,7 +445,12 @@ to infer regional trends in a set of data.
 A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
 
 .. code-block:: python
-
+    injurious_collisions = gpd.read_file(
+        gplt.datasets.get_path('nyc_injurious_collisions')
+    )
+    injurious_collisions = injurious_collisions.assign(
+        geometry=gplt.ops.jitter_points(injurious_collisions.geometry)
+    )
     ax = gplt.voronoi(injurious_collisions.head(1000))
     gplt.polyplot(boroughs, ax=ax)
 
