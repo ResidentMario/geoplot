@@ -3,10 +3,10 @@ from .geoplot import (
     __version__
 )
 from .crs import (
-    PlateCarree, LambertCylindrical, Mercator, Miller, Mollweide, Robinson, Sinusoidal,
-    InterruptedGoodeHomolosine, Geostationary, NorthPolarStereo, SouthPolarStereo, Gnomonic,
-    AlbersEqualArea, AzimuthalEquidistant, LambertConformal, Orthographic, Stereographic,
-    TransverseMercator, LambertAzimuthalEqualArea, OSGB, EuroPP, OSNI, WebMercator,
+    PlateCarree, LambertCylindrical, Mercator, WebMercator, Miller, Mollweide, Robinson,
+    Sinusoidal, InterruptedGoodeHomolosine, Geostationary, NorthPolarStereo, SouthPolarStereo,
+    Gnomonic, AlbersEqualArea, AzimuthalEquidistant, LambertConformal, Orthographic,
+    Stereographic, TransverseMercator, LambertAzimuthalEqualArea, OSGB, EuroPP, OSNI,
     EckertI, EckertII, EckertIII, EckertIV, EckertV, EckertVI, NearsidePerspective
 )
 from .datasets import get_path
