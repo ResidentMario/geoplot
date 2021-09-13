@@ -1,4 +1,12 @@
 from setuptools import setup
+
+
+doc_requires = [
+    'sphinx', 'sphinx-gallery', 'sphinx_rtd_theme', 'nbsphinx', 'ipython',
+    'mplleaflet', 'scipy',
+]
+test_requires = ['pytest', 'pytest-mpl', 'scipy']
+
 setup(
     name='geoplot',
     packages=['geoplot'],
@@ -6,10 +14,11 @@ setup(
         'matplotlib', 'seaborn', 'pandas', 'geopandas>=0.9.0', 'cartopy', 'mapclassify>=2.1',
         'contextily>=1.0.0'
     ],
-    extras_require={'develop': [
-        'pytest', 'pytest-mpl', 'scipy', 'pylint', 'jupyter', 'sphinx', 'sphinx-gallery',
-        'sphinx_rtd_theme', 'mplleaflet'
-    ]},
+    extras_require={
+        'doc': doc_requires,
+        'test': test_requires,
+        'develop': [*doc_requires, *test_requires, 'pylint'],
+    },
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
     version='0.4.4',
     python_requires='>=3.6.0',
