@@ -185,13 +185,12 @@ def build_voronoi_polygons(df):
         raise ImportError("Install scipy >= 0.12.0 for Voronoi support")
     geom = np.array(df.geometry.map(lambda p: [p.x, p.y]).tolist())
 
-    # Voronoi diagram is not applicable to input data containing duplicate points. See GH 192.
-    if len(geom) != len(np.unique(geom, axis=0)):
-        raise ValueError(
-            'The input data contains duplicate coordinates, which Voronoi '
-            'tessellation does not support. To fix this error, make sure that '
-            'every record in your dataset has a unique coordinate value.'
-        )
+    # Jitter the points. Otherwise points sharing the same coordinate value will cause
+    # undefined behavior from the Voronoi algorithm (see GH#192). Jitter is applied randomly
+    # on 10**-5 scale, inducing maximum additive inaccuracy of ~1cm - good enough for the
+    # vast majority of geospatial applications. If the meaningful precision of your dataset
+    # exceeds 1cm, jitter the points yourself. cf. https://xkcd.com/2170/
+    df = df.assign(geometry=jitter_points(df.geometry))
 
     vor = Voronoi(geom)
 
