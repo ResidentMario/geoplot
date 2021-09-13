@@ -26,7 +26,7 @@ author = 'Aleksey Bilogur'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.4.1'
+release = '0.4.4'
 
 
 # -- General configuration ---------------------------------------------------
