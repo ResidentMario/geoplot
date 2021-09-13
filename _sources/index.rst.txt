@@ -61,7 +61,7 @@ For a brief introduction refer to the `Quickstart`_.
     :caption: Getting Started
 
     installation.rst
-    quickstart/Quickstart.ipynb
+    quickstart/quickstart.ipynb
 
 .. toctree::
     :maxdepth: 1
