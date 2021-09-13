@@ -188,9 +188,9 @@ def build_voronoi_polygons(df):
     # Voronoi diagram is not applicable to input data containing duplicate points. See GH 192.
     if len(geom) != len(np.unique(geom, axis=0)):
         raise ValueError(
-            'The input data contains duplicate coordinates, which Voronoi tessellation does not '
-            'support. To fix this error, make sure that ever record in your dataset has a unique '
-            'coordinate value.'
+            'The input data contains duplicate coordinates, which Voronoi '
+            'tessellation does not support. To fix this error, make sure that '
+            'every record in your dataset has a unique coordinate value.'
         )
 
     vor = Voronoi(geom)
@@ -270,8 +270,8 @@ def build_voronoi_polygons(df):
                     ls_sorted.append(l1)
 
                 for match in matches:
-                    # in list sytax this would be "if match not in ls_sorted"
-                    # in numpy things are more complicated...
+                    # in list syntax this would be "if match not in ls_sorted"
+                    # in NumPy things are more complicated...
                     if not any((match == ls_sort).all() for ls_sort in ls_sorted):
                         ls_sorted.append(match)
                         break

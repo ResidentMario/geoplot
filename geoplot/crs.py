@@ -47,7 +47,7 @@ class Base:
 
             A top-level centerings method is provided in each of the ``geoplot`` top-level plot
             functions; each of the projection wrapper classes defined here in turn selects the
-            functions from this list relevent to this particular instance and passes them to
+            functions from this list relevant to this particular instance and passes them to
             the ``_generic_load`` method here.
 
             We then in turn execute these functions to get defaults for our ``df`` and pass them
@@ -81,7 +81,7 @@ class Base:
 
     def _as_mpl_axes(self):
         """
-        When ``matplotlib`` is provided a projection via a ``projection`` keyword argument, it
+        When Matplotlib is provided a projection via a ``projection`` keyword argument, it
         expects to get something with a callable ``as_mpl_axes`` method. The precise details of
         what this method does, exactly, are not important: it suffices to know that every
         ``cartopy`` coordinate reference system object has one.
@@ -96,7 +96,7 @@ class Base:
         creating a plot containing subplots, the "overall" projection must be pre-loaded. It's
         possible to get around this by using ``cartopy.crs`` objects instead, but this is
         inelegant. This method is a better way: when a ``geoplot.crs`` object called by
-        ``matplotlib``, it silently swaps itself out for a vanilla version of its ``cartopy.crs``
+        Matplotlib, it silently swaps itself out for a vanilla version of its ``cartopy.crs``
         mirror, and calls that function's ``_as_mpl_axes`` instead.
 
         Parameters

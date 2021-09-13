@@ -324,7 +324,7 @@ class LegendMixin:
                         f'"matplotlib.colorbar.Colorbar" legend parameters instead?'
                         f'\n\n'
                         f'For a '
-                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'reference on the valid keyword parameters, see the Matplotlib '
                         f'documentation at '
                         f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/legend_api.html#'
                         f'matplotlib.legend.Legend . To learn more about the difference '
@@ -362,7 +362,7 @@ class LegendMixin:
                         f'"matplotlib.legend.Legend" legend parameters instead?'
                         f'\n\n'
                         f'For a '
-                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'reference on the valid keyword parameters, see the Matplotlib '
                         f'documentation at '
                         f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/colorbar_api.html#'
                         f'matplotlib.colorbar.Colorbar . To learn more about the difference '
@@ -375,7 +375,7 @@ class LegendMixin:
             if legend_values is None:
                 # If the user doesn't specify their own legend_values, apply a reasonable
                 # default: a five-point linear array from max to min. The sort order (max to min,
-                # not min to max) is important because ax.legend, the matplotlib function these
+                # not min to max) is important because ax.legend, the Matplotlib function these
                 # values are ultimately passed to, sorts the patches in ascending value order
                 # internally. Even though we pass no patch ordering information to ax.legend,
                 # it still appears to determine an ordering by inspecting plot artists
@@ -394,7 +394,7 @@ class LegendMixin:
                 # default: the 'g' f-string for the given input value.
                 legend_labels = ['{0:g}'.format(value) for value in legend_values]
 
-            # If the user specifies a markerfacecolor explicity via legend_params, use that.
+            # If the user specifies a markerfacecolor explicitly via legend_params, use that.
             #
             # Otherwise, use an open-circle design when hue is not None, so as not to confuse
             # viewers with colors in the scale mapping to values that do not correspond with the
@@ -607,7 +607,7 @@ class Plot:
     def __init__(self, df, **kwargs):
         if not hasattr(df, 'geometry'):
             # The two valid df types are GeoDataFrame and GeoSeries. The former may be missing
-            # a geometry column, depending on how it was initialzied. The latter always returns
+            # a geometry column, depending on how it was initialized. The latter always returns
             # self when it is asked for its geometry property, and so it will never be the source
             # of this error.
             raise ValueError(
@@ -642,7 +642,7 @@ class Plot:
             plt.figure(figsize=self.figsize)
 
         if len(self.df.geometry) == 0:
-            extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
+            extrema = np.array([0, 0, 1, 1])  # default Matplotlib plot extent
         else:
             xmin, ymin, xmax, ymax = self.df.total_bounds
             # Plots suffer clipping issues if we use just the geometry extrema due to plot features
@@ -697,14 +697,14 @@ class Plot:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
                 except ValueError:
-                    # This occurs either due to numerical stability errors in cartopy or due
+                    # This occurs either due to numerical stability errors in Cartopy or due
                     # to the extent exceeding the projection parameters. The latter *ought* to
                     # only happen when using the Orthographic projection (maybe others?), which
                     # is on a globe and only shows at most half of the world at a time. So if the
                     # plot extent exceeds the world half in any dimension the extent-setting
                     # operation will fail.
                     #
-                    # The default behavior in cartopy is to use a global extent with
+                    # The default behavior in Cartopy is to use a global extent with
                     # central_latitude and central_longitude as its center. This is the behavior
                     # we will follow in failure cases.
                     if isinstance(self.projection, ccrs.Orthographic):
@@ -867,7 +867,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
@@ -971,7 +971,7 @@ def choropleth(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
@@ -1086,7 +1086,7 @@ def quadtree(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
@@ -1222,7 +1222,7 @@ def cartogram(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
@@ -1600,7 +1600,7 @@ def voronoi(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Line2D objects
+        Keyword arguments to be passed to the underlying Matplotlib `Line2D objects
         <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
 
     Returns
@@ -1693,7 +1693,7 @@ def webmap(
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
         instance to paint the plot on. Defaults to a new axis.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
