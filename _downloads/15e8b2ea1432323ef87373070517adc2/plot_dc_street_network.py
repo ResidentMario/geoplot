@@ -2,7 +2,7 @@
 Sankey of traffic volumes in Washington DC
 ==========================================
 
-This example plots 
+This example plots
 `annual average daily traffic volume <https://en.wikipedia.org/wiki/Annual_average_daily_traffic>`_
 in Washington DC.
 """

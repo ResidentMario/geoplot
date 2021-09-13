@@ -53,6 +53,7 @@ def identity_scale(minval, maxval):
         return 2
     return scalar
 
+
 gplt.polyplot(contiguous_usa.geometry, ax=axarr[0][1], **polyplot_kwargs)
 gplt.pointplot(
     continental_usa_cities.query("POP_2010 > 10000"),
@@ -66,6 +67,7 @@ def log_scale(minval, maxval):
         val = val + abs(minval) + 1
         return np.log10(val)
     return scalar
+
 
 gplt.polyplot(
     contiguous_usa.geometry,
@@ -81,11 +83,12 @@ axarr[1][0].set_title("Log Scale")
 def power_scale(minval, maxval):
     def scalar(val):
         val = val + abs(minval) + 1
-        return (val/1000)**2
+        return (val / 1000)**2
     return scalar
 
+
 gplt.polyplot(
-    contiguous_usa.geometry, 
+    contiguous_usa.geometry,
     ax=axarr[1][1], **polyplot_kwargs
 )
 gplt.pointplot(

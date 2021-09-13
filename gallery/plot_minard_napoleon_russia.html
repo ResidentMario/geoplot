@@ -1,41 +1,50 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Sankey of Napoleon’s march on Moscow with custom colormap &mdash; geoplot 0.4.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Voronoi of Melbourne primary schools" href="plot_melbourne_schools.html" />
@@ -76,6 +85,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -86,7 +96,7 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/Quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul>
@@ -99,9 +109,9 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_dc_street_network.html">Sankey of traffic volumes in Washington DC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_nyc_collisions_quadtree.html">Quadtree of NYC traffic collisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_ny_state_demographics.html">Choropleth of New York State population demographics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_boston_airbnb_kde.html">KDEPlot of Boston AirBnB Locations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_san_francisco_trees.html">Quadtree of San Francisco street trees</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Sankey of Napoleon’s march on Moscow with custom colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_melbourne_schools.html">Voronoi of Melbourne primary schools</a></li>
@@ -124,6 +134,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -158,11 +169,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="index.html">Gallery</a> &raquo;</li>
         
@@ -171,7 +184,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/gallery/plot_minard_napoleon_russia.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -185,9 +198,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="sphx-glr-download-link-note admonition note">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-gallery-plot-minard-napoleon-russia-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-gallery-plot-minard-napoleon-russia-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="sankey-of-napoleon-s-march-on-moscow-with-custom-colormap">
 <span id="sphx-glr-gallery-plot-minard-napoleon-russia-py"></span><h1>Sankey of Napoleon’s march on Moscow with custom colormap<a class="headerlink" href="#sankey-of-napoleon-s-march-on-moscow-with-custom-colormap" title="Permalink to this headline">¶</a></h1>
@@ -195,19 +233,18 @@
 Napoleon’s disastrously costly 1812 march on Russia during the Napoleonic Wars.</p>
 <p>This plot demonstrates building and using a custom <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> colormap. To learn more refer to
 <a class="reference external" href="https://matplotlib.org/gallery/images_contours_and_fields/custom_cmap.html">the matplotlib documentation</a>.</p>
-<p><a class="reference external" href="http://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746">Click here</a> to see an
+<p><a class="reference external" href="https://bl.ocks.org/ResidentMario/ac2db57d1c6652ddbc4112a3d318c746">Click here</a> to see an
 interactive scrolly-panny version of this webmap built with <code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code>. To learn more about
 <code class="docutils literal notranslate"><span class="pre">mplleaflet</span></code>, refer to <a class="reference external" href="https://github.com/jwass/mplleaflet">the mplleaflet GitHub repo</a>.</p>
-<img alt="../_images/sphx_glr_plot_minard_napoleon_russia_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_minard_napoleon_russia_001.png" />
+<img alt="plot minard napoleon russia" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_minard_napoleon_russia_001.png" />
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">mplleaflet</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span>
 
 <span class="n">napoleon_troop_movements</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;napoleon_troop_movements&#39;</span><span class="p">))</span>
 
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">215</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">193</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">126</span><span class="o">/</span><span class="mi">255</span><span class="p">),</span> <span class="p">(</span><span class="mi">37</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">37</span><span class="o">/</span><span class="mi">255</span><span class="p">,</span> <span class="mi">37</span><span class="o">/</span><span class="mi">255</span><span class="p">)]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">215</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">193</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">126</span> <span class="o">/</span> <span class="mi">255</span><span class="p">),</span> <span class="p">(</span><span class="mi">37</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">37</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">37</span> <span class="o">/</span> <span class="mi">255</span><span class="p">)]</span>
 <span class="n">cm</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="s1">&#39;minard&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="p">)</span>
 
 <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
@@ -223,7 +260,7 @@ interactive scrolly-panny version of this webmap built with <code class="docutil
 <span class="c1"># mplleaflet.save_html(fig, fileobj=&#39;minard-napoleon-russia.html&#39;)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.622 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.236 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-minard-napoleon-russia-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/2a7423bcb55581cad1e4ba382c7b279a/plot_minard_napoleon_russia.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_minard_napoleon_russia.py</span></code></a></p>
@@ -240,29 +277,29 @@ interactive scrolly-panny version of this webmap built with <code class="docutil
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="plot_melbourne_schools.html" class="btn btn-neutral float-right" title="Voronoi of Melbourne primary schools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="plot_san_francisco_trees.html" class="btn btn-neutral float-left" title="Quadtree of San Francisco street trees" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="plot_melbourne_schools.html" class="btn btn-neutral float-right" title="Voronoi of Melbourne primary schools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plot_san_francisco_trees.html" class="btn btn-neutral float-left" title="Quadtree of San Francisco street trees" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2020, Aleksey Bilogur
+        &#169; Copyright 2016-2020, Aleksey Bilogur.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -270,7 +307,6 @@ interactive scrolly-panny version of this webmap built with <code class="docutil
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

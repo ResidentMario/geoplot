@@ -18,8 +18,8 @@ nyc_fatal_collisions = gpd.read_file(gplt.datasets.get_path('nyc_fatal_collision
 nyc_injurious_collisions = gpd.read_file(gplt.datasets.get_path('nyc_injurious_collisions'))
 
 
-fig = plt.figure(figsize=(10,5))
-proj = projection=gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
+fig = plt.figure(figsize=(10, 5))
+proj = gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
 ax1 = plt.subplot(121, projection=proj)
 ax2 = plt.subplot(122, projection=proj)
 

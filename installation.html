@@ -1,44 +1,53 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Installation &mdash; geoplot 0.4.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-rendered-html.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Quickstart" href="quickstart/quickstart.html" />
+    <link rel="next" title="Quickstart" href="quickstart/Quickstart.html" />
     <link rel="prev" title="geoplot: geospatial data visualization" href="index.html" /> 
 </head>
 
@@ -76,6 +85,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -90,7 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#without-conda">Without Conda</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/Quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul>
@@ -111,6 +121,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -145,18 +156,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -170,18 +183,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">geoplot</span></code> is Python 3.6+ only.</p>
 <div class="section" id="with-conda-recommended">
 <h2>With Conda (Recommended)<a class="headerlink" href="#with-conda-recommended" title="Permalink to this headline">¶</a></h2>
-<p>If you haven’t already, <a class="reference external" href="http://conda.pydata.org/docs/">install conda</a>. Then run
-<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span> <span class="pre">-c</span> <span class="pre">conda-forge</span></code> and you’re done. This works on all platforms (Linux, Mac OSX, and Windows).</p>
+<p>If you haven’t already, <a class="reference external" href="https://conda.pydata.org/docs/">install conda</a>. Then run
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">geoplot</span> <span class="pre">-c</span> <span class="pre">conda-forge</span></code> and you’re done. This works on all platforms (Linux, macOS, and Windows).</p>
 </div>
 <div class="section" id="without-conda">
 <h2>Without Conda<a class="headerlink" href="#without-conda" title="Permalink to this headline">¶</a></h2>
 <p>You can install <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">geoplot</span></code>. Use caution however, as this probably will not work on
-Windows, and possibly will not work on OSX and Linux.</p>
+Windows, and possibly will not work on macOS and Linux.</p>
 </div>
 </div>
 
@@ -190,29 +227,29 @@ Windows, and possibly will not work on OSX and Linux.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="quickstart/quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="geoplot: geospatial data visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="quickstart/Quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="geoplot: geospatial data visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2020, Aleksey Bilogur
+        &#169; Copyright 2016-2020, Aleksey Bilogur.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -220,7 +257,6 @@ Windows, and possibly will not work on OSX and Linux.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

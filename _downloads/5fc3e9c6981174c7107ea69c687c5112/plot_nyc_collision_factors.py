@@ -18,7 +18,7 @@ nyc_collision_factors = gpd.read_file(gplt.datasets.get_path('nyc_collision_fact
 
 
 proj = gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
-fig = plt.figure(figsize=(10,5))
+fig = plt.figure(figsize=(10, 5))
 ax1 = plt.subplot(121, projection=proj)
 ax2 = plt.subplot(122, projection=proj)
 
@@ -28,7 +28,7 @@ gplt.kdeplot(
     ],
     cmap='Reds',
     projection=proj,
-    shade=True, shade_lowest=False, 
+    shade=True, shade_lowest=False,
     clip=nyc_boroughs.geometry,
     ax=ax1
 )
@@ -39,7 +39,7 @@ gplt.kdeplot(
     nyc_collision_factors[
         nyc_collision_factors['CONTRIBUTING FACTOR VEHICLE 1'] == "Lost Consciousness"
     ],
-    cmap = 'Reds',
+    cmap='Reds',
     projection=proj,
     shade=True, shade_lowest=False,
     clip=nyc_boroughs.geometry,

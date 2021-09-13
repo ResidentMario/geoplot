@@ -12,31 +12,32 @@ choice for showing simple pointwise relationships between observations.
 
 ``pointplot`` requires, at a minimum, some points for plotting:
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
+
     cities = gpd.read_file(gplt.datasets.get_path('usa_cities'))
     gplt.pointplot(cities)
-
-.. image:: ../figures/pointplot/pointplot-initial.png
 
 
 The ``hue`` parameter applies a colormap to a data column. The ``legend`` parameter toggles a
 legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.pointplot(cities, projection=gcrs.AlbersEqualArea(), hue='ELEV_IN_FT', legend=True)
 
-.. image:: ../figures/pointplot/pointplot-legend.png
-
 Change the colormap using ``cmap``. For a categorical colormap, use ``scheme``.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.Quantiles(cities['ELEV_IN_FT'], k=5)
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(),
@@ -44,15 +45,14 @@ Change the colormap using ``cmap``. For a categorical colormap, use ``scheme``.
         legend=True
     )
 
-.. image:: ../figures/pointplot/pointplot-k.png
-
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 `matplotlib.pyplot.scatter instance 
 <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html>`_,
 which can be used to customize the appearance of the
 plot. To pass keyword argument to the legend, use the ``legend_kwargs`` argument.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(), 
@@ -61,40 +61,41 @@ plot. To pass keyword argument to the legend, use the ``legend_kwargs`` argument
         edgecolor='lightgray', linewidth=0.5
     )
 
-.. image:: ../figures/pointplot/pointplot-kwargs.png
-
 ``scale`` provides an alternative or additional visual variable. The minimum and maximum size
 of the points can be adjusted to fit your data using the ``limits`` parameter. It is often
 benefitial to combine both ``scale`` and ``hue`` in a single plot. In this case, you can use
 the ``legend_var`` variable to control which visual variable the legend is keyed on.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.pointplot(
         cities, projection=gcrs.AlbersEqualArea(), 
         hue='ELEV_IN_FT', scale='ELEV_IN_FT', limits=(1, 10), cmap='inferno_r',
         legend=True, legend_var='scale'
     )
-.. image:: ../figures/pointplot/pointplot-scale.png
 
 Polyplot
 --------
 
 The polyplot draws polygons on a map.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
+
     boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
     gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
 
-.. image:: ../figures/polyplot/polyplot-initial.png
-
 ``polyplot`` is intended to act as a basemap for other, more interesting plot types.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
+
+    collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
 
     ax = gplt.polyplot(
         boroughs, projection=gcrs.AlbersEqualArea(),
@@ -105,34 +106,34 @@ The polyplot draws polygons on a map.
         hue='BOROUGH', ax=ax, legend=True
     )
 
-.. image:: ../figures/polyplot/polyplot-stacked.png
-
 Webmap
 ------
 
 The webmap creates a static webmap.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
-    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
-    gplt.webmap(boroughs, projection=gcrs.WebMercator())
 
-.. image:: ../figures/webmap/webmap-initial.png
+    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+
+    gplt.webmap(boroughs, projection=gcrs.WebMercator())
 
 ``webmap`` is intended to act as a basemap for other plot types.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
+
+    collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
 
     ax = gplt.webmap(boroughs, projection=gcrs.WebMercator())
     gplt.pointplot(
         collisions[collisions['BOROUGH'].notnull()],
         hue='BOROUGH', ax=ax, legend=True
     )
-
-.. image:: ../figures/webmap/webmap-stacked.png
 
 
 Choropleth
@@ -145,32 +146,33 @@ the specifically spatial plot types.
 
 A basic choropleth requires polygonal geometries and a ``hue`` variable.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
-    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
-    gplt.choropleth(boroughs, hue='Shape_Area')
 
-.. image:: ../figures/choropleth/choropleth-initial.png
+    contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
+
+    gplt.choropleth(contiguous_usa, hue='population')
 
 Change the colormap using ``cmap``. The ``legend`` parameter toggles the legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
         cmap='Greens', legend=True
     )
 
-.. image:: ../figures/choropleth/choropleth-cmap.png
-
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 ``matplotlib.patches.Polygon`` objects; this can be used to control plot aesthetics. To pass
 keyword argument to the legend, use the ``legend_kwargs`` argument.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
@@ -178,13 +180,13 @@ keyword argument to the legend, use the ``legend_kwargs`` argument.
         cmap='Greens', legend=True, legend_kwargs={'orientation': 'horizontal'}
     )
 
-.. image:: ../figures/choropleth/choropleth-legend-kwargs.png
-
 To specify a categorical colormap, use ``scheme``.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.FisherJenks(contiguous_usa['population'], k=5)
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
@@ -194,14 +196,14 @@ To specify a categorical colormap, use ``scheme``.
         scheme=scheme
     )
 
-.. image:: ../figures/choropleth/choropleth-scheme.png
-
 Use ``legend_labels`` and ``legend_values`` to customize the labels and values that appear
 in the legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.FisherJenks(contiguous_usa['population'], k=5)
     gplt.choropleth(
         contiguous_usa, hue='population', projection=gcrs.AlbersEqualArea(),
@@ -214,8 +216,6 @@ in the legend.
         ]
     )
 
-.. image:: ../figures/choropleth/choropleth-labels.png
-
 KDEPlot
 -------
 
@@ -227,48 +227,47 @@ technique to the geospatial setting.
 A basic ``kdeplot`` takes pointwise data as input. For interpretability, let's also plot the
 underlying borough geometry.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
+
     boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
     collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
+
     ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
     gplt.kdeplot(collisions, ax=ax)
 
-.. image:: ../figures/kdeplot/kdeplot-initial.png
-
 ``n_levels`` controls the number of isochrones. ``cmap`` control the colormap.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
     gplt.kdeplot(collisions, n_levels=20, cmap='Reds', ax=ax)
 
-.. image:: ../figures/kdeplot/kdeplot-shade.png
-
 ``shade`` toggles shaded isochrones. Use ``clip`` to constrain the plot to the surrounding
 geometry.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
-    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
+    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), zorder=1)
     gplt.kdeplot(collisions, cmap='Reds', shade=True, clip=boroughs, ax=ax)
 
-.. image:: ../figures/kdeplot/kdeplot-clip.png
-
 Additional keyword arguments that are not part of the ``geoplot`` API are passed to
-`the underlying seaborn.kdeplot instance <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+`the underlying seaborn.kdeplot instance <https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
 One of the most useful of these parameters is ``shade_lowest``, which toggles shading on the
 lowest (basal) layer of the kernel density estimate.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
-    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea())
-    ax = gplt.kdeplot(collisions, cmap='Reds', shade=True, shade_lowest=True, clip=boroughs)
-
-.. image:: ../figures/kdeplot/kdeplot-shade-lowest.png
+    ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), zorder=1)
+    gplt.kdeplot(collisions, cmap='Reds', shade=True, shade_lowest=True,
+                 clip=boroughs, ax=ax)
 
 Cartogram
 ---------
@@ -276,35 +275,37 @@ Cartogram
 A cartogram distorts (grows or shrinks) polygons on a map according to the magnitude of some
 input data. A basic cartogram specifies data, a projection, and a ``scale`` parameter.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
-    contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
-    gplt.cartogram(contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea())
 
-.. image:: ../figures/cartogram/cartogram-initial.png
+    contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
+
+    gplt.cartogram(contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea())
 
 Toggle the legend with ``legend``. Keyword arguments can be passed to the legend using the
 ``legend_kwargs`` argument. These arguments will be passed to the underlying legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'loc': 'lower right'}
     )
 
-.. image:: ../figures/cartogram/cartogram-trace-legend.png
-
 To add a colormap to the plot, specify ``hue``. Use ``cmap`` to control the colormap. For a
 categorical colormap, specify a ``scheme``. In this plot we also add a backing outline of the
 original state shapes, for better geospatial context.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.Quantiles(contiguous_usa['population'], k=5)
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
@@ -313,41 +314,42 @@ original state shapes, for better geospatial context.
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
-.. image:: ../figures/cartogram/cartogram-cmap.png
-
 Use ``legend_labels`` and ``legend_values`` to customize the labels and values that appear
 in the legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', k=5, cmap='Greens',
+        hue='population', scheme=scheme, cmap='Greens',
         legend_labels=[
             '<1.4 million', '1.4-3.2 million', '3.2-5.6 million',
             '5.6-9 million', '9-37 million'
         ]
     )
-
-.. image:: ../figures/cartogram/cartogram-legend-labels.png
+    gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
 Use the ``limits`` parameter to adjust the minimum and maximum scaling factors. You can also
 pass a custom scaling function to ``scale_func`` to apply a different scale to the plot (the
 default scaling function is linear); see the `USA City Elevations demo 
 <https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_ for an example.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     ax = gplt.cartogram(
         contiguous_usa, scale='population', projection=gcrs.AlbersEqualArea(),
         legend=True, legend_kwargs={'bbox_to_anchor': (1, 0.9)}, legend_var='hue',
-        hue='population', k=5, cmap='Greens',
+        hue='population', scheme=scheme, cmap='Greens',
+        legend_labels=[
+            '<1.4 million', '1.4-3.2 million', '3.2-5.6 million',
+            '5.6-9 million', '9-37 million'
+        ],
         limits=(0.5, 1)
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
-
-.. image:: ../figures/cartogram/cartogram-limits.png
 
 Sankey
 ------
@@ -360,11 +362,13 @@ network, for example, or travel volumes between different airports.
 A basic ``sankey`` requires a ``GeoDataFrame`` of ``LineString`` or ``MultiPoint`` geometries.
 For interpretability, these examples also include world geometry.
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
     import geopandas as gpd
+
     la_flights = gpd.read_file(gplt.datasets.get_path('la_flights'))
     world = gpd.read_file(gplt.datasets.get_path('world'))
 
@@ -372,51 +376,51 @@ For interpretability, these examples also include world geometry.
     gplt.polyplot(world, ax=ax, facecolor='lightgray', edgecolor='white')
     ax.set_global(); ax.outline_patch.set_visible(True)
 
-.. image:: ../figures/sankey/sankey-geospatial-context.png
-
 ``hue`` adds color gradation to the map. Use ``cmap`` to control the colormap. For a categorical
 colormap, specify ``scheme``. ``legend`` toggles a legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
-        scale='Passengers', hue='Passengers', scheme=scheme, cmap='Greens', legend=True
+        hue='Passengers', cmap='Greens', scheme=scheme, legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
     )
     ax.set_global(); ax.outline_patch.set_visible(True)
-
-.. image:: ../figures/sankey/sankey-cmap.png
 
 ``scale`` adds volumetric scaling to the plot. ``limits`` can be used to control the minimum
 and maximum line width.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
         scale='Passengers', limits=(1, 10),
-        hue='Passengers', scheme=scheme, cmap='Greens', legend=True
+        hue='Passengers', cmap='Greens', scheme=scheme, legend=True
     )
     gplt.polyplot(
         world, ax=ax, facecolor='lightgray', edgecolor='white'
     )
     ax.set_global(); ax.outline_patch.set_visible(True)
 
-.. image:: ../figures/sankey/sankey-scale.png
-
 Keyword arguments can be passed to the legend using the ``legend_kwargs`` argument. These
 arguments will be passed to the underlying legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.Quantiles(la_flights['Passengers'], k=5)
     ax = gplt.sankey(
         la_flights, projection=gcrs.Mollweide(),
@@ -428,8 +432,6 @@ arguments will be passed to the underlying legend.
         world, ax=ax, facecolor='lightgray', edgecolor='white'
     )
     ax.set_global(); ax.outline_patch.set_visible(True)
-
-.. image:: ../figures/sankey/sankey-legend-kwargs.png
 
 Voronoi
 -------
@@ -444,18 +446,25 @@ to infer regional trends in a set of data.
 
 A basic ``voronoi`` specifies some point data. We overlay geometry to aid interpretability.
 
-.. code-block:: python
+.. plot::
+    :context: reset
+
+    import geoplot as gplt
+    import geoplot.crs as gcrs
+    import geopandas as gpd
+
+    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+    injurious_collisions = gpd.read_file(gplt.datasets.get_path('nyc_injurious_collisions'))
 
     ax = gplt.voronoi(injurious_collisions.head(1000))
     gplt.polyplot(boroughs, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-simple.png
 
 Use ``clip`` to clip the result to surrounding geometry. This is recommended in most cases.
 Note that if the clip geometry is complicated, this operation will take a long time; consider
 simplifying complex geometries with ``simplify`` to speed it up.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     ax = gplt.voronoi(
         injurious_collisions.head(100),
@@ -463,14 +472,14 @@ simplifying complex geometries with ``simplify`` to speed it up.
     )
     gplt.polyplot(boroughs, ax=ax)
 
-.. image:: ../figures/voronoi/voronoi-clip.png
-
 Use ``hue`` to add color as a visual variable to the plot. Change the colormap using ``cmap``. To
 use a categorical colormap, set ``scheme``. ``legend`` toggles the legend.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.NaturalBreaks(injurious_collisions['NUMBER OF PERSONS INJURED'], k=3)
     ax = gplt.voronoi(
         injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
@@ -480,17 +489,17 @@ use a categorical colormap, set ``scheme``. ``legend`` toggles the legend.
     )
     gplt.polyplot(boroughs, ax=ax)
 
-.. image:: ../figures/voronoi/voronoi-cmap.png
-
 Keyword arguments that are not part of the ``geoplot`` API are passed to the underlying
 ``matplotlib``
-`Polygon patches <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
+`Polygon patches <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_,
 which can be used to customize the appearance of the plot. To pass keyword argument to the
 legend, use the ``legend_kwargs`` argument.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     import mapclassify as mc
+
     scheme = mc.NaturalBreaks(injurious_collisions['NUMBER OF PERSONS INJURED'], k=3)
     ax = gplt.voronoi(
         injurious_collisions.head(1000), projection=gcrs.AlbersEqualArea(),
@@ -500,8 +509,6 @@ legend, use the ``legend_kwargs`` argument.
         edgecolor='white', legend_kwargs={'loc': 'upper left'}
     )
     gplt.polyplot(boroughs, edgecolor='black', zorder=1, ax=ax)
-
-.. image:: ../figures/voronoi/voronoi-kwargs.png
 
 Quadtree
 --------
@@ -519,14 +526,17 @@ A simple ``quadtree`` specifies a dataset. It's recommended to also set a maximu
 observations per bin, ``nmax``. The smaller the ``nmax``, the more detailed the plot (the
 minimum value is 1).
 
-.. code-block:: python
+.. plot::
+    :context: reset
 
     import geoplot as gplt
     import geoplot.crs as gcrs
-    collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
-    gplt.quadtree(collisions, nmax=1)
+    import geopandas as gpd
 
-.. image:: ../figures/quadtree/quadtree-initial.png
+    boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
+    collisions = gpd.read_file(gplt.datasets.get_path('nyc_collision_factors'))
+
+    gplt.quadtree(collisions, nmax=1)
 
 Use ``clip`` to clip the result to surrounding geometry.  Note that if the clip geometry is
 complicated, this operation will take a long time; consider simplifying complex geometries with
@@ -537,7 +547,8 @@ Keyword arguments that are not part of the ``geoplot`` API are passed to the
 <https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.patches.Patch.html>`_, which can be used
 to customize the appearance of the plot.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.quadtree(
         collisions, nmax=1,
@@ -545,21 +556,18 @@ to customize the appearance of the plot.
         facecolor='lightgray', edgecolor='white'
     )
 
-.. image:: ../figures/quadtree/quadtree-clip.png
-
 A basic clipped quadtree plot such as this can be used as an alternative to ``polyplot`` as
 a basemap.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     ax = gplt.quadtree(
         collisions, nmax=1,
-        projection=gcrs.AlbersEqualArea(), clip=boroughs,
+        projection=gcrs.AlbersEqualArea(), clip=boroughs.simplify(0.001),
         facecolor='lightgray', edgecolor='white', zorder=0
     )
     gplt.pointplot(collisions, s=1, ax=ax)
-
-.. image:: ../figures/quadtree/quadtree-basemap.png
 
 Use ``hue`` to add color as a visual variable to the plot. ``cmap`` controls the colormap
 used. ``legend`` toggles the legend. The individual
@@ -572,39 +580,36 @@ more spatially correlated the variable.
 The default aggregation function is ``np.mean``, but you can configure the aggregation
 by passing a different function to ``agg``.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.quadtree(
         collisions, nmax=1,
-        projection=gcrs.AlbersEqualArea(), clip=boroughs,
-        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', k=None,
+        projection=gcrs.AlbersEqualArea(), clip=boroughs.simplify(0.001),
+        hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
         edgecolor='white', legend=True,
     )
 
-.. image:: ../figures/quadtree/quadtree-k.png
-
 To use a categorical colormap, set ``scheme``.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.quadtree(
         collisions, nmax=1,
-        projection=gcrs.AlbersEqualArea(), clip=boroughs,
+        projection=gcrs.AlbersEqualArea(), clip=boroughs.simplify(0.001),
         hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds', scheme='Quantiles',
         edgecolor='white', legend=True
     )
 
-.. image:: ../figures/quadtree/quadtree-hue.png
-
 Here is a demo of an alternative aggregation function.
 
-.. code-block:: python
+.. plot::
+    :context: close-figs
 
     gplt.quadtree(
         collisions, nmax=1, agg=np.max,
-        projection=gcrs.AlbersEqualArea(), clip=boroughs,
+        projection=gcrs.AlbersEqualArea(), clip=boroughs.simplify(0.001),
         hue='NUMBER OF PEDESTRIANS INJURED', cmap='Reds',
         edgecolor='white', legend=True
     )
-
-.. image:: ../figures/quadtree/quadtree-agg.png

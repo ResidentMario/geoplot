@@ -1,41 +1,50 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Computation times &mdash; geoplot 0.4.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
 </head>
@@ -74,6 +83,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -84,7 +94,7 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/Quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul>
@@ -105,6 +115,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,18 +150,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Computation times</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/gallery/sg_execution_times.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -164,9 +177,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="computation-times">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="computation-times">
 <span id="sphx-glr-gallery-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
-<p><strong>02:24.708</strong> total execution time for <strong>gallery</strong> files:</p>
+<p><strong>01:41.125</strong> total execution time for <strong>gallery</strong> files:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 83%" />
@@ -174,64 +211,64 @@
 <col style="width: 7%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_nyc_collisions_quadtree.html#sphx-glr-gallery-plot-nyc-collisions-quadtree-py"><span class="std std-ref">Quadtree of NYC traffic collisions</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_collisions_quadtree.py</span></code>)</p></td>
-<td><p>00:23.188</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_dc_street_network.html#sphx-glr-gallery-plot-dc-street-network-py"><span class="std std-ref">Sankey of traffic volumes in Washington DC</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_dc_street_network.py</span></code>)</p></td>
+<td><p>00:23.373</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_dc_street_network.html#sphx-glr-gallery-plot-dc-street-network-py"><span class="std std-ref">Sankey of traffic volumes in Washington DC</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_dc_street_network.py</span></code>)</p></td>
-<td><p>00:22.067</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_san_francisco_trees.html#sphx-glr-gallery-plot-san-francisco-trees-py"><span class="std std-ref">Quadtree of San Francisco street trees</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_san_francisco_trees.py</span></code>)</p></td>
-<td><p>00:16.598</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_nyc_collision_factors.html#sphx-glr-gallery-plot-nyc-collision-factors-py"><span class="std std-ref">KDEPlot of two NYC traffic accident contributing factors</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_collision_factors.py</span></code>)</p></td>
-<td><p>00:15.036</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_nyc_collisions_quadtree.html#sphx-glr-gallery-plot-nyc-collisions-quadtree-py"><span class="std std-ref">Quadtree of NYC traffic collisions</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_collisions_quadtree.py</span></code>)</p></td>
+<td><p>00:15.601</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_melbourne_schools.html#sphx-glr-gallery-plot-melbourne-schools-py"><span class="std std-ref">Voronoi of Melbourne primary schools</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_melbourne_schools.py</span></code>)</p></td>
-<td><p>00:14.813</p></td>
+<td><p>00:10.160</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_san_francisco_trees.html#sphx-glr-gallery-plot-san-francisco-trees-py"><span class="std std-ref">Quadtree of San Francisco street trees</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_san_francisco_trees.py</span></code>)</p></td>
+<td><p>00:08.544</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_nyc_collision_factors.html#sphx-glr-gallery-plot-nyc-collision-factors-py"><span class="std std-ref">KDEPlot of two NYC traffic accident contributing factors</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_collision_factors.py</span></code>)</p></td>
+<td><p>00:08.401</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_nyc_collisions_map.html#sphx-glr-gallery-plot-nyc-collisions-map-py"><span class="std std-ref">Pointplot of NYC fatal and injurious traffic collisions</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_collisions_map.py</span></code>)</p></td>
-<td><p>00:10.916</p></td>
+<td><p>00:07.407</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_nyc_parking_tickets.html#sphx-glr-gallery-plot-nyc-parking-tickets-py"><span class="std std-ref">Choropleth of parking tickets issued to state by precinct in NYC</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_parking_tickets.py</span></code>)</p></td>
-<td><p>00:10.189</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_boston_airbnb_kde.html#sphx-glr-gallery-plot-boston-airbnb-kde-py"><span class="std std-ref">KDEPlot of Boston AirBnB Locations</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_boston_airbnb_kde.py</span></code>)</p></td>
+<td><p>00:07.277</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_boston_airbnb_kde.html#sphx-glr-gallery-plot-boston-airbnb-kde-py"><span class="std std-ref">KDEPlot of Boston AirBnB Locations</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_boston_airbnb_kde.py</span></code>)</p></td>
-<td><p>00:08.904</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_nyc_parking_tickets.html#sphx-glr-gallery-plot-nyc-parking-tickets-py"><span class="std std-ref">Choropleth of parking tickets issued to state by precinct in NYC</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nyc_parking_tickets.py</span></code>)</p></td>
+<td><p>00:06.387</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_los_angeles_flights.html#sphx-glr-gallery-plot-los-angeles-flights-py"><span class="std std-ref">Sankey of Los Angeles flight volumes with Cartopy globes</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_los_angeles_flights.py</span></code>)</p></td>
-<td><p>00:06.299</p></td>
+<td><p>00:03.823</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py"><span class="std std-ref">Pointplot of US city elevations with custom scale functions</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_usa_city_elevations.py</span></code>)</p></td>
-<td><p>00:04.375</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_california_districts.html#sphx-glr-gallery-plot-california-districts-py"><span class="std std-ref">Choropleth of California districts with alternative binning schemes</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_california_districts.py</span></code>)</p></td>
+<td><p>00:03.024</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_california_districts.html#sphx-glr-gallery-plot-california-districts-py"><span class="std std-ref">Choropleth of California districts with alternative binning schemes</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_california_districts.py</span></code>)</p></td>
-<td><p>00:03.954</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py"><span class="std std-ref">Pointplot of US city elevations with custom scale functions</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_usa_city_elevations.py</span></code>)</p></td>
+<td><p>00:02.846</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_largest_cities_usa.html#sphx-glr-gallery-plot-largest-cities-usa-py"><span class="std std-ref">Pointplot of US cities by population</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_largest_cities_usa.py</span></code>)</p></td>
-<td><p>00:03.728</p></td>
+<td><p>00:01.705</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_obesity.html#sphx-glr-gallery-plot-obesity-py"><span class="std std-ref">Cartogram of US states by obesity rate</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_obesity.py</span></code>)</p></td>
-<td><p>00:02.243</p></td>
+<td><p>00:01.309</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_ny_state_demographics.html#sphx-glr-gallery-plot-ny-state-demographics-py"><span class="std std-ref">Choropleth of New York State population demographics</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_ny_state_demographics.py</span></code>)</p></td>
-<td><p>00:01.776</p></td>
+<td><p>00:01.033</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_minard_napoleon_russia.html#sphx-glr-gallery-plot-minard-napoleon-russia-py"><span class="std std-ref">Sankey of Napoleon’s march on Moscow with custom colormap</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_minard_napoleon_russia.py</span></code>)</p></td>
-<td><p>00:00.622</p></td>
+<td><p>00:00.236</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 </tbody>
@@ -243,20 +280,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2020, Aleksey Bilogur
+        &#169; Copyright 2016-2020, Aleksey Bilogur.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -264,7 +306,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

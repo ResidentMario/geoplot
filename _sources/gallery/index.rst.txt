@@ -10,11 +10,12 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example plots  `annual average daily traffic volume &lt;https://en.wikipedia.org/wiki/Annual_...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example plots `annual average daily traffic volume &lt;https://en.wikipedia.org/wiki/Annual_a...">
 
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_dc_street_network_thumb.png
+     :alt: Sankey of traffic volumes in Washington DC
 
      :ref:`sphx_glr_gallery_plot_dc_street_network.py`
 
@@ -30,11 +31,33 @@ Gallery
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates a combined application of kdeplot and pointplot to a dataset of AirBn...">
+
+.. only:: html
+
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_boston_airbnb_kde_thumb.png
+     :alt: KDEPlot of Boston AirBnB Locations
+
+     :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_boston_airbnb_kde
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example plots traffic collisions in New York City. Overlaying a pointplot on a quadtree li...">
 
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_quadtree_thumb.png
+     :alt: Quadtree of NYC traffic collisions
 
      :ref:`sphx_glr_gallery_plot_nyc_collisions_quadtree.py`
 
@@ -55,6 +78,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_ny_state_demographics_thumb.png
+     :alt: Choropleth of New York State population demographics
 
      :ref:`sphx_glr_gallery_plot_ny_state_demographics.py`
 
@@ -70,31 +94,12 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates a combined application of kdeplot and pointplot to a dataset of AirBn...">
-
-.. only:: html
-
- .. figure:: /gallery/images/thumb/sphx_glr_plot_boston_airbnb_kde_thumb.png
-
-     :ref:`sphx_glr_gallery_plot_boston_airbnb_kde.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /gallery/plot_boston_airbnb_kde
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows the geospatial nullity pattern (whether records are more or less likely to b...">
 
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_san_francisco_trees_thumb.png
+     :alt: Quadtree of San Francisco street trees
 
      :ref:`sphx_glr_gallery_plot_san_francisco_trees.py`
 
@@ -115,6 +120,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
+     :alt: Sankey of Napoleon's march on Moscow with custom colormap
 
      :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
 
@@ -135,6 +141,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_melbourne_schools_thumb.png
+     :alt: Voronoi of Melbourne primary schools
 
      :ref:`sphx_glr_gallery_plot_melbourne_schools.py`
 
@@ -155,6 +162,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_obesity_thumb.png
+     :alt: Cartogram of US states by obesity rate
 
      :ref:`sphx_glr_gallery_plot_obesity.py`
 
@@ -175,6 +183,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_largest_cities_usa_thumb.png
+     :alt: Pointplot of US cities by population
 
      :ref:`sphx_glr_gallery_plot_largest_cities_usa.py`
 
@@ -195,6 +204,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_parking_tickets_thumb.png
+     :alt: Choropleth of parking tickets issued to state by precinct in NYC
 
      :ref:`sphx_glr_gallery_plot_nyc_parking_tickets.py`
 
@@ -215,6 +225,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collision_factors_thumb.png
+     :alt: KDEPlot of two NYC traffic accident contributing factors
 
      :ref:`sphx_glr_gallery_plot_nyc_collision_factors.py`
 
@@ -235,6 +246,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_california_districts_thumb.png
+     :alt: Choropleth of California districts with alternative binning schemes
 
      :ref:`sphx_glr_gallery_plot_california_districts.py`
 
@@ -255,6 +267,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_los_angeles_flights_thumb.png
+     :alt: Sankey of Los Angeles flight volumes with Cartopy globes
 
      :ref:`sphx_glr_gallery_plot_los_angeles_flights.py`
 
@@ -275,6 +288,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_nyc_collisions_map_thumb.png
+     :alt: Pointplot of NYC fatal and injurious traffic collisions
 
      :ref:`sphx_glr_gallery_plot_nyc_collisions_map.py`
 
@@ -295,6 +309,7 @@ Gallery
 .. only:: html
 
  .. figure:: /gallery/images/thumb/sphx_glr_plot_usa_city_elevations_thumb.png
+     :alt: Pointplot of US city elevations with custom scale functions
 
      :ref:`sphx_glr_gallery_plot_usa_city_elevations.py`
 
@@ -321,13 +336,13 @@ Gallery
 
   .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: gallery_python.zip <//Users/alekseybilogur/Desktop/geoplot/docs/gallery/gallery_python.zip>`
+    :download:`Download all examples in Python source code: gallery_python.zip </gallery/gallery_python.zip>`
 
 
 
   .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: gallery_jupyter.zip <//Users/alekseybilogur/Desktop/geoplot/docs/gallery/gallery_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: gallery_jupyter.zip </gallery/gallery_jupyter.zip>`
 
 
 .. only:: html

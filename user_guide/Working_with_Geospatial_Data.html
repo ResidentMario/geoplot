@@ -1,45 +1,56 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Working with Geospatial Data &mdash; geoplot 0.4.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Projections" href="Working_with_Projections.html" />
-    <link rel="prev" title="Quickstart" href="../quickstart/quickstart.html" /> 
+    <link rel="prev" title="Quickstart" href="../quickstart/Quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -76,6 +87,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -86,18 +98,18 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/Quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Working with Geospatial Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#coordinate-reference-systems">Coordinate reference systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coordinate-order">Coordinate order</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#types-of-geometries">Types of geometries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#performing-geometric-operations">Performing geometric operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#defining-your-own-geometries">Defining your own geometries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#joining-on-existing-geometries">Joining on existing geometries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#save-formats">Save formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Coordinate-reference-systems">Coordinate reference systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Coordinate-order">Coordinate order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Types-of-geometries">Types of geometries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Performing-geometric-operations">Performing geometric operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Defining-your-own-geometries">Defining your own geometries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Joining-on-existing-geometries">Joining on existing geometries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Save-formats">Save formats</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Working_with_Projections.html">Working with Projections</a></li>
@@ -116,6 +128,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -150,19 +163,21 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Working with Geospatial Data</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
-            <a href="../_sources/user_guide/Working_with_Geospatial_Data.rst.txt" rel="nofollow"> View page source</a>
+          
+            <a href="../_sources/user_guide/Working_with_Geospatial_Data.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -175,19 +190,289 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="working-with-geospatial-data">
-<h1>Working with Geospatial Data<a class="headerlink" href="#working-with-geospatial-data" title="Permalink to this headline">¶</a></h1>
-<p>This section of the tutorial discusses how to use <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and
-<code class="docutils literal notranslate"><span class="pre">shapely</span></code> to manipulate geospatial data in Python. If you’ve never
-used these libraries before, or are looking for a refresher on how they
-work, this page is for you!</p>
-<p>I recommend following along with this tutorial interactively using
-<a class="reference external" href="https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working_with_Geospatial_Data.ipynb">Binder</a>.</p>
-<div class="section" id="coordinate-reference-systems">
-<h2>Coordinate reference systems<a class="headerlink" href="#coordinate-reference-systems" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> is an augmented version of a <code class="docutils literal notranslate"><span class="pre">pandas</span></code>
-<code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> with an attached geometry:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span><span class="p">;</span> <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;max_columns&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># Unclutter display.</span>
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Working-with-Geospatial-Data">
+<h1>Working with Geospatial Data<a class="headerlink" href="#Working-with-Geospatial-Data" title="Permalink to this headline">¶</a></h1>
+<p>This section of the tutorial discusses how to use <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and <code class="docutils literal notranslate"><span class="pre">shapely</span></code> to manipulate geospatial data in Python. If you’ve never used these libraries before, or are looking for a refresher on how they work, this page is for you!</p>
+<p>I recommend following along with this tutorial interactively using <a class="reference external" href="https://mybinder.org/v2/gh/ResidentMario/geoplot/master?filepath=notebooks/tutorials/Working_with_Geospatial_Data.ipynb">Binder</a>.</p>
+<div class="section" id="Coordinate-reference-systems">
+<h2>Coordinate reference systems<a class="headerlink" href="#Coordinate-reference-systems" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> is an augmented version of a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> with an attached geometry:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span><span class="p">;</span> <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;max_columns&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># Unclutter display.</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 
@@ -196,6 +481,12 @@ work, this page is for you!</p>
 <span class="n">nyc_boroughs</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -264,61 +555,71 @@ work, this page is for you!</p>
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>Most operations that will work on a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> will
-work on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, but the latter adds a few additional
-methods and features for dealing with geometry not present in the
-former. The most obvious of these is the addition of a column for
-storing geometries, accessible using the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> attribute:</p>
+</div></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span>
+<div style="margin-top:2em"><p>Most operations that will work on a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> will work on a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, but the latter adds a few additional methods and features for dealing with geometry not present in the former. The most obvious of these is the addition of a column for storing geometries, accessible using the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> attribute:</p>
+</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.05050806403247</span> <span class="mf">40.5664220341608</span><span class="o">...</span>
-<span class="mi">1</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.83668274106708</span> <span class="mf">40.5949466970158</span><span class="o">...</span>
-<span class="mi">2</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.8670614947212</span> <span class="mf">40.58208797679338</span><span class="o">...</span>
-<span class="mi">3</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.01092841268033</span> <span class="mf">40.6844914725429</span><span class="o">...</span>
-<span class="mi">4</span>    <span class="p">(</span><span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.89680883223775</span> <span class="mf">40.7958084451597</span><span class="o">...</span>
-<span class="n">Name</span><span class="p">:</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span>
 </pre></div>
 </div>
-<p>Whenever you work with novel geospatial data in a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, the
-first thing you should do is check its <strong>coordinate reference system</strong>.</p>
-<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">coordinate reference
-system</a>, or
-CRS, is a system for defining where points in space are. You can extract
-what CRS your polygons are stored in using the <code class="docutils literal notranslate"><span class="pre">crs</span></code> attribute:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">crs</span>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="s1">&#39;epsg:4326&#39;</span><span class="p">}</span>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    (POLYGON ((-74.05050806403247 40.5664220341608...
+1    (POLYGON ((-73.83668274106708 40.5949466970158...
+2    (POLYGON ((-73.8670614947212 40.58208797679338...
+3    (POLYGON ((-74.01092841268033 40.6844914725429...
+4    (POLYGON ((-73.89680883223775 40.7958084451597...
+Name: geometry, dtype: object
+</pre></div></div>
+</div>
+<p>Whenever you work with novel geospatial data in a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>, the first thing you should do is check its <strong>coordinate reference system</strong>.</p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_reference_system">coordinate reference system</a>, or CRS, is a system for defining where points in space are. You can extract what CRS your polygons are stored in using the <code class="docutils literal notranslate"><span class="pre">crs</span></code> attribute:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<p>In this case <code class="docutils literal notranslate"><span class="pre">epsg:4326</span></code> is the official identifier for what the rest
-of us more commonly refer to as “longitude and latitude”. Most
-coordinate reference systems have a well-defined EPSG number, which you
-can look up using the handy
-<a class="reference external" href="http://spatialreference.org/ref/epsg/wgs-84/">spatialreference.org</a>
-website.</p>
-<p>Why do coordinate reference systems besides latitude-longitude even
-exist? As an example, the United States Geolocial Service, which
-maintains extremely high-accuracy maps of the United States, maintains
-110 coordinate reference systems, refered to as “state plane coordinate
-systems”, for various portions of the United States. Latitude-longitude
-uses <a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">spherical
-coordinates</a>;
-state plane coordinate systems use “flat-Earth” <a class="reference external" href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">Cartesian
-coordinate</a>.
-State plane coordinates are therefore much simpler to work with
-computationally, while remaining accurate enough (within their “zone”)
-for most applications.</p>
-<p>For this reason, state plane coordinate systems remain in use throughout
-government. For example, here’s a sample of data taken from the MapPLUTO
-dataset released by the City of New York:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_map_pluto_sample</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_map_pluto_sample&#39;</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">crs</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;init&#39;: &#39;epsg:4326&#39;}
+</pre></div></div>
+</div>
+<p>In this case <code class="docutils literal notranslate"><span class="pre">epsg:4326</span></code> is the official identifier for what the rest of us more commonly refer to as “longitude and latitude”. Most coordinate reference systems have a well-defined EPSG number, which you can look up using the handy <a class="reference external" href="https://spatialreference.org/ref/epsg/wgs-84/">spatialreference.org</a> website.</p>
+<p>Why do coordinate reference systems besides latitude-longitude even exist? As an example, the United States Geolocial Service, which maintains extremely high-accuracy maps of the United States, maintains 110 coordinate reference systems, refered to as “state plane coordinate systems”, for various portions of the United States. Latitude-longitude uses <a class="reference external" href="https://en.wikipedia.org/wiki/Spherical_coordinate_system">spherical coordinates</a>; state plane coordinate systems use “flat-Earth” <a class="reference external" href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">Cartesian
+coordinate</a>. State plane coordinates are therefore much simpler to work with computationally, while remaining accurate enough (within their “zone”) for most applications.</p>
+<p>For this reason, state plane coordinate systems remain in use throughout government. For example, here’s a sample of data taken from the MapPLUTO dataset released by the City of New York:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_map_pluto_sample</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_map_pluto_sample&#39;</span><span class="p">))</span>
 <span class="n">nyc_map_pluto_sample</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -420,30 +721,45 @@ dataset released by the City of New York:</p>
   </tbody>
 </table>
 <p>7 rows × 90 columns</p>
-</div><p>This data is stored in the Long Island State Plane coordinate reference
-system (<a class="reference external" href="https://www.spatialreference.org/ref/epsg/2263/">EPSG
-2263</a>).
-Unfortunately the CRS on read is set incorrectly to <code class="docutils literal notranslate"><span class="pre">epsg:4326</span></code> and we
-have to set it to the correct coordinate reference system ourselves.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="s1">&#39;epsg:2263&#39;</span><span class="p">}</span>
+</div></div>
+</div>
+<p>This data is stored in the Long Island State Plane coordinate reference system (<a class="reference external" href="https://www.spatialreference.org/ref/epsg/2263/">EPSG 2263</a>). Unfortunately the CRS on read is set incorrectly to <code class="docutils literal notranslate"><span class="pre">epsg:4326</span></code> and we have to set it to the correct coordinate reference system ourselves.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="s1">&#39;epsg:2263&#39;</span><span class="p">}</span>
 <span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">crs</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="s1">&#39;epsg:2263&#39;</span><span class="p">}</span>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<p>Depending on the dataset, <code class="docutils literal notranslate"><span class="pre">crs</span></code> may be set to either <code class="docutils literal notranslate"><span class="pre">epsg:&lt;INT&gt;</span></code> or
-to a raw <a class="reference external" href="https://github.com/OSGeo/PROJ">proj4</a> projection
-dictionary. The bottom line is, after reading in a dataset, always
-verify that the dataset coordinate reference system is set to what its
-documentation it should be set to.</p>
-<p>If you determine that your coordinates are not latitude-longitude,
-usually the first thing you want to do is covert to it. <code class="docutils literal notranslate"><span class="pre">to_crs</span></code> does
-this:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_map_pluto_sample</span> <span class="o">=</span> <span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;init&#39;: &#39;epsg:2263&#39;}
+</pre></div></div>
+</div>
+<p>Depending on the dataset, <code class="docutils literal notranslate"><span class="pre">crs</span></code> may be set to either <code class="docutils literal notranslate"><span class="pre">epsg:&lt;INT&gt;</span></code> or to a raw <a class="reference external" href="https://github.com/OSGeo/PROJ">proj4</a> projection dictionary. The bottom line is, after reading in a dataset, always verify that the dataset coordinate reference system is set to what its documentation it should be set to.</p>
+<p>If you determine that your coordinates are not latitude-longitude, usually the first thing you want to do is covert to it. <code class="docutils literal notranslate"><span class="pre">to_crs</span></code> does this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_map_pluto_sample</span> <span class="o">=</span> <span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
 <span class="n">nyc_map_pluto_sample</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -546,117 +862,158 @@ this:</p>
 </table>
 <p>7 rows × 90 columns</p>
 </div></div>
-<div class="section" id="coordinate-order">
-<h2>Coordinate order<a class="headerlink" href="#coordinate-order" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">shapely</span></code>, the library <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> uses to store its geometries,
-uses “modern” longitude-latitude <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinate order. This
-differs from the “historical” latitude-longitude <code class="docutils literal notranslate"><span class="pre">(y,</span> <span class="pre">x)</span></code> coordinate
-order. Datasets “in the wild” may be in either format.</p>
-<p>There is no way for <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> to know whether a dataset is in one
-format or the other at load time. Once you have converted your dataset
-to the right coordinate system, always always always make sure to next
-check that the geometries are also in the right coordinate order.</p>
-<p>This is an easy mistake to make and people are making it constantly!</p>
-<p>The fastest way to ensure that coordinates are in the right order is to
-know what the right x coordinates and y coordinates for your data should
-be and eyeball it.</p>
 </div>
-<div class="section" id="types-of-geometries">
-<h2>Types of geometries<a class="headerlink" href="#types-of-geometries" title="Permalink to this headline">¶</a></h2>
-<p>Every element of the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column in a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> is a
-<code class="docutils literal notranslate"><span class="pre">shapely</span></code> object. <a class="reference external" href="https://github.com/Toblerity/Shapely">Shapely</a>
-is a geometric operations library which is used for manipulating
-geometries in space, and it’s the Python API of choice for working with
-shape data.</p>
+</div>
+<div class="section" id="Coordinate-order">
+<h2>Coordinate order<a class="headerlink" href="#Coordinate-order" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">shapely</span></code>, the library <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> uses to store its geometries, uses “modern” longitude-latitude <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinate order. This differs from the “historical” latitude-longitude <code class="docutils literal notranslate"><span class="pre">(y,</span> <span class="pre">x)</span></code> coordinate order. Datasets “in the wild” may be in either format.</p>
+<p>There is no way for <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> to know whether a dataset is in one format or the other at load time. Once you have converted your dataset to the right coordinate system, always always always make sure to next check that the geometries are also in the right coordinate order.</p>
+<p>This is an easy mistake to make and people are making it constantly!</p>
+<p>The fastest way to ensure that coordinates are in the right order is to know what the right x coordinates and y coordinates for your data should be and eyeball it.</p>
+</div>
+<div class="section" id="Types-of-geometries">
+<h2>Types of geometries<a class="headerlink" href="#Types-of-geometries" title="Permalink to this headline">¶</a></h2>
+<p>Every element of the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column in a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> is a <code class="docutils literal notranslate"><span class="pre">shapely</span></code> object. <a class="reference external" href="https://github.com/Toblerity/Shapely">Shapely</a> is a geometric operations library which is used for manipulating geometries in space, and it’s the Python API of choice for working with shape data.</p>
 <p><code class="docutils literal notranslate"><span class="pre">shapely</span></code> defines just a handful of types of geometries:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Point</span></code>—a point.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MultiPoint</span></code>—a set of points.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">LineString</span></code>—a line segment.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code>—a collection of lines (e.g. a sequence of
-connected line segments).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">LinearRing</span></code>—a closed collection of lines. Basically a polygon with
-zero-area.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MultiLineString</span></code>—a collection of lines (e.g. a sequence of connected line segments).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LinearRing</span></code>—a closed collection of lines. Basically a polygon with zero-area.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Polygon</span></code>—an closed shape along a sequence of points.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MultiPolygon</span></code>—a collection of polygons.</p></li>
 </ul>
 <p>You can check the <code class="docutils literal notranslate"><span class="pre">type</span></code> of a geometry using the <code class="docutils literal notranslate"><span class="pre">type</span></code> operator:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">multipolygon</span><span class="o">.</span><span class="n">MultiPolygon</span>
-</pre></div>
-</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">polygon</span><span class="o">.</span><span class="n">Polygon</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">type</span><span class="p">(</span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="performing-geometric-operations">
-<h2>Performing geometric operations<a class="headerlink" href="#performing-geometric-operations" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://shapely.readthedocs.io/en/latest/manual.html">shapely user
-manual</a>
-provides an extensive list of geometric operations that you can perform
-using the library: from simple things like translations and
-transformations to more complex operations like polygon buffering.</p>
-<p>You can apply transformations to your geometries in an object-by-object
-way by using the native <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">map</span></code> function on the <code class="docutils literal notranslate"><span class="pre">geometry</span></code>
-column. For example, here is one way of deconstructing a set of
-<code class="docutils literal notranslate"><span class="pre">Polygon</span></code> or <code class="docutils literal notranslate"><span class="pre">MultiPolygon</span></code> objects into simplified <a class="reference external" href="https://en.wikipedia.org/wiki/Convex_hull">convex
-hulls</a>:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">time</span> gplt.polyplot(nyc_boroughs.geometry.map(lambda shp: shp.convex_hull))
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="n">user</span> <span class="mf">62.7</span> <span class="n">ms</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mf">2.64</span> <span class="n">ms</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mf">65.3</span> <span class="n">ms</span>
-<span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mf">71.6</span> <span class="n">ms</span>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+shapely.geometry.multipolygon.MultiPolygon
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">_subplots</span><span class="o">.</span><span class="n">AxesSubplot</span> <span class="n">at</span> <span class="mh">0x11c61d7b8</span><span class="o">&gt;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">type</span><span class="p">(</span><span class="n">nyc_map_pluto_sample</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="../_images/Working_with_Geospatial_Data_18_2.png" src="../_images/Working_with_Geospatial_Data_18_2.png" />
-<p>You can perform arbitrarily complex geometric transformations on your
-shapes this way. However, <a class="reference external" href="http://geopandas.org/geometric_manipulations.html">most common
-operations</a> are
-provided in optimized form as part of the <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> API. Here’s a
-faster way to create convex hulls, for example:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">time</span> nyc_boroughs.convex_hull
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="n">user</span> <span class="mf">55.6</span> <span class="n">ms</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mf">6.45</span> <span class="n">ms</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mf">62.1</span> <span class="n">ms</span>
-<span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mf">39.9</span> <span class="n">ms</span>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+shapely.geometry.polygon.Polygon
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Performing-geometric-operations">
+<h2>Performing geometric operations<a class="headerlink" href="#Performing-geometric-operations" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://shapely.readthedocs.io/en/latest/manual.html">shapely user manual</a> provides an extensive list of geometric operations that you can perform using the library: from simple things like translations and transformations to more complex operations like polygon buffering.</p>
+<p>You can apply transformations to your geometries in an object-by-object way by using the native <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">map</span></code> function on the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column. For example, here is one way of deconstructing a set of <code class="docutils literal notranslate"><span class="pre">Polygon</span></code> or <code class="docutils literal notranslate"><span class="pre">MultiPolygon</span></code> objects into simplified <a class="reference external" href="https://en.wikipedia.org/wiki/Convex_hull">convex hulls</a>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.24712436215984</span> <span class="mf">40.49611539517034</span><span class="o">...</span>
-<span class="mi">1</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.94073681665428</span> <span class="mf">40.54182008715522</span><span class="o">...</span>
-<span class="mi">2</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.98336058039274</span> <span class="mf">40.56952999448672</span><span class="o">...</span>
-<span class="mi">3</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">74.02305574749596</span> <span class="mf">40.68291694544512</span><span class="o">...</span>
-<span class="mi">4</span>    <span class="n">POLYGON</span> <span class="p">((</span><span class="o">-</span><span class="mf">73.87830680057651</span> <span class="mf">40.78535662050845</span><span class="o">...</span>
-<span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">time</span> gplt.polyplot(nyc_boroughs.geometry.map(lambda shp: shp.convex_hull))
 </pre></div>
 </div>
-<p>It is beyond the scope of this short guide to dive too deeply into
-geospatial data transformations. Suffice to say that there are many of
-them, and that you can learn some more about them by consulting the
-<a class="reference external" href="http://geopandas.org/">geopandas</a> and
-<a class="reference external" href="https://toblerity.org/shapely/manual.html">shapely</a> documentation.</p>
 </div>
-<div class="section" id="defining-your-own-geometries">
-<h2>Defining your own geometries<a class="headerlink" href="#defining-your-own-geometries" title="Permalink to this headline">¶</a></h2>
-<p>In this section of the tutorial, we will focus on one particular aspect
-of <code class="docutils literal notranslate"><span class="pre">shapely</span></code> which is likely to come up: defining your own geometries.</p>
-<p>In the cases above we read a GeoDataFrame straight out of geospatial
-files: our borough information was stored in the
-<a class="reference external" href="http://geojson.org/">GeoJSON</a> format, while our building footprints
-were a <a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a>. What if
-we have geospatial data embedded in an ordinary <code class="docutils literal notranslate"><span class="pre">CSV</span></code> or <code class="docutils literal notranslate"><span class="pre">JSON</span></code>
-file, which read into an ordinary <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>?</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_collisions_sample</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collisions_sample&#39;</span><span class="p">))</span>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CPU times: user 62.7 ms, sys: 2.64 ms, total: 65.3 ms
+Wall time: 71.6 ms
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x11c61d7b8&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/user_guide_Working_with_Geospatial_Data_18_2.png" src="../_images/user_guide_Working_with_Geospatial_Data_18_2.png" />
+</div>
+</div>
+<p>You can perform arbitrarily complex geometric transformations on your shapes this way. However, <a class="reference external" href="https://geopandas.org/geometric_manipulations.html">most common operations</a> are provided in optimized form as part of the <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> API. Here’s a faster way to create convex hulls, for example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">time</span> nyc_boroughs.convex_hull
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CPU times: user 55.6 ms, sys: 6.45 ms, total: 62.1 ms
+Wall time: 39.9 ms
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    POLYGON ((-74.24712436215984 40.49611539517034...
+1    POLYGON ((-73.94073681665428 40.54182008715522...
+2    POLYGON ((-73.98336058039274 40.56952999448672...
+3    POLYGON ((-74.02305574749596 40.68291694544512...
+4    POLYGON ((-73.87830680057651 40.78535662050845...
+dtype: object
+</pre></div></div>
+</div>
+<p>It is beyond the scope of this short guide to dive too deeply into geospatial data transformations. Suffice to say that there are many of them, and that you can learn some more about them by consulting the <a class="reference external" href="https://geopandas.org/">geopandas</a> and <a class="reference external" href="https://toblerity.org/shapely/manual.html">shapely</a> documentation.</p>
+</div>
+<div class="section" id="Defining-your-own-geometries">
+<h2>Defining your own geometries<a class="headerlink" href="#Defining-your-own-geometries" title="Permalink to this headline">¶</a></h2>
+<p>In this section of the tutorial, we will focus on one particular aspect of <code class="docutils literal notranslate"><span class="pre">shapely</span></code> which is likely to come up: defining your own geometries.</p>
+<p>In the cases above we read a GeoDataFrame straight out of geospatial files: our borough information was stored in the <a class="reference external" href="https://geojson.org/">GeoJSON</a> format, while our building footprints were a <a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a>. What if we have geospatial data embedded in an ordinary <code class="docutils literal notranslate"><span class="pre">CSV</span></code> or <code class="docutils literal notranslate"><span class="pre">JSON</span></code> file, which read into an ordinary <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nyc_collisions_sample</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collisions_sample&#39;</span><span class="p">))</span>
 <span class="n">nyc_collisions_sample</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -719,15 +1076,16 @@ file, which read into an ordinary <code class="docutils literal notranslate"><sp
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>It is extremely common for datasets containing light geospatial data
-(e.g. points, maybe line segments, but usually not whole polygons) to
-be saved in a non-geospatial formats.</p>
-<p>In this case can import <code class="docutils literal notranslate"><span class="pre">shapely</span></code> directly, use it to define our
-own geometries, then initialize a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>. The <code class="docutils literal notranslate"><span class="pre">pandas</span></code>
-<code class="docutils literal notranslate"><span class="pre">apply</span></code> function is the best to do this:</p>
+</div></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<div style="margin-top:2em"><p>It is extremely common for datasets containing light geospatial data (e.g. points, maybe line segments, but usually not whole polygons) to be saved in a non-geospatial formats.</p>
+<p>In this case can import <code class="docutils literal notranslate"><span class="pre">shapely</span></code> directly, use it to define our own geometries, then initialize a <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>. The <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">apply</span></code> function is the best to do this:</p>
+</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 
 <span class="n">collision_points</span> <span class="o">=</span> <span class="n">nyc_collisions_sample</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
     <span class="k">lambda</span> <span class="n">srs</span><span class="p">:</span> <span class="n">Point</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LONGITUDE&#39;</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">srs</span><span class="p">[</span><span class="s1">&#39;LATITUDE&#39;</span><span class="p">])),</span>
@@ -736,21 +1094,38 @@ own geometries, then initialize a <code class="docutils literal notranslate"><sp
 <span class="n">collision_points</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span>           <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.950057</span> <span class="mf">40.767373</span><span class="p">)</span>
-<span class="mi">1</span>    <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.90903900000001</span> <span class="mf">40.86267</span><span class="p">)</span>
-<span class="mi">2</span>           <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.961275</span> <span class="mf">40.716507</span><span class="p">)</span>
-<span class="mi">3</span>           <span class="n">POINT</span> <span class="p">(</span><span class="o">-</span><span class="mf">73.987768</span> <span class="mf">40.749788</span><span class="p">)</span>
-<span class="mi">4</span>    <span class="n">POINT</span> <span class="p">(</span><span class="mf">73.96049599999999</span> <span class="mf">40.702401</span><span class="p">)</span>
-<span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<p>From there we pass this iterable of geometries to the <code class="docutils literal notranslate"><span class="pre">geometry</span></code>
-property of the <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> initializer:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0           POINT (-73.950057 40.767373)
+1    POINT (-73.90903900000001 40.86267)
+2           POINT (-73.961275 40.716507)
+3           POINT (-73.987768 40.749788)
+4    POINT (73.96049599999999 40.702401)
+dtype: object
+</pre></div></div>
+</div>
+<p>From there we pass this iterable of geometries to the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> property of the <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> initializer:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="n">nyc_collisions_sample_geocoded</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">nyc_collisions_sample</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">collision_points</span><span class="p">)</span>
 <span class="n">nyc_collisions_sample_geocoded</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -819,24 +1194,29 @@ property of the <code class="docutils literal notranslate"><span class="pre">Geo
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>In most cases, data with geospatial information provided in a CSV
-will be point data corresponding with individual coordinates.
-Sometimes, however, one may wish to define more complex geometry:
-square areas, for example, and <em>maybe</em> even complex polygons. While
-we won’t cover these cases, they’re quite similar to the extremely
-simple point case we’ve shown here. For further reference on such a
-task, refer to the <code class="docutils literal notranslate"><span class="pre">shapely</span></code> documentation.</p>
+</div></div>
 </div>
-</div>
-<div class="section" id="joining-on-existing-geometries">
-<h2>Joining on existing geometries<a class="headerlink" href="#joining-on-existing-geometries" title="Permalink to this headline">¶</a></h2>
+<div style="margin-top:2em"><p>In most cases, data with geospatial information provided in a CSV will be point data corresponding with individual coordinates. Sometimes, however, one may wish to define more complex geometry: square areas, for example, and <em>maybe</em> even complex polygons. While we won’t cover these cases, they’re quite similar to the extremely simple point case we’ve shown here. For further reference on such a task, refer to the <code class="docutils literal notranslate"><span class="pre">shapely</span></code> documentation.</p>
+</div></div>
+<div class="section" id="Joining-on-existing-geometries">
+<h2>Joining on existing geometries<a class="headerlink" href="#Joining-on-existing-geometries" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes the necessary geospatial data is elsewhere entirely.</p>
 <p>Suppose now that we have information on obesity by state.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obesity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;obesity_by_state&#39;</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">obesity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;obesity_by_state&#39;</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">obesity</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -887,19 +1267,25 @@ task, refer to the <code class="docutils literal notranslate"><span class="pre">
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>We’d like to put this information on a map. But we don’t have any
-geometry!</p>
-<p>We will once again have to define a geometry. Except that this time,
-instead of writing our own, we will need to find data with state
-shapes, and join that data against this data. In other cases there
-may be other shapes: police precincts, survey zones, and so on. Here
-is just such a dataset:</p>
+</div></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+<div style="margin-top:2em"><p>We’d like to put this information on a map. But we don’t have any geometry!</p>
+<p>We will once again have to define a geometry. Except that this time, instead of writing our own, we will need to find data with state shapes, and join that data against this data. In other cases there may be other shapes: police precincts, survey zones, and so on. Here is just such a dataset:</p>
+</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
 <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -962,13 +1348,24 @@ is just such a dataset:</p>
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>A simple <code class="docutils literal notranslate"><span class="pre">join</span></code> solves the problem:</p>
+</div></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obesity</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">))</span>
+<div style="margin-top:2em"><p>A simple <code class="docutils literal notranslate"><span class="pre">join</span></code> solves the problem:</p>
+</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">result</span> <span class="o">=</span> <span class="n">contiguous_usa</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obesity</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">))</span>
 <span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1038,57 +1435,57 @@ is just such a dataset:</p>
     </tr>
   </tbody>
 </table>
-</div><div class="docutils container">
-<p>Now we can plot it:</p>
+</div></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<div style="margin-top:2em"><p>Now we can plot it:</p>
+</div><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Percent&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cartopy</span><span class="o">.</span><span class="n">mpl</span><span class="o">.</span><span class="n">geoaxes</span><span class="o">.</span><span class="n">GeoAxesSubplot</span> <span class="n">at</span> <span class="mh">0x11c3bda20</span><span class="o">&gt;</span>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<img alt="../_images/Working_with_Geospatial_Data_36_1.png" src="../_images/Working_with_Geospatial_Data_36_1.png" />
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;cartopy.mpl.geoaxes.GeoAxesSubplot at 0x11c3bda20&gt;
+</pre></div></div>
 </div>
-<div class="section" id="save-formats">
-<h2>Save formats<a class="headerlink" href="#save-formats" title="Permalink to this headline">¶</a></h2>
-<p>You can read data out of a geospatial file format using
-<code class="docutils literal notranslate"><span class="pre">GeoDataFrame.from_file</span></code>. You can write data to a geospatial file
-format using <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.to_file</span></code>. By default, these methods will
-infer the file format and save to a <code class="docutils literal notranslate"><span class="pre">Shapefile</span></code>, respectively. To
-specify an explicit file format, pass the name of that format to the
-<code class="docutils literal notranslate"><span class="pre">driver</span></code> argument. For example:</p>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/user_guide_Working_with_Geospatial_Data_36_1.png" src="../_images/user_guide_Working_with_Geospatial_Data_36_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Save-formats">
+<h2>Save formats<a class="headerlink" href="#Save-formats" title="Permalink to this headline">¶</a></h2>
+<p>You can read data out of a geospatial file format using <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.from_file</span></code>. You can write data to a geospatial file format using <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.to_file</span></code>. By default, these methods will infer the file format and save to a <code class="docutils literal notranslate"><span class="pre">Shapefile</span></code>, respectively. To specify an explicit file format, pass the name of that format to the <code class="docutils literal notranslate"><span class="pre">driver</span></code> argument. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;boroughs.geojson&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The simplest and increasingly most common save format for geospatial
-data is <a class="reference external" href="https://geojson.org/">GeoJSON</a>. A geojson file may have a
-<code class="docutils literal notranslate"><span class="pre">.geojson</span></code> or <code class="docutils literal notranslate"><span class="pre">.json</span></code> extension, and stores data in a human-readable
-format:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">125.6</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">]</span>
-  <span class="p">},</span>
-  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Dinagat Islands&quot;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<p>The simplest and increasingly most common save format for geospatial data is <a class="reference external" href="https://geojson.org/">GeoJSON</a>. A geojson file may have a <code class="docutils literal notranslate"><span class="pre">.geojson</span></code> or <code class="docutils literal notranslate"><span class="pre">.json</span></code> extension, and stores data in a human-readable format:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{
+  &quot;type&quot;: &quot;Feature&quot;,
+  &quot;geometry&quot;: {
+    &quot;type&quot;: &quot;Point&quot;,
+    &quot;coordinates&quot;: [125.6, 10.1]
+  },
+  &quot;properties&quot;: {
+    &quot;name&quot;: &quot;Dinagat Islands&quot;
+  }
+}
 </pre></div>
 </div>
-<p>Historically speaking, the most common geospatial data format is the
-<a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a>. Shapefiles are
-not actually really files, but instead groups of files in a folder or
-<code class="docutils literal notranslate"><span class="pre">zip</span></code> archive that together can encode very complex information about
-your data. Shapefiles are a binary file format, so they are not
-human-readable like GeoJSON files are, but can efficiently encode data
-too complex for easy storage in a GeoJSON.</p>
-<p>These are the two best-known file formats, but there are <a class="reference external" href="https://en.wikipedia.org/wiki/GIS_file_formats">many many
-others</a>. For a list
-of geospatial file formats supported by <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> refer to the
-<a class="reference external" href="https://fiona.readthedocs.io/en/latest/manual.html">fiona user
-manual</a>.</p>
+<p>Historically speaking, the most common geospatial data format is the <a class="reference external" href="https://en.wikipedia.org/wiki/Shapefile">Shapefile</a>. Shapefiles are not actually really files, but instead groups of files in a folder or <code class="docutils literal notranslate"><span class="pre">zip</span></code> archive that together can encode very complex information about your data. Shapefiles are a binary file format, so they are not human-readable like GeoJSON files are, but can efficiently encode data too complex for easy storage in a GeoJSON.</p>
+<p>These are the two best-known file formats, but there are <a class="reference external" href="https://en.wikipedia.org/wiki/GIS_file_formats">many many others</a>. For a list of geospatial file formats supported by <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> refer to the <a class="reference external" href="https://fiona.readthedocs.io/en/latest/manual.html">fiona user manual</a>.</p>
 </div>
 </div>
 
@@ -1097,29 +1494,29 @@ manual</a>.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Working_with_Projections.html" class="btn btn-neutral float-right" title="Working with Projections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../quickstart/quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="Working_with_Projections.html" class="btn btn-neutral float-right" title="Working with Projections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../quickstart/Quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2020, Aleksey Bilogur
+        &#169; Copyright 2016-2020, Aleksey Bilogur.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1127,7 +1524,6 @@ manual</a>.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

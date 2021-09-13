@@ -1,41 +1,50 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Plot Reference &mdash; geoplot 0.4.1 documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Gallery" href="../gallery/index.html" />
@@ -76,6 +85,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -86,7 +96,7 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/Quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption"><span class="caption-text">User Guide</span></p>
 <ul class="current">
@@ -118,6 +128,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -152,18 +163,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Plot Reference</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/plot_references/plot_reference.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -177,7 +190,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="plot-reference">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="plot-reference">
 <h1>Plot Reference<a class="headerlink" href="#plot-reference" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="pointplot">
 <h2>Pointplot<a class="headerlink" href="#pointplot" title="Permalink to this headline">¶</a></h2>
@@ -188,19 +225,27 @@ choice for showing simple pointwise relationships between observations.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">cities</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;usa_cities&#39;</span><span class="p">))</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/pointplot-initial.png" src="../_images/pointplot-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-1.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-1.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-1.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-1.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-1.png" class="plot-directive" src="../_images/plot_reference-1.png" />
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">hue</span></code> parameter applies a colormap to a data column. The <code class="docutils literal notranslate"><span class="pre">legend</span></code> parameter toggles a
 legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/pointplot-legend.png" src="../_images/pointplot-legend.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-2.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-2.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-2.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-2.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-2.png" class="plot-directive" src="../_images/plot_reference-2.png" />
+</div>
 <p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. For a categorical colormap, use <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">cities</span><span class="p">[</span><span class="s1">&#39;ELEV_IN_FT&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">cities</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -209,7 +254,10 @@ legend.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/pointplot-k.png" src="../_images/pointplot-k.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-3.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-3.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-3.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-3.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-3.png" class="plot-directive" src="../_images/plot_reference-3.png" />
+</div>
 <p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
 <a class="reference external" href="https://matplotlib.org/3.1.0/api/_as_gen/matplotlib.pyplot.scatter.html">matplotlib.pyplot.scatter instance</a>,
 which can be used to customize the appearance of the
@@ -222,7 +270,10 @@ plot. To pass keyword argument to the legend, use the <code class="docutils lite
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/pointplot-kwargs.png" src="../_images/pointplot-kwargs.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-4.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-4.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-4.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-4.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-4.png" class="plot-directive" src="../_images/plot_reference-4.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">scale</span></code> provides an alternative or additional visual variable. The minimum and maximum size
 of the points can be adjusted to fit your data using the <code class="docutils literal notranslate"><span class="pre">limits</span></code> parameter. It is often
 benefitial to combine both <code class="docutils literal notranslate"><span class="pre">scale</span></code> and <code class="docutils literal notranslate"><span class="pre">hue</span></code> in a single plot. In this case, you can use
@@ -234,7 +285,10 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/pointplot-scale.png" src="../_images/pointplot-scale.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-5.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-5.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-5.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-5.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-5.png" class="plot-directive" src="../_images/plot_reference-5.png" />
+</div>
 </div>
 <div class="section" id="polyplot">
 <h2>Polyplot<a class="headerlink" href="#polyplot" title="Permalink to this headline">¶</a></h2>
@@ -242,13 +296,19 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../_images/polyplot-initial.png" src="../_images/polyplot-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-6.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-6.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-6.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-6.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-6.png" class="plot-directive" src="../_images/plot_reference-6.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">polyplot</span></code> is intended to act as a basemap for other, more interesting plot types.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collision_factors&#39;</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span>
 <span class="p">)</span>
@@ -258,7 +318,10 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/polyplot-stacked.png" src="../_images/polyplot-stacked.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-7.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-7.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-7.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-7.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-7.png" class="plot-directive" src="../_images/plot_reference-7.png" />
+</div>
 </div>
 <div class="section" id="webmap">
 <h2>Webmap<a class="headerlink" href="#webmap" title="Permalink to this headline">¶</a></h2>
@@ -266,20 +329,30 @@ the <code class="docutils literal notranslate"><span class="pre">legend_var</spa
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
+
 <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../_images/webmap-initial.png" src="../_images/webmap-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-8.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-8.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-8.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-8.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-8.png" class="plot-directive" src="../_images/plot_reference-8.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">webmap</span></code> is intended to act as a basemap for other plot types.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collision_factors&#39;</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">webmap</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">WebMercator</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">[</span><span class="n">collisions</span><span class="p">[</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()],</span>
     <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;BOROUGH&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/webmap-stacked.png" src="../_images/webmap-stacked.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-9.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-9.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-9.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-9.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-9.png" class="plot-directive" src="../_images/plot_reference-9.png" />
+</div>
 </div>
 <div class="section" id="choropleth">
 <h2>Choropleth<a class="headerlink" href="#choropleth" title="Permalink to this headline">¶</a></h2>
@@ -291,11 +364,16 @@ the specifically spatial plot types.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
-<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Shape_Area&#39;</span><span class="p">)</span>
+
+<span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+
+<span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/choropleth-initial.png" src="../_images/choropleth-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-10.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-10.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-10.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-10.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-10.png" class="plot-directive" src="../_images/plot_reference-10.png" />
+</div>
 <p>Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. The <code class="docutils literal notranslate"><span class="pre">legend</span></code> parameter toggles the legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -303,7 +381,10 @@ the specifically spatial plot types.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/choropleth-cmap.png" src="../_images/choropleth-cmap.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-11.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-11.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-11.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-11.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-11.png" class="plot-directive" src="../_images/plot_reference-11.png" />
+</div>
 <p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
 <code class="docutils literal notranslate"><span class="pre">matplotlib.patches.Polygon</span></code> objects; this can be used to control plot aesthetics. To pass
 keyword argument to the legend, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
@@ -314,9 +395,13 @@ keyword argument to the legend, use the <code class="docutils literal notranslat
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/choropleth-legend-kwargs.png" src="../_images/choropleth-legend-kwargs.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-12.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-12.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-12.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-12.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-12.png" class="plot-directive" src="../_images/plot_reference-12.png" />
+</div>
 <p>To specify a categorical colormap, use <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">FisherJenks</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -327,10 +412,14 @@ keyword argument to the legend, use the <code class="docutils literal notranslat
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/choropleth-scheme.png" src="../_images/choropleth-scheme.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-13.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-13.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-13.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-13.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-13.png" class="plot-directive" src="../_images/plot_reference-13.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">legend_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">legend_values</span></code> to customize the labels and values that appear
 in the legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">FisherJenks</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -344,7 +433,10 @@ in the legend.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/choropleth-labels.png" src="../_images/choropleth-labels.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-14.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-14.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-14.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-14.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-14.png" class="plot-directive" src="../_images/plot_reference-14.png" />
+</div>
 </div>
 <div class="section" id="kdeplot">
 <h2>KDEPlot<a class="headerlink" href="#kdeplot" title="Permalink to this headline">¶</a></h2>
@@ -357,35 +449,50 @@ underlying borough geometry.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
 <span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collision_factors&#39;</span><span class="p">))</span>
+
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/kdeplot-initial.png" src="../_images/kdeplot-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-15.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-15.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-15.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-15.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-15.png" class="plot-directive" src="../_images/plot_reference-15.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">n_levels</span></code> controls the number of isochrones. <code class="docutils literal notranslate"><span class="pre">cmap</span></code> control the colormap.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">n_levels</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/kdeplot-shade.png" src="../_images/kdeplot-shade.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-16.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-16.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-16.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-16.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-16.png" class="plot-directive" src="../_images/plot_reference-16.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">shade</span></code> toggles shaded isochrones. Use <code class="docutils literal notranslate"><span class="pre">clip</span></code> to constrain the plot to the surrounding
 geometry.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/kdeplot-clip.png" src="../_images/kdeplot-clip.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-17.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-17.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-17.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-17.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-17.png" class="plot-directive" src="../_images/plot_reference-17.png" />
+</div>
 <p>Additional keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to
-<a class="reference external" href="http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot">the underlying seaborn.kdeplot instance</a>.
+<a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot">the underlying seaborn.kdeplot instance</a>.
 One of the most useful of these parameters is <code class="docutils literal notranslate"><span class="pre">shade_lowest</span></code>, which toggles shading on the
 lowest (basal) layer of the kernel density estimate.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shade_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shade_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/kdeplot-shade-lowest.png" src="../_images/kdeplot-shade-lowest.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-18.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-18.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-18.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-18.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-18.png" class="plot-directive" src="../_images/plot_reference-18.png" />
+</div>
 </div>
 <div class="section" id="cartogram">
 <h2>Cartogram<a class="headerlink" href="#cartogram" title="Permalink to this headline">¶</a></h2>
@@ -394,11 +501,16 @@ input data. A basic cartogram specifies data, a projection, and a <code class="d
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">contiguous_usa</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;contiguous_usa&#39;</span><span class="p">))</span>
+
 <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">())</span>
 </pre></div>
 </div>
-<img alt="../_images/cartogram-initial.png" src="../_images/cartogram-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-19.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-19.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-19.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-19.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-19.png" class="plot-directive" src="../_images/plot_reference-19.png" />
+</div>
 <p>Toggle the legend with <code class="docutils literal notranslate"><span class="pre">legend</span></code>. Keyword arguments can be passed to the legend using the
 <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument. These arguments will be passed to the underlying legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
@@ -407,11 +519,15 @@ input data. A basic cartogram specifies data, a projection, and a <code class="d
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/cartogram-trace-legend.png" src="../_images/cartogram-trace-legend.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-20.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-20.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-20.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-20.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-20.png" class="plot-directive" src="../_images/plot_reference-20.png" />
+</div>
 <p>To add a colormap to the plot, specify <code class="docutils literal notranslate"><span class="pre">hue</span></code>. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap. For a
 categorical colormap, specify a <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. In this plot we also add a backing outline of the
 original state shapes, for better geospatial context.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">[</span><span class="s1">&#39;population&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -421,34 +537,48 @@ original state shapes, for better geospatial context.</p>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/cartogram-cmap.png" src="../_images/cartogram-cmap.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-21.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-21.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-21.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-21.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-21.png" class="plot-directive" src="../_images/plot_reference-21.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">legend_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">legend_values</span></code> to customize the labels and values that appear
 in the legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)},</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
     <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span>
         <span class="s1">&#39;&lt;1.4 million&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4-3.2 million&#39;</span><span class="p">,</span> <span class="s1">&#39;3.2-5.6 million&#39;</span><span class="p">,</span>
         <span class="s1">&#39;5.6-9 million&#39;</span><span class="p">,</span> <span class="s1">&#39;9-37 million&#39;</span>
     <span class="p">]</span>
 <span class="p">)</span>
+<span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/cartogram-legend-labels.png" src="../_images/cartogram-legend-labels.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-22.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-22.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-22.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-22.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-22.png" class="plot-directive" src="../_images/plot_reference-22.png" />
+</div>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">limits</span></code> parameter to adjust the minimum and maximum scaling factors. You can also
 pass a custom scaling function to <code class="docutils literal notranslate"><span class="pre">scale_func</span></code> to apply a different scale to the plot (the
 default scaling function is linear); see the <a class="reference external" href="https://residentmario.github.io/geoplot/examples/usa-city-elevations.html">USA City Elevations demo</a> for an example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">cartogram</span><span class="p">(</span>
     <span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
     <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)},</span> <span class="n">legend_var</span><span class="o">=</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;population&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+    <span class="n">legend_labels</span><span class="o">=</span><span class="p">[</span>
+        <span class="s1">&#39;&lt;1.4 million&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4-3.2 million&#39;</span><span class="p">,</span> <span class="s1">&#39;3.2-5.6 million&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;5.6-9 million&#39;</span><span class="p">,</span> <span class="s1">&#39;9-37 million&#39;</span>
+    <span class="p">],</span>
     <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">contiguous_usa</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/cartogram-limits.png" src="../_images/cartogram-limits.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-23.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-23.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-23.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-23.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-23.png" class="plot-directive" src="../_images/plot_reference-23.png" />
+</div>
 </div>
 <div class="section" id="sankey">
 <h2>Sankey<a class="headerlink" href="#sankey" title="Permalink to this headline">¶</a></h2>
@@ -461,6 +591,7 @@ For interpretability, these examples also include world geometry.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
 <span class="n">la_flights</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;la_flights&#39;</span><span class="p">))</span>
 <span class="n">world</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">))</span>
 
@@ -469,14 +600,18 @@ For interpretability, these examples also include world geometry.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">();</span> <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/sankey-geospatial-context.png" src="../_images/sankey-geospatial-context.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-24.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-24.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-24.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-24.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-24.png" class="plot-directive" src="../_images/plot_reference-24.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">hue</span></code> adds color gradation to the map. Use <code class="docutils literal notranslate"><span class="pre">cmap</span></code> to control the colormap. For a categorical
 colormap, specify <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles a legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
-    <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">world</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
@@ -484,15 +619,19 @@ colormap, specify <code class="docutils literal notranslate"><span class="pre">s
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">();</span> <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/sankey-cmap.png" src="../_images/sankey-cmap.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-25.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-25.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-25.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-25.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-25.png" class="plot-directive" src="../_images/plot_reference-25.png" />
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">scale</span></code> adds volumetric scaling to the plot. <code class="docutils literal notranslate"><span class="pre">limits</span></code> can be used to control the minimum
 and maximum line width.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
     <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Passengers&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span>
     <span class="n">world</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
@@ -500,10 +639,14 @@ and maximum line width.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">();</span> <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/sankey-scale.png" src="../_images/sankey-scale.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-26.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-26.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-26.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-26.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-26.png" class="plot-directive" src="../_images/plot_reference-26.png" />
+</div>
 <p>Keyword arguments can be passed to the legend using the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument. These
 arguments will be passed to the underlying legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">Quantiles</span><span class="p">(</span><span class="n">la_flights</span><span class="p">[</span><span class="s1">&#39;Passengers&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">sankey</span><span class="p">(</span>
     <span class="n">la_flights</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">Mollweide</span><span class="p">(),</span>
@@ -517,7 +660,10 @@ arguments will be passed to the underlying legend.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_global</span><span class="p">();</span> <span class="n">ax</span><span class="o">.</span><span class="n">outline_patch</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/sankey-legend-kwargs.png" src="../_images/sankey-legend-kwargs.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-27.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-27.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-27.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-27.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-27.png" class="plot-directive" src="../_images/plot_reference-27.png" />
+</div>
 </div>
 <div class="section" id="voronoi">
 <h2>Voronoi<a class="headerlink" href="#voronoi" title="Permalink to this headline">¶</a></h2>
@@ -528,11 +674,21 @@ plots them.</p>
 <p>Voronoi plots are efficient for judging point density and, combined with colormap, can be used
 to infer regional trends in a set of data.</p>
 <p>A basic <code class="docutils literal notranslate"><span class="pre">voronoi</span></code> specifies some point data. We overlay geometry to aid interpretability.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
+<span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
+<span class="n">injurious_collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_injurious_collisions&#39;</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/voronoi-simple.png" src="../_images/voronoi-simple.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-28.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-28.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-28.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-28.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-28.png" class="plot-directive" src="../_images/plot_reference-28.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">clip</span></code> to clip the result to surrounding geometry. This is recommended in most cases.
 Note that if the clip geometry is complicated, this operation will take a long time; consider
 simplifying complex geometries with <code class="docutils literal notranslate"><span class="pre">simplify</span></code> to speed it up.</p>
@@ -543,10 +699,14 @@ simplifying complex geometries with <code class="docutils literal notranslate"><
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/voronoi-clip.png" src="../_images/voronoi-clip.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-29.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-29.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-29.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-29.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-29.png" class="plot-directive" src="../_images/plot_reference-29.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">hue</span></code> to add color as a visual variable to the plot. Change the colormap using <code class="docutils literal notranslate"><span class="pre">cmap</span></code>. To
 use a categorical colormap, set <code class="docutils literal notranslate"><span class="pre">scheme</span></code>. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">NaturalBreaks</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="p">[</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
     <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -557,13 +717,17 @@ use a categorical colormap, set <code class="docutils literal notranslate"><span
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/voronoi-cmap.png" src="../_images/voronoi-cmap.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-30.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-30.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-30.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-30.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-30.png" class="plot-directive" src="../_images/plot_reference-30.png" />
+</div>
 <p>Keyword arguments that are not part of the <code class="docutils literal notranslate"><span class="pre">geoplot</span></code> API are passed to the underlying
 <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>
-<a class="reference external" href="http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>,
+<a class="reference external" href="https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon">Polygon patches</a>,
 which can be used to customize the appearance of the plot. To pass keyword argument to the
 legend, use the <code class="docutils literal notranslate"><span class="pre">legend_kwargs</span></code> argument.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mapclassify</span> <span class="k">as</span> <span class="nn">mc</span>
+
 <span class="n">scheme</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">NaturalBreaks</span><span class="p">(</span><span class="n">injurious_collisions</span><span class="p">[</span><span class="s1">&#39;NUMBER OF PERSONS INJURED&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">voronoi</span><span class="p">(</span>
     <span class="n">injurious_collisions</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span>
@@ -575,7 +739,10 @@ legend, use the <code class="docutils literal notranslate"><span class="pre">leg
 <span class="n">gplt</span><span class="o">.</span><span class="n">polyplot</span><span class="p">(</span><span class="n">boroughs</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/voronoi-kwargs.png" src="../_images/voronoi-kwargs.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-31.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-31.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-31.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-31.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-31.png" class="plot-directive" src="../_images/plot_reference-31.png" />
+</div>
 </div>
 <div class="section" id="quadtree">
 <h2>Quadtree<a class="headerlink" href="#quadtree" title="Permalink to this headline">¶</a></h2>
@@ -591,11 +758,18 @@ observations per bin, <code class="docutils literal notranslate"><span class="pr
 minimum value is 1).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geoplot</span> <span class="k">as</span> <span class="nn">gplt</span>
 <span class="kn">import</span> <span class="nn">geoplot.crs</span> <span class="k">as</span> <span class="nn">gcrs</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+<span class="n">boroughs</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_boroughs&#39;</span><span class="p">))</span>
 <span class="n">collisions</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">gplt</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;nyc_collision_factors&#39;</span><span class="p">))</span>
+
 <span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-initial.png" src="../_images/quadtree-initial.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-32.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-32.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-32.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-32.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-32.png" class="plot-directive" src="../_images/plot_reference-32.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">clip</span></code> to clip the result to surrounding geometry.  Note that if the clip geometry is
 complicated, this operation will take a long time; consider simplifying complex geometries with
 <code class="docutils literal notranslate"><span class="pre">simplify</span></code> to speed it up.</p>
@@ -609,18 +783,24 @@ to customize the appearance of the plot.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-clip.png" src="../_images/quadtree-clip.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-33.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-33.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-33.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-33.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-33.png" class="plot-directive" src="../_images/plot_reference-33.png" />
+</div>
 <p>A basic clipped quadtree plot such as this can be used as an alternative to <code class="docutils literal notranslate"><span class="pre">polyplot</span></code> as
 a basemap.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
     <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">)</span>
 <span class="n">gplt</span><span class="o">.</span><span class="n">pointplot</span><span class="p">(</span><span class="n">collisions</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-basemap.png" src="../_images/quadtree-basemap.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-34.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-34.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-34.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-34.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-34.png" class="plot-directive" src="../_images/plot_reference-34.png" />
+</div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">hue</span></code> to add color as a visual variable to the plot. <code class="docutils literal notranslate"><span class="pre">cmap</span></code> controls the colormap
 used. <code class="docutils literal notranslate"><span class="pre">legend</span></code> toggles the legend. The individual
 values of the points included in the partitions are aggregated, and each partition is colormapped
@@ -631,33 +811,42 @@ more spatially correlated the variable.</p>
 by passing a different function to <code class="docutils literal notranslate"><span class="pre">agg</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
-    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-k.png" src="../_images/quadtree-k.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-35.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-35.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-35.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-35.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-35.png" class="plot-directive" src="../_images/plot_reference-35.png" />
+</div>
 <p>To use a categorical colormap, set <code class="docutils literal notranslate"><span class="pre">scheme</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
     <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;Quantiles&#39;</span><span class="p">,</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-hue.png" src="../_images/quadtree-hue.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-36.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-36.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-36.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-36.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-36.png" class="plot-directive" src="../_images/plot_reference-36.png" />
+</div>
 <p>Here is a demo of an alternative aggregation function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gplt</span><span class="o">.</span><span class="n">quadtree</span><span class="p">(</span>
     <span class="n">collisions</span><span class="p">,</span> <span class="n">nmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">agg</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
-    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">gcrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(),</span> <span class="n">clip</span><span class="o">=</span><span class="n">boroughs</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span>
     <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;NUMBER OF PEDESTRIANS INJURED&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
     <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/quadtree-agg.png" src="../_images/quadtree-agg.png" />
+<p>(<a class="reference external" href="../plot_references/plot_reference-37.py">Source code</a>, <a class="reference external" href="../plot_references/plot_reference-37.png">png</a>, <a class="reference external" href="../plot_references/plot_reference-37.hires.png">hires.png</a>, <a class="reference external" href="../plot_references/plot_reference-37.pdf">pdf</a>)</p>
+<div class="figure align-default">
+<img alt="../_images/plot_reference-37.png" class="plot-directive" src="../_images/plot_reference-37.png" />
+</div>
 </div>
 </div>
 
@@ -666,29 +855,29 @@ by passing a different function to <code class="docutils literal notranslate"><s
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../gallery/index.html" class="btn btn-neutral float-right" title="Gallery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../user_guide/Customizing_Plots.html" class="btn btn-neutral float-left" title="Customizing Plots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../gallery/index.html" class="btn btn-neutral float-right" title="Gallery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../user_guide/Customizing_Plots.html" class="btn btn-neutral float-left" title="Customizing Plots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2020, Aleksey Bilogur
+        &#169; Copyright 2016-2020, Aleksey Bilogur.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -696,7 +885,6 @@ by passing a different function to <code class="docutils literal notranslate"><s
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

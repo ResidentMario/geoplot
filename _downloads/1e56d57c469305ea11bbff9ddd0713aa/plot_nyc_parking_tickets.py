@@ -17,7 +17,7 @@ Observations that can be made based on this plot include:
 
 This example was inspired by the blog post `"Californians love Brooklyn, New Jerseyans love
 Midtown: Mapping NYC’s Visitors Through Parking Tickets"
-<http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love>`_.
+<https://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love>`_.
 """
 
 
@@ -31,6 +31,8 @@ nyc_boroughs = gpd.read_file(gplt.datasets.get_path('nyc_boroughs'))
 tickets = gpd.read_file(gplt.datasets.get_path('nyc_parking_tickets'))
 
 proj = gcrs.AlbersEqualArea(central_latitude=40.7128, central_longitude=-74.0059)
+
+
 def plot_state_to_ax(state, ax):
     gplt.choropleth(
         tickets.set_index('id').loc[:, [state, 'geometry']],
@@ -40,6 +42,7 @@ def plot_state_to_ax(state, ax):
     gplt.polyplot(
         nyc_boroughs, edgecolor='black', linewidth=0.5, ax=ax
     )
+
 
 f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': proj})
 
