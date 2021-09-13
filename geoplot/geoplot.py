@@ -636,11 +636,6 @@ class Plot:
         self.init_axes()
         self.kwargs = kwargs
 
-    def init_axis(self, *args, **kwargs):
-        warnings.warn('Use Plot.init_axes instead of Plot.init_axis',
-                      DeprecationWarning, stacklevel=2)
-        self.init_axes(*args, **kwargs)
-
     def init_axes(self):
 
         if not self.ax:
