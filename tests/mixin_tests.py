@@ -54,7 +54,7 @@ class TestPlot(unittest.TestCase):
 
     @axis_initializer
     def test_init_ax(self):
-        """Test that the passed axis is set."""
+        """Test that the passed Axes is set."""
         _, ax = plt.subplots(figsize=(2, 2))
         plot = Plot(self.gdf, **{**self.kwargs, **{'ax': ax}})
         assert plot.figsize == (2, 2)

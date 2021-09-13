@@ -474,7 +474,7 @@ class ClipMixin:
       automatically unfortunately).
 
     KDEPlot uses the first method because it relies on `seaborn` underneath, and there is no way
-    to clip an existing axis painter (that I am aware of). All other plots use the second method.
+    to clip an existing Axes painter (that I am aware of). All other plots use the second method.
     """
     def set_clip(self, gdf):
         clip = self.kwargs.pop('clip')
@@ -632,11 +632,16 @@ class Plot:
         self.ax = kwargs.pop('ax')
         self.extent = kwargs.pop('extent')
         self.projection = kwargs.pop('projection')
-        # TODO: init_axis() -> init_axis(ax)
-        self.init_axis()
+        # TODO: init_axes() -> init_axes(ax)
+        self.init_axes()
         self.kwargs = kwargs
 
-    def init_axis(self):
+    def init_axis(self, *args, **kwargs):
+        warnings.warn('Use Plot.init_axes instead of Plot.init_axis',
+                      DeprecationWarning, stacklevel=2)
+        self.init_axes(*args, **kwargs)
+
+    def init_axes(self):
 
         if not self.ax:
             plt.figure(figsize=self.figsize)
@@ -797,7 +802,7 @@ def pointplot(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying `matplotlib.pyplot.scatter instance
         <https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
@@ -805,7 +810,7 @@ def pointplot(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class PointPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
@@ -865,7 +870,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -873,7 +878,7 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class PolyPlot(Plot):
         def __init__(self, df, **kwargs):
@@ -969,7 +974,7 @@ def choropleth(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -977,7 +982,7 @@ def choropleth(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     if hue is None:
         raise ValueError("No 'hue' specified.")
@@ -1084,7 +1089,7 @@ def quadtree(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -1092,7 +1097,7 @@ def quadtree(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class QuadtreePlot(Plot, QuadtreeComputeMixin, QuadtreeHueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
@@ -1220,7 +1225,7 @@ def cartogram(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -1228,7 +1233,7 @@ def cartogram(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     if scale is None:
         raise ValueError("No scale parameter provided.")
@@ -1316,7 +1321,7 @@ def kdeplot(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to
         `the underlying seaborn.kdeplot instance
@@ -1325,7 +1330,7 @@ def kdeplot(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
@@ -1434,7 +1439,7 @@ def sankey(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to
         `the underlying matplotlib.lines.Line2D
@@ -1444,7 +1449,7 @@ def sankey(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
@@ -1599,7 +1604,7 @@ def voronoi(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Line2D objects
         <https://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
@@ -1607,7 +1612,7 @@ def voronoi(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class VoronoiPlot(Plot, HueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
@@ -1692,7 +1697,7 @@ def webmap(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
         <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
@@ -1700,10 +1705,10 @@ def webmap(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class WebmapPlot(Plot):
-        # webmap is restricted to the WebMercator projection, which requires special axis and
+        # webmap is restricted to the WebMercator projection, which requires special Axes and
         # projection initialization rules to get right.
         def __init__(self, df, **kwargs):
             if isinstance(ax, GeoAxesSubplot):
@@ -1711,15 +1716,15 @@ def webmap(
                 if proj_name != 'WebMercator':
                     raise ValueError(
                         f'"webmap" is only compatible with the "WebMercator" projection, but '
-                        f'the input axis is in the {proj_name!r} projection instead. To fix, '
-                        f'pass "projection=gcrs.WebMercator()" to the axis initializer.'
+                        f'the input Axes is in the {proj_name!r} projection instead. To fix, '
+                        f'pass "projection=gcrs.WebMercator()" to the Axes initializer.'
                     )
                 super().__init__(df, projection=projection, **kwargs)
             elif isinstance(ax, mpl.axes.Axes):
                 raise ValueError(
                     '"webmap" is only compatible with the "WebMercator" projection, but '
-                    'the input axis is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
-                    'to the axis initializer.'
+                    'the input Axes is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
+                    'to the Axes initializer.'
                 )
             elif ax is None and projection is None:
                 warnings.warn(
