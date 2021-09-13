@@ -331,10 +331,10 @@ in the legend.
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='white', ax=ax)
 
-Use the ``limits`` parameter to adjust the minimum and maximum scaling factors. You can also
-pass a custom scaling function to ``scale_func`` to apply a different scale to the plot (the
-default scaling function is linear); see the `USA City Elevations demo 
-<https://residentmario.github.io/geoplot/examples/usa-city-elevations.html>`_ for an example.
+Use the ``limits`` parameter to adjust the minimum and maximum scaling factors.
+You can also pass a custom scaling function to ``scale_func`` to apply a
+different scale to the plot (the default scaling function is linear); see the
+:doc:`/gallery/plot_usa_city_elevations` for an example.
 
 .. plot::
     :context: close-figs
