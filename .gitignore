@@ -1,6 +1,4 @@
 .vscode/
-.idea/
-.ipynb_checkpoints/
 .cache/
 .DS_Store
 *.pyc
@@ -12,10 +10,7 @@ bin/
 dist/
 geoplot.egg-info/
 tests/baseline/
-quilt_packages/
 .pytest_cache/
-Untitled.ipynb
-dev.ipynb
 
 # sphinx-gallery
 *.md5
