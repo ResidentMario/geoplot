@@ -16,7 +16,7 @@ from shapely.geometry import Point, Polygon
 import numpy as np
 
 
-def axis_initializer(f):
+def figure_cleanup(f):
     def wrapped(_self):
         try:
             f(_self)
@@ -31,7 +31,7 @@ class TestPlot(unittest.TestCase):
         self.gdf = gpd.GeoDataFrame(geometry=[])
         self.nonempty_gdf = gpd.GeoDataFrame(geometry=[Point(-1, -1), Point(1, 1)])
 
-    @axis_initializer
+    @figure_cleanup
     def test_base_init(self):
         """Test the base init all plotters pass to Plot."""
         plot = Plot(self.gdf, **self.kwargs)
@@ -46,13 +46,13 @@ class TestPlot(unittest.TestCase):
         assert plot.extent is None
         assert isinstance(plot.projection, ccrs.PlateCarree)
 
-    @axis_initializer
+    @figure_cleanup
     def test_no_geometry_col(self):
         """Test the requirement that the geometry column is set."""
         with pytest.raises(ValueError):
             Plot(gpd.GeoDataFrame(), **self.kwargs)
 
-    @axis_initializer
+    @figure_cleanup
     def test_init_ax(self):
         """Test that the passed Axes is set."""
         _, ax = plt.subplots(figsize=(2, 2))
@@ -67,13 +67,13 @@ class TestPlot(unittest.TestCase):
         with pytest.warns(UserWarning):
             Plot(self.gdf, **{**self.kwargs, **{'figsize': (1, 1), 'ax': ax}})
 
-    @axis_initializer
+    @figure_cleanup
     def test_init_projection(self):
         """Test that passing a projection works as expected."""
         plot = Plot(self.gdf, **{**self.kwargs, 'projection': gcrs.PlateCarree()})
         assert isinstance(plot.projection, ccrs.PlateCarree)
 
-    @axis_initializer
+    @figure_cleanup
     def test_init_extent_axes(self):
         """Test the extent setter code in the Axes case."""
         # default, empty geometry case: set extent to default value of (0, 1)
@@ -116,7 +116,7 @@ class TestPlot(unittest.TestCase):
         with pytest.warns(UserWarning):
             Plot(self.nonempty_gdf, **{**self.kwargs, **{'extent': (0, 0, 0, 0)}})
 
-    @axis_initializer
+    @figure_cleanup
     def test_init_extent_geoaxes(self):
         """Test the extent setter code in the GeoAxes case."""
         # default, empty geometry case: set extent to default value of (0, 1)
@@ -472,13 +472,13 @@ class TestLegend(unittest.TestCase):
 
         self.create_legendmixin = create_legendmixin
 
-    @axis_initializer
+    @figure_cleanup
     def test_legend_init_defaults(self):
         legendmixin = self.create_legendmixin(['hue'])
         legendmixin.paint_legend()
         # legendmixin is a painter, not a value-setter, so this is a smoke test
 
-    @axis_initializer
+    @figure_cleanup
     def test_legend_invalid_inputs(self):
         # no hue or scale, but legend is True: raise
         legendmixin = self.create_legendmixin(['hue', 'scale'])
@@ -627,7 +627,7 @@ class TestWebmapInput(unittest.TestCase):
         p_srs = gpd.GeoSeries(utils.gaussian_points(n=100))
         self.p_df = gpd.GeoDataFrame(geometry=p_srs)
 
-    @axis_initializer
+    @figure_cleanup
     def test_webmap_input_restrictions(self):
         """Test webmap-specific plot restrictions."""
         with pytest.raises(ValueError):
