@@ -53,7 +53,7 @@ which makes mapping easy: like ``seaborn`` for geospatial. It comes with the fol
 
 For a brief introduction refer to the `Quickstart`_.
 
-.. _Quickstart: https://residentmario.github.io/geoplot/quickstart/quickstart.html
+.. _Quickstart: quickstart/Quickstart.ipynb
 
 
 .. toctree::
@@ -61,15 +61,15 @@ For a brief introduction refer to the `Quickstart`_.
     :caption: Getting Started
 
     installation.rst
-    quickstart/quickstart.rst
+    quickstart/Quickstart.ipynb
 
 .. toctree::
     :maxdepth: 1
     :caption: User Guide
 
-    user_guide/Working_with_Geospatial_Data.rst
-    user_guide/Working_with_Projections.rst
-    user_guide/Customizing_Plots.rst
+    user_guide/Working_with_Geospatial_Data.ipynb
+    user_guide/Working_with_Projections.ipynb
+    user_guide/Customizing_Plots.ipynb
     plot_references/plot_reference.rst
 
 .. toctree::
