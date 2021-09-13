@@ -43,7 +43,7 @@ The static example images on the repo and documentation homepages are located in
 
 ### Gallery
 
-The gallery is generated using `sphinx-gallery`, and use the `examples/` folder as their source. The webmap examples are hosted on [bl.ocks.org](http://bl.ocks.org/) and linked to from their gallery landing pages.
+The gallery is generated using `sphinx-gallery`, and use the `examples/` folder as their source. The webmap examples are hosted on [bl.ocks.org](https://bl.ocks.org/) and linked to from their gallery landing pages.
 
 ### Quickstart
 

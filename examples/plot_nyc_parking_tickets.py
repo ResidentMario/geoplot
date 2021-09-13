@@ -17,7 +17,7 @@ Observations that can be made based on this plot include:
 
 This example was inspired by the blog post `"Californians love Brooklyn, New Jerseyans love
 Midtown: Mapping NYC’s Visitors Through Parking Tickets"
-<http://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love>`_.
+<https://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love>`_.
 """
 
 

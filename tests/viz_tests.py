@@ -37,15 +37,6 @@ def identity_scale(minval, maxval):
     return scalar
 
 
-def axis_initializer(f):
-    def wrapped(_self):
-        try:
-            f(_self)
-        finally:
-            plt.close('all')
-    return wrapped
-
-
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
     {'hue': 'var', 'linewidth': 0, 's': 10},

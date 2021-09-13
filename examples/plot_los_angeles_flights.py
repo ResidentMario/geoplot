@@ -4,7 +4,7 @@ Sankey of Los Angeles flight volumes with Cartopy globes
 
 This example plots passenger volumes for commercial flights out of Los Angeles International
 Airport. Some globe-modification options available in ``cartopy`` are demonstrated. Visit
-`the cartopy docs <http://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html>`_
+`the cartopy docs <https://scitools.org.uk/cartopy/docs/latest/matplotlib/feature_interface.html>`_
 for more information.
 """
 

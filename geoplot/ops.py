@@ -159,7 +159,7 @@ class QuadTree:
         """
         Yield items from any nested iterable. Used by ``QuadTree.flatten`` to one-dimensionalize a
         list of sublists. cf.
-        http://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+        https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
         """
         for x in items:
             if isinstance(x, Iterable):
@@ -269,8 +269,8 @@ def build_voronoi_polygons(df):
                     ls_sorted.append(l1)
 
                 for match in matches:
-                    # in list sytax this would be "if match not in ls_sorted"
-                    # in numpy things are more complicated...
+                    # in list syntax this would be "if match not in ls_sorted"
+                    # in NumPy things are more complicated...
                     if not any((match == ls_sort).all() for ls_sort in ls_sorted):
                         ls_sorted.append(match)
                         break

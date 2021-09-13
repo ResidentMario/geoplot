@@ -82,7 +82,7 @@ def gaussian_linestrings(points):
 
 def uniform_random_global_points(n=100):
     """
-    Returns an array of `n` uniformally distributed `shapely.geometry.Point` objects. Points are
+    Returns an array of `n` uniformly distributed `shapely.geometry.Point` objects. Points are
     coordinates distributed equivalently across the Earth's surface.
     """
     xs = np.random.uniform(-180, 180, n)
@@ -92,7 +92,7 @@ def uniform_random_global_points(n=100):
 
 def uniform_random_global_network(loc=2000, scale=250, n=100):
     """
-    Returns an array of `n` uniformally randomly distributed `shapely.geometry.Point` objects.
+    Returns an array of `n` uniformly randomly distributed `shapely.geometry.Point` objects.
     """
     arr = (np.random.normal(loc, scale, n)).astype(int)
     return pd.DataFrame(

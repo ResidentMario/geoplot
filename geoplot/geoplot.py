@@ -324,7 +324,7 @@ class LegendMixin:
                         f'"matplotlib.colorbar.Colorbar" legend parameters instead?'
                         f'\n\n'
                         f'For a '
-                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'reference on the valid keyword parameters, see the Matplotlib '
                         f'documentation at '
                         f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/legend_api.html#'
                         f'matplotlib.legend.Legend . To learn more about the difference '
@@ -362,7 +362,7 @@ class LegendMixin:
                         f'"matplotlib.legend.Legend" legend parameters instead?'
                         f'\n\n'
                         f'For a '
-                        f'reference on the valid keyword parameters, see the matplotlib '
+                        f'reference on the valid keyword parameters, see the Matplotlib '
                         f'documentation at '
                         f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/colorbar_api.html#'
                         f'matplotlib.colorbar.Colorbar . To learn more about the difference '
@@ -375,7 +375,7 @@ class LegendMixin:
             if legend_values is None:
                 # If the user doesn't specify their own legend_values, apply a reasonable
                 # default: a five-point linear array from max to min. The sort order (max to min,
-                # not min to max) is important because ax.legend, the matplotlib function these
+                # not min to max) is important because ax.legend, the Matplotlib function these
                 # values are ultimately passed to, sorts the patches in ascending value order
                 # internally. Even though we pass no patch ordering information to ax.legend,
                 # it still appears to determine an ordering by inspecting plot artists
@@ -394,7 +394,7 @@ class LegendMixin:
                 # default: the 'g' f-string for the given input value.
                 legend_labels = ['{0:g}'.format(value) for value in legend_values]
 
-            # If the user specifies a markerfacecolor explicity via legend_params, use that.
+            # If the user specifies a markerfacecolor explicitly via legend_params, use that.
             #
             # Otherwise, use an open-circle design when hue is not None, so as not to confuse
             # viewers with colors in the scale mapping to values that do not correspond with the
@@ -474,7 +474,7 @@ class ClipMixin:
       automatically unfortunately).
 
     KDEPlot uses the first method because it relies on `seaborn` underneath, and there is no way
-    to clip an existing axis painter (that I am aware of). All other plots use the second method.
+    to clip an existing Axes painter (that I am aware of). All other plots use the second method.
     """
     def set_clip(self, gdf):
         clip = self.kwargs.pop('clip')
@@ -607,7 +607,7 @@ class Plot:
     def __init__(self, df, **kwargs):
         if not hasattr(df, 'geometry'):
             # The two valid df types are GeoDataFrame and GeoSeries. The former may be missing
-            # a geometry column, depending on how it was initialzied. The latter always returns
+            # a geometry column, depending on how it was initialized. The latter always returns
             # self when it is asked for its geometry property, and so it will never be the source
             # of this error.
             raise ValueError(
@@ -632,17 +632,17 @@ class Plot:
         self.ax = kwargs.pop('ax')
         self.extent = kwargs.pop('extent')
         self.projection = kwargs.pop('projection')
-        # TODO: init_axis() -> init_axis(ax)
-        self.init_axis()
+        # TODO: init_axes() -> init_axes(ax)
+        self.init_axes()
         self.kwargs = kwargs
 
-    def init_axis(self):
+    def init_axes(self):
 
         if not self.ax:
             plt.figure(figsize=self.figsize)
 
         if len(self.df.geometry) == 0:
-            extrema = np.array([0, 0, 1, 1])  # default matplotlib plot extent
+            extrema = np.array([0, 0, 1, 1])  # default Matplotlib plot extent
         else:
             xmin, ymin, xmax, ymax = self.df.total_bounds
             # Plots suffer clipping issues if we use just the geometry extrema due to plot features
@@ -697,14 +697,14 @@ class Plot:
                 try:
                     ax.set_extent((xmin, xmax, ymin, ymax), crs=ccrs.PlateCarree())
                 except ValueError:
-                    # This occurs either due to numerical stability errors in cartopy or due
+                    # This occurs either due to numerical stability errors in Cartopy or due
                     # to the extent exceeding the projection parameters. The latter *ought* to
                     # only happen when using the Orthographic projection (maybe others?), which
                     # is on a globe and only shows at most half of the world at a time. So if the
                     # plot extent exceeds the world half in any dimension the extent-setting
                     # operation will fail.
                     #
-                    # The default behavior in cartopy is to use a global extent with
+                    # The default behavior in Cartopy is to use a global extent with
                     # central_latitude and central_longitude as its center. This is the behavior
                     # we will follow in failure cases.
                     if isinstance(self.projection, ccrs.Orthographic):
@@ -757,7 +757,7 @@ def pointplot(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -797,15 +797,15 @@ def pointplot(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to the underlying `matplotlib.pyplot.scatter instance
-        <http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
+        <https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class PointPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
@@ -865,15 +865,15 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class PolyPlot(Plot):
         def __init__(self, df, **kwargs):
@@ -944,7 +944,7 @@ def choropleth(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         The
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -969,15 +969,15 @@ def choropleth(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     if hue is None:
         raise ValueError("No 'hue' specified.")
@@ -1050,7 +1050,7 @@ def quadtree(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1084,15 +1084,15 @@ def quadtree(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class QuadtreePlot(Plot, QuadtreeComputeMixin, QuadtreeHueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
@@ -1193,7 +1193,7 @@ def cartogram(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1220,15 +1220,15 @@ def cartogram(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     if scale is None:
         raise ValueError("No scale parameter provided.")
@@ -1305,7 +1305,7 @@ def kdeplot(
         `Working with Projections
         <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
     cmap : matplotlib color, optional
-        The `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        The `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     clip : None or iterable or GeoSeries, optional
         If specified, isochrones will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
@@ -1316,15 +1316,16 @@ def kdeplot(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to
         `the underlying seaborn.kdeplot instance
-        <http://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+        <https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
+
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
@@ -1393,7 +1394,7 @@ def sankey(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1433,7 +1434,7 @@ def sankey(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
         Keyword arguments to be passed to
         `the underlying matplotlib.lines.Line2D
@@ -1443,7 +1444,7 @@ def sankey(
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class SankeyPlot(Plot, HueMixin, ScaleMixin, LegendMixin):
         def __init__(self, df, **kwargs):
@@ -1558,7 +1559,7 @@ def voronoi(
         <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
-        `colormap <http://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
+        `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     norm: function, optional
         A `colormap normalization function <https://matplotlib.org/users/colormapnorms.html>`_
         which will be applied to the data before plotting.
@@ -1598,15 +1599,15 @@ def voronoi(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying ``matplotlib`` `Line2D objects
-        <http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Line2D objects
+        <https://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class VoronoiPlot(Plot, HueMixin, LegendMixin, ClipMixin):
         def __init__(self, df, **kwargs):
@@ -1691,18 +1692,18 @@ def webmap(
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
         If set, the ``matplotlib.axes.AxesSubplot`` or ``cartopy.mpl.geoaxes.GeoAxesSubplot``
-        instance to paint the plot on. Defaults to a new axis.
+        instance to paint the plot on. Defaults to a new Axes.
     kwargs: dict, optional
-        Keyword arguments to be passed to the underlying matplotlib `Polygon patches
-        <http://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
+        Keyword arguments to be passed to the underlying Matplotlib `Polygon patches
+        <https://matplotlib.org/api/patches_api.html#matplotlib.patches.Polygon>`_.
 
     Returns
     -------
     ``AxesSubplot`` or ``GeoAxesSubplot``
-        The plot axis.
+        The plot Axes.
     """
     class WebmapPlot(Plot):
-        # webmap is restricted to the WebMercator projection, which requires special axis and
+        # webmap is restricted to the WebMercator projection, which requires special Axes and
         # projection initialization rules to get right.
         def __init__(self, df, **kwargs):
             if isinstance(ax, GeoAxesSubplot):
@@ -1710,15 +1711,15 @@ def webmap(
                 if proj_name != 'WebMercator':
                     raise ValueError(
                         f'"webmap" is only compatible with the "WebMercator" projection, but '
-                        f'the input axis is in the {proj_name!r} projection instead. To fix, '
-                        f'pass "projection=gcrs.WebMercator()" to the axis initializer.'
+                        f'the input Axes is in the {proj_name!r} projection instead. To fix, '
+                        f'pass "projection=gcrs.WebMercator()" to the Axes initializer.'
                     )
                 super().__init__(df, projection=projection, **kwargs)
             elif isinstance(ax, mpl.axes.Axes):
                 raise ValueError(
                     '"webmap" is only compatible with the "WebMercator" projection, but '
-                    'the input axis is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
-                    'to the axis initializer.'
+                    'the input Axes is unprojected. To fix, pass "projection=gcrs.WebMercator()" '
+                    'to the Axes initializer.'
                 )
             elif ax is None and projection is None:
                 warnings.warn(

@@ -8,7 +8,7 @@ dataset of AirBnB locations in Boston. The result is outputted to a webmap using
 overwhelming the renderer.
 
 `Click here to see this plot as an interactive webmap.
-<http://bl.ocks.org/ResidentMario/868ac097d671df1ed5ec83eed048560c>`_
+<https://bl.ocks.org/ResidentMario/868ac097d671df1ed5ec83eed048560c>`_
 """
 
 import geopandas as gpd
