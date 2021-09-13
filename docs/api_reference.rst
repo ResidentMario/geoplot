@@ -52,6 +52,8 @@ Projections
 
 .. automethod:: geoplot.crs.SouthPolarStereo
 
+.. automethod:: geoplot.crs.Gnomonic
+
 .. automethod:: geoplot.crs.AlbersEqualArea
 
 .. automethod:: geoplot.crs.AzimuthalEquidistant
@@ -66,13 +68,25 @@ Projections
 
 .. automethod:: geoplot.crs.LambertAzimuthalEqualArea
 
-.. automethod:: geoplot.crs.UTM
-
 .. automethod:: geoplot.crs.OSGB
 
 .. automethod:: geoplot.crs.EuroPP
 
 .. automethod:: geoplot.crs.OSNI
+
+.. automethod:: geoplot.crs.EckertI
+
+.. automethod:: geoplot.crs.EckertII
+
+.. automethod:: geoplot.crs.EckertIII
+
+.. automethod:: geoplot.crs.EckertIV
+
+.. automethod:: geoplot.crs.EckertV
+
+.. automethod:: geoplot.crs.EckertVI
+
+.. automethod:: geoplot.crs.NearsidePerspective
 
 Utilities
 ---------
