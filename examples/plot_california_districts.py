@@ -15,9 +15,8 @@ The options demonstrated are:
 * scheme="FisherJenks"—Bins the data using the Fisher natural breaks optimization
   procedure.
 
-To learn more about colormaps in general, refer to the `Customizing Plots
-<https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_ reference in the
-documentation.
+To learn more about colormaps in general, refer to the
+:ref:`/user_guide/Customizing_Plots.ipynb#hue` reference in the documentation.
 
 This demo showcases a small subset of the classifiers available in ``mapclassify``, the library
 that ``geoplot`` relies on for this feature. To learn more about ``mapclassify``, including how

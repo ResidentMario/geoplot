@@ -748,13 +748,11 @@ def pointplot(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -766,21 +764,16 @@ def pointplot(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#scale`.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
         If ``scale`` is set, the function used to determine the size of each point. For reference
-        see the
-        `Pointplot Scale Functions
-        <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
-        demo.
+        see the :doc:`/gallery/plot_usa_city_elevations` demo.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -791,8 +784,7 @@ def pointplot(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -855,12 +847,10 @@ def polyplot(df, projection=None, extent=None, figsize=(8, 6), ax=None, **kwargs
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -935,13 +925,11 @@ def choropleth(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         The
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -953,8 +941,7 @@ def choropleth(
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -963,8 +950,7 @@ def choropleth(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1039,15 +1025,13 @@ def quadtree(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     clip : None or iterable or GeoSeries, optional
         If specified, quadrangles will be clipped to the boundaries of this geometry.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -1068,8 +1052,7 @@ def quadtree(
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -1078,8 +1061,7 @@ def quadtree(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1171,26 +1153,20 @@ def cartogram(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#scale`.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
         If ``scale`` is set, the function used to determine the size of each point. For reference
-        see the
-        `Pointplot Scale Functions
-        <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
-        demo.
+        see the :doc:`/gallery/plot_usa_city_elevations` demo.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -1202,8 +1178,7 @@ def cartogram(
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -1214,8 +1189,7 @@ def cartogram(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1302,16 +1276,14 @@ def kdeplot(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     cmap : matplotlib color, optional
         The `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
     clip : None or iterable or GeoSeries, optional
         If specified, isochrones will be clipped to the boundaries of this geometry.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1385,13 +1357,11 @@ def sankey(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -1403,21 +1373,16 @@ def sankey(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#scale`.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
         If ``scale`` is set, the function used to determine the size of each point. For reference
-        see the
-        `Pointplot Scale Functions
-        <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
-        demo.
+        see the :doc:`/gallery/plot_usa_city_elevations` demo.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -1428,8 +1393,7 @@ def sankey(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1548,15 +1512,13 @@ def voronoi(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
     clip : None or iterable or GeoSeries, optional
         If specified, the output will be clipped to the boundaries of this geometry.
     hue : None, Series, GeoSeries, iterable, or str, optional
         The column in the dataset (or an iterable of some other data) used to color the points.
         For a reference on this and the other hue-related parameters that follow, see
-        `Customizing Plots#Hue
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#hue>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#hue`.
     cmap : matplotlib color, optional
         If ``hue`` is specified, the
         `colormap <https://matplotlib.org/examples/color/colormaps_reference.html>`_ to use.
@@ -1568,21 +1530,16 @@ def voronoi(
     scale : str or iterable, optional
         The column in the dataset (or an iterable of some other data) with which to scale output
         points. For a reference on this and the other scale-related parameters that follow, see
-        `Customizing Plots#Scale
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#scale>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#scale`.
     limits : (min, max) tuple, optional
         If ``scale`` is set, the minimum and maximum size of the points.
     scale_func : ufunc, optional
         If ``scale`` is set, the function used to determine the size of each point. For reference
-        see the
-        `Pointplot Scale Functions
-        <https://residentmario.github.io/geoplot/gallery/plot_usa_city_elevations.html#sphx-glr-gallery-plot-usa-city-elevations-py>`_
-        demo.
+        see the :doc:`/gallery/plot_usa_city_elevations` demo.
     legend : boolean, optional
         Whether or not to include a map legend. For a reference on this and the other
         legend-related parameters that follow, see
-        `Customizing Plots#Legend
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#legend>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#legend`.
     legend_values : list, optional
         The data values to be used in the legend.
     legend_labels : list, optional
@@ -1593,8 +1550,7 @@ def voronoi(
         Keyword arguments to be passed to the underlying legend.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     figsize : (x, y) tuple, optional
         Sets the size of the plot figure (in inches).
     ax : AxesSubplot or GeoAxesSubplot instance, optional
@@ -1671,13 +1627,11 @@ def webmap(
         The data being plotted.
     projection : geoplot.crs object instance, optional
         The projection to use. For reference see
-        `Working with Projections
-        <https://residentmario.github.io/geoplot/user_guide/Working_with_Projections.html>`_.
+        :ref:`/user_guide/Working_with_Projections.ipynb`.
         ``webmap`` only supports a single projection: ``WebMercator``.
     extent : None or (min_longitude, min_latitude, max_longitude, max_latitude), optional
         Controls the plot extents. For reference see
-        `Customizing Plots#Extent
-        <https://residentmario.github.io/geoplot/user_guide/Customizing_Plots.html#extent>`_.
+        :ref:`/user_guide/Customizing_Plots.ipynb#extent`.
     zoom: None or int
         The zoom level to use when fetching webmap tiles. Higher zoom levels mean more detail,
         but will also take longer to generate and will have more clutter. There are generally
