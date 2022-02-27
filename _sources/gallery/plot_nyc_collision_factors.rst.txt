@@ -64,14 +64,6 @@ distributions: loss of consciousness crashes are more localized to Manhattan.
       mpl_cm.register_cmap(_name, _cmap)
     /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap 'crest_r' which already exists.
       mpl_cm.register_cmap(_name + "_r", _cmap_r)
-    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/_decorators.py:36: FutureWarning: Pass the following variable as a keyword arg: y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
-      warnings.warn(
-    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/distributions.py:1676: UserWarning: `shade_lowest` is now deprecated in favor of `thresh`. Setting `thresh=0.05`, but please update your code.
-      warnings.warn(msg, UserWarning)
-    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/_decorators.py:36: FutureWarning: Pass the following variable as a keyword arg: y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
-      warnings.warn(
-    /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/distributions.py:1676: UserWarning: `shade_lowest` is now deprecated in favor of `thresh`. Setting `thresh=0.05`, but please update your code.
-      warnings.warn(msg, UserWarning)
 
     Text(0.5, 1.0, 'Loss of Consciousness Crashes, 2016')
 
@@ -105,7 +97,7 @@ distributions: loss of consciousness crashes are more localized to Manhattan.
         ],
         cmap='Reds',
         projection=proj,
-        shade=True, shade_lowest=False,
+        shade=True, thresh=0.05,
         clip=nyc_boroughs.geometry,
         ax=ax1
     )
@@ -118,7 +110,7 @@ distributions: loss of consciousness crashes are more localized to Manhattan.
         ],
         cmap='Reds',
         projection=proj,
-        shade=True, shade_lowest=False,
+        shade=True, thresh=0.05,
         clip=nyc_boroughs.geometry,
         ax=ax2
     )
@@ -128,7 +120,7 @@ distributions: loss of consciousness crashes are more localized to Manhattan.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  9.274 seconds)
+   **Total running time of the script:** ( 0 minutes  8.911 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collision_factors.py:

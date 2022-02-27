@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>KDEPlot of two NYC traffic accident contributing factors &mdash; geoplot 0.4.4 documentation</title>
+  <title>KDEPlot of two NYC traffic accident contributing factors &mdash; geoplot 0.5.0 documentation</title>
   
 
   
@@ -258,14 +258,6 @@ distributions: loss of consciousness crashes are more localized to Manhattan.</p
   mpl_cm.register_cmap(_name, _cmap)
 /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;crest_r&#39; which already exists.
   mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/_decorators.py:36: FutureWarning: Pass the following variable as a keyword arg: y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
-  warnings.warn(
-/Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/distributions.py:1676: UserWarning: `shade_lowest` is now deprecated in favor of `thresh`. Setting `thresh=0.05`, but please update your code.
-  warnings.warn(msg, UserWarning)
-/Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/_decorators.py:36: FutureWarning: Pass the following variable as a keyword arg: y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
-  warnings.warn(
-/Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/distributions.py:1676: UserWarning: `shade_lowest` is now deprecated in favor of `thresh`. Setting `thresh=0.05`, but please update your code.
-  warnings.warn(msg, UserWarning)
 
 Text(0.5, 1.0, &#39;Loss of Consciousness Crashes, 2016&#39;)
 </pre></div>
@@ -293,7 +285,7 @@ Text(0.5, 1.0, &#39;Loss of Consciousness Crashes, 2016&#39;)
     <span class="p">],</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-    <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shade_lowest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
     <span class="n">clip</span><span class="o">=</span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
 <span class="p">)</span>
@@ -306,7 +298,7 @@ Text(0.5, 1.0, &#39;Loss of Consciousness Crashes, 2016&#39;)
     <span class="p">],</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span>
     <span class="n">projection</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
-    <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shade_lowest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">shade</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
     <span class="n">clip</span><span class="o">=</span><span class="n">nyc_boroughs</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span>
 <span class="p">)</span>
@@ -314,7 +306,7 @@ Text(0.5, 1.0, &#39;Loss of Consciousness Crashes, 2016&#39;)
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Loss of Consciousness Crashes, 2016&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.274 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.911 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gallery-plot-nyc-collision-factors-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/5fc3e9c6981174c7107ea69c687c5112/plot_nyc_collision_factors.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nyc_collision_factors.py</span></code></a></p>
@@ -340,7 +332,7 @@ Text(0.5, 1.0, &#39;Loss of Consciousness Crashes, 2016&#39;)
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2016-2020, Aleksey Bilogur.
+        &#169; Copyright 2016-2022, Aleksey Bilogur.
 
     </p>
   </div>

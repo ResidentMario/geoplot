@@ -50,7 +50,7 @@ for more information.
     /Users/alekseybilogur/Desktop/geoplot/examples/plot_los_angeles_flights.py:54: DeprecationWarning: The outline_patch property is deprecated. Use GeoAxes.spines['geo'] or the default Axes properties instead.
       ax.outline_patch.set_visible(True)
 
-    <cartopy.mpl.feature_artist.FeatureArtist object at 0x7fc3522637c0>
+    <cartopy.mpl.feature_artist.FeatureArtist object at 0x7fe3047659d0>
 
 
 
@@ -114,7 +114,7 @@ for more information.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.990 seconds)
+   **Total running time of the script:** ( 0 minutes  2.370 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_los_angeles_flights.py:

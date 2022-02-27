@@ -124,7 +124,7 @@ you can build your own custom ``UserDefined`` classifier, refer to `the mapclass
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.368 seconds)
+   **Total running time of the script:** ( 0 minutes  2.023 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_california_districts.py:
