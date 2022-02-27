@@ -1318,7 +1318,7 @@ def kdeplot(
                 sns.kdeplot(
                     x=pd.Series([p.x for p in self.df.geometry]),
                     y=pd.Series([p.y for p in self.df.geometry]),
-                    ax=ax, cmap=self.cmap, **self.kwargs
+                    ax=ax, cmap=self.cmap.cmap, norm=self.cmap.norm, **self.kwargs
                 )
             return ax
 
