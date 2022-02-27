@@ -31,7 +31,7 @@ of trees classified per area, which ranges from 88% to 98%.
 For more tools for visualizing data nullity, `check out the ``missingno`` library
 <https://github.com/ResidentMario/missingno>`_.
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-35
+.. GENERATED FROM PYTHON SOURCE LINES 15-32
 
 
 
@@ -53,6 +53,7 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
     import warnings; warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
       return self.isna()
 
+    <GeoAxesSubplot:>
 
 
 
@@ -66,7 +67,6 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
     import geopandas as gpd
     import geoplot as gplt
     import geoplot.crs as gcrs
-    import matplotlib.pyplot as plt
 
 
     trees = gpd.read_file(gplt.datasets.get_path('san_francisco_street_trees_sample'))
@@ -81,12 +81,10 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
     )
     gplt.polyplot(sf, facecolor='None', edgecolor='gray', linewidth=1, zorder=2, ax=ax)
 
-    plt.savefig("san-francisco-street-trees.png", bbox_inches='tight', pad_inches=0)
-
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  9.868 seconds)
+   **Total running time of the script:** ( 0 minutes  8.753 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_san_francisco_trees.py:

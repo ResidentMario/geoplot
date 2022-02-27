@@ -24,4 +24,3 @@ ax = gplt.quadtree(
 gplt.pointplot(collisions, s=1, ax=ax)
 
 plt.title("New York Ciy Traffic Collisions, 2016")
-plt.savefig("nyc-collisions-quadtree.png", bbox_inches='tight', pad_inches=0)

@@ -32,7 +32,7 @@ contiguous_usa = gpd.read_file(gplt.datasets.get_path('contiguous_usa'))
 
 
 proj = gcrs.AlbersEqualArea(central_longitude=-98, central_latitude=39.5)
-f, axarr = plt.subplots(2, 2, figsize=(12, 8), subplot_kw={'projection': proj})
+f, axarr = plt.subplots(2, 2, figsize=(12, 9), subplot_kw={'projection': proj})
 
 polyplot_kwargs = {'facecolor': (0.9, 0.9, 0.9), 'linewidth': 0}
 pointplot_kwargs = {
@@ -98,6 +98,4 @@ gplt.pointplot(
 axarr[1][1].set_title("Power Scale")
 
 plt.suptitle('Continental US Cities by Elevation, 2016', fontsize=16)
-
 plt.subplots_adjust(top=0.95)
-plt.savefig("usa-city-elevations.png", bbox_inches='tight')

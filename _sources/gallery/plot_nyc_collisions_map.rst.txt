@@ -24,7 +24,7 @@ Pointplot of NYC fatal and injurious traffic collisions
 The example plots fatal (>=1 fatality) and injurious (>=1 injury requiring hospitalization)
 vehicle collisions in New York City. Injuries are far more common than fatalities.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-54
+.. GENERATED FROM PYTHON SOURCE LINES 8-52
 
 
 
@@ -33,8 +33,20 @@ vehicle collisions in New York City. Injuries are far more common than fatalitie
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
 
 
+    Text(0.5, 1.0, 'Injurious Crashes in New York City, 2016')
+
+
+
+
+
+|
 
 .. code-block:: default
 
@@ -83,12 +95,10 @@ vehicle collisions in New York City. Injuries are far more common than fatalitie
     gplt.polyplot(nyc_boroughs, ax=ax2, projection=proj)
     ax2.set_title("Injurious Crashes in New York City, 2016")
 
-    plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)
-
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  8.937 seconds)
+   **Total running time of the script:** ( 0 minutes  7.239 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_map.py:

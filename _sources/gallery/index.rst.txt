@@ -115,27 +115,6 @@ Gallery
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example reproduces a famous historical flow map: Charles Joseph Minard&#x27;s map depicting Nap...">
-
-.. only:: html
-
- .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
-     :alt: Sankey of Napoleon's march on Moscow with custom colormap
-
-     :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /gallery/plot_minard_napoleon_russia
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows a pointplot combined with a voronoi mapping primary schools in Melbourne. Sc...">
 
 .. only:: html
@@ -154,6 +133,27 @@ Gallery
    :hidden:
 
    /gallery/plot_melbourne_schools
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example reproduces a famous historical flow map: Charles Joseph Minard&#x27;s map depicting Nap...">
+
+.. only:: html
+
+ .. figure:: /gallery/images/thumb/sphx_glr_plot_minard_napoleon_russia_thumb.png
+     :alt: Sankey of Napoleon's march on Moscow with custom colormap
+
+     :ref:`sphx_glr_gallery_plot_minard_napoleon_russia.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/plot_minard_napoleon_russia
 
 .. raw:: html
 

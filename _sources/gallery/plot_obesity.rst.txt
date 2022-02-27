@@ -27,7 +27,7 @@ mountain states are the healthiest; the deep South, the unhealthiest.
 This example inspired by the `"Non-Contiguous Cartogram" <https://bl.ocks.org/mbostock/4055908>`_
 example in the D3.JS example gallery.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-42
+.. GENERATED FROM PYTHON SOURCE LINES 11-41
 
 
 
@@ -36,8 +36,20 @@ example in the D3.JS example gallery.
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
 
 
+    Text(0.5, 1.0, 'Adult Obesity Rate by State, 2013')
+
+
+
+
+
+|
 
 .. code-block:: default
 
@@ -66,17 +78,16 @@ example in the D3.JS example gallery.
         hue='Obesity Rate', cmap='Reds', scheme=scheme,
         linewidth=0.5,
         legend=True, legend_kwargs={'loc': 'lower right'}, legend_var='hue',
-        figsize=(8, 12)
+        figsize=(12, 7)
     )
     gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='None', ax=ax)
 
     plt.title("Adult Obesity Rate by State, 2013")
-    plt.savefig("obesity.png", bbox_inches='tight', pad_inches=0.1)
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.334 seconds)
+   **Total running time of the script:** ( 0 minutes  0.795 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_obesity.py:

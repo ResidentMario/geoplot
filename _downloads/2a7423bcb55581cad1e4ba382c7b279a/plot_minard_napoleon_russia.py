@@ -16,7 +16,6 @@ interactive scrolly-panny version of this webmap built with ``mplleaflet``. To l
 
 import geopandas as gpd
 import geoplot as gplt
-import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 napoleon_troop_movements = gpd.read_file(gplt.datasets.get_path('napoleon_troop_movements'))
@@ -30,8 +29,9 @@ gplt.sankey(
     hue='direction',
     cmap=cm
 )
-fig = plt.gcf()
-plt.savefig("minard-napoelon-russia.png", bbox_inches='tight', pad_inches=0.1)
 
-# Uncomment and run the following line of code to save as an interactive webmap.
+# Uncomment and run the following lines of code to save as an interactive webmap.
+# import matplotlib.pyplot as plt
+# import mplleaflet
+# fig = plt.gcf()
 # mplleaflet.save_html(fig, fileobj='minard-napoleon-russia.html')

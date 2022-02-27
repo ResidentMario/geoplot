@@ -25,7 +25,7 @@ This example plots traffic collisions in New York City. Overlaying a ``pointplot
 ``quadtree`` like this communicates information on two visual channels, position and texture,
 simultaneously.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-28
+.. GENERATED FROM PYTHON SOURCE LINES 9-27
 
 
 
@@ -47,6 +47,7 @@ simultaneously.
     import warnings; warnings.filterwarnings('ignore', 'GeoSeries.isna', UserWarning)
       return self.isna()
 
+    Text(0.5, 1.0, 'New York Ciy Traffic Collisions, 2016')
 
 
 
@@ -74,12 +75,11 @@ simultaneously.
     gplt.pointplot(collisions, s=1, ax=ax)
 
     plt.title("New York Ciy Traffic Collisions, 2016")
-    plt.savefig("nyc-collisions-quadtree.png", bbox_inches='tight', pad_inches=0)
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  15.910 seconds)
+   **Total running time of the script:** ( 0 minutes  15.060 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_collisions_quadtree.py:

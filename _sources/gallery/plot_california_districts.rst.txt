@@ -42,7 +42,7 @@ that ``geoplot`` relies on for this feature. To learn more about ``mapclassify``
 you can build your own custom ``UserDefined`` classifier, refer to `the mapclassify docs
 <https://pysal.org/mapclassify/index.html>`_.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-69
+.. GENERATED FROM PYTHON SOURCE LINES 26-66
 
 
 
@@ -70,6 +70,7 @@ you can build your own custom ``UserDefined`` classifier, refer to `the mapclass
 
       scheme = mc.FisherJenks(cali.area, k=5)
 
+    Text(0.5, 0.98, 'California State Districts by Area, 2010')
 
 
 
@@ -120,13 +121,10 @@ you can build your own custom ``UserDefined`` classifier, refer to `the mapclass
     plt.subplots_adjust(top=0.92)
     plt.suptitle('California State Districts by Area, 2010', fontsize=18)
 
-    fig = plt.gcf()
-    plt.savefig("boston-airbnb-kde.png", bbox_inches='tight', pad_inches=0.1)
-
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.884 seconds)
+   **Total running time of the script:** ( 0 minutes  2.368 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_california_districts.py:

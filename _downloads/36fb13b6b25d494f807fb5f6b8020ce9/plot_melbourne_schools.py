@@ -26,4 +26,3 @@ ax = gplt.voronoi(
 gplt.polyplot(melbourne, edgecolor='None', facecolor='lightgray', ax=ax)
 gplt.pointplot(melbourne_primary_schools, color='black', ax=ax, s=1, extent=melbourne.total_bounds)
 plt.title('Primary Schools in Greater Melbourne, 2018')
-plt.savefig("melbourne-schools.png", bbox_inches='tight', pad_inches=0)

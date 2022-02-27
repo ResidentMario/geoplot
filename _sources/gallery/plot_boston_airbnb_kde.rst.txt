@@ -29,7 +29,7 @@ overwhelming the renderer.
 `Click here to see this plot as an interactive webmap.
 <https://bl.ocks.org/ResidentMario/868ac097d671df1ed5ec83eed048560c>`_
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-31
+.. GENERATED FROM PYTHON SOURCE LINES 13-28
 
 
 
@@ -49,6 +49,7 @@ overwhelming the renderer.
     /Users/alekseybilogur/opt/miniconda3/envs/geoplot-dev/lib/python3.8/site-packages/seaborn/distributions.py:1676: UserWarning: `shade_lowest` is now deprecated in favor of `thresh`. Setting `thresh=0.05`, but please update your code.
       warnings.warn(msg, UserWarning)
 
+    Text(0.5, 1.0, 'Boston AirBnB Locations, 2016')
 
 
 
@@ -74,13 +75,10 @@ overwhelming the renderer.
     gplt.webmap(boston_airbnb_listings, ax=ax)
     plt.title('Boston AirBnB Locations, 2016', fontsize=18)
 
-    fig = plt.gcf()
-    plt.savefig("boston-airbnb-kde.png", bbox_inches='tight', pad_inches=0.1)
-
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.781 seconds)
+   **Total running time of the script:** ( 0 minutes  6.817 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_boston_airbnb_kde.py:

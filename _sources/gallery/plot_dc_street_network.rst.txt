@@ -25,7 +25,7 @@ This example plots
 `annual average daily traffic volume <https://en.wikipedia.org/wiki/Annual_average_daily_traffic>`_
 in Washington DC.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-24
+.. GENERATED FROM PYTHON SOURCE LINES 9-23
 
 
 
@@ -34,8 +34,20 @@ in Washington DC.
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
 
 
+    Text(0.5, 1.0, 'Streets in Washington DC by Average Daily Traffic, 2015')
+
+
+
+
+
+|
 
 .. code-block:: default
 
@@ -53,12 +65,11 @@ in Washington DC.
     )
 
     plt.title("Streets in Washington DC by Average Daily Traffic, 2015")
-    plt.savefig("dc-street-network.png", bbox_inches='tight', pad_inches=0.1)
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.929 seconds)
+   **Total running time of the script:** ( 0 minutes  10.988 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_dc_street_network.py:

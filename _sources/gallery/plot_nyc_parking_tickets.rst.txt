@@ -38,7 +38,7 @@ This example was inspired by the blog post `"Californians love Brooklyn, New Jer
 Midtown: Mapping NYC’s Visitors Through Parking Tickets"
 <https://iquantny.tumblr.com/post/84393789169/californians-love-brooklyn-new-jerseyans-love>`_.
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-65
+.. GENERATED FROM PYTHON SOURCE LINES 22-63
 
 
 
@@ -47,8 +47,20 @@ Midtown: Mapping NYC’s Visitors Through Parking Tickets"
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
 
 
+    Text(0.5, 1.0, 'Connecticut (n=126,661)')
+
+
+
+
+
+|
 
 .. code-block:: default
 
@@ -77,7 +89,7 @@ Midtown: Mapping NYC’s Visitors Through Parking Tickets"
         )
 
 
-    f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': proj})
+    f, axarr = plt.subplots(2, 2, figsize=(12, 13), subplot_kw={'projection': proj})
 
     plt.suptitle('Parking Tickets Issued to State by Precinct, 2016', fontsize=16)
     plt.subplots_adjust(top=0.95)
@@ -94,12 +106,10 @@ Midtown: Mapping NYC’s Visitors Through Parking Tickets"
     plot_state_to_ax('ct', axarr[1][1])
     axarr[1][1].set_title('Connecticut (n=126,661)')
 
-    plt.savefig("nyc-parking-tickets.png", bbox_inches='tight')
-
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.978 seconds)
+   **Total running time of the script:** ( 0 minutes  4.866 seconds)
 
 
 .. _sphx_glr_download_gallery_plot_nyc_parking_tickets.py:

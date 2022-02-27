@@ -27,4 +27,3 @@ gplt.choropleth(
     projection=gcrs.AlbersEqualArea()
 )
 plt.title("Percentage White Residents, 2000")
-plt.savefig("ny-state-demographics.png", bbox_inches='tight', pad_inches=0.1)
