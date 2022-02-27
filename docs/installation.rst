@@ -2,7 +2,7 @@
 Installation
 ============
 
-``geoplot`` is Python 3.6+ only.
+``geoplot`` supports Python 3.7 and higher.
 
 With Conda (Recommended)
 ------------------------
