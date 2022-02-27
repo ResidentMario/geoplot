@@ -1317,14 +1317,14 @@ def kdeplot(
 
             if self.projection:
                 sns.kdeplot(
-                    pd.Series([p.x for p in self.df.geometry]),
-                    pd.Series([p.y for p in self.df.geometry]),
+                    x=pd.Series([p.x for p in self.df.geometry]),
+                    y=pd.Series([p.y for p in self.df.geometry]),
                     transform=ccrs.PlateCarree(), ax=ax, cmap=self.cmap, **self.kwargs
                 )
             else:
                 sns.kdeplot(
-                    pd.Series([p.x for p in self.df.geometry]),
-                    pd.Series([p.y for p in self.df.geometry]),
+                    x=pd.Series([p.x for p in self.df.geometry]),
+                    y=pd.Series([p.y for p in self.df.geometry]),
                     ax=ax, cmap=self.cmap, **self.kwargs
                 )
             return ax
