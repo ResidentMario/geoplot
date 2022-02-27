@@ -1798,40 +1798,6 @@ def _to_geoseries(df, var, var_name, validate=True):
         return s
 
 
-def _validate_buckets(df, hue, k, scheme):
-    """
-    This helper method infers if the ``hue`` parameter is categorical, and sets scheme if isn't
-    already set.
-    """
-    if isinstance(hue, str):
-        hue = df[hue]
-    count_unique = len(np.unique(hue))
-
-    if hue is None:
-        categorical = False
-    # if the data is non-categorical, but there are fewer to equal numbers of bins and
-    # observations, treat it as categorical, as doing so will make the legend cleaner
-    elif k is not None and len(hue) == k:
-        categorical = True
-    elif k is not None and len(hue) < k:
-        warnings.warn(
-            f'There are just {len(hue)} observations in the "hue" data, but "k" is set to {k}. '
-            f'"k" will be set to the number of categories of observations in the dataset.'
-        )
-        categorical = True
-    elif k is not None and count_unique > k and (hue.dtype != np.dtype('object')):
-        categorical = False
-    elif k is not None and count_unique > k and (hue.dtype == np.dtype('object')):
-        raise ValueError(
-            f'"k" is set to {k}, but "hue" is a column of data of type "object", which cannot be '
-            f'bucketized discretely. Try setting "k" to None instead.'
-        )
-    else:
-        categorical = (hue.dtype == np.dtype('object'))
-    scheme = scheme if scheme else 'Quantiles'
-    return categorical, scheme
-
-
 def relax_bounds(xmin, ymin, xmax, ymax):
     """
     Increases the viewport slightly. Used to ameliorate plot features that fall out of bounds.
