@@ -25,7 +25,7 @@ ax = gplt.polyplot(
     projection=gcrs.AlbersEqualArea(),
     edgecolor='white',
     facecolor='lightgray',
-    figsize=(8, 12)
+    figsize=(12, 7)
 )
 gplt.pointplot(
     continental_usa_cities,
@@ -42,6 +42,4 @@ gplt.pointplot(
     ax=ax
 )
 
-
 plt.title("Large cities in the contiguous United States, 2010")
-plt.savefig("largest-cities-usa.png", bbox_inches='tight', pad_inches=0.1)

@@ -44,7 +44,7 @@ def plot_state_to_ax(state, ax):
     )
 
 
-f, axarr = plt.subplots(2, 2, figsize=(12, 12), subplot_kw={'projection': proj})
+f, axarr = plt.subplots(2, 2, figsize=(12, 13), subplot_kw={'projection': proj})
 
 plt.suptitle('Parking Tickets Issued to State by Precinct, 2016', fontsize=16)
 plt.subplots_adjust(top=0.95)
@@ -60,5 +60,3 @@ axarr[1][0].set_title('Pennsylvania (n=215,065)')
 
 plot_state_to_ax('ct', axarr[1][1])
 axarr[1][1].set_title('Connecticut (n=126,661)')
-
-plt.savefig("nyc-parking-tickets.png", bbox_inches='tight')

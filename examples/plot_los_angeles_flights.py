@@ -57,5 +57,3 @@ ax.add_feature(cartopy.feature.LAND)
 ax.add_feature(cartopy.feature.OCEAN)
 ax.add_feature(cartopy.feature.LAKES)
 ax.add_feature(cartopy.feature.RIVERS)
-
-plt.savefig("los-angeles-flights.png", bbox_inches='tight', pad_inches=0.1)
