@@ -2,18 +2,22 @@
 This module defines the majority of geoplot functions, including all plot types.
 """
 
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+import warnings
+
 import numpy as np
-from cartopy.feature import ShapelyFeature
+import pandas as pd
+import geopandas as gpd
+from geopandas.plotting import _PolygonPatch as GeopandasPolygonPatch
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 import cartopy.crs as ccrs
 import geoplot.crs as gcrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
-import warnings
+from cartopy.feature import ShapelyFeature
 import shapely.geometry
-import pandas as pd
-from geopandas.plotting import _PolygonPatch as GeopandasPolygonPatch
 import contextily as ctx
 import mapclassify as mc
 
@@ -1286,8 +1290,6 @@ def kdeplot(
     ``AxesSubplot`` or ``GeoAxesSubplot``
         The plot Axes.
     """
-    import seaborn as sns  # Immediately fail if no seaborn.
-
     class KDEPlot(Plot, HueMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
