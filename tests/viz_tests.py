@@ -3,7 +3,6 @@ import numpy as np
 import geopandas as gpd
 from shapely.geometry import Polygon
 from matplotlib.colors import Normalize
-import matplotlib.pyplot as plt
 
 from geoplot import utils
 from geoplot import (
@@ -60,7 +59,7 @@ def test_hue_params(kwargs):
 @pytest.mark.parametrize("kwargs", [
     pytest.param({'cmap': 'Reds'}, marks=pytest.mark.xfail),
     pytest.param({'cmap': 'Blues', 'shade': True}, marks=pytest.mark.xfail),
-    pytest.param({'cmap': 'Greens', 'shade': True, 'shade_lowest': True}, marks=pytest.mark.xfail)
+    pytest.param({'cmap': 'Greens', 'shade': True, 'thresh': 0.05}, marks=pytest.mark.xfail)
 ])
 def test_hue_params_kdeplot(kwargs):
     return kdeplot(p_df, **kwargs).get_figure()

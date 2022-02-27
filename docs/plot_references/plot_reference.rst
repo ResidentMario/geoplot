@@ -259,14 +259,14 @@ geometry.
 
 Additional keyword arguments that are not part of the ``geoplot`` API are passed to
 `the underlying seaborn.kdeplot instance <https://seaborn.pydata.org/generated/seaborn.kdeplot.html#seaborn.kdeplot>`_.
-One of the most useful of these parameters is ``shade_lowest``, which toggles shading on the
+One of the most useful of these parameters is ``thresh=0.05``, which toggles shading on the
 lowest (basal) layer of the kernel density estimate.
 
 .. plot::
     :context: close-figs
 
     ax = gplt.polyplot(boroughs, projection=gcrs.AlbersEqualArea(), zorder=1)
-    gplt.kdeplot(collisions, cmap='Reds', shade=True, shade_lowest=True,
+    gplt.kdeplot(collisions, cmap='Reds', shade=True, thresh=0.05,
                  clip=boroughs, ax=ax)
 
 Cartogram
