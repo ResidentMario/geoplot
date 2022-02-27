@@ -28,8 +28,7 @@ class HueMixin:
     Class container for hue-setter code shared across all plots that support hue.
     """
     def set_hue_values(
-        self, color_kwarg='color', default_color='steelblue',
-        supports_categorical=True, verify_input=True
+        self, color_kwarg='color', default_color='steelblue', supports_categorical=True
     ):
         hue = self.kwargs.pop('hue', None)
         cmap = self.kwargs.pop('cmap', 'viridis')
@@ -48,18 +47,14 @@ class HueMixin:
         else:
             scheme = None
 
-        # kdeplot is special: it has a 'cmap' parameter but no 'hue' or 'scheme' parameters,
-        # merely passing those parameters to `seaborn.kdeplot`. So for these plots we don't
-        # validate.
-        if verify_input:
-            if color_kwarg in self.kwargs and hue is not None:
-                raise ValueError(
-                    f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
-                )
-            if (cmap is not None or scheme is not None) and hue is None:
-                raise ValueError(
-                    'Cannot specify "cmap" or "scheme" without specifying "hue".'
-                )
+        if color_kwarg in self.kwargs and hue is not None:
+            raise ValueError(
+                f'Cannot specify both "{color_kwarg}" and "hue" in the same plot.'
+            )
+        if (cmap is not None or scheme is not None) and hue is None:
+            raise ValueError(
+                'Cannot specify "cmap" or "scheme" without specifying "hue".'
+            )
 
         hue = _to_geoseries(self.df, hue, "hue")
         if hue is not None and hue.isnull().any():
@@ -73,6 +68,7 @@ class HueMixin:
             colors = [color] * len(self.df)
             categories = None
             self.k = None
+            mpl_cm_scalar_mappable = None
         elif ((scheme == 'categorical') or (scheme is None and hue.dtype == np.dtype('object'))):
             categories = np.unique(hue)
             value_map = {v: i for i, v in enumerate(categories)}
@@ -80,14 +76,14 @@ class HueMixin:
 
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=min(values), vmax=max(values))
-            cmap = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
-            colors = [cmap.to_rgba(v) for v in values]
+            mpl_cm_scalar_mappable = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+            colors = [mpl_cm_scalar_mappable.to_rgba(v) for v in values]
             self.k = len(value_map)
         elif scheme is None:
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=hue.min(), vmax=hue.max())
-            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
-            colors = [cmap.to_rgba(v) for v in hue]
+            mpl_cm_scalar_mappable = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+            colors = [mpl_cm_scalar_mappable.to_rgba(v) for v in hue]
             categories = None
             self.k = None
         else:  # scheme is not None
@@ -107,20 +103,29 @@ class HueMixin:
 
             if norm is None:
                 norm = mpl.colors.Normalize(vmin=scheme.yb.min(), vmax=scheme.yb.max())
-            cmap = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
+                mpl_cm_scalar_mappable = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
             values = scheme(hue)
             binedges = [scheme.yb.min()] + scheme.bins.tolist()
             categories = [
                 '{0:g} - {1:g}'.format(binedges[i], binedges[i + 1])
                 for i in range(len(binedges) - 1)
             ]
-            colors = [cmap.to_rgba(v) for v in values]
+            colors = [mpl_cm_scalar_mappable.to_rgba(v) for v in values]
             self.k = len(scheme.bins)
+
+        # matplotlib has separate concepts of "colormap" (a color gradient) and "norm" (a min-max
+        # range within which to apply that gradient). It also has a ScalarMappable mixin which
+        # wraps the two into one object. Different matplotlib APIs accept different things: some
+        # want a colormap, some want a colormap and/or a norm, and some want a ScalarMappable
+        # object. It's really obnoxious.
+        #
+        # Since cmap and norm are attributes of a ScalarMappable, it's easiest to just save the
+        # ScalarMappable and access these underlying objects when we need to use those instead.
+        self.mpl_cm_scalar_mappable = mpl_cm_scalar_mappable
 
         self.colors = colors
         self.hue = hue
         self.scheme = scheme
-        self.cmap = cmap
         self.categories = categories
         self.color_kwarg = color_kwarg
         self.default_color = default_color
@@ -282,10 +287,10 @@ class LegendMixin:
                 marker_kwargs.update(legend_marker_kwargs)
 
                 if legend_values is None:
-                    markerfacecolors = [self.cmap.to_rgba(value) for (value, _)
+                    markerfacecolors = [self.mpl_cm_scalar_mappable.to_rgba(value) for (value, _)
                                         in enumerate(self.categories)]
                 else:
-                    markerfacecolors = [self.cmap.to_rgba(value) for value in legend_values]
+                    markerfacecolors = [self.mpl_cm_scalar_mappable.to_rgba(value) for value in legend_values]
 
                 patches = []
                 for markerfacecolor in markerfacecolors:
@@ -344,9 +349,9 @@ class LegendMixin:
                         'apply in the case of a colorbar legend and should be removed.'
                     )
 
-                self.cmap.set_array(self.hue)
+                self.mpl_cm_scalar_mappable.set_array(self.hue)
                 try:
-                    plt.gcf().colorbar(self.cmap, ax=self.ax, **legend_kwargs)
+                    plt.gcf().colorbar(self.mpl_cm_scalar_mappable, ax=self.ax, **legend_kwargs)
                 except TypeError:
                     raise ValueError(
                         f'The plot is in continuous legend mode, implying a '
@@ -1297,10 +1302,6 @@ def kdeplot(
     class KDEPlot(Plot, HueMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
-            self.set_hue_values(
-                color_kwarg=None, default_color=None, supports_categorical=False,
-                verify_input=False
-            )
             self.paint_clip()
 
         def draw(self):
@@ -1312,13 +1313,13 @@ def kdeplot(
                 sns.kdeplot(
                     x=pd.Series([p.x for p in self.df.geometry]),
                     y=pd.Series([p.y for p in self.df.geometry]),
-                    transform=ccrs.PlateCarree(), ax=ax, cmap=self.cmap, **self.kwargs
+                    transform=ccrs.PlateCarree(), ax=ax, **self.kwargs
                 )
             else:
                 sns.kdeplot(
                     x=pd.Series([p.x for p in self.df.geometry]),
                     y=pd.Series([p.y for p in self.df.geometry]),
-                    ax=ax, cmap=self.cmap, **self.kwargs
+                    ax=ax, **self.kwargs
                 )
             return ax
 
