@@ -34,14 +34,6 @@ class HueMixin:
         cmap = self.kwargs.pop('cmap', 'viridis')
         norm = self.kwargs.pop('norm', None)
 
-        if 'k' in self.kwargs:
-            raise ValueError(
-                "The 'k' parameter was removed in geoplot version 0.4.0. To set a specific "
-                "categorical bin count, pass a mapclassify object to 'scheme' instead. For "
-                'further information refer to the release notes at '
-                'https://github.com/ResidentMario/geoplot/releases/tag/0.4.0'
-            )
-
         if supports_categorical:
             scheme = self.kwargs.pop('scheme')
         else:
