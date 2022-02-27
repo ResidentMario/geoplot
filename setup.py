@@ -11,7 +11,8 @@ setup(
     name='geoplot',
     packages=['geoplot'],
     install_requires=[
-        'matplotlib', 'seaborn', 'pandas', 'geopandas>=0.9.0', 'cartopy', 'mapclassify>=2.1',
+        'matplotlib>=3.1.2',  # seaborn GH#1773
+        'seaborn', 'pandas', 'geopandas>=0.9.0', 'cartopy', 'mapclassify>=2.1',
         'contextily>=1.0.0'
     ],
     extras_require={

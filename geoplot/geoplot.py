@@ -181,9 +181,7 @@ class LegendMixin:
     """
     Class container for legend-builder code shared across all plots that support legend.
     """
-    def paint_legend(
-        self, supports_hue=True, supports_scale=False, verify_input=True, scale_multiplier=1,
-    ):
+    def paint_legend(self, supports_hue=True, supports_scale=False, scale_multiplier=1):
         legend = self.kwargs.pop('legend', None)
         legend_labels = self.kwargs.pop('legend_labels', None)
         legend_values = self.kwargs.pop('legend_values', None)
@@ -198,40 +196,36 @@ class LegendMixin:
                 if kwarg[:6] == 'marker':
                     legend_marker_kwargs[kwarg] = legend_kwargs.pop(kwarg)
 
-        # kdeplot is special: it has a 'legend' parameter but no other legend-related params,
-        # as the 'legend' param is merely passed down to `seaborn.kdeplot`. So for kdeplot
-        # we do not verify inputs.
-        if verify_input:
-            if legend and (
-                (not supports_hue or self.hue is None)
-                and (not supports_scale or self.scale is None)
-            ):
-                raise ValueError(
-                    '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
-                    'variable.'
-                )
-            if not legend and (
-                legend_labels is not None or legend_values is not None
-                or legend_kwargs != dict()
-            ):
-                raise ValueError(
-                    'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
-                    'when "legend" is set to False.'
-                )
-            if (
-                legend_labels is not None and legend_values is not None
-                and len(legend_labels) != len(legend_values)
-            ):
-                raise ValueError(
-                    'The "legend_labels" and "legend_values" parameters have different lengths.'
-                )
-            if (not legend and (
-                'legend_var' in self.kwargs and self.kwargs['legend_var'] is not None
-            )):
-                raise ValueError(
-                    'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
-                    'when "legend" is set to False.'
-                )
+        if legend and (
+            (not supports_hue or self.hue is None)
+            and (not supports_scale or self.scale is None)
+        ):
+            raise ValueError(
+                '"legend" is set to True, but the plot has neither a "hue" nor a "scale" '
+                'variable.'
+            )
+        if not legend and (
+            legend_labels is not None or legend_values is not None
+            or legend_kwargs != dict()
+        ):
+            raise ValueError(
+                'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                'when "legend" is set to False.'
+            )
+        if (
+            legend_labels is not None and legend_values is not None
+            and len(legend_labels) != len(legend_values)
+        ):
+            raise ValueError(
+                'The "legend_labels" and "legend_values" parameters have different lengths.'
+            )
+        if (not legend and (
+            'legend_var' in self.kwargs and self.kwargs['legend_var'] is not None
+        )):
+            raise ValueError(
+                'Cannot specify "legend_labels", "legend_values", or "legend_kwargs" '
+                'when "legend" is set to False.'
+            )
 
         # Mutate matplotlib defaults
         addtl_legend_kwargs = dict()
@@ -1300,14 +1294,13 @@ def kdeplot(
     """
     import seaborn as sns  # Immediately fail if no seaborn.
 
-    class KDEPlot(Plot, HueMixin, LegendMixin, ClipMixin):
+    class KDEPlot(Plot, HueMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
             self.set_hue_values(
                 color_kwarg=None, default_color=None, supports_categorical=False,
                 verify_input=False
             )
-            self.paint_legend(supports_hue=True, supports_scale=False, verify_input=False)
             self.paint_clip()
 
         def draw(self):
