@@ -16,6 +16,7 @@ import pandas as pd
 from geopandas.plotting import _PolygonPatch as GeopandasPolygonPatch
 import contextily as ctx
 import mapclassify as mc
+import seaborn as sns
 
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
@@ -1286,8 +1287,6 @@ def kdeplot(
     ``AxesSubplot`` or ``GeoAxesSubplot``
         The plot Axes.
     """
-    import seaborn as sns  # Immediately fail if no seaborn.
-
     class KDEPlot(Plot, HueMixin, ClipMixin):
         def __init__(self, df, **kwargs):
             super().__init__(df, **kwargs)
