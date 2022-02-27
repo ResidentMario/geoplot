@@ -1264,8 +1264,7 @@ def cartogram(
 
 
 def kdeplot(
-    df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, shade_lowest=False,
-    **kwargs
+    df, projection=None, extent=None, figsize=(8, 6), ax=None, clip=None, **kwargs
 ):
     """
     A kernel density estimate isochrone plot.
@@ -1312,7 +1311,6 @@ def kdeplot(
             self.paint_clip()
 
         def draw(self):
-            shade_lowest = self.kwargs.pop('shade_lowest', False)
             ax = self.ax
             if len(self.df.geometry) == 0:
                 return ax
@@ -1321,21 +1319,18 @@ def kdeplot(
                 sns.kdeplot(
                     pd.Series([p.x for p in self.df.geometry]),
                     pd.Series([p.y for p in self.df.geometry]),
-                    transform=ccrs.PlateCarree(), ax=ax, shade_lowest=shade_lowest, cmap=self.cmap,
-                    **self.kwargs
+                    transform=ccrs.PlateCarree(), ax=ax, cmap=self.cmap, **self.kwargs
                 )
             else:
                 sns.kdeplot(
                     pd.Series([p.x for p in self.df.geometry]),
                     pd.Series([p.y for p in self.df.geometry]),
-                    ax=ax, shade_lowest=shade_lowest, cmap=self.cmap, **self.kwargs
+                    ax=ax, cmap=self.cmap, **self.kwargs
                 )
             return ax
 
     plot = KDEPlot(
-        df, projection=projection, extent=extent, figsize=figsize, ax=ax, clip=clip,
-        shade_lowest=shade_lowest,
-        **kwargs
+        df, projection=projection, extent=extent, figsize=figsize, ax=ax, clip=clip, **kwargs
     )
     return plot.draw()
 
