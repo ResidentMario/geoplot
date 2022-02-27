@@ -16,7 +16,6 @@ For more tools for visualizing data nullity, `check out the ``missingno`` librar
 import geopandas as gpd
 import geoplot as gplt
 import geoplot.crs as gcrs
-import matplotlib.pyplot as plt
 
 
 trees = gpd.read_file(gplt.datasets.get_path('san_francisco_street_trees_sample'))
@@ -30,5 +29,3 @@ ax = gplt.quadtree(
     clip=sf, edgecolor='white', linewidth=1
 )
 gplt.polyplot(sf, facecolor='None', edgecolor='gray', linewidth=1, zorder=2, ax=ax)
-
-plt.savefig("san-francisco-street-trees.png", bbox_inches='tight', pad_inches=0)

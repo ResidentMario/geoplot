@@ -49,5 +49,3 @@ gplt.pointplot(
 )
 gplt.polyplot(nyc_boroughs, ax=ax2, projection=proj)
 ax2.set_title("Injurious Crashes in New York City, 2016")
-
-plt.savefig("nyc-collisions-map.png", bbox_inches='tight', pad_inches=0)

@@ -20,4 +20,3 @@ gplt.sankey(
 )
 
 plt.title("Streets in Washington DC by Average Daily Traffic, 2015")
-plt.savefig("dc-street-network.png", bbox_inches='tight', pad_inches=0.1)

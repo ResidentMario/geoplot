@@ -25,6 +25,3 @@ ax = gplt.kdeplot(
 gplt.pointplot(boston_airbnb_listings, s=1, color='black', ax=ax)
 gplt.webmap(boston_airbnb_listings, ax=ax)
 plt.title('Boston AirBnB Locations, 2016', fontsize=18)
-
-fig = plt.gcf()
-plt.savefig("boston-airbnb-kde.png", bbox_inches='tight', pad_inches=0.1)

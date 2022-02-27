@@ -33,9 +33,8 @@ ax = gplt.cartogram(
     hue='Obesity Rate', cmap='Reds', scheme=scheme,
     linewidth=0.5,
     legend=True, legend_kwargs={'loc': 'lower right'}, legend_var='hue',
-    figsize=(8, 12)
+    figsize=(12, 7)
 )
 gplt.polyplot(contiguous_usa, facecolor='lightgray', edgecolor='None', ax=ax)
 
 plt.title("Adult Obesity Rate by State, 2013")
-plt.savefig("obesity.png", bbox_inches='tight', pad_inches=0.1)

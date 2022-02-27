@@ -47,5 +47,3 @@ gplt.kdeplot(
 )
 gplt.polyplot(nyc_boroughs, zorder=1, ax=ax2)
 ax2.set_title("Loss of Consciousness Crashes, 2016")
-
-plt.savefig("nyc-collision-factors.png", bbox_inches='tight', pad_inches=0.1)

@@ -63,6 +63,3 @@ axarr[1][1].set_title('scheme="FisherJenks"', fontsize=18)
 
 plt.subplots_adjust(top=0.92)
 plt.suptitle('California State Districts by Area, 2010', fontsize=18)
-
-fig = plt.gcf()
-plt.savefig("boston-airbnb-kde.png", bbox_inches='tight', pad_inches=0.1)
