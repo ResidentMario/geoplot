@@ -54,12 +54,11 @@ def test_hue_params(kwargs):
     return pointplot(p_df, **kwargs).get_figure()
 
 
-# xfail due to seaborn#1773
 @pytest.mark.mpl_image_compare
 @pytest.mark.parametrize("kwargs", [
-    pytest.param({'cmap': 'Reds'}, marks=pytest.mark.xfail),
-    pytest.param({'cmap': 'Blues', 'shade': True}, marks=pytest.mark.xfail),
-    pytest.param({'cmap': 'Greens', 'shade': True, 'thresh': 0.05}, marks=pytest.mark.xfail)
+    pytest.param({'cmap': 'Reds'}),
+    pytest.param({'cmap': 'Blues', 'shade': True}),
+    pytest.param({'cmap': 'Greens', 'shade': True, 'thresh': 0.05})
 ])
 def test_hue_params_kdeplot(kwargs):
     return kdeplot(p_df, **kwargs).get_figure()
