@@ -20,7 +20,6 @@ import mapclassify as mc
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
 __version__ = "0.4.4"
-MATPLOTLIB_DOCS_VERSION = "3.2.1"  # used in some docstrings
 
 
 class HueMixin:
@@ -308,20 +307,19 @@ class LegendMixin:
                     )
                 except TypeError:
                     raise ValueError(
-                        f'The plot is in categorical legend mode, implying a '
-                        f'"matplotlib.legend.Legend" legend object. However, "legend_kwarg" '
-                        f'contains unexpected keyword arguments not supported by this legend type.'
-                        f' Are you sure you are not accidentally passing continuous '
-                        f'"matplotlib.colorbar.Colorbar" legend parameters instead?'
-                        f'\n\n'
-                        f'For a '
-                        f'reference on the valid keyword parameters, see the Matplotlib '
-                        f'documentation at '
-                        f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/legend_api.html#'
-                        f'matplotlib.legend.Legend . To learn more about the difference '
-                        f'between these two legend modes, refer to the geoplot documentation '
-                        f'at https://residentmario.github.io/geoplot/user_guide/'
-                        f'Customizing_Plots.html#legend .'
+                        'The plot is in categorical legend mode, implying a '
+                        '"matplotlib.legend.Legend" legend object. However, "legend_kwarg" '
+                        'contains unexpected keyword arguments not supported by this legend type.'
+                        ' Are you sure you are not accidentally passing continuous '
+                        '"matplotlib.colorbar.Colorbar" legend parameters instead?'
+                        '\n\n'
+                        'For a reference on the valid keyword parameters, see the Matplotlib '
+                        'documentation at '
+                        'https://matplotlib.org/stable/api/legend_api.html#'
+                        'matplotlib.legend.Legend. To learn more about the difference '
+                        'between these two legend modes, refer to the geoplot documentation '
+                        'at https://residentmario.github.io/geoplot/user_guide/'
+                        'Customizing_Plots.html#legend.'
                     )
 
             else:  # self.k is None
@@ -346,20 +344,19 @@ class LegendMixin:
                     plt.gcf().colorbar(self.mpl_cm_scalar_mappable, ax=self.ax, **legend_kwargs)
                 except TypeError:
                     raise ValueError(
-                        f'The plot is in continuous legend mode, implying a '
-                        f'"matplotlib.colorbar.Colorbar" legend object. However, "legend_kwarg" '
-                        f'contains unexpected keyword arguments not supported by this legend type.'
-                        f' Are you sure you are not accidentally passing categorical '
-                        f'"matplotlib.legend.Legend" legend parameters instead?'
-                        f'\n\n'
-                        f'For a '
-                        f'reference on the valid keyword parameters, see the Matplotlib '
-                        f'documentation at '
-                        f'https://matplotlib.org/{MATPLOTLIB_DOCS_VERSION}/api/colorbar_api.html#'
-                        f'matplotlib.colorbar.Colorbar . To learn more about the difference '
-                        f'between these two legend modes, refer to the geoplot documentation '
-                        f'at https://residentmario.github.io/geoplot/user_guide/'
-                        f'Customizing_Plots.html#legend .'
+                        'The plot is in continuous legend mode, implying a '
+                        '"matplotlib.colorbar.Colorbar" legend object. However, "legend_kwarg" '
+                        'contains unexpected keyword arguments not supported by this legend type.'
+                        ' Are you sure you are not accidentally passing categorical '
+                        '"matplotlib.legend.Legend" legend parameters instead?'
+                        '\n\n'
+                        'For a reference on the valid keyword parameters, see the Matplotlib '
+                        'documentation at '
+                        'https://matplotlib.org/stable/api/colorbar_api.html#'
+                        'matplotlib.colorbar.Colorbar. To learn more about the difference '
+                        'between these two legend modes, refer to the geoplot documentation '
+                        'at https://residentmario.github.io/geoplot/user_guide/'
+                        'Customizing_Plots.html#legend.'
                     )
 
         elif legend and legend_var == 'scale':
