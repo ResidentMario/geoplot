@@ -21,13 +21,13 @@ setup(
         'develop': [*doc_requires, *test_requires, 'pylint'],
     },
     py_modules=['geoplot', 'crs', 'utils', 'ops'],
-    version='0.4.4',
+    version='0.5.0',
     python_requires='>=3.7.0',
     description='High-level geospatial plotting for Python.',
     author='Aleksey Bilogur',
     author_email='aleksey.bilogur@gmail.com',
     url='https://github.com/ResidentMario/geoplot',
-    download_url='https://github.com/ResidentMario/geoplot/tarball/0.4.4',
+    download_url='https://github.com/ResidentMario/geoplot/tarball/0.5.0',
     keywords=[
         'data', 'data visualization', 'data analysis', 'data science', 'pandas', 'geospatial data',
         'geospatial analytics'

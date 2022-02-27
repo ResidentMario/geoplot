@@ -14,16 +14,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import cartopy.crs as ccrs
-import geoplot.crs as gcrs
 from cartopy.mpl.geoaxes import GeoAxesSubplot
 from cartopy.feature import ShapelyFeature
 import shapely.geometry
 import contextily as ctx
 import mapclassify as mc
 
+import geoplot.crs as gcrs
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
-__version__ = "0.4.4"
+__version__ = "0.5.0"
 
 
 class HueMixin:
