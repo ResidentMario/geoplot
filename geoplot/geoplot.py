@@ -23,7 +23,7 @@ import mapclassify as mc
 import geoplot.crs as gcrs
 from .ops import QuadTree, build_voronoi_polygons, jitter_points
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 
 class HueMixin:
