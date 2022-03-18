@@ -188,7 +188,7 @@ class TestHue(unittest.TestCase):
         assert isinstance(huemixin.hue, pd.Series) and len(huemixin.hue) == 100
         assert huemixin.scheme is None
         assert huemixin.k is None
-        assert isinstance(huemixin.cmap, ScalarMappable)
+        assert isinstance(huemixin.mpl_cm_scalar_mappable, ScalarMappable)
         assert huemixin.k is None
         assert huemixin.categories is None
         assert huemixin.color_kwarg == 'color'
@@ -235,7 +235,7 @@ class TestHue(unittest.TestCase):
         huemixin = self.create_huemixin()
         huemixin.kwargs['cmap'] = 'jet'
         huemixin.set_hue_values(supports_categorical=False)
-        assert huemixin.cmap.cmap.name == 'jet'
+        assert huemixin.mpl_cm_scalar_mappable.cmap.name == 'jet'
 
         # cmap is a Colormap instance: it is propogated
         # Colormap is an abstract class, LinearSegmentedColormap stands in as a test object
@@ -244,7 +244,7 @@ class TestHue(unittest.TestCase):
         cm = LinearSegmentedColormap.from_list('test_colormap', colors)
         huemixin.kwargs['cmap'] = cm
         huemixin.set_hue_values(supports_categorical=False)
-        assert huemixin.cmap.cmap.name == 'test_colormap'
+        assert huemixin.mpl_cm_scalar_mappable.cmap.name == 'test_colormap'
 
         # cmap is not None but hue is None: raise
         huemixin = self.create_huemixin()
@@ -257,15 +257,15 @@ class TestHue(unittest.TestCase):
         # norm is None: a Normalize instance is used with vmin, vmax boundaries
         huemixin = self.create_huemixin()
         huemixin.set_hue_values(supports_categorical=False)
-        assert huemixin.cmap.norm.vmin == np.min(huemixin.hue)
-        assert huemixin.cmap.norm.vmax == np.max(huemixin.hue)
+        assert huemixin.mpl_cm_scalar_mappable.norm.vmin == np.min(huemixin.hue)
+        assert huemixin.mpl_cm_scalar_mappable.norm.vmax == np.max(huemixin.hue)
 
         # norm is not None: it is propogated
         huemixin = self.create_huemixin()
         norm = Normalize(vmin=-0.1, vmax=0.1)
         huemixin.kwargs['norm'] = norm
         huemixin.set_hue_values(supports_categorical=False)
-        assert huemixin.cmap.norm == norm
+        assert huemixin.mpl_cm_scalar_mappable.norm == norm
 
     def test_hue_init_color_kwarg(self):
         # color_kwarg in keyword arguments and hue is not None: raise
@@ -308,28 +308,6 @@ class TestHue(unittest.TestCase):
         huemixin.kwargs['cmap'] = None
         with pytest.raises(ValueError):
             huemixin.set_hue_values(supports_categorical=True)
-
-    def test_hue_init_verify_input_flag(self):
-        """
-        verify_input is specified as False solely in the case of KDEPlot, which doesn't support
-        some parameters because it is just a thin wrapper over seaborn.kdeplot. Some verification
-        steps are skipped because keyword arguments are passed directly to the underlying plotter.
-        """
-        # skip validating color_kwarg against hue
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['color'] = 'black'
-        huemixin.set_hue_values(supports_categorical=False, verify_input=False)
-
-        # skip validating cmap against hue
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['hue'] = None
-        huemixin.set_hue_values(supports_categorical=False, verify_input=False)
-
-        # skip validating scheme against hue
-        huemixin = self.create_huemixin()
-        huemixin.kwargs['hue'] = None
-        huemixin.kwargs['scheme'] = 'FisherJenks'
-        huemixin.set_hue_values(supports_categorical=False, verify_input=False)
 
 
 class TestScale(unittest.TestCase):
@@ -453,7 +431,7 @@ class TestLegend(unittest.TestCase):
             if 'hue' in legend_vars:
                 legendmixin.colors = ['black'] * 100
                 legendmixin.hue = legendmixin.df.foo
-                legendmixin.cmap = ScalarMappable(cmap='Reds')
+                legendmixin.mpl_cm_scalar_mappable = ScalarMappable(cmap='Reds')
                 legendmixin.k = None
                 legendmixin.categorical = False
                 legendmixin.categories = None
