@@ -6,7 +6,7 @@ import geopandas as gpd
 import unittest
 import pytest
 import matplotlib.pyplot as plt
-from matplotlib.axes._subplots import SubplotBase
+from matplotlib.axes import SubplotBase
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 import cartopy.crs as ccrs
