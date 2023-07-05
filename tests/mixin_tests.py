@@ -589,9 +589,8 @@ class TestClip(unittest.TestCase):
     def test_clip_init_default(self):
         clipmixin = self.create_clipmixin()
 
-        # UserWarning because we have a narrow clip
-        with pytest.warns(UserWarning):
-            df_result = clipmixin.set_clip(clipmixin.df)
+        # UserWarning because we have a narrow clip (before geopandas 0.11)
+        df_result = clipmixin.set_clip(clipmixin.df)
         expected = Polygon([[0, 0], [0, 100], [100, 100], [100, 0]])
         result = df_result.geometry.unary_union.envelope
         assert expected.contains(result)
