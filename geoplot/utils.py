@@ -71,7 +71,7 @@ def gaussian_linestrings(points):
     Returns a GeoSeries of len(points) / 2 `shapely.geometry.LineString` objects for an array of
     `shapely.geometry.Point` objects.
     """
-    polys = [poly for _, poly in gaussian_polygons(points).iteritems()]
+    polys = [poly for _, poly in gaussian_polygons(points).items()]
     linestrings = []
     for poly in polys:
         start_point = shapely.geometry.Point(poly.exterior.coords[0])
