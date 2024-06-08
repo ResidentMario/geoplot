@@ -1304,7 +1304,7 @@ def kdeplot(
                 sns.kdeplot(
                     x=pd.Series([p.x for p in self.df.geometry]),
                     y=pd.Series([p.y for p in self.df.geometry]),
-                    transform=ccrs.PlateCarree(), ax=ax, **self.kwargs
+                    transform=ccrs.PlateCarree()._as_mpl_transform(ax), ax=ax, **self.kwargs
                 )
             else:
                 sns.kdeplot(
